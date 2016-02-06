@@ -26,13 +26,17 @@ class GameScreen(val game: Game): Screen {
     val pos1: Vector2 = Vector2(Gdx.graphics.width/2f - scrolling1.width.toFloat(), -Gdx.graphics.height/2f)
     val pos2: Vector2 = Vector2(startingPos, -Gdx.graphics.height/2f)
 
-    var currTime:Double = 0.0
+    var counter:Double = 0.0
+    var currTime:Int = 0
     var currDist:Float = 0f
     var currPosOfBackground:Float = 0f
     var currPosOfSun:Float = 0f
 
+    val gui:GameScreenGUI = GameScreenGUI(this)
+
     override fun show() {
         var tree:TreeNode<String> = TreeNode("I am you", "root")
+        gui.init()
 
         sunMoon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         //throw UnsupportedOperationException()
@@ -52,33 +56,32 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun render(delta: Float) {
-        TextGame.stage.draw()
         update(delta)
 
         TextGame.batch.begin()
         draw(TextGame.batch)
         TextGame.batch.end()
+
+        gui.update(delta)
+        TextGame.stage.draw()
     }
 
     fun draw(batch:SpriteBatch){
         batch.color = Color.WHITE
-        batch.draw(background, -400f, -background.height.toFloat() + 240f + currPosOfBackground*(background.height - 480f))
+        batch.draw(background, -400f, -background.height.toFloat() + 240f + (currPosOfBackground)*(background.height - 480f))
         batch.draw(sunMoon, -400f, -sunMoon.height.toFloat()/1.32f, sunMoon.width.toFloat()/2, sunMoon.height.toFloat()/2, sunMoon.width.toFloat(), sunMoon.height.toFloat(), 1f, 1f, MathUtils.radiansToDegrees* currPosOfSun,
                 0, 0, sunMoon.width, sunMoon.height, false, true)
 
-        val posX = (currDist%(scrolling1.width+Gdx.graphics.width) - scrolling1.width + Gdx.graphics.width/2f).toFloat()
-
-        //batch.color = Color.GREEN
         batch.draw(scrolling1, pos1.x, pos1.y)
-        //batch.color = Color.RED
         batch.draw(scrolling2, pos2.x, pos2.y)
     }
 
     fun update(delta:Float){
-        currTime += delta
         currDist += 1
-        currPosOfBackground = (MathUtils.sin(((currTime-timeScale)/timeScale).toFloat()).toFloat() + 1f)/2f;
-        currPosOfSun = ((-currTime - timeScale*0.5f)/timeScale).toFloat()
+        counter += delta
+        currTime = (counter%timeScale).toInt()
+        currPosOfBackground = (MathUtils.sin((((counter)/(timeScale/2f))*MathUtils.PI).toFloat()).toFloat() + 1f)/2f;
+        currPosOfSun = ((-counter)/(timeScale/2f)).toFloat()*MathUtils.PI
 
 
         pos1.set(pos1.x + 2, pos1.y)
@@ -88,6 +91,7 @@ class GameScreen(val game: Game): Screen {
             pos1.set(startingPos, -Gdx.graphics.height/2f)
         if(pos2.x > Gdx.graphics.width/2f)
             pos2.set(startingPos, -Gdx.graphics.height/2f)
+
     }
 
     override fun resume() {

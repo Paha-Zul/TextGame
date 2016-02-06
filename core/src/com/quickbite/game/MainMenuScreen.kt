@@ -1,6 +1,7 @@
 package com.quickbite.game
 
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -17,6 +18,7 @@ class MainMenuScreen(val game:TextGame) : Screen {
 
         val style:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.font
+        style.fontColor = Color.BLACK
 
         val startButton = TextButton("Start", style);
 
