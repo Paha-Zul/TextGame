@@ -15,6 +15,7 @@ class MainMenuScreen(val game:TextGame) : Screen {
 
     override fun show() {
         //game.setScreen(GameScreen(game))
+        DataManager.loadEvents()
 
         val style:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.font

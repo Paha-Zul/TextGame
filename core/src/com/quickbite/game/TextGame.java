@@ -17,7 +17,8 @@ public class TextGame extends Game {
 	public static BitmapFont font;
 	public static Viewport viewport;
     public static Stage stage;
-	
+    public static EasyAssetManager manager;
+
 	@Override
 	public void create () {
         camera = new OrthographicCamera(800, 480);
@@ -27,6 +28,14 @@ public class TextGame extends Game {
         stage = new Stage(viewport);
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
         font.setColor(Color.BLACK);
+		manager = new EasyAssetManager();
+		manager.loadALlPictures(Gdx.files.internal("art/"));
+
+		boolean done = false;
+		while(!done){
+			done = manager.update();
+		}
+
 
         Gdx.input.setInputProcessor(stage);
         setScreen(new MainMenuScreen(this));
