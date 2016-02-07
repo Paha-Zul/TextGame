@@ -19,6 +19,7 @@ class GameScreen(val game: Game): Screen {
     val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
     val scrolling1 = Texture(Gdx.files.internal("art/Seemlessbackground.png"), true)
     val scrolling2 = Texture(Gdx.files.internal("art/Seemlessbackground.png"), true)
+    val ROV:Texture = TextGame.manager.get("ROV", Texture::class.java)
 
     var startingPos:Float = Gdx.graphics.width/2f - scrolling1.width.toFloat()*2f
     val pos1: Vector2 = Vector2(Gdx.graphics.width/2f - scrolling1.width.toFloat(), -Gdx.graphics.height/2f)
@@ -50,7 +51,7 @@ class GameScreen(val game: Game): Screen {
         sunMoon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
         //throw UnsupportedOperationException()
 
-        Tester.testEvents("Event1", 20)
+        //Tester.testEvents("Event1", 20)
 
         val multi:InputMultiplexer = InputMultiplexer()
         multi.addProcessor(TextGame.stage)
@@ -58,6 +59,7 @@ class GameScreen(val game: Game): Screen {
         Gdx.input.inputProcessor = multi
 
         gameInput.keyEventMap.put(Input.Keys.P, {paused = !paused})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
     }
 
     override fun hide() {
@@ -85,13 +87,23 @@ class GameScreen(val game: Game): Screen {
     }
 
     fun draw(batch:SpriteBatch){
-        batch.color = Color.WHITE
+
+        val value = currPosOfBackground.clamp(0.3f, 1f)
         batch.draw(background, -400f, -background.height.toFloat() + Gdx.graphics.height/2f + (background.height - Gdx.graphics.height)*currPosOfBackground)
+
+        batch.color = Color.WHITE
+
         batch.draw(sunMoon, -400f, -sunMoon.height.toFloat()/1.32f, sunMoon.width.toFloat()/2, sunMoon.height.toFloat()/2, sunMoon.width.toFloat(), sunMoon.height.toFloat(), 1f, 1f, MathUtils.radiansToDegrees* currPosOfSun,
                 0, 0, sunMoon.width, sunMoon.height, false, true)
 
+        batch.color = Color(value, value, value, 1f)
         batch.draw(scrolling1, pos1.x, pos1.y)
         batch.draw(scrolling2, pos2.x, pos2.y)
+
+        //Drawing the ROV.
+
+        val shaking = (counter%0.5f).toFloat()*2f
+        batch.draw(ROV, -ROV.width/2f, -Gdx.graphics.height/3f + shaking)
     }
 
     fun update(delta:Float){
@@ -126,6 +138,12 @@ class GameScreen(val game: Game): Screen {
 
 
         gui.updateOnTimeTick(delta)
+    }
+
+    fun Float.clamp(min:Float, max:Float):Float{
+        if(this <= min) return min
+        if(this >= max) return max
+        return this
     }
 
     override fun resume() {

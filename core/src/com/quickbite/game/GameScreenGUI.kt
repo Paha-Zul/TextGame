@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.utils.Align
 
 /**
  * Created by Paha on 2/5/2016.
@@ -20,8 +24,14 @@ class GameScreenGUI(val game : GameScreen) {
     lateinit var distanceTitleLabel:Label
     lateinit var distanceLabel:Label
 
-    lateinit var distProgressBar:ProgressBar
+    /* Gui elements for events */
+    val eventTable:Table = Table()
+    val eventChoicesTable:Table = Table()
+    val outerTable:Table = Table()
 
+    val defLabelStyle = Label.LabelStyle(TextGame.font, Color.BLACK)
+
+    lateinit var distProgressBar:ProgressBar
 
     fun init(){
         val style:Label.LabelStyle = Label.LabelStyle(TextGame.font, Color.RED)
@@ -84,7 +94,54 @@ class GameScreenGUI(val game : GameScreen) {
         distProgressBar.setValue(game.totalDistTraveled.toFloat())
     }
 
-    fun triggerEventGUI(){
+    fun triggerEventGUI(event: DataManager.EventJson){
+        outerTable.clear()
+        eventTable.clear()
+        eventChoicesTable.clear()
 
+        outerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pixel", Texture::class.java)))
+
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.font, Color.BLACK)
+
+        val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        textButtonStyle.font = TextGame.font
+        textButtonStyle.fontColor = Color.BLACK
+
+        val padding:Int = 400/(event.choices!!.size+1)/2
+
+        for(choice in event.choices?.iterator()){
+            val button = TextButton(choice, textButtonStyle)
+            button.pad(0f, 10f, 0f, 10f)
+            eventChoicesTable.add(button)
+
+            button.addListener(object:ChangeListener(){
+                override fun changed(event: ChangeEvent?, actor: Actor?) {
+                    game.paused = false
+                    outerTable.remove()
+                }
+            })
+        }
+
+        val titleLabel = Label(event.name, defLabelStyle)
+        titleLabel.setAlignment(Align.top)
+
+        val descLabel = Label(event.description, defLabelStyle)
+        descLabel.setAlignment(Align.center)
+        descLabel.setFontScale(0.5f)
+        descLabel.setWrap(true)
+
+        eventTable.add(titleLabel).expandX().fillX()
+        eventTable.row().expand().fill()
+        eventTable.add(descLabel).expand().fill()
+        eventTable.row().expand().fill()
+        eventTable.add(eventChoicesTable).expand().fill()
+
+        //eventTable.debugAll()
+
+        outerTable.setSize(400f, 400f)
+        outerTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
+        outerTable.add(eventTable).expand().fill()
+
+        TextGame.stage.addActor(outerTable)
     }
 }

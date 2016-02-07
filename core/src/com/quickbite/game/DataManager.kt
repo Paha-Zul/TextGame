@@ -3,7 +3,6 @@ package com.quickbite.game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.utils.Json
-import com.badlogic.gdx.utils.JsonReader
 import java.util.*
 
 /**
@@ -13,10 +12,8 @@ import java.util.*
 object DataManager{
     val rootEventMap:HashMap<String, EventJson> = HashMap() //For Json Events
     val eventMap:HashMap<String, EventJson> = HashMap() //For Json Events
-    val eventTreeMap:HashMap<String, TreeNode<Event>> = HashMap() //For Event Trees made from the Json Events
 
     val json: Json = Json()
-    val jsonReader:JsonReader = JsonReader()
 
     fun loadEvents(){
         val handle:FileHandle = Gdx.files.internal("files/events/")
