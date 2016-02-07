@@ -1,8 +1,6 @@
 package com.quickbite.game
 
-import com.badlogic.gdx.Game
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Screen
+import com.badlogic.gdx.*
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -39,7 +37,11 @@ class GameScreen(val game: Game): Screen {
     var totalDistToGo:Int = 0
     var currMPH:Int = 20
 
+    var paused = false
+
     val gui:GameScreenGUI = GameScreenGUI(this)
+
+    val gameInput:GameScreenInput = GameScreenInput()
 
 
     override fun show() {
@@ -49,6 +51,13 @@ class GameScreen(val game: Game): Screen {
         //throw UnsupportedOperationException()
 
         Tester.testEvents("Event1", 20)
+
+        val multi:InputMultiplexer = InputMultiplexer()
+        multi.addProcessor(TextGame.stage)
+        multi.addProcessor(gameInput)
+        Gdx.input.inputProcessor = multi
+
+        gameInput.keyEventMap.put(Input.Keys.P, {paused = !paused})
     }
 
     override fun hide() {
@@ -65,7 +74,7 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun render(delta: Float) {
-        update(delta)
+        if(!paused) update(delta)
 
         TextGame.batch.begin()
         draw(TextGame.batch)

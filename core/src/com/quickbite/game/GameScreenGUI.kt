@@ -83,4 +83,8 @@ class GameScreenGUI(val game : GameScreen) {
         distanceLabel.setText("" + game.totalDistTraveled + " / " + game.totalDistOfGame)
         distProgressBar.setValue(game.totalDistTraveled.toFloat())
     }
+
+    fun triggerEventGUI(){
+
+    }
 }
