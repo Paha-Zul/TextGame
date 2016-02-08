@@ -42,20 +42,13 @@ class GameScreen(val game: Game): Screen {
     var totalDistToGo:Int = 0
     var currMPH:Int = 20
 
-    val eventTimer: Timer = Timer()
+    val eventTimerTest: com.quickbite.game.Timer = com.quickbite.game.Timer(null, 1f)
 
-    private var _paused = false
-    var paused: Boolean
-        get() = _paused
-        set(value) {
-            _paused = value
-        }
-
+    private var paused = false
 
     val gui:GameScreenGUI = GameScreenGUI(this)
 
     val gameInput:GameScreenInput = GameScreenInput()
-
 
     override fun show() {
         gui.init()
@@ -73,26 +66,23 @@ class GameScreen(val game: Game): Screen {
         //gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
 
         var currEvent: DataManager.EventJson? = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
-        var task:Timer.Task? = null
 
-        task = object:Timer.Task(){
-            override fun run() {
-                if(currEvent!=null){
-                    val _evt = currEvent as DataManager.EventJson
-                    gui.triggerEventGUI(_evt, { choice ->
-                        currEvent = _evt.selected(choice, MathUtils.random(100))
-                        if(currEvent != null){
-                            eventTimer.scheduleTask(task, MathUtils.random(1, 2).toFloat())
-                        }else{
-                            currEvent = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
-                            eventTimer.scheduleTask(task, MathUtils.random(3, 5).toFloat())
-                        }
-                    })
-                }
+        val func = {
+            if(currEvent!=null){
+                val _evt = currEvent as DataManager.EventJson
+                gui.triggerEventGUI(_evt, { choice ->
+                    currEvent = _evt.selected(choice, MathUtils.random(100))
+                    if(currEvent != null){
+                        eventTimerTest.restart()
+                    }else{
+                        currEvent = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
+                        eventTimerTest.restart()
+                    }
+                })
             }
         }
 
-        eventTimer.scheduleTask(task, MathUtils.random(3, 5).toFloat())
+        eventTimerTest.callback = func
     }
 
     override fun hide() {
@@ -105,12 +95,10 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun pause() {
-        paused = true
         //throw UnsupportedOperationException()
     }
 
     override fun resume() {
-        paused = false
         //throw UnsupportedOperationException()
     }
 
@@ -147,6 +135,7 @@ class GameScreen(val game: Game): Screen {
 
     fun update(delta:Float){
         recordTime(delta)
+        eventTimerTest.update(delta)
 
         //the -MathUtils.PI/2f is to offset the value to 0. Since sine goes to -1 and 1 but normalize it 0 - 1, the initial value will be 0.5 and we don't want that!
         currPosOfBackground = (MathUtils.sin((((counter)/(timeScale/2f))*MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
@@ -183,6 +172,14 @@ class GameScreen(val game: Game): Screen {
         if(this <= min) return min
         if(this >= max) return max
         return this
+    }
+
+    fun pauseGame(){
+        this.paused = true
+    }
+
+    fun resumeGame(){
+        this.paused = false;
     }
 
     override fun dispose() {

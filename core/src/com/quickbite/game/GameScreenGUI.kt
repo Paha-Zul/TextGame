@@ -97,8 +97,8 @@ class GameScreenGUI(val game : GameScreen) {
         pauseButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 when{
-                    pauseButton.isChecked -> game.pause()
-                    else -> game.resume()
+                    pauseButton.isChecked -> game.pauseGame()
+                    else -> game.resumeGame()
                 }
             }
         })
@@ -123,10 +123,11 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun triggerEventGUI(event: DataManager.EventJson, callbackTask : (choice:String)->Unit){
+        game.pauseGame()
+
         outerTable.clear()
         eventTable.clear()
         eventChoicesTable.clear()
-        game.game.pause()
 
         outerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log", Texture::class.java)))
 
@@ -146,7 +147,7 @@ class GameScreenGUI(val game : GameScreen) {
 
             button.addListener(object:ChangeListener(){
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    game.game.resume()
+                    game.resumeGame()
                     outerTable.remove()
                     callbackTask(button.text.toString())
                 }
