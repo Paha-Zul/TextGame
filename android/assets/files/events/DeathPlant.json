@@ -1,0 +1,8 @@
+{
+  "name": "Bad Idea",
+  "description": "You pick the plant, cautiously place it in your mouth and begin to chew it. You start feeling terrible and begin to lose your breath. The sudden feeling brings you to your knees as you cough, spitting any piece of the plant out that you can. You grab water and try to wash it away but nothing is stopping the feeling. As you collapse to the ground your group surrounds you; all you can hear is their muffled voices as your vision starts to blur. 'Is this really how it ends?' is your last thought as consciousness fades from your body...",
+  "choices": ["... I Died?"],
+  "outcomes": [],
+  "chances": [],
+  "resultingAction": "Die"
+}

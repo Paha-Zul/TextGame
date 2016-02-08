@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class TextGame extends Game {
     public OrthographicCamera camera;
 	public static SpriteBatch batch;
-	public static BitmapFont font;
+	public static BitmapFont font, spaceFont;
 	public static Viewport viewport;
     public static Stage stage;
     public static EasyAssetManager manager;
@@ -25,11 +26,17 @@ public class TextGame extends Game {
 		viewport = new StretchViewport(800, 480, camera);
 		batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
+
         stage = new Stage(viewport);
 		font = new BitmapFont(Gdx.files.internal("fonts/font.fnt"));
-        font.setColor(Color.BLACK);
+		font.setColor(Color.BLACK);
+		spaceFont = new BitmapFont(Gdx.files.internal("fonts/spaceFont.fnt"));
+		spaceFont.setColor(Color.BLACK);
+		spaceFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
 		manager = new EasyAssetManager();
 		manager.loadALlPictures(Gdx.files.internal("art/"));
+		manager.loadAllFonts(Gdx.files.internal("fonts/"));
 
 		boolean done = false;
 		while(!done){
@@ -47,5 +54,15 @@ public class TextGame extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		super.render();
+	}
+
+	@Override
+	public void pause() {
+		super.pause();
+	}
+
+	@Override
+	public void resume() {
+		super.resume();
 	}
 }

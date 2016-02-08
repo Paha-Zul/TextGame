@@ -1,12 +1,16 @@
 package com.quickbite.game
 
-import com.badlogic.gdx.*
+import com.badlogic.gdx.Game
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.utils.Timer
 
 /**
  * Created by Paha on 2/3/2016.
@@ -38,7 +42,15 @@ class GameScreen(val game: Game): Screen {
     var totalDistToGo:Int = 0
     var currMPH:Int = 20
 
-    var paused = false
+    val eventTimer: Timer = Timer()
+
+    private var _paused = false
+    var paused: Boolean
+        get() = _paused
+        set(value) {
+            _paused = value
+        }
+
 
     val gui:GameScreenGUI = GameScreenGUI(this)
 
@@ -58,8 +70,29 @@ class GameScreen(val game: Game): Screen {
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        gameInput.keyEventMap.put(Input.Keys.P, {paused = !paused})
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
+        //gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
+
+        var currEvent: DataManager.EventJson? = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
+        var task:Timer.Task? = null
+
+        task = object:Timer.Task(){
+            override fun run() {
+                if(currEvent!=null){
+                    val _evt = currEvent as DataManager.EventJson
+                    gui.triggerEventGUI(_evt, { choice ->
+                        currEvent = _evt.selected(choice, MathUtils.random(100))
+                        if(currEvent != null){
+                            eventTimer.scheduleTask(task, MathUtils.random(1, 2).toFloat())
+                        }else{
+                            currEvent = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
+                            eventTimer.scheduleTask(task, MathUtils.random(3, 5).toFloat())
+                        }
+                    })
+                }
+            }
+        }
+
+        eventTimer.scheduleTask(task, MathUtils.random(3, 5).toFloat())
     }
 
     override fun hide() {
@@ -72,6 +105,12 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun pause() {
+        paused = true
+        //throw UnsupportedOperationException()
+    }
+
+    override fun resume() {
+        paused = false
         //throw UnsupportedOperationException()
     }
 
@@ -144,10 +183,6 @@ class GameScreen(val game: Game): Screen {
         if(this <= min) return min
         if(this >= max) return max
         return this
-    }
-
-    override fun resume() {
-        //throw UnsupportedOperationException()
     }
 
     override fun dispose() {

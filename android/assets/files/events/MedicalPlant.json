@@ -1,0 +1,7 @@
+{
+  "name": "Medical Plant",
+  "description": "You pick the plant and cautiously place it in your mouth. As you chew it, you begin to feel invigorated! Any pains you had before begin to subside. We'll have to make sure to gather any of these plants in the future.",
+  "choices": ["Awesome!"],
+  "outcomes": [],
+  "chances": []
+}

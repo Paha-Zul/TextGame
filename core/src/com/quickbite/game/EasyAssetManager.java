@@ -2,9 +2,11 @@ package com.quickbite.game;
 
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import java.util.HashMap;
 
@@ -34,6 +36,29 @@ public class EasyAssetManager extends AssetManager {
 
             if(handle.name().endsWith(".png")) {
                 this.load(handle.path(), Texture.class, params);
+                if(log) System.out.println("Loaded "+handle.path());
+            }
+        }
+    }
+
+    /**
+     * Helper function to load all fonts from a baseDir. Doesn't have to be used...
+     * @param baseDir The base directory handle to start in.
+     */
+    public void loadAllFonts(FileHandle baseDir){
+        BitmapFontLoader.BitmapFontParameter params = new BitmapFontLoader.BitmapFontParameter();
+        params.genMipMaps = true;
+        params.magFilter = Texture.TextureFilter.Linear;
+        params.minFilter = Texture.TextureFilter.Linear;
+
+        FileHandle[] files = baseDir.list();
+
+        for(FileHandle handle : files){
+            if(handle.isDirectory())
+                loadAllFonts(handle);
+
+            if(handle.name().endsWith(".fnt")) {
+                this.load(handle.path(), BitmapFont.class);
                 if(log) System.out.println("Loaded "+handle.path());
             }
         }

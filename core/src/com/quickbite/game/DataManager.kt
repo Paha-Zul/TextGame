@@ -21,8 +21,8 @@ object DataManager{
 
         for(file:FileHandle in list){
             val event:EventJson = json.fromJson(EventJson::class.java, file)
-            if(event.root) rootEventMap.put(event.name, event)
-            else eventMap.put(event.name, event)
+            if(event.root) rootEventMap.put(file.nameWithoutExtension(), event)
+            else eventMap.put(file.nameWithoutExtension(), event)
         }
     }
 
@@ -42,6 +42,8 @@ object DataManager{
             //If our result is valid, find the outcome that is a result of it.
             if(choiceIndex >= 0){
                 var counter:Int = 0 //Keep track of percentages
+                if(chances!!.isEmpty()) //If the chances/outcomes are empty, return null
+                     return null
 
                 //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
                 for(i in chances!![choiceIndex].indices){

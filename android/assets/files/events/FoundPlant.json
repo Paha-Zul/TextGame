@@ -1,0 +1,8 @@
+{
+  "name": "Example Event",
+  "description": "This is an example of a branching event. It will probably have text like 'You found a mysterious plant that you haven't seen before, what do you wish to do?' and then we'll give you some choices below which will lead to outcomes.",
+  "choices": ["Ignore It", "Touch It", "Eat It"],
+  "outcomes": [["IgnoredPlant"], ["SilkySmoothPlant", "PoisonPlant"], ["MedicalPlant", "DeathPlant"]],
+  "chances": [[100], [50, 50], [30, 70]]
+  "root": true
+}
