@@ -1,6 +1,7 @@
-package com.quickbite.game
+package com.quickbite.game.managers
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.game.Person
 
 /**
  * Created by Paha on 2/8/2016.
@@ -23,7 +24,7 @@ class GroupManager {
         return list.toTypedArray()
     }
 
-    fun getPerson(name:String):Person?{
+    fun getPerson(name:String): Person?{
         if(name.equals("random")) return list[MathUtils.random(list.size-1)]
         return list.find {person -> person.name.equals(name)}
     }

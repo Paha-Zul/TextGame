@@ -1,6 +1,7 @@
 package com.quickbite.game
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.game.managers.DataManager
 
 /**
  * Created by Paha on 2/6/2016.
@@ -10,7 +11,7 @@ object Tester {
         System.out.println("---------------------")
 
         for(i in 0.rangeTo(numTests)){
-            var evt:DataManager.EventJson? = DataManager.rootEventMap[rootEventName]
+            var evt: DataManager.EventJson? = DataManager.rootEventMap[rootEventName]
             System.out.println("Event: "+evt?.name)
 
             //While the event is no null and has choices, loop over them

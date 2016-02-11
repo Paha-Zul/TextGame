@@ -4,7 +4,7 @@ package com.quickbite.game
  * Created by Paha on 2/7/2016.
  * Creates the timer as one time.
  */
-class Timer(private var _callback:(()->Unit)?, private var secondsDelay:Float) {
+class CustomTimer(private var _callback:(()->Unit)?, private var secondsDelay:Float) {
     var callback:(()->Unit)?
         get() = _callback
         set(value){_callback = value}

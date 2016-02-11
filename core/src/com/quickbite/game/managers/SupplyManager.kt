@@ -1,11 +1,12 @@
-package com.quickbite.game
+package com.quickbite.game.managers
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.game.screens.GameScreen
 
 /**
  * Created by Paha on 2/8/2016.
  */
-class SupplyManager(val game:GameScreen, val groupManager:GroupManager) {
+class SupplyManager(val game: GameScreen, val groupManager: GroupManager) {
     val map:MutableMap<String, Supply> = hashMapOf()
 
     init{

@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.quickbite.game.managers.EasyAssetManager;
+import com.quickbite.game.screens.MainMenuScreen;
 
 public class TextGame extends Game {
     public OrthographicCamera camera;

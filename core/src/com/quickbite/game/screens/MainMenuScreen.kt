@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.game.screens
 
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
@@ -6,27 +6,29 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.quickbite.game.TextGame
+import com.quickbite.game.managers.DataManager
 
 /**
  * Created by Paha on 2/3/2016.
  */
-class MainMenuScreen(val game:TextGame) : Screen {
+class MainMenuScreen(val game: TextGame) : Screen {
     val table: Table = Table()
 
     override fun show() {
         //game.setScreen(GameScreen(game))
         DataManager.loadEvents()
 
-        val style:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.font
         style.fontColor = Color.BLACK
 
         val startButton = TextButton("Start", style);
 
-        startButton.addListener(object:ChangeListener(){
+        startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 table.remove()
-                game.setScreen(GameScreen(game))
+                game.screen = GameIntroScreen(game)
             }
         })
 

@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.game.managers
 
 import java.util.*
 
@@ -6,7 +6,7 @@ import java.util.*
  * Created by Paha on 2/8/2016.
  */
 object EventManager {
-    val eventMap:HashMap<String, (args:List<Any>) -> Unit> = hashMapOf()
+    val eventMap: HashMap<String, (args: List<Any>) -> Unit> = hashMapOf()
 
     fun onEvent(name:String, event:(args:List<Any>) -> Unit){
         eventMap.put(name, event)

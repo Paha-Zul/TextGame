@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.game.screens
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.quickbite.game.*
+import com.quickbite.game.managers.DataManager
+import com.quickbite.game.managers.EventManager
 
 /**
  * Created by Paha on 2/3/2016.
@@ -26,8 +29,9 @@ class GameScreen(val game: Game): Screen {
     val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
 
     val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
+    val campScreenBackground: Texture = TextGame.manager.get("Camp", Texture::class.java)
 
-    val ROV:Texture = TextGame.manager.get("ROV", Texture::class.java)
+    val ROV: Texture = TextGame.manager.get("ROV", Texture::class.java)
 
     var currPosOfBackground:Float = 0f
     var currPosOfSun:Float = 0f
@@ -38,13 +42,13 @@ class GameScreen(val game: Game): Screen {
     var totalDistToGo:Int = 0
     var currMPH:Int = 20
 
-    val eventTimerTest: com.quickbite.game.Timer = com.quickbite.game.Timer(null, MathUtils.random(10, 30).toFloat())
+    val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(10, 30).toFloat())
 
     private var paused = false
 
-    val gui:GameScreenGUI = GameScreenGUI(this)
+    val gui: GameScreenGUI = GameScreenGUI(this)
 
-    val gameInput:GameScreenInput = GameScreenInput()
+    val gameInput: GameScreenInput = GameScreenInput()
 
     override fun show() {
         GameStats.init(this)
@@ -55,23 +59,23 @@ class GameScreen(val game: Game): Screen {
 
         //Tester.testEvents("Event1", 20)
 
-        val multi:InputMultiplexer = InputMultiplexer()
+        val multi: InputMultiplexer = InputMultiplexer()
         multi.addProcessor(TextGame.stage)
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        val sc1:ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Foreground", Texture::class.java)), 3f, -100f, -Gdx.graphics.height/2f)
-        val sc2:ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Foreground", Texture::class.java)), 3f, 800f, -Gdx.graphics.height/2f)
+        val sc1: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Foreground", Texture::class.java)), 3f, -100f, -Gdx.graphics.height / 2f)
+        val sc2: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Foreground", Texture::class.java)), 3f, 800f, -Gdx.graphics.height / 2f)
         sc1.following = sc2
         sc2.following = sc1
 
-        val sc3:ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground", Texture::class.java)), 2f, -100f, -Gdx.graphics.height/2f)
-        val sc4:ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground", Texture::class.java)), 2f, 800f, -Gdx.graphics.height/2f)
+        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground", Texture::class.java)), 2f, -100f, -Gdx.graphics.height / 2f)
+        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground", Texture::class.java)), 2f, 800f, -Gdx.graphics.height / 2f)
         sc3.following = sc4
         sc4.following = sc3
 
-        val sc5:ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background", Texture::class.java)), 1f, -100f, -Gdx.graphics.height/2f)
-        val sc6:ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background", Texture::class.java)), 1f, 800f, -Gdx.graphics.height/2f)
+        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background", Texture::class.java)), 1f, -100f, -Gdx.graphics.height / 2f)
+        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background", Texture::class.java)), 1f, 800f, -Gdx.graphics.height / 2f)
         sc5.following = sc6
         sc6.following = sc5
 
@@ -97,22 +101,22 @@ class GameScreen(val game: Game): Screen {
 
                     currEvent = _evt.selected(choice, MathUtils.random(100))
                     if(currEvent != null){
-                        eventTimerTest.restart(0.00001f)
+                        eventCustomTimerTest.restart(0.00001f)
                     }else{
                         currEvent = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
-                        eventTimerTest.restart(MathUtils.random(10, 30).toFloat())
+                        eventCustomTimerTest.restart(MathUtils.random(10, 30).toFloat())
                     }
                 })
             }
         }
 
-        eventTimerTest.callback = func
+        eventCustomTimerTest.callback = func
 
         makeEvents()
     }
 
     private fun makeEvents(){
-        EventManager.onEvent("hurt", {args ->
+        EventManager.onEvent("hurt", { args ->
             var name = (args[0]) as String
             val amt = ((args[1]) as String).toInt()
 
@@ -124,14 +128,14 @@ class GameScreen(val game: Game): Screen {
             gui.buildGroupTable()
         })
 
-        EventManager.onEvent("die", {args ->
+        EventManager.onEvent("die", { args ->
             var name = (args[0]) as String
 
             GameStats.groupManager.killPerson(name)
             gui.buildGroupTable()
         })
 
-        EventManager.onEvent("heal", {args ->
+        EventManager.onEvent("heal", { args ->
             var name = (args[0]) as String
             val amt = ((args[1]) as String).toInt()
 
@@ -172,21 +176,22 @@ class GameScreen(val game: Game): Screen {
         TextGame.stage.draw()
     }
 
-    private fun draw(batch:SpriteBatch){
+    private fun draw(batch: SpriteBatch){
+        batch.color = Color.WHITE
+
+        batch.draw(backgroundSky, -400f, -backgroundSky.height.toFloat() + Gdx.graphics.height/2f + (backgroundSky.height - Gdx.graphics.height)*currPosOfBackground)
+
+        batch.draw(sunMoon, -400f, -sunMoon.height.toFloat()/1.32f, sunMoon.width.toFloat()/2, sunMoon.height.toFloat()/2, sunMoon.width.toFloat(), sunMoon.height.toFloat(), 1f, 1f, MathUtils.radiansToDegrees* currPosOfSun,
+                0, 0, sunMoon.width, sunMoon.height, false, true)
+
         if(state == State.TRAVELING)
             drawTravelScreen(batch)
         else if(state == State.CAMP)
             drawCampScreen(batch)
     }
 
-    private fun drawTravelScreen(batch:SpriteBatch){
+    private fun drawTravelScreen(batch: SpriteBatch){
         val value = currPosOfBackground.clamp(0.3f, 1f)
-        batch.draw(backgroundSky, -400f, -backgroundSky.height.toFloat() + Gdx.graphics.height/2f + (backgroundSky.height - Gdx.graphics.height)*currPosOfBackground)
-
-        batch.color = Color.WHITE
-
-        batch.draw(sunMoon, -400f, -sunMoon.height.toFloat()/1.32f, sunMoon.width.toFloat()/2, sunMoon.height.toFloat()/2, sunMoon.width.toFloat(), sunMoon.height.toFloat(), 1f, 1f, MathUtils.radiansToDegrees* currPosOfSun,
-                0, 0, sunMoon.width, sunMoon.height, false, true)
 
         val color = Color(value, value, value, 1f)
         batch.color = color
@@ -205,17 +210,18 @@ class GameScreen(val game: Game): Screen {
 
     }
 
-    private fun drawCampScreen(batch:SpriteBatch){
+    private fun drawCampScreen(batch: SpriteBatch){
+        batch.draw(campScreenBackground, -Gdx.graphics.width/2f, -Gdx.graphics.height/2f)
 
     }
 
     private fun update(delta:Float){
         GameStats.update(delta)
-        eventTimerTest.update(delta)
+        eventCustomTimerTest.update(delta)
 
         //the -MathUtils.PI/2f is to offset the value to 0. Since sine goes to -1 and 1 but normalize it 0 - 1, the initial value will be 0.5 and we don't want that!
-        currPosOfBackground = (MathUtils.sin((((GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f))*MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
-        currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()*MathUtils.PI
+        currPosOfBackground = (MathUtils.sin((((GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f))* MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
+        currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()* MathUtils.PI
 
         for(background in scrollingBackgroundList)
             background.update(delta)

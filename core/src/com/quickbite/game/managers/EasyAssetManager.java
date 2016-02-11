@@ -1,4 +1,4 @@
-package com.quickbite.game;
+package com.quickbite.game.managers;
 
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;

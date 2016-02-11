@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.game.managers
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
@@ -10,17 +10,17 @@ import java.util.*
  */
 
 object DataManager{
-    val rootEventMap:HashMap<String, EventJson> = HashMap() //For Json Events
-    val eventMap:HashMap<String, EventJson> = HashMap() //For Json Events
+    val rootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val json: Json = Json()
 
     fun loadEvents(){
-        val handle:FileHandle = Gdx.files.internal("files/events/")
+        val handle: FileHandle = Gdx.files.internal("files/events/")
         val list:Array<FileHandle> = handle.list()
 
-        for(file:FileHandle in list){
-            val event:EventJson = json.fromJson(EventJson::class.java, file)
+        for(file: FileHandle in list){
+            val event: EventJson = json.fromJson(EventJson::class.java, file)
             if(event.root) rootEventMap.put(file.nameWithoutExtension(), event)
             else eventMap.put(file.nameWithoutExtension(), event)
         }
@@ -35,7 +35,7 @@ object DataManager{
         var chances:Array<IntArray>? = null //The chances of each outcome happening
         var resultingAction:Array<String>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
 
-        fun selected(choice:String, chance:Int):EventJson?{
+        fun selected(choice:String, chance:Int): EventJson?{
             var outcomeIndex:Int = -1
 
             val choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice

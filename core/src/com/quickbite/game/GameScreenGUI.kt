@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
+import com.quickbite.game.managers.DataManager
+import com.quickbite.game.screens.GameScreen
 
 /**
  * Created by Paha on 2/5/2016.
@@ -47,6 +49,7 @@ class GameScreenGUI(val game : GameScreen) {
     private lateinit var supplyButtonTab:TextButton
     private lateinit var travelInfoButtonTab:TextButton
     private lateinit var groupButtonTab:TextButton
+    private lateinit var campButtonTab:TextButton
 
     /* GUI elements for supplies */
 
@@ -107,6 +110,7 @@ class GameScreenGUI(val game : GameScreen) {
                 supplyButtonTab.isChecked = true
                 travelInfoButtonTab.isChecked = false
                 groupButtonTab.isChecked = false
+                campButtonTab.isChecked = false
             }
         })
 
@@ -116,6 +120,7 @@ class GameScreenGUI(val game : GameScreen) {
                 travelInfoButtonTab.isChecked = true
                 supplyButtonTab.isChecked = false
                 groupButtonTab.isChecked = false
+                campButtonTab.isChecked = false
             }
         })
 
@@ -125,6 +130,21 @@ class GameScreenGUI(val game : GameScreen) {
                 groupButtonTab.isChecked = true
                 travelInfoButtonTab.isChecked = false
                 supplyButtonTab.isChecked = false
+                campButtonTab.isChecked = false
+            }
+        })
+
+        campButtonTab.addListener(object:ClickListener(){
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                campButtonTab.isChecked = false
+
+                if(game.state == GameScreen.State.TRAVELING) {
+                    game.state = GameScreen.State.CAMP
+                    campButtonTab.setText("Travel")
+                }else if(game.state == GameScreen.State.CAMP) {
+                    game.state = GameScreen.State.TRAVELING
+                    campButtonTab.setText("Camp")
+                }
             }
         })
     }
@@ -210,11 +230,17 @@ class GameScreenGUI(val game : GameScreen) {
         groupButtonTab.label.setFontScale(0.5f)
         groupButtonTab.label.setAlignment(Align.left)
 
-        tabTable.add(travelInfoButtonTab).width(100f).height(25f).padRight(10f)
+        campButtonTab = TextButton("Camp", textButtonStyle)
+        campButtonTab.label.setFontScale(0.5f)
+        campButtonTab.label.setAlignment(Align.left)
+
+        tabTable.add(travelInfoButtonTab).width(100f).height(35f).padRight(10f)
         tabTable.row()
-        tabTable.add(supplyButtonTab).width(100f).height(25f).padRight(10f)
+        tabTable.add(supplyButtonTab).width(100f).height(35f).padRight(10f)
         tabTable.row()
-        tabTable.add(groupButtonTab).width(100f).height(25f).padRight(10f)
+        tabTable.add(groupButtonTab).width(100f).height(35f).padRight(10f)
+        tabTable.row()
+        tabTable.add(campButtonTab).width(100f).height(35f).padRight(10f)
     }
 
     private fun buildTravelInfoTable(){

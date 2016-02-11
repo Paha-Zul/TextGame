@@ -1,14 +1,18 @@
 package com.quickbite.game
 
+import com.quickbite.game.managers.GroupManager
+import com.quickbite.game.managers.SupplyManager
+import com.quickbite.game.screens.GameScreen
+
 /**
  * Created by Paha on 2/8/2016.
  */
 object GameStats {
-    lateinit var groupManager:GroupManager
-    lateinit var supplyManager:SupplyManager
-    lateinit var game:GameScreen
+    lateinit var groupManager: GroupManager
+    lateinit var supplyManager: SupplyManager
+    lateinit var game: GameScreen
 
-    fun init(gameScreen:GameScreen){
+    fun init(gameScreen: GameScreen){
         game = gameScreen
 
         groupManager = GroupManager()
