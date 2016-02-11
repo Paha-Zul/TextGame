@@ -1,8 +1,8 @@
 {
   "name": "Poisonous ",
-  "description": "Upon touching the plant your finger begins to burn. It slowly spreads up your arm to your shoulder. The pain is intense and you begin to wonder why touching the plant ever crossed your mind.",
+  "description": "Upon touching the plant your finger begins to bern. It slowly spreads up your arm to your shoulder. The pain is intense and you begin to wonder why touching the plant ever crossed your mind.",
   "choices": ["That Sucks..."],
   "outcomes": [],
   "chances": [],
-  "resultingAction": "Hurt"
+  "resultingAction": ["hurt", "random", "10"]
 }

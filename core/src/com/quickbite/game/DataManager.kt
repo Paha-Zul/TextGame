@@ -33,7 +33,7 @@ object DataManager{
         var choices:Array<String>? = null // The choices, like 'yes' or 'no' || 'Kill him', 'Let him go', 'Have him join you'
         var outcomes:Array<Array<String>>? = null //The possible outcomes for each choice, ie: 'He died', 'He killed you first!'
         var chances:Array<IntArray>? = null //The chances of each outcome happening
-        var resultingAction:String? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
+        var resultingAction:Array<String>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
 
         fun selected(choice:String, chance:Int):EventJson?{
             var outcomeIndex:Int = -1

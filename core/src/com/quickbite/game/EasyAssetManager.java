@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class EasyAssetManager extends AssetManager {
     public static boolean log = false;
 
-    HashMap<String, DataReference> dataMap = new HashMap<String, DataReference>(20);
+    private HashMap<String, DataReference> dataMap = new HashMap<String, DataReference>(20);
 
     /**
      * Helper function to load all pictures from a baseDir. Doesn't have to be used...

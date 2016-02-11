@@ -4,5 +4,5 @@
   "choices": ["... I Died?"],
   "outcomes": [],
   "chances": [],
-  "resultingAction": "Die"
+  "resultingAction": ["die", "random"]
 }

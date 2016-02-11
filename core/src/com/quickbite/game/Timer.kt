@@ -56,15 +56,15 @@ class Timer(private var _callback:(()->Unit)?, private var secondsDelay:Float) {
         start()
     }
 
-    fun restart(secondDelay: Float){
-        this.secondsDelay = secondsDelay
+    fun restart(sDelay: Float){
+        this.secondsDelay = sDelay
         repeating = false
         restart()
     }
 
-    fun restart(secondDelay:Float, secondInterval:Float){
-        this.secondsDelay = secondsDelay
-        this.secondInterval = secondInterval
+    fun restart(sDelay:Float, sInterval:Float){
+        this.secondsDelay = sDelay
+        this.secondInterval = sInterval
         repeating = true
         restart()
     }
