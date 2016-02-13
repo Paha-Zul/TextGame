@@ -1,8 +1,9 @@
 package com.quickbite.game.managers
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
+import java.io.BufferedReader
 import java.util.*
 
 /**
@@ -10,20 +11,36 @@ import java.util.*
  */
 
 object DataManager{
-    val rootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val rootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val randomNameList:MutableList<String> = arrayListOf()
 
     val json: Json = Json()
 
-    fun loadEvents(){
-        val handle: FileHandle = Gdx.files.internal("files/events/")
-        val list:Array<FileHandle> = handle.list()
+    fun loadEvents(dir:FileHandle){
+        val list:Array<FileHandle> = dir.list()
 
         for(file: FileHandle in list){
-            val event: EventJson = json.fromJson(EventJson::class.java, file)
-            if(event.root) rootEventMap.put(file.nameWithoutExtension(), event)
-            else eventMap.put(file.nameWithoutExtension(), event)
+            if(file.isDirectory)
+                loadEvents(file)
+            else {
+                val event: EventJson = json.fromJson(EventJson::class.java, file)
+                if (event.root) rootEventMap.put(file.nameWithoutExtension(), event)
+                else eventMap.put(file.nameWithoutExtension(), event)
+            }
         }
+    }
+
+    fun loadRandomNames(file:FileHandle){
+        val reader:BufferedReader = BufferedReader(file.reader());
+        reader.forEachLine {line ->  randomNameList += line }
+    }
+
+    fun pullRandomName():String{
+        val index = MathUtils.random(0, randomNameList.size - 1)
+        val name = randomNameList[index]
+        randomNameList.removeAt(index)
+        return name
     }
 
     class EventJson{
@@ -35,7 +52,12 @@ object DataManager{
         var chances:Array<IntArray>? = null //The chances of each outcome happening
         var resultingAction:Array<String>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
 
-        fun selected(choice:String, chance:Int): EventJson?{
+        var randomName:String = ""
+
+        /**
+         * Selects another Event using a choice and chance.
+         */
+        fun select(choice:String, chance:Int): EventJson?{
             var outcomeIndex:Int = -1
 
             val choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
@@ -57,11 +79,20 @@ object DataManager{
                 if(outcomeIndex < 0)
                     return null
 
-                val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]
+                val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]!!
+                outcomeEvent.randomName = GroupManager.getRandomPerson().name
                 return outcomeEvent
             }
 
             return null
+        }
+
+        companion object{
+            fun getRandomRoot():EventJson{
+                val event = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
+                event.randomName = GroupManager.getRandomPerson().name
+                return event;
+            }
         }
     }
 }

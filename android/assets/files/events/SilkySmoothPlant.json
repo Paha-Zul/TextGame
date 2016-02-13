@@ -1,7 +1,0 @@
-{
-  "name": "Silky Plant",
-  "description": "Upon touching the plant, you realise it feels silky smooth. Maybe it's a profitable plant for the natives?",
-  "choices": ["Take It", "Leave It"],
-  "outcomes": [],
-  "chances": []
-}

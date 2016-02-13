@@ -6,18 +6,18 @@ import com.quickbite.game.Person
 /**
  * Created by Paha on 2/8/2016.
  */
-class GroupManager {
+object GroupManager {
     private val list:MutableList<Person> = arrayListOf()
 
     val numPeopleAlive:Int
         get() = list.size
 
     init{
-        list += Person("John")
-        list += Person("Jacob")
-        list += Person("Will")
-        list += Person("Brad")
-        list += Person("Ben")
+        list += Person(DataManager.pullRandomName())
+        list += Person(DataManager.pullRandomName())
+        list += Person(DataManager.pullRandomName())
+        list += Person(DataManager.pullRandomName())
+        list += Person(DataManager.pullRandomName())
     }
 
     fun getPeopleList():Array<Person>{
@@ -27,6 +27,10 @@ class GroupManager {
     fun getPerson(name:String): Person?{
         if(name.equals("random")) return list[MathUtils.random(list.size-1)]
         return list.find {person -> person.name.equals(name)}
+    }
+
+    fun getRandomPerson():Person{
+        return list[MathUtils.random(0, list.size-1)]
     }
 
     fun killPerson(name:String){

@@ -1,6 +1,6 @@
 package com.quickbite.game
 
-import com.quickbite.game.managers.GroupManager
+import com.badlogic.gdx.math.MathUtils
 import com.quickbite.game.managers.SupplyManager
 import com.quickbite.game.screens.GameScreen
 
@@ -8,19 +8,14 @@ import com.quickbite.game.screens.GameScreen
  * Created by Paha on 2/8/2016.
  */
 object GameStats {
-    lateinit var groupManager: GroupManager
-    lateinit var supplyManager: SupplyManager
     lateinit var game: GameScreen
 
     fun init(gameScreen: GameScreen){
         game = gameScreen
-
-        groupManager = GroupManager()
-        supplyManager = SupplyManager(gameScreen, groupManager)
     }
 
     fun update(delta:Float){
-        supplyManager.update(delta)
+        SupplyManager.update(delta)
 
         TimeInfo.totalTimeCounter+=delta
         TimeInfo.currTime = (TimeInfo.totalTimeCounter%TimeInfo.timeScale).toInt()
@@ -32,11 +27,16 @@ object GameStats {
     }
 
     fun updateTimeTick(){
-        supplyManager.updatePerTick()
+        SupplyManager.updatePerTick()
+        TravelInfo.totalDistTraveled += TravelInfo.currMPH
     }
 
     object TravelInfo{
-
+        //Need total distance of the game, distance traveled, distance to go, mph traveling
+        var totalDistOfGame:Int = MathUtils.random(36000, 108000)
+        var totalDistTraveled:Int = 0
+        var totalDistToGo:Int = 0
+        var currMPH:Int = 10
     }
 
     object TimeInfo{

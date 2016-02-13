@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.quickbite.game.*
 import com.quickbite.game.managers.DataManager
 import com.quickbite.game.managers.EventManager
+import com.quickbite.game.managers.GroupManager
+import com.quickbite.game.managers.SupplyManager
 
 /**
  * Created by Paha on 2/3/2016.
@@ -23,32 +25,29 @@ class GameScreen(val game: Game): Screen {
     }
     var state = State.TRAVELING
 
-    val table: Table = Table()
+    private val table: Table = Table()
 
-    val backgroundSky = Texture(Gdx.files.internal("art/backgroundSky.png"), true)
-    val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
+    private val backgroundSky = Texture(Gdx.files.internal("art/backgroundSky.png"), true)
+    private val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
 
-    val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
-    val campScreenBackground: Texture = TextGame.manager.get("Camp", Texture::class.java)
+    private val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
+    private val campScreenBackground: Texture = TextGame.manager.get("Camp", Texture::class.java)
 
-    val ROV: Texture = TextGame.manager.get("ROV", Texture::class.java)
+    private val ROV: Texture = TextGame.manager.get("ROV", Texture::class.java)
 
-    var currPosOfBackground:Float = 0f
-    var currPosOfSun:Float = 0f
+    private var currPosOfBackground:Float = 0f
+    private var currPosOfSun:Float = 0f
 
-    //Need total distance of the game, distance traveled, distance to go, mph traveling
-    var totalDistOfGame:Int = MathUtils.random(36000, 108000)
-    var totalDistTraveled:Int = 0
-    var totalDistToGo:Int = 0
-    var currMPH:Int = 20
-
-    val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(10, 30).toFloat())
+    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(10, 30).toFloat())
 
     private var paused = false
 
-    val gui: GameScreenGUI = GameScreenGUI(this)
+    private val gui: GameScreenGUI = GameScreenGUI(this)
 
-    val gameInput: GameScreenInput = GameScreenInput()
+    private val gameInput: GameScreenInput = GameScreenInput()
+
+    var numHoursToAdvance:Int = 0
+    var speedToAdvance:Float = 0.5f
 
     override fun show() {
         GameStats.init(this)
@@ -88,22 +87,23 @@ class GameScreen(val game: Game): Screen {
 
         //gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
 
-        var currEvent: DataManager.EventJson? = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
+        var currEvent: DataManager.EventJson? = DataManager.EventJson.getRandomRoot()
 
         val func = {
             if(currEvent!=null){
                 val _evt = currEvent as DataManager.EventJson
                 gui.triggerEventGUI(_evt, { choice ->
+
                     //If the list has a resulting action, call it!
                     val list = currEvent!!.resultingAction;
                     if(list != null && list.size > 0)
                         EventManager.callEvent(list[0], list.slice(1.rangeTo(list.size)))
 
-                    currEvent = _evt.selected(choice, MathUtils.random(100))
+                    currEvent = _evt.select(choice, MathUtils.random(100))
                     if(currEvent != null){
                         eventCustomTimerTest.restart(0.00001f)
                     }else{
-                        currEvent = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
+                        currEvent = DataManager.EventJson.getRandomRoot()
                         eventCustomTimerTest.restart(MathUtils.random(10, 30).toFloat())
                     }
                 })
@@ -120,10 +120,10 @@ class GameScreen(val game: Game): Screen {
             var name = (args[0]) as String
             val amt = ((args[1]) as String).toInt()
 
-            val person = GameStats.groupManager.getPerson(name)!!
+            val person = GroupManager.getPerson(name)!!
             person.health -= amt
             if(person.health <= 0)
-                GameStats.groupManager.killPerson(name)
+                GroupManager.killPerson(name)
 
             gui.buildGroupTable()
         })
@@ -131,7 +131,7 @@ class GameScreen(val game: Game): Screen {
         EventManager.onEvent("die", { args ->
             var name = (args[0]) as String
 
-            GameStats.groupManager.killPerson(name)
+            GroupManager.killPerson(name)
             gui.buildGroupTable()
         })
 
@@ -139,12 +139,23 @@ class GameScreen(val game: Game): Screen {
             var name = (args[0]) as String
             val amt = ((args[1]) as String).toInt()
 
-            val player = GameStats.groupManager.getPerson(name)!!;
+            val player = GroupManager.getPerson(name)!!;
 
             player.health += amt;
             if(player.health >= 100) player.health = 100;
 
             gui.buildGroupTable()
+        })
+
+        EventManager.onEvent("addRndAmt", {args ->
+            val name:String = args[0] as String
+            val min:Int = (args[1] as String).toInt()
+            val max:Int = (args[2] as String).toInt()
+            val supplyName:String = args[3] as String
+
+            var num = MathUtils.random(Math.abs(min), Math.abs(max))
+            if(min < 0 || max < 0) num = -num
+            val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
         })
     }
 
@@ -166,7 +177,9 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun render(delta: Float) {
-        if(!paused && state == State.TRAVELING) update(delta)
+        update(delta)
+        if(!paused && state == State.TRAVELING) travelUpdate(delta)
+        else if(!paused && state == State.CAMP) campUpdate(delta)
 
         TextGame.batch.begin()
         draw(TextGame.batch)
@@ -215,22 +228,30 @@ class GameScreen(val game: Game): Screen {
 
     }
 
-    private fun update(delta:Float){
+    private fun campUpdate(delta:Float){
+        if(numHoursToAdvance > 0){
+            GameStats.update(speedToAdvance)
+        }
+    }
+
+    private fun travelUpdate(delta:Float){
         GameStats.update(delta)
         eventCustomTimerTest.update(delta)
-
-        //the -MathUtils.PI/2f is to offset the value to 0. Since sine goes to -1 and 1 but normalize it 0 - 1, the initial value will be 0.5 and we don't want that!
-        currPosOfBackground = (MathUtils.sin((((GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f))* MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
-        currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()* MathUtils.PI
 
         for(background in scrollingBackgroundList)
             background.update(delta)
     }
 
+    private fun update(delta:Float){
+        //the -MathUtils.PI/2f is to offset the value to 0. Since sine goes to -1 and 1 but normalize it 0 - 1, the initial value will be 0.5 and we don't want that!
+        currPosOfBackground = (MathUtils.sin((((GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f))* MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
+        currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()* MathUtils.PI
+    }
+
     public fun onTimeTick(delta:Float){
-        totalDistTraveled += currMPH
 
         GameStats.updateTimeTick()
+        if(numHoursToAdvance > 0) numHoursToAdvance--
 
         gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
     }

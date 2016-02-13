@@ -1,8 +1,0 @@
-{
-  "name": "Information",
-  "description": "This kind of Event simply tells you something of interest. Something like... 'Hey man, you ran over a sharp piece of metal and it looks like you lost a tire. Good thing you had a spare!'",
-  "choices": ["Thank God"],
-  "outcomes": [],
-  "chances": [],
-  "root": true
-}

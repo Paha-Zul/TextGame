@@ -1,5 +1,6 @@
 package com.quickbite.game.screens
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -17,7 +18,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
     override fun show() {
         //game.setScreen(GameScreen(game))
-        DataManager.loadEvents()
+        DataManager.loadEvents(Gdx.files.internal("files/events/"))
+        DataManager.loadRandomNames(Gdx.files.internal("files/text/names.txt"))
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.font

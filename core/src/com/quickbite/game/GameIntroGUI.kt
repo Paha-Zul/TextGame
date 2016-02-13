@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.quickbite.game.managers.SupplyManager
 import com.quickbite.game.screens.GameIntroScreen
 import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 /**
  * Created by Paha on 2/10/2016.
@@ -33,7 +36,9 @@ class GameIntroGUI(val game:GameIntroScreen) {
 
     fun firstPage(){
         TextGame.stage.clear()
-        reader = BufferedReader(page1.reader());
+        val fileInputStream = FileInputStream(page1.file())
+        val inputStreamReader = InputStreamReader(fileInputStream, "UTF-8")
+        reader = BufferedReader(inputStreamReader);
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
@@ -46,10 +51,11 @@ class GameIntroGUI(val game:GameIntroScreen) {
         layoutTable.setFillParent(true)
 
         val titleLabel:Label = Label(reader.readLine(), labelStyle)
+        titleLabel.setFontScale(0.4f)
         titleLabel.color.a = 0f
 
         val bodyLabel:Label = Label(reader.readLine(), labelStyle)
-        bodyLabel.setFontScale(0.5f)
+        bodyLabel.setFontScale(0.2f)
         bodyLabel.setWrap(true)
         bodyLabel.color.a = 0f
 
@@ -59,7 +65,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
         layoutTable.top()
         layoutTable.add(titleLabel).left()
         layoutTable.row()
-        layoutTable.add(bodyLabel).width(Gdx.graphics.width.toFloat())
+        layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
         layoutTable.row().padTop(20f)
         layoutTable.add(nextPageButton).size(64f, 64f)
 
@@ -87,7 +93,9 @@ class GameIntroGUI(val game:GameIntroScreen) {
     fun secondPage(){
         TextGame.stage.clear()
 
-        reader = BufferedReader(page2.reader());
+        val fileInputStream = FileInputStream(page2.file())
+        val inputStreamReader = InputStreamReader(fileInputStream, "UTF-8")
+        reader = BufferedReader(inputStreamReader);
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
@@ -100,14 +108,14 @@ class GameIntroGUI(val game:GameIntroScreen) {
         layoutTable.setFillParent(true)
 
         val bodyLabel:Label = Label(reader.readLine(), labelStyle)
-        bodyLabel.setFontScale(0.5f)
+        bodyLabel.setFontScale(0.2f)
         bodyLabel.setWrap(true)
         bodyLabel.color.a = 0f
 
         val nextPageButton:ImageButton = ImageButton(buttonStyle)
         nextPageButton.color.a = 0f
 
-        layoutTable.add(bodyLabel).width(Gdx.graphics.width.toFloat())
+        layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
         layoutTable.row()
         layoutTable.add(nextPageButton).size(64f)
 
@@ -141,22 +149,22 @@ class GameIntroGUI(val game:GameIntroScreen) {
         val layoutTable: Table = Table()
         layoutTable.setFillParent(true)
 
-        val bodyLabel:Label = Label(reader.readLine(), labelStyle)
-        bodyLabel.setFontScale(0.5f)
+        val bodyLabel:Label = Label(reader.readLine()+"\n\nThe ship’s last coordinates place the crew ${GameStats.TravelInfo.totalDistOfGame} miles away from the RX-2020.", labelStyle)
+        bodyLabel.setFontScale(0.2f)
         bodyLabel.setWrap(true)
         bodyLabel.color.a = 0f
 
         val nextPageButton:TextButton = TextButton("Count the Losses", buttonStyle)
         nextPageButton.color.a = 0f
+        nextPageButton.label.setFontScale(0.4f)
 
-        layoutTable.add(bodyLabel).width(Gdx.graphics.width.toFloat())
+        layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
         layoutTable.row()
         layoutTable.add(nextPageButton)
 
         nextPageButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                TextGame.stage.clear()
-                game.done = true
+                suppliesPage()
             }
         })
 
@@ -165,6 +173,69 @@ class GameIntroGUI(val game:GameIntroScreen) {
         })
 
         chainTask.setChain(ChainTask({nextPageButton.color.a >= 1}, {
+            nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
+        }))
+
+        TextGame.stage.addActor(layoutTable)
+    }
+
+    fun suppliesPage(){
+        TextGame.stage.clear()
+
+        reader = BufferedReader(page3.reader());
+
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+        val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.fontColor = Color.BLACK
+
+        val layoutTable: Table = Table()
+        layoutTable.setFillParent(true)
+
+        val titleLabel:Label = Label("Supplies Recovered", labelStyle)
+        titleLabel.color.a = 0f
+        titleLabel.setFontScale(0.4f)
+
+        layoutTable.add(titleLabel)
+        layoutTable.row()
+
+        val labelList:MutableList<Label> = arrayListOf()
+        val list = SupplyManager.getSupplyList()
+        for(i in list.indices){
+            val supply = list[i]
+            val label = Label(supply.displayName+": "+supply.amt.toInt(), labelStyle)
+            label.setFontScale(0.2f)
+            label.color.a = 0f
+            layoutTable.add(label)
+            layoutTable.row()
+            labelList.add(label)
+        }
+
+        val nextPageButton:TextButton = TextButton("Embark", buttonStyle)
+        nextPageButton.color.a = 0f
+        nextPageButton.label.setFontScale(0.4f)
+
+        layoutTable.row().padTop(15f)
+        layoutTable.add(nextPageButton)
+
+        nextPageButton.addListener(object:ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                chainTask = ChainTask({layoutTable.color.a <= 0}, {layoutTable.color.a = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f)})
+                chainTask.setChain(ChainTask(null, {TextGame.stage.clear(); game.done = true;}))
+
+            }
+        })
+
+        chainTask = ChainTask({titleLabel.color.a >= 1}, {titleLabel.color.a = GH.lerpValue(titleLabel.color.a, 0f, 1f, 0.1f)})
+        var nextChain:ChainTask = chainTask;
+
+        for(label in labelList){
+            nextChain = nextChain.setChain(ChainTask({label.color.a >= 1}, {
+                label.color.a = GH.lerpValue(label.color.a, 0f, 1f, 0.1f)
+            }))
+        }
+
+        nextChain.setChain(ChainTask({nextPageButton.color.a >= 1}, {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 

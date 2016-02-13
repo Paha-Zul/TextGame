@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.game.managers.DataManager
+import com.quickbite.game.managers.GroupManager
+import com.quickbite.game.managers.SupplyManager
 import com.quickbite.game.screens.GameScreen
 
 /**
@@ -21,9 +23,14 @@ import com.quickbite.game.screens.GameScreen
 class GameScreenGUI(val game : GameScreen) {
     var displaying:Int = 0
 
+    private val normalFontScale = 0.15f
+    private val titleFontScale = 0.25f
+    private val buttonFontScale = 0.15f
+
     private val table: Table = Table()
     private val travelInfoTable:Table = Table()
     private val tabTable:Table = Table()
+    private val campTable:Table = Table()
 
     private val timeInfoTable:Table = Table()
     private lateinit var timeTitleLabel:Label
@@ -46,10 +53,19 @@ class GameScreenGUI(val game : GameScreen) {
     private val outerTable:Table = Table()
     private val supplyAmountList:MutableList<Label> = arrayListOf()
 
+    /* Tab buttons */
     private lateinit var supplyButtonTab:TextButton
     private lateinit var travelInfoButtonTab:TextButton
     private lateinit var groupButtonTab:TextButton
     private lateinit var campButtonTab:TextButton
+
+    /* Camp specific stuff */
+    private lateinit var restButton:TextButton
+    private lateinit var scavengeButton:TextButton
+    private lateinit var restHourLabel:Label
+    private lateinit var scavengeHourLabel:Label
+    private lateinit var restHourSlider:Slider
+    private lateinit var scavengeHourSlider:Slider
 
     /* GUI elements for supplies */
 
@@ -73,22 +89,24 @@ class GameScreenGUI(val game : GameScreen) {
     fun updateOnTimeTick(delta:Float){
         var time:String
 
-        when{
-            GameStats.TimeInfo.currTime < 10 -> time = "0"+GameStats.TimeInfo.currTime.toInt()+"00"
-            else -> time = ""+GameStats.TimeInfo.currTime.toInt()+"00"
-        }
+        var t:Int = ((GameStats.TimeInfo.currTime.toInt())%12)
+
+        if(t == 0) t = 12
+        time = ""+t+":00 "
+        if(GameStats.TimeInfo.currTime >= 12) time += "PM"
+        else time += "AM"
 
         timeLabel.setText(time)
         totalDays.setText(""+(GameStats.TimeInfo.totalTimeCounter/GameStats.TimeInfo.timeScale).toInt()+" Days")
 
-        distanceLabel.setText("" + game.totalDistTraveled + " / " + game.totalDistOfGame)
-        distProgressBar.setValue(game.totalDistTraveled.toFloat())
+        distanceLabel.setText("" + GameStats.TravelInfo.totalDistTraveled + " / " + GameStats.TravelInfo.totalDistOfGame)
+        distProgressBar.setValue(GameStats.TravelInfo.totalDistTraveled.toFloat())
 
         updateSuppliesGUI()
     }
 
     private fun updateSuppliesGUI(){
-        val list = GameStats.supplyManager.getSupplyList()
+        val list = SupplyManager.getSupplyList()
         for(i in list.indices){
             supplyAmountList[i].setText( list[i].amt.toInt().toString())
         }
@@ -136,15 +154,45 @@ class GameScreenGUI(val game : GameScreen) {
 
         campButtonTab.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                super.clicked(event, x, y)
                 campButtonTab.isChecked = false
 
                 if(game.state == GameScreen.State.TRAVELING) {
                     game.state = GameScreen.State.CAMP
                     campButtonTab.setText("Travel")
+                    applyCampTab()
                 }else if(game.state == GameScreen.State.CAMP) {
                     game.state = GameScreen.State.TRAVELING
                     campButtonTab.setText("Camp")
                 }
+            }
+        })
+
+        restButton.addListener(object:ClickListener(){
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                super.clicked(event, x, y)
+
+                game.numHoursToAdvance = restHourSlider.value.toInt()
+            }
+        })
+
+        scavengeButton.addListener(object:ClickListener(){
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                super.clicked(event, x, y)
+
+                game.numHoursToAdvance = scavengeHourSlider.value.toInt()
+            }
+        })
+
+        restHourSlider.addListener(object:ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                restHourLabel.setText(restHourSlider.value.toInt().toString() + " hours")
+            }
+        })
+
+        scavengeHourSlider.addListener(object:ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                scavengeHourLabel.setText(scavengeHourSlider.value.toInt().toString() + " hours")
             }
         })
     }
@@ -166,8 +214,8 @@ class GameScreenGUI(val game : GameScreen) {
      * Applies the travel screen GUI stuff, which is initially only the group stats
      * and supplies info.
      */
-    fun applyTravelScreenGUI(){
-        table.remove()
+    fun applyCampTab(){
+        TextGame.stage.clear()
         table.clear()
 
         table.add(tabTable).top()
@@ -175,8 +223,11 @@ class GameScreenGUI(val game : GameScreen) {
 
         table.top().left()
         table.setFillParent(true)
+        campTable.bottom().left()
+        campTable.setFillParent(true)
 
         TextGame.stage.addActor(table)
+        TextGame.stage.addActor(campTable)
     }
 
     fun buildTravelScreenGUI(){
@@ -194,7 +245,7 @@ class GameScreenGUI(val game : GameScreen) {
         pauseButtonStyle.imageOver =  drawable
         pauseButtonStyle.imageDown =  drawable
 
-        distProgressBar = ProgressBar(0f, game.totalDistOfGame.toFloat(), 20f, false, barStyle)
+        distProgressBar = ProgressBar(0f, GameStats.TravelInfo.totalDistOfGame.toFloat(), 20f, false, barStyle)
 
         pauseButton = ImageButton(pauseButtonStyle)
         pauseButton.setSize(40f, 40f)
@@ -205,6 +256,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         TextGame.stage.addActor(pauseButton)
 
+        buildCampTable()
         buildTabTable()
         buildTravelInfoTable()
         buildStatsTable()
@@ -219,28 +271,28 @@ class GameScreenGUI(val game : GameScreen) {
         textButtonStyle.fontColor = Color.WHITE
 
         travelInfoButtonTab = TextButton("Stats", textButtonStyle)
-        travelInfoButtonTab.label.setFontScale(0.5f)
+        travelInfoButtonTab.label.setFontScale(buttonFontScale)
         travelInfoButtonTab.label.setAlignment(Align.left)
 
         supplyButtonTab = TextButton("Supplies", textButtonStyle)
-        supplyButtonTab.label.setFontScale(0.5f)
+        supplyButtonTab.label.setFontScale(buttonFontScale)
         supplyButtonTab.label.setAlignment(Align.left)
 
         groupButtonTab = TextButton("Group", textButtonStyle)
-        groupButtonTab.label.setFontScale(0.5f)
+        groupButtonTab.label.setFontScale(buttonFontScale)
         groupButtonTab.label.setAlignment(Align.left)
 
         campButtonTab = TextButton("Camp", textButtonStyle)
-        campButtonTab.label.setFontScale(0.5f)
+        campButtonTab.label.setFontScale(buttonFontScale)
         campButtonTab.label.setAlignment(Align.left)
 
-        tabTable.add(travelInfoButtonTab).width(100f).height(35f).padRight(10f)
+        tabTable.add(travelInfoButtonTab).width(100f).padRight(10f)
         tabTable.row()
-        tabTable.add(supplyButtonTab).width(100f).height(35f).padRight(10f)
+        tabTable.add(supplyButtonTab).width(100f).padRight(10f)
         tabTable.row()
-        tabTable.add(groupButtonTab).width(100f).height(35f).padRight(10f)
+        tabTable.add(groupButtonTab).width(100f).padRight(10f)
         tabTable.row()
-        tabTable.add(campButtonTab).width(100f).height(35f).padRight(10f)
+        tabTable.add(campButtonTab).width(100f).padRight(10f)
     }
 
     private fun buildTravelInfoTable(){
@@ -259,8 +311,8 @@ class GameScreenGUI(val game : GameScreen) {
         timeTitleLabel = Label("Time of Day", style)
         timeLabel = Label("0000"+GameStats.TimeInfo.currTime, style)
 
-        timeTitleLabel.setFontScale(0.5f)
-        timeLabel.setFontScale(0.3f)
+        timeTitleLabel.setFontScale(titleFontScale)
+        timeLabel.setFontScale(normalFontScale)
 
         timeInfoTable.add(timeTitleLabel)
         timeInfoTable.row()
@@ -272,12 +324,12 @@ class GameScreenGUI(val game : GameScreen) {
 
         /* Travel info related stuff */
         distanceTitleLabel = Label("Travel Info", style)
-        distanceLabel = Label("0 / "+game.totalDistOfGame, style)
+        distanceLabel = Label("0 / "+GameStats.TravelInfo.totalDistOfGame, style)
         totalDays = Label("0"+GameStats.TimeInfo.currTime+" Days", style)
 
-        distanceTitleLabel.setFontScale(0.5f)
-        distanceLabel.setFontScale(0.3f)
-        totalDays.setFontScale(0.3f)
+        distanceTitleLabel.setFontScale(titleFontScale)
+        distanceLabel.setFontScale(normalFontScale)
+        totalDays.setFontScale(normalFontScale)
 
         distanceTable.add(distanceTitleLabel)
         distanceTable.row()
@@ -309,17 +361,17 @@ class GameScreenGUI(val game : GameScreen) {
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val titleLabel:Label = Label("Group", labelStyle)
-        titleLabel.setFontScale(0.5f)
+        titleLabel.setFontScale(titleFontScale)
         //groupTable.add(titleLabel)
         //groupTable.row()
 
-        val list:Array<Person> = GameStats.groupManager.getPeopleList()
+        val list:Array<Person> = GroupManager.getPeopleList()
         for(person:Person in list.iterator()){
             val nameLabel = Label(person.name, labelStyle)
-            nameLabel.setFontScale(0.3f)
+            nameLabel.setFontScale(normalFontScale)
 
             val healthLabel:Label = Label(""+person.health, labelStyle)
-            healthLabel.setFontScale(0.3f)
+            healthLabel.setFontScale(normalFontScale)
 
             innerGroupTable.add(nameLabel).left().padRight(10f)
             innerGroupTable.add(healthLabel).left()
@@ -339,20 +391,20 @@ class GameScreenGUI(val game : GameScreen) {
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val title = Label("Supplies", labelStyle)
-        title.setFontScale(0.5f)
+        title.setFontScale(titleFontScale)
 
         //supplyTable.add(title).left()
         //supplyTable.row()
 
         val innerTable = Table()
-        val list = GameStats.supplyManager.getSupplyList()
+        val list = SupplyManager.getSupplyList()
         for(i in list.indices){
             val value = list[i]
             val nameLabel = Label(value.displayName, labelStyle)
-            nameLabel.setFontScale(0.3f)
+            nameLabel.setFontScale(normalFontScale)
 
             val amtLabel = Label(""+value.amt.toInt(), labelStyle)
-            amtLabel.setFontScale(0.3f)
+            amtLabel.setFontScale(normalFontScale)
             supplyAmountList += amtLabel
 
             innerTable.add(nameLabel).left().padRight(20f)
@@ -387,7 +439,7 @@ class GameScreenGUI(val game : GameScreen) {
         for(choice in event.choices?.iterator()){
             val button = TextButton(choice, textButtonStyle)
             button.pad(0f, 10f, 0f, 10f)
-            button.label.setFontScale(0.5f)
+            button.label.setFontScale(buttonFontScale)
             eventChoicesTable.add(button)
 
             button.addListener(object:ChangeListener(){
@@ -403,11 +455,13 @@ class GameScreenGUI(val game : GameScreen) {
 
         val titleLabel = Label(event.name, labelStyle)
         titleLabel.setAlignment(Align.left)
-        titleLabel.setFontScale(0.5f)
+        titleLabel.setFontScale(titleFontScale)
 
-        val descLabel = Label(event.description, labelStyle)
+        val desc = event.description.replace("%n", event.randomName)
+
+        val descLabel = Label(desc, labelStyle)
         descLabel.setAlignment(Align.top)
-        descLabel.setFontScale(0.3f)
+        descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)
 
         eventTable.add(titleLabel).expandX().fillX().padLeft(40f).height(45f)
@@ -425,5 +479,49 @@ class GameScreenGUI(val game : GameScreen) {
         //outerTable.debugAll()
 
         TextGame.stage.addActor(outerTable)
+    }
+
+    fun buildCampTable(){
+        campTable.clear()
+        campTable.remove()
+        campTable.setFillParent(true)
+
+        val slider = TextureRegionDrawable(TextureRegion(TextGame.manager.get("slider", Texture::class.java)))
+        val knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnob", Texture::class.java)))
+
+        val sliderStyle:Slider.SliderStyle = Slider.SliderStyle(slider, knob)
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+
+        restButton = TextButton("Rest", buttonStyle)
+        restButton.label.setFontScale(0.2f)
+
+        scavengeButton = TextButton("Scavenge", buttonStyle)
+        scavengeButton.label.setFontScale(0.2f)
+
+        restHourLabel = Label("0 hours", labelStyle)
+        restHourLabel.setFontScale(normalFontScale)
+
+        scavengeHourLabel = Label("0 hours", labelStyle)
+        scavengeHourLabel.setFontScale(normalFontScale)
+
+        restHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
+        scavengeHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
+
+        campTable.add(restButton).width(130f).left()
+        campTable.add(restHourSlider).width(140f).left().padLeft(20f)
+        campTable.add(restHourLabel).padLeft(20f)
+        campTable.row()
+        campTable.add(scavengeButton).width(130f).left()
+        campTable.add(scavengeHourSlider).width(140f).left().padLeft(20f)
+        campTable.add(scavengeHourLabel).padLeft(20f)
+
+        campTable.bottom().left()
+    }
+
+    fun applyCampTable(){
+        TextGame.stage.addActor(campTable)
     }
 }

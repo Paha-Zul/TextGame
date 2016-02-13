@@ -11,7 +11,7 @@ object Tester {
         System.out.println("---------------------")
 
         for(i in 0.rangeTo(numTests)){
-            var evt: DataManager.EventJson? = DataManager.rootEventMap[rootEventName]
+            var evt: DataManager.EventJson? = DataManager.EventJson.getRandomRoot()
             System.out.println("Event: "+evt?.name)
 
             //While the event is no null and has choices, loop over them
@@ -22,7 +22,7 @@ object Tester {
 
                 System.out.println("selecting $choice with chance of $chance")
 
-                evt = evt.selected(choice, chance)
+                evt = evt.select(choice, chance)
 
                 System.out.println("Selected "+evt?.name)
             }

@@ -1,37 +1,37 @@
 package com.quickbite.game.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.game.screens.GameScreen
+import java.util.*
 
 /**
  * Created by Paha on 2/8/2016.
  */
-class SupplyManager(val game: GameScreen, val groupManager: GroupManager) {
-    val map:MutableMap<String, Supply> = hashMapOf()
+object SupplyManager {
+    private val map:LinkedHashMap<String, Supply> = linkedMapOf()
 
     init{
-        addNewSupply("edibles", "Edibles", 0f)
-        addNewSupply("parts", "Parts", 0f)
-        addNewSupply("medkits", "Medkits", 0f)
-        addNewSupply("wealth", "Wealth", 0f)
-        addNewSupply("energy", "Energy", 0f)
-        addNewSupply("ammo", "Ammo", 0f)
-        addNewSupply("solar panels", "Solar Panels", 0f)
-        addNewSupply("tracks", "Tracks", 0f)
-        addNewSupply("battery", "Battery", 0f)
-        addNewSupply("storage", "Storage", 0f)
-
-        map["edibles"]?.amt = (MathUtils.random(75, 225)*groupManager.numPeopleAlive).toFloat() //Initially set the food
-        map["parts"]?.amt = MathUtils.random(50, 150).toFloat()
+        addNewSupply("energy", "Energy", MathUtils.random(50, 150).toFloat(), 200)
+        addNewSupply("edibles", "Edibles", (MathUtils.random(75, 225)*GroupManager.numPeopleAlive).toFloat(), 250*GroupManager.numPeopleAlive) //Initially set the food
+        addNewSupply("parts", "Parts", MathUtils.random(50, 150).toFloat(), 250)
+        addNewSupply("medkits", "Med-kits", MathUtils.random(0, 5).toFloat(), 10)
+        addNewSupply("wealth", "Wealth", MathUtils.random(1, 100).toFloat(), 250)
+        addNewSupply("ammo", "Ammo", MathUtils.random(50, 150).toFloat(), 250)
+        addNewSupply("solar panels", "Solar Panels", MathUtils.random(0, 2).toFloat(), 5)
+        addNewSupply("tracks", "Tracks", MathUtils.random(0, 2).toFloat(), 5)
+        addNewSupply("battery", "Battery", MathUtils.random(0, 2).toFloat(), 5)
+        addNewSupply("storage", "Storage", MathUtils.random(0, 2).toFloat(), 5)
 
         map["edibles"]?.consumePerDay = 5f
         map["parts"]?.consumePerDay = 3.3f
     }
 
-    fun addNewSupply(name:String, displayName:String, amt:Float){
-        map.put(name, Supply(name, displayName, amt))
+    fun addNewSupply(name:String, displayName:String, amt:Float, maxAmount:Int){
+        map.put(name, Supply(name, displayName, amt, maxAmount))
     }
 
+    fun addToSupply(name:String, amt:Float){
+        map[name]!!.amt += amt
+    }
 
     fun update(delta:Float){
 
@@ -39,7 +39,7 @@ class SupplyManager(val game: GameScreen, val groupManager: GroupManager) {
 
     fun updatePerTick(){
         val food = map["edibles"]!!
-        val _f = food.amt- ((food.consumePerDay*groupManager.numPeopleAlive)/24f)
+        val _f = food.amt- ((food.consumePerDay*GroupManager.numPeopleAlive)/24f)
         food.amt = if (_f >= 0) _f else 0f
 
         val scrap = map["parts"]!!
@@ -51,7 +51,7 @@ class SupplyManager(val game: GameScreen, val groupManager: GroupManager) {
         return map.values.toTypedArray()
     }
 
-    class Supply(val name:String, val displayName:String, var amt:Float){
+    class Supply(val name:String, val displayName:String, var amt:Float, var maxAmount:Int){
         var consumePerDay:Float = 0f
     }
 }
