@@ -51,9 +51,7 @@ class GameScreenGUI(val game : GameScreen) {
     private val supplyTable:Table = Table() //For the supplies
 
     /* Gui elements for events */
-    private val eventTable:Table = Table()
-    private val eventChoicesTable:Table = Table()
-    private val outerTable:Table = Table()
+
     private val supplyAmountList:MutableList<Label> = arrayListOf()
 
     /* Tab buttons */
@@ -297,14 +295,17 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildLeftTable(){
         buildSupplyTable()
 
+        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.WHITE
+        buttonStyle.up = drawable
 
         supplyButton = TextButton("Storage", buttonStyle)
         supplyButton.label.setFontScale(buttonFontScale)
 
-        leftTable.add(supplyButton).left()
+        leftTable.add(supplyButton).left().size(130f, 40f)
         leftTable.row()
 
         leftTable.top().left()
@@ -315,9 +316,12 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildRightTable(){
         rightTable.clear()
 
+        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+
         val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.WHITE
+        buttonStyle.up = drawable
 
         groupButtonTab = TextButton("Exomer751", buttonStyle)
         groupButtonTab.label.setFontScale(buttonFontScale)
@@ -325,7 +329,7 @@ class GameScreenGUI(val game : GameScreen) {
         rightTable.setFillParent(true)
         rightTable.top().right()
 
-        rightTable.add(groupButtonTab).right()
+        rightTable.add(groupButtonTab).right().size(130f, 40f)
         rightTable.row()
         TextGame.stage.addActor(rightTable)
     }
@@ -389,11 +393,12 @@ class GameScreenGUI(val game : GameScreen) {
 
             supplyAmountList += amtLabel
 
-            rowTable.add(nameLabel).left().padRight(20f)
-            rowTable.add(amtLabel).left().width(40f).fillX().expandX()
-            rowTable.left()
+            innerTable.add(nameLabel).left().padRight(5f)
+            innerTable.add(amtLabel).left().width(40f)
 
-            innerTable.add(rowTable).fillX().expandX()
+            //rowTable.left()
+
+            //innerTable.add(rowTable).fillX().expandX()
             innerTable.row()
 
         }
@@ -405,13 +410,16 @@ class GameScreenGUI(val game : GameScreen) {
     fun triggerEventGUI(event: DataManager.EventJson, callbackTask : (choice:String)->Unit){
         game.pauseGame()
 
-        outerTable.clear()
-        eventTable.clear()
-        eventChoicesTable.clear()
+        EventInfo.outerEventTable.clear()
+        EventInfo.eventTable.clear()
+        EventInfo.eventChoicesTable.clear()
 
-        outerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log", Texture::class.java)))
+        EventInfo.outerEventTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
+        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -420,25 +428,23 @@ class GameScreenGUI(val game : GameScreen) {
         val padding:Int = 400/(event.choices!!.size+1)/2
 
         for(choice in event.choices?.iterator()){
-            val button = TextButton(choice, textButtonStyle)
+            val button = TextButton("- $choice -", textButtonStyle)
             button.pad(0f, 10f, 0f, 10f)
             button.label.setFontScale(buttonFontScale)
-            eventChoicesTable.add(button)
+            EventInfo.eventChoicesTable.add(button)
+            EventInfo.eventChoicesTable.row()
 
             button.addListener(object:ChangeListener(){
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
-                    game.resumeGame()
-                    outerTable.remove()
-                    callbackTask(button.text.toString())
+                    //EventInfo.outerEventTable.remove()
+                    callbackTask(button.text.toString().split(' ')[1])
                 }
             })
         }
 
-        eventChoicesTable.bottom()
-
-        val titleLabel = Label(event.name, labelStyle)
-        titleLabel.setAlignment(Align.left)
-        titleLabel.setFontScale(titleFontScale)
+        EventInfo.titleLabel = Label(event.name, labelStyle)
+        EventInfo.titleLabel!!.setAlignment(Align.center)
+        EventInfo.titleLabel!!.setFontScale(titleFontScale)
 
         val desc = event.description.replace("%n", event.randomName)
 
@@ -447,21 +453,78 @@ class GameScreenGUI(val game : GameScreen) {
         descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)
 
-        eventTable.add(titleLabel).expandX().fillX().padLeft(40f).height(45f)
-        eventTable.row().expand().fill()
-        eventTable.add(descLabel).width(310f).padTop(10f)
-        eventTable.row().expand().fill()
-        eventTable.add(eventChoicesTable).expandX().fillX().bottom().padBottom(25f)
+        val nextPageButton:ImageButton = ImageButton(drawable)
 
-        //eventTable.debugAll()
+        EventInfo.eventTable.add(EventInfo.titleLabel).expandX().fillX().height(45f).padTop(10f)
+        EventInfo.eventTable.row().expand().fill()
+        EventInfo.eventTable.add(descLabel).width(310f).padTop(10f)
+        EventInfo.eventTable.row().expand().fill()
+        EventInfo.eventTable.add(nextPageButton).size(32f)
 
-        outerTable.setSize(400f, 400f)
-        outerTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
-        outerTable.add(eventTable).expand().fill()
+        EventInfo.outerEventTable.setSize(400f, 400f)
+        EventInfo.outerEventTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
+        EventInfo.outerEventTable.add(EventInfo.eventTable).expand().fill()
 
-        //outerTable.debugAll()
+//        EventInfo.outerEventTable.debugAll()
+//        EventInfo.eventChoicesTable.debugAll()
 
-        TextGame.stage.addActor(outerTable)
+        TextGame.stage.addActor(EventInfo.outerEventTable)
+
+        nextPageButton.addListener(object:ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                EventInfo.eventTable.clear()
+                EventInfo.eventTable.add(EventInfo.titleLabel).expandX().fillX().height(45f).padTop(10f)
+                EventInfo.eventTable.row()
+                EventInfo.eventTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(50f)
+            }
+        })
+    }
+
+    fun showEventResults(list: List<Pair<Int, String>>){
+        EventInfo.eventResultsTable.clear()
+
+        val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.fontColor = Color.WHITE
+
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val redLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
+        val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
+
+        val okayButton:TextButton = TextButton("Okay", textButtonStyle)
+        okayButton.label.setFontScale(buttonFontScale)
+
+        for(item in list){
+            val nameLabel = Label(item.second, labelStyle)
+            var amtLabel:Label? = null
+            if(item.first < 0) amtLabel = Label(item.first.toString(), redLabelStyle)
+            else amtLabel = Label("+${item.first}", greenLabelStyle)
+
+            nameLabel.setFontScale(normalFontScale)
+            amtLabel.setFontScale(normalFontScale)
+
+            EventInfo.eventResultsTable.add(amtLabel).padRight(10f)
+            EventInfo.eventResultsTable.add(nameLabel)
+            EventInfo.eventResultsTable.row()
+        }
+
+        EventInfo.eventTable.clear()
+        EventInfo.eventTable.add(EventInfo.titleLabel).expandX().fillX().height(45f).padTop(10f)
+        EventInfo.eventTable.row()
+        EventInfo.eventTable.add(EventInfo.eventResultsTable).expand().fill()
+        EventInfo.eventTable.row()
+        EventInfo.eventTable.add(okayButton).padBottom(60f).bottom()
+
+        okayButton.addListener(object:ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                game.resumeGame()
+                EventInfo.outerEventTable.remove()
+            }
+        })
+    }
+
+    fun closeEvent(){
+        EventInfo.outerEventTable.remove()
     }
 
     fun buildCampTable(){
@@ -506,5 +569,13 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun applyCampTable(){
         TextGame.stage.addActor(campTable)
+    }
+
+    private object EventInfo{
+        val eventTable:Table = Table()
+        val eventChoicesTable:Table = Table()
+        val outerEventTable:Table = Table()
+        val eventResultsTable:Table = Table()
+        var titleLabel:Label? = null
     }
 }

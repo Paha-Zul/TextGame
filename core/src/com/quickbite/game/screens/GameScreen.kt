@@ -99,13 +99,26 @@ class GameScreen(val game: Game): Screen {
 
                     //If the list has a resulting action, call it!
                     val list = currEvent!!.resultingAction;
-                    if(list != null && list.size > 0)
+                    var exit:Boolean = true
+                    if(list != null && list.size > 0) {
+                        exit = false
                         EventManager.callEvent(list[0], list.slice(1.rangeTo(list.size)))
+                    }
 
                     currEvent = _evt.select(choice, MathUtils.random(100))
                     if(currEvent != null){
                         eventCustomTimerTest.restart(0.00001f)
+                        if(exit){
+                            resumeGame()
+                            gui.closeEvent()
+                        }
+
+                    //Get a new root sometime.
                     }else{
+                        if(exit){
+                            resumeGame()
+                            gui.closeEvent()
+                        }
                         currEvent = DataManager.EventJson.getRandomRoot()
                         eventCustomTimerTest.restart(MathUtils.random(10, 30).toFloat())
                     }
@@ -159,6 +172,8 @@ class GameScreen(val game: Game): Screen {
             var num = MathUtils.random(Math.abs(min), Math.abs(max))
             if(min < 0 || max < 0) num = -num
             val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
+
+            gui.showEventResults(listOf(Pair(num, supplyName)))
         })
     }
 

@@ -15,8 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.quickbite.game.managers.SupplyManager
 import com.quickbite.game.screens.GameIntroScreen
 import java.io.BufferedReader
-import java.io.FileInputStream
-import java.io.InputStreamReader
 
 /**
  * Created by Paha on 2/10/2016.
@@ -36,9 +34,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
 
     fun firstPage(){
         TextGame.stage.clear()
-        val fileInputStream = FileInputStream(page1.file())
-        val inputStreamReader = InputStreamReader(fileInputStream, "UTF-8")
-        reader = BufferedReader(inputStreamReader);
+        reader = BufferedReader(page1.reader());
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
@@ -66,8 +62,8 @@ class GameIntroGUI(val game:GameIntroScreen) {
         layoutTable.add(titleLabel).left()
         layoutTable.row()
         layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
-        layoutTable.row().padTop(20f)
-        layoutTable.add(nextPageButton).size(64f, 64f)
+        layoutTable.row().fill().expand()
+        layoutTable.add(nextPageButton).size(64f, 64f).bottom()
 
         nextPageButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -93,9 +89,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
     fun secondPage(){
         TextGame.stage.clear()
 
-        val fileInputStream = FileInputStream(page2.file())
-        val inputStreamReader = InputStreamReader(fileInputStream, "UTF-8")
-        reader = BufferedReader(inputStreamReader);
+        reader = BufferedReader(page2.reader());
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
@@ -116,8 +110,8 @@ class GameIntroGUI(val game:GameIntroScreen) {
         nextPageButton.color.a = 0f
 
         layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
-        layoutTable.row()
-        layoutTable.add(nextPageButton).size(64f)
+        layoutTable.row().fill().expand()
+        layoutTable.add(nextPageButton).size(64f).bottom()
 
         nextPageButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -160,7 +154,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
 
         layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
         layoutTable.row()
-        layoutTable.add(nextPageButton)
+        layoutTable.add(nextPageButton).bottom()
 
         nextPageButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
