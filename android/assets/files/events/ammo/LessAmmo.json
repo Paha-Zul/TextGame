@@ -1,0 +1,8 @@
+{
+  "name": "Missing Ammo!",
+  "description": "The numbers come up shorter than expected.",
+  "choices": ["Alright"],
+  "outcomes": [],
+  "chances": [],
+  "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "ammo"]
+}

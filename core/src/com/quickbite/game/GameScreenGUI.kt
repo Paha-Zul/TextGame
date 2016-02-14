@@ -27,10 +27,13 @@ class GameScreenGUI(val game : GameScreen) {
     private val titleFontScale = 0.25f
     private val buttonFontScale = 0.15f
 
-    private val table: Table = Table()
-    private val travelInfoTable:Table = Table()
-    private val tabTable:Table = Table()
-    private val campTable:Table = Table()
+    private val mainTable: Table = Table()
+    private val travelInfoTable:Table = Table() //For time and distance traveled
+    private val tabTable:Table = Table() //For the button tabs
+    private val campTable:Table = Table() //For the camp screen
+    private val centerInfoTable:Table = Table()
+    private val leftTable:Table = Table()
+    private val rightTable:Table = Table()
 
     private val timeInfoTable:Table = Table()
     private lateinit var timeTitleLabel:Label
@@ -40,7 +43,7 @@ class GameScreenGUI(val game : GameScreen) {
     private val distanceTable:Table = Table()
     private lateinit var distanceTitleLabel:Label
     private lateinit var distanceLabel:Label
-    private lateinit var totalDays:Label
+    private lateinit var totalDaysLabel:Label
 
     /* GUI elements for people */
     private val groupStatsTable:Table = Table() //Holds the group and supply tables
@@ -54,7 +57,7 @@ class GameScreenGUI(val game : GameScreen) {
     private val supplyAmountList:MutableList<Label> = arrayListOf()
 
     /* Tab buttons */
-    private lateinit var supplyButtonTab:TextButton
+    private lateinit var supplyButton:TextButton
     private lateinit var travelInfoButtonTab:TextButton
     private lateinit var groupButtonTab:TextButton
     private lateinit var campButtonTab:TextButton
@@ -71,14 +74,13 @@ class GameScreenGUI(val game : GameScreen) {
 
     private lateinit var pauseButton:ImageButton
 
-    private val defLabelStyle = Label.LabelStyle(TextGame.font, Color.BLACK)
+    private val defLabelStyle = Label.LabelStyle(TextGame.font, Color.WHITE)
 
     private lateinit var distProgressBar:ProgressBar
 
     fun init(){
         buildTravelScreenGUI()
         applyTravelTab(groupTable)
-        groupButtonTab.isChecked = true
         //applyTravelScreenGUI()
     }
 
@@ -89,17 +91,15 @@ class GameScreenGUI(val game : GameScreen) {
     fun updateOnTimeTick(delta:Float){
         var time:String
 
-        var t:Int = ((GameStats.TimeInfo.currTime.toInt())%12)
-
-        if(t == 0) t = 12
+        val t = GameStats.TimeInfo.timeOfDay
         time = ""+t+":00 "
         if(GameStats.TimeInfo.currTime >= 12) time += "PM"
         else time += "AM"
 
         timeLabel.setText(time)
-        totalDays.setText(""+(GameStats.TimeInfo.totalTimeCounter/GameStats.TimeInfo.timeScale).toInt()+" Days")
+        totalDaysLabel.setText("Day "+GameStats.TimeInfo.totalDaysTraveled)
 
-        distanceLabel.setText("" + GameStats.TravelInfo.totalDistTraveled + " / " + GameStats.TravelInfo.totalDistOfGame)
+        distanceLabel.setText("" + GameStats.TravelInfo.totalDistToGo+" Miles")
         distProgressBar.setValue(GameStats.TravelInfo.totalDistTraveled.toFloat())
 
         updateSuppliesGUI()
@@ -122,51 +122,45 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        supplyButtonTab.addListener(object:ClickListener(){
+        supplyButton.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                applyTravelTab(supplyTable)
-                supplyButtonTab.isChecked = true
-                travelInfoButtonTab.isChecked = false
-                groupButtonTab.isChecked = false
-                campButtonTab.isChecked = false
-            }
-        })
-
-        travelInfoButtonTab.addListener(object:ClickListener(){
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                applyTravelTab(travelInfoTable)
-                travelInfoButtonTab.isChecked = true
-                supplyButtonTab.isChecked = false
-                groupButtonTab.isChecked = false
-                campButtonTab.isChecked = false
+                super.clicked(event, x, y)
+                if(supplyTable.parent == null) {
+                    leftTable.add(supplyTable)
+                }else{
+                    supplyTable.remove()
+                }
             }
         })
 
         groupButtonTab.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                applyTravelTab(groupTable)
-                groupButtonTab.isChecked = true
-                travelInfoButtonTab.isChecked = false
-                supplyButtonTab.isChecked = false
-                campButtonTab.isChecked = false
-            }
-        })
-
-        campButtonTab.addListener(object:ClickListener(){
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
-                campButtonTab.isChecked = false
-
-                if(game.state == GameScreen.State.TRAVELING) {
-                    game.state = GameScreen.State.CAMP
-                    campButtonTab.setText("Travel")
-                    applyCampTab()
-                }else if(game.state == GameScreen.State.CAMP) {
-                    game.state = GameScreen.State.TRAVELING
-                    campButtonTab.setText("Camp")
+                if(groupTable.parent == null) {
+                    buildGroupTable()
+                    rightTable.add(groupTable)
+                }else{
+                    groupTable.remove()
                 }
             }
         })
+
+//        campButtonTab.addListener(object:ClickListener(){
+//            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+//                super.clicked(event, x, y)
+//                campButtonTab.isChecked = false
+//
+//                if(game.state == GameScreen.State.TRAVELING) {
+//                    game.state = GameScreen.State.CAMP
+//                    campButtonTab.setText("Travel")
+//                    applyCampTab()
+//                }else if(game.state == GameScreen.State.CAMP) {
+//                    game.state = GameScreen.State.TRAVELING
+//                    campButtonTab.setText("Camp")
+//                    applyTravelTab(groupTable)
+//                }
+//            }
+//        })
 
         restButton.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -195,19 +189,23 @@ class GameScreenGUI(val game : GameScreen) {
                 scavengeHourLabel.setText(scavengeHourSlider.value.toInt().toString() + " hours")
             }
         })
+
+        game.timeTickEventList += ChainTask({scavengeHourSlider.value <= 0}, {scavengeHourSlider.setValue(scavengeHourSlider.value-1)})
+        game.timeTickEventList += ChainTask({restHourSlider.value <= 0}, {restHourSlider.setValue(restHourSlider.value-1)})
     }
 
     fun applyTravelTab(tableToApply:Table){
-        table.remove()
-        table.clear()
+        mainTable.remove()
+        mainTable.clear()
+        campTable.remove()
 
-        table.add(tabTable).top()
-        table.add(tableToApply).left().top()
+        //mainTable.add(tabTable).top()
+        //mainTable.add(tableToApply).left().top()
 
-        table.top().left()
-        table.setFillParent(true)
+        //mainTable.top().left()
+        //mainTable.setFillParent(true)
 
-        TextGame.stage.addActor(table)
+        TextGame.stage.addActor(centerInfoTable)
     }
 
     /**
@@ -216,17 +214,17 @@ class GameScreenGUI(val game : GameScreen) {
      */
     fun applyCampTab(){
         TextGame.stage.clear()
-        table.clear()
+        mainTable.clear()
 
-        table.add(tabTable).top()
-        table.add(groupStatsTable).left().top().padRight(30f)
+        mainTable.add(tabTable).top()
+        mainTable.add(groupStatsTable).left().top().padRight(30f)
 
-        table.top().left()
-        table.setFillParent(true)
+        mainTable.top().left()
+        mainTable.setFillParent(true)
         campTable.bottom().left()
         campTable.setFillParent(true)
 
-        TextGame.stage.addActor(table)
+        TextGame.stage.addActor(mainTable)
         TextGame.stage.addActor(campTable)
     }
 
@@ -249,105 +247,87 @@ class GameScreenGUI(val game : GameScreen) {
 
         pauseButton = ImageButton(pauseButtonStyle)
         pauseButton.setSize(40f, 40f)
-        pauseButton.setPosition(Gdx.graphics.width.toFloat() - pauseButton.width, Gdx.graphics.height.toFloat() - pauseButton.height)
+        pauseButton.setPosition(Gdx.graphics.width.toFloat()/1.5f - pauseButton.width, Gdx.graphics.height.toFloat() - pauseButton.height)
 
         //distanceTable.row()
         //distanceTable.add(distProgressBar).height(25f).width(150f)
 
         TextGame.stage.addActor(pauseButton)
 
+        buildCenterInfoTable()
+        buildLeftTable()
+        buildRightTable()
+
         buildCampTable()
-        buildTabTable()
-        buildTravelInfoTable()
-        buildStatsTable()
 
         addListeners()
     }
 
-    private fun buildTabTable(){
-        val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        textButtonStyle.checkedFontColor = Color.GREEN
-        textButtonStyle.fontColor = Color.WHITE
+    private fun buildCenterInfoTable(){
+        centerInfoTable.top()
+        centerInfoTable.setFillParent(true)
 
-        travelInfoButtonTab = TextButton("Stats", textButtonStyle)
-        travelInfoButtonTab.label.setFontScale(buttonFontScale)
-        travelInfoButtonTab.label.setAlignment(Align.left)
+        val innerTable = Table()
+        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
-        supplyButtonTab = TextButton("Supplies", textButtonStyle)
-        supplyButtonTab.label.setFontScale(buttonFontScale)
-        supplyButtonTab.label.setAlignment(Align.left)
-
-        groupButtonTab = TextButton("Group", textButtonStyle)
-        groupButtonTab.label.setFontScale(buttonFontScale)
-        groupButtonTab.label.setAlignment(Align.left)
-
-        campButtonTab = TextButton("Camp", textButtonStyle)
-        campButtonTab.label.setFontScale(buttonFontScale)
-        campButtonTab.label.setAlignment(Align.left)
-
-        tabTable.add(travelInfoButtonTab).width(100f).padRight(10f)
-        tabTable.row()
-        tabTable.add(supplyButtonTab).width(100f).padRight(10f)
-        tabTable.row()
-        tabTable.add(groupButtonTab).width(100f).padRight(10f)
-        tabTable.row()
-        tabTable.add(campButtonTab).width(100f).padRight(10f)
-    }
-
-    private fun buildTravelInfoTable(){
-        travelInfoTable.top().left()
-        travelInfoTable.add(timeInfoTable).top().padRight(30f)
-        travelInfoTable.add(distanceTable).top()
-
-        buildTimeInfo()
-        buildTravelInfo()
-    }
-
-    private fun buildTimeInfo(){
         val style:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        totalDaysLabel = Label("Day "+GameStats.TimeInfo.totalDaysTraveled, style)
+        timeLabel = Label("12:00 AM", style)
+        distanceLabel = Label(""+GameStats.TravelInfo.totalDistToGo+" Miles", style)
 
         /* Time related stuff */
-        timeTitleLabel = Label("Time of Day", style)
-        timeLabel = Label("0000"+GameStats.TimeInfo.currTime, style)
-
-        timeTitleLabel.setFontScale(titleFontScale)
+        totalDaysLabel.setFontScale(normalFontScale)
         timeLabel.setFontScale(normalFontScale)
-
-        timeInfoTable.add(timeTitleLabel)
-        timeInfoTable.row()
-        timeInfoTable.add(timeLabel)
-    }
-
-    private fun buildTravelInfo(){
-        val style:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-
-        /* Travel info related stuff */
-        distanceTitleLabel = Label("Travel Info", style)
-        distanceLabel = Label("0 / "+GameStats.TravelInfo.totalDistOfGame, style)
-        totalDays = Label("0"+GameStats.TimeInfo.currTime+" Days", style)
-
-        distanceTitleLabel.setFontScale(titleFontScale)
         distanceLabel.setFontScale(normalFontScale)
-        totalDays.setFontScale(normalFontScale)
 
-        distanceTable.add(distanceTitleLabel)
-        distanceTable.row()
-        distanceTable.add(distanceLabel)
-        distanceTable.row()
-        distanceTable.add(totalDays)
+        totalDaysLabel.setAlignment(Align.center)
+        timeLabel.setAlignment(Align.center)
+        distanceLabel.setAlignment(Align.center)
+
+        innerTable.add(totalDaysLabel).width(150f).fillX().expandX()
+        innerTable.row()
+        innerTable.add(timeLabel).width(150f).fillX().expandX()
+        innerTable.row()
+        innerTable.add(distanceLabel).width(150f).fillX().expandX().padBottom(20f)
+
+        centerInfoTable.add(innerTable)
     }
 
-    /**
-     * Builds the left side table layout which includes the group and supply table.
-     */
-    fun buildStatsTable(){
-        groupStatsTable.top().left()
-        groupStatsTable.add(groupTable).top().padRight(30f)
-        groupStatsTable.add(supplyTable).top()
-
-        buildGroupTable()
+    fun buildLeftTable(){
         buildSupplyTable()
+
+        val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.fontColor = Color.WHITE
+
+        supplyButton = TextButton("Storage", buttonStyle)
+        supplyButton.label.setFontScale(buttonFontScale)
+
+        leftTable.add(supplyButton).left()
+        leftTable.row()
+
+        leftTable.top().left()
+        leftTable.setFillParent(true)
+        TextGame.stage.addActor(leftTable)
+    }
+
+    fun buildRightTable(){
+        rightTable.clear()
+
+        val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.fontColor = Color.WHITE
+
+        groupButtonTab = TextButton("Exomer751", buttonStyle)
+        groupButtonTab.label.setFontScale(buttonFontScale)
+
+        rightTable.setFillParent(true)
+        rightTable.top().right()
+
+        rightTable.add(groupButtonTab).right()
+        rightTable.row()
+        TextGame.stage.addActor(rightTable)
     }
 
     /**
@@ -356,29 +336,24 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildGroupTable(){
         groupTable.clear()
 
-        val innerGroupTable = Table()
+        groupTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        groupTable.padRight(10f)
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
-        val titleLabel:Label = Label("Group", labelStyle)
-        titleLabel.setFontScale(titleFontScale)
-        //groupTable.add(titleLabel)
-        //groupTable.row()
-
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person:Person in list.iterator()){
-            val nameLabel = Label(person.name, labelStyle)
+            val nameLabel = Label(person.fullName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
 
             val healthLabel:Label = Label(""+person.health, labelStyle)
             healthLabel.setFontScale(normalFontScale)
 
-            innerGroupTable.add(nameLabel).left().padRight(10f)
-            innerGroupTable.add(healthLabel).left()
-            innerGroupTable.row()
+            groupTable.add(nameLabel).right()
+            groupTable.row()
+            groupTable.add(healthLabel).right()
+            groupTable.row()
         }
-
-        groupTable.add(innerGroupTable)
     }
 
     /**
@@ -387,6 +362,9 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildSupplyTable(){
         supplyTable.clear()
         supplyAmountList.clear()
+
+        supplyTable.padLeft(10f)
+        supplyTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -399,19 +377,24 @@ class GameScreenGUI(val game : GameScreen) {
         val innerTable = Table()
         val list = SupplyManager.getSupplyList()
         for(i in list.indices){
+            val rowTable:Table = Table()
             val value = list[i]
             val nameLabel = Label(value.displayName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
+            nameLabel.setAlignment(Align.left)
 
             val amtLabel = Label(""+value.amt.toInt(), labelStyle)
             amtLabel.setFontScale(normalFontScale)
+            amtLabel.setAlignment(Align.left)
+
             supplyAmountList += amtLabel
 
-            innerTable.add(nameLabel).left().padRight(20f)
-            innerTable.add(amtLabel).left().width(40f)
+            rowTable.add(nameLabel).left().padRight(20f)
+            rowTable.add(amtLabel).left().width(40f).fillX().expandX()
+            rowTable.left()
 
-            if((i)%2 == 1)
-                innerTable.row()
+            innerTable.add(rowTable).fillX().expandX()
+            innerTable.row()
 
         }
 
@@ -428,11 +411,11 @@ class GameScreenGUI(val game : GameScreen) {
 
         outerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log", Texture::class.java)))
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        textButtonStyle.fontColor = Color.BLACK
+        textButtonStyle.fontColor = Color.WHITE
 
         val padding:Int = 400/(event.choices!!.size+1)/2
 

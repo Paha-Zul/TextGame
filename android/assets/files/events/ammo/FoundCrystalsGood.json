@@ -1,0 +1,9 @@
+{
+  "root": true,
+  "name": "Crystals!",
+  "description": "%n tests some newly discovered Crystals into the group’s firearms.",
+  "choices": ["They Work!"],
+  "outcomes": [],
+  "chances": [],
+  "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "ammo"]
+}

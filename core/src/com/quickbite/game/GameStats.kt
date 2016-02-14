@@ -35,8 +35,9 @@ object GameStats {
         //Need total distance of the game, distance traveled, distance to go, mph traveling
         var totalDistOfGame:Int = MathUtils.random(36000, 108000)
         var totalDistTraveled:Int = 0
-        var totalDistToGo:Int = 0
         var currMPH:Int = 10
+        var totalDistToGo:Int = 0
+            get() = totalDistOfGame - totalDistTraveled
     }
 
     object TimeInfo{
@@ -44,5 +45,14 @@ object GameStats {
         var totalTimeCounter:Float = 0f
         var currTime:Int = 0
         var lastTime:Int = 0
+        var timeOfDay:Int = 0
+            get() {
+                var _t = ((GameStats.TimeInfo.currTime.toInt())%12)
+                if(_t == 0) _t = 12
+                return _t
+            }
+        var totalDaysTraveled:Int = 0
+            get() = (totalTimeCounter/timeScale).toInt() + 1
+
     }
 }

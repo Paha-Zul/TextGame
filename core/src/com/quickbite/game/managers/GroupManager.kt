@@ -26,7 +26,7 @@ object GroupManager {
 
     fun getPerson(name:String): Person?{
         if(name.equals("random")) return list[MathUtils.random(list.size-1)]
-        return list.find {person -> person.name.equals(name)}
+        return list.find {person -> person.firstName.equals(name)}
     }
 
     fun getRandomPerson():Person{

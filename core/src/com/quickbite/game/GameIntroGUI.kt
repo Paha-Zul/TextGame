@@ -243,6 +243,6 @@ class GameIntroGUI(val game:GameIntroScreen) {
     }
 
     fun update(delta:Float){
-        chainTask.update(delta)
+        chainTask.update()
     }
 }

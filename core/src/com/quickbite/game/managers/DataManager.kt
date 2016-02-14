@@ -13,7 +13,9 @@ import java.util.*
 object DataManager{
     private val rootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     private val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    private val randomNameList:MutableList<String> = arrayListOf()
+
+    private val randomFirstNameList:MutableList<String> = arrayListOf()
+    private val randomLastNameList:MutableList<String> = arrayListOf()
 
     val json: Json = Json()
 
@@ -31,16 +33,24 @@ object DataManager{
         }
     }
 
-    fun loadRandomNames(file:FileHandle){
-        val reader:BufferedReader = BufferedReader(file.reader());
-        reader.forEachLine {line ->  randomNameList += line }
+    fun loadRandomNames(firstNameFile:FileHandle, lastNameFile:FileHandle){
+        var reader:BufferedReader = BufferedReader(firstNameFile.reader());
+        reader.forEachLine {line ->  randomFirstNameList += line }
+
+        reader = BufferedReader(lastNameFile.reader());
+        reader.forEachLine {line ->  randomLastNameList += line }
     }
 
-    fun pullRandomName():String{
-        val index = MathUtils.random(0, randomNameList.size - 1)
-        val name = randomNameList[index]
-        randomNameList.removeAt(index)
-        return name
+    fun pullRandomName():Pair<String, String>{
+        var index = MathUtils.random(0, randomFirstNameList.size - 1)
+        val firstName = randomFirstNameList[index]
+        randomFirstNameList.removeAt(index)
+
+        index = MathUtils.random(0, randomFirstNameList.size - 1)
+        val lastName = randomLastNameList[index]
+        randomLastNameList.removeAt(index)
+
+        return Pair(firstName, lastName)
     }
 
     class EventJson{
@@ -80,7 +90,7 @@ object DataManager{
                     return null
 
                 val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]!!
-                outcomeEvent.randomName = GroupManager.getRandomPerson().name
+                outcomeEvent.randomName = GroupManager.getRandomPerson().firstName
                 return outcomeEvent
             }
 
@@ -90,7 +100,7 @@ object DataManager{
         companion object{
             fun getRandomRoot():EventJson{
                 val event = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
-                event.randomName = GroupManager.getRandomPerson().name
+                event.randomName = GroupManager.getRandomPerson().firstName
                 return event;
             }
         }

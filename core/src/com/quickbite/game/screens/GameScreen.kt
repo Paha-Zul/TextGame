@@ -15,6 +15,7 @@ import com.quickbite.game.managers.DataManager
 import com.quickbite.game.managers.EventManager
 import com.quickbite.game.managers.GroupManager
 import com.quickbite.game.managers.SupplyManager
+import java.util.*
 
 /**
  * Created by Paha on 2/3/2016.
@@ -25,6 +26,8 @@ class GameScreen(val game: Game): Screen {
     }
     var state = State.TRAVELING
 
+    val timeTickEventList:LinkedList<ChainTask> = LinkedList()
+
     private val table: Table = Table()
 
     private val backgroundSky = Texture(Gdx.files.internal("art/backgroundSky.png"), true)
@@ -33,7 +36,7 @@ class GameScreen(val game: Game): Screen {
     private val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
     private val campScreenBackground: Texture = TextGame.manager.get("Camp", Texture::class.java)
 
-    private val ROV: Texture = TextGame.manager.get("ROV", Texture::class.java)
+    private val ROV: Texture = TextGame.manager.get("Exomer751ROV", Texture::class.java)
 
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
@@ -47,7 +50,7 @@ class GameScreen(val game: Game): Screen {
     private val gameInput: GameScreenInput = GameScreenInput()
 
     var numHoursToAdvance:Int = 0
-    var speedToAdvance:Float = 0.5f
+    var speedToAdvance:Float = 0.1f
 
     override fun show() {
         GameStats.init(this)
@@ -63,18 +66,18 @@ class GameScreen(val game: Game): Screen {
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        val sc1: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Foreground", Texture::class.java)), 3f, -100f, -Gdx.graphics.height / 2f)
-        val sc2: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Foreground", Texture::class.java)), 3f, 800f, -Gdx.graphics.height / 2f)
+        val sc1: ScrollingBackground = ScrollingBackground(null, 3f, -100f, -Gdx.graphics.height / 2f)
+        val sc2: ScrollingBackground = ScrollingBackground(null, 3f, 800f, -Gdx.graphics.height / 2f)
         sc1.following = sc2
         sc2.following = sc1
 
-        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground", Texture::class.java)), 2f, -100f, -Gdx.graphics.height / 2f)
-        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground", Texture::class.java)), 2f, 800f, -Gdx.graphics.height / 2f)
+        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -Gdx.graphics.height / 2f)
+        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -Gdx.graphics.height / 2f)
         sc3.following = sc4
         sc4.following = sc3
 
-        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background", Texture::class.java)), 1f, -100f, -Gdx.graphics.height / 2f)
-        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background", Texture::class.java)), 1f, 800f, -Gdx.graphics.height / 2f)
+        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -Gdx.graphics.height / 2f)
+        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -Gdx.graphics.height / 2f)
         sc5.following = sc6
         sc6.following = sc5
 
@@ -252,6 +255,7 @@ class GameScreen(val game: Game): Screen {
 
         GameStats.updateTimeTick()
         if(numHoursToAdvance > 0) numHoursToAdvance--
+        timeTickEventList.forEach { evt -> evt.update()}
 
         gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
     }

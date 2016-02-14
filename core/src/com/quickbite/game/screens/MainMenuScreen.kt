@@ -19,7 +19,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
     override fun show() {
         //game.setScreen(GameScreen(game))
         DataManager.loadEvents(Gdx.files.internal("files/events/"))
-        DataManager.loadRandomNames(Gdx.files.internal("files/text/names.txt"))
+        DataManager.loadRandomNames(Gdx.files.internal("files/text/firstNames.txt"), Gdx.files.internal("files/text/lastNames.txt"))
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.font
