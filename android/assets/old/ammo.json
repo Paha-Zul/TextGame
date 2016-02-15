@@ -1,0 +1,49 @@
+[
+  {
+    "root": true,
+    "name": "CheckAmmo",
+    "title": "Crystals!",
+    "description": ["%n checks the groups Ammo storage."],
+    "choices": ["Continue"],
+    "outcomes": [["ExtraAmmo", "LessAmmo"]],
+    "chances": [[50, 50]]
+  },
+  {
+    "name": "ExtraAmmo",
+    "title": "More Ammo",
+    "description": ["He finds some extra Ammo"],
+    "choices": ["Good"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "ammo"]
+  },
+  {
+    "name": "LessAmmo",
+    "title": "Missing Ammo!",
+    "description": ["The numbers come up shorter than expected."],
+    "choices": ["Alright"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "ammo"]
+  },
+  {
+    "root": true,
+    "name": "FoundCrystals",
+    "title": "Crystals!",
+    "description": ["%n tests some newly discovered Crystals into the group’s firearms."],
+    "choices": ["They Work!"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "ammo"]
+  },
+  {
+    "root" : true,
+    "name": "BadCrystal",
+    "title": "Crystals!",
+    "description": ["It seems some of these crystals don’t fit the weapons specifications."],
+    "choices": ["Who Knew?"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "ammo"]
+  }
+]

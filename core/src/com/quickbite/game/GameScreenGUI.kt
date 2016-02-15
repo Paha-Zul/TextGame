@@ -25,6 +25,7 @@ class GameScreenGUI(val game : GameScreen) {
 
     private val normalFontScale = 0.15f
     private val titleFontScale = 0.25f
+    private val eventTitleFontScale = 0.18f
     private val buttonFontScale = 0.15f
 
     private val mainTable: Table = Table()
@@ -410,6 +411,22 @@ class GameScreenGUI(val game : GameScreen) {
     fun triggerEventGUI(event: DataManager.EventJson, callbackTask : (choice:String)->Unit){
         game.pauseGame()
 
+//        EventInfo.outerEventTable.debugAll()
+//        EventInfo.eventTable.debugAll()
+//        EventInfo.eventChoicesTable.debugAll()
+
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        EventInfo.titleLabel = Label(event.title, labelStyle)
+        EventInfo.titleLabel!!.setAlignment(Align.center)
+        EventInfo.titleLabel!!.setFontScale(eventTitleFontScale)
+        EventInfo.titleLabel!!.setWrap(true)
+
+        showEventPage(event, callbackTask, 0)
+
+    }
+
+    private fun showEventPage(event: DataManager.EventJson, callbackTask : (choice:String)->Unit, page:Int){
         EventInfo.outerEventTable.clear()
         EventInfo.eventTable.clear()
         EventInfo.eventChoicesTable.clear()
@@ -442,11 +459,7 @@ class GameScreenGUI(val game : GameScreen) {
             })
         }
 
-        EventInfo.titleLabel = Label(event.name, labelStyle)
-        EventInfo.titleLabel!!.setAlignment(Align.center)
-        EventInfo.titleLabel!!.setFontScale(titleFontScale)
-
-        val desc = event.description.replace("%n", event.randomName)
+        val desc = event.description[page].replace("%n", event.randomName)
 
         val descLabel = Label(desc, labelStyle)
         descLabel.setAlignment(Align.top)
@@ -455,7 +468,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         val nextPageButton:ImageButton = ImageButton(drawable)
 
-        EventInfo.eventTable.add(EventInfo.titleLabel).expandX().fillX().height(45f).padTop(10f)
+        EventInfo.eventTable.add(EventInfo.titleLabel).width(250f).height(45f).padTop(15f)
         EventInfo.eventTable.row().expand().fill()
         EventInfo.eventTable.add(descLabel).width(310f).padTop(10f)
         EventInfo.eventTable.row().expand().fill()
@@ -465,23 +478,28 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.outerEventTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
         EventInfo.outerEventTable.add(EventInfo.eventTable).expand().fill()
 
-//        EventInfo.outerEventTable.debugAll()
-//        EventInfo.eventChoicesTable.debugAll()
+        //        EventInfo.outerEventTable.debugAll()
+        //        EventInfo.eventChoicesTable.debugAll()
 
         TextGame.stage.addActor(EventInfo.outerEventTable)
 
         nextPageButton.addListener(object:ChangeListener(){
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                EventInfo.eventTable.clear()
-                EventInfo.eventTable.add(EventInfo.titleLabel).expandX().fillX().height(45f).padTop(10f)
-                EventInfo.eventTable.row()
-                EventInfo.eventTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(50f)
+            override fun changed(evt: ChangeEvent?, actor: Actor?) {
+                if(event.description.size - 1 > page)
+                    showEventPage(event, callbackTask, page+1)
+                else {
+                    EventInfo.eventTable.clear()
+                    EventInfo.eventTable.add(EventInfo.titleLabel).width(250f).height(45f).padTop(15f)
+                    EventInfo.eventTable.row()
+                    EventInfo.eventTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(50f)
+                }
             }
         })
     }
 
     fun showEventResults(list: List<Pair<Int, String>>){
         EventInfo.eventResultsTable.clear()
+        EventInfo.eventTable.clear()
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -508,8 +526,7 @@ class GameScreenGUI(val game : GameScreen) {
             EventInfo.eventResultsTable.row()
         }
 
-        EventInfo.eventTable.clear()
-        EventInfo.eventTable.add(EventInfo.titleLabel).expandX().fillX().height(45f).padTop(10f)
+        EventInfo.eventTable.add(EventInfo.titleLabel).height(45f).width(250f).padTop(15f)
         EventInfo.eventTable.row()
         EventInfo.eventTable.add(EventInfo.eventResultsTable).expand().fill()
         EventInfo.eventTable.row()

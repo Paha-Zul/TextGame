@@ -26,9 +26,11 @@ object DataManager{
             if(file.isDirectory)
                 loadEvents(file)
             else {
-                val event: EventJson = json.fromJson(EventJson::class.java, file)
-                if (event.root) rootEventMap.put(file.nameWithoutExtension(), event)
-                else eventMap.put(file.nameWithoutExtension(), event)
+                val events: Array<EventJson> = json.fromJson(Array<EventJson>::class.java, file)
+                events.forEach { event ->
+                    if (event.root) rootEventMap.put(event.name, event)
+                    else eventMap.put(event.name, event)
+                }
             }
         }
     }
@@ -56,7 +58,8 @@ object DataManager{
     class EventJson{
         var root:Boolean = false
         lateinit var name:String
-        lateinit var description:String
+        lateinit var title:String
+        lateinit var description:Array<String>
         var choices:Array<String>? = null // The choices, like 'yes' or 'no' || 'Kill him', 'Let him go', 'Have him join you'
         var outcomes:Array<Array<String>>? = null //The possible outcomes for each choice, ie: 'He died', 'He killed you first!'
         var chances:Array<IntArray>? = null //The chances of each outcome happening

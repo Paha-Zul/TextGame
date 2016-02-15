@@ -1,0 +1,49 @@
+[
+  {
+    "root": true,
+    "name": "OrganizeFood",
+    "title": "Let's See...",
+    "description": ["%n organizes the food storage."],
+    "choices": ["Continue"],
+    "outcomes": [["MoreEdibles", "LessEdibles"]],
+    "chances": [[50, 50]]
+  },
+  {
+    "name": "MoreEdibles",
+    "title": "Looks Like Meat's Back On the Menu Boys!",
+    "description": ["He uncovers some misplaced food!"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "2", "5", "edibles"]
+  },
+  {
+    "name": "LessEdibles",
+    "title": "Where Are Those Tomatoes?",
+    "description": ["He discovers some food has gone missing!"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "-2", "-5", "edibles"]
+  },
+  {
+    "root": true,
+    "name": "FoundEdibles",
+    "title": "Found Something",
+    "description": ["%n picks some edible fruit from the road side!"],
+    "choices": ["Yum!"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "2", "5", "edibles"]
+  },
+  {
+    "root": true,
+    "name": "RottenEdibles",
+    "title": "Hmm",
+    "description": ["%n discovers some rotten food in your storage."],
+    "choices": ["That's a Shame..."],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": ["addRndAmt", "evtPerson", "-2", "-5", "edibles"]
+  }
+]

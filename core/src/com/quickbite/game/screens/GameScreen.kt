@@ -41,7 +41,7 @@ class GameScreen(val game: Game): Screen {
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
 
-    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(10, 30).toFloat())
+    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(1, 1).toFloat())
 
     private var paused = false
 
@@ -120,7 +120,7 @@ class GameScreen(val game: Game): Screen {
                             gui.closeEvent()
                         }
                         currEvent = DataManager.EventJson.getRandomRoot()
-                        eventCustomTimerTest.restart(MathUtils.random(10, 30).toFloat())
+                        eventCustomTimerTest.restart(MathUtils.random(1, 1).toFloat())
                     }
                 })
             }

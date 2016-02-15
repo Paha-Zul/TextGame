@@ -109,8 +109,8 @@ class GameIntroGUI(val game:GameIntroScreen) {
         val nextPageButton:ImageButton = ImageButton(buttonStyle)
         nextPageButton.color.a = 0f
 
-        layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
-        layoutTable.row().fill().expand()
+        layoutTable.add(bodyLabel).expand().fill().padLeft(5f)
+        layoutTable.row()
         layoutTable.add(nextPageButton).size(64f).bottom()
 
         nextPageButton.addListener(object:ChangeListener(){
@@ -152,7 +152,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
         nextPageButton.color.a = 0f
         nextPageButton.label.setFontScale(0.4f)
 
-        layoutTable.add(bodyLabel).expandX().fillX().padLeft(5f)
+        layoutTable.add(bodyLabel).expand().fill().padLeft(5f)
         layoutTable.row()
         layoutTable.add(nextPageButton).bottom()
 
