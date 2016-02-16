@@ -540,7 +540,7 @@ class GameScreenGUI(val game : GameScreen) {
         val redLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
         val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
 
-        val okayButton:TextButton = TextButton("Okay", textButtonStyle)
+        val okayButton:TextButton = TextButton("- Close -", textButtonStyle)
         okayButton.label.setFontScale(buttonFontScale)
 
         for(item in list){

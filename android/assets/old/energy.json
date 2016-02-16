@@ -21,7 +21,7 @@
     "name": "LessEnergy",
     "title": "Well...",
     "description": ["I don't think that sparked before!"],
-    "choices": ["WTF?!?!"],
+    "choices": [],
     "outcomes": [],
     "chances": [],
     "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "energy"]]
@@ -39,7 +39,7 @@
   {
     "root": true,
     "name": "BadBatteries",
-    "title": "What's That Smell?",
+    "title": "Hot to the Touch",
     "description": ["The batteries are running a little hot."],
     "choices": ["Darn"],
     "outcomes": [],

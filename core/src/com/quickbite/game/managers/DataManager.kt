@@ -1,5 +1,6 @@
 package com.quickbite.game.managers
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
@@ -76,8 +77,10 @@ object DataManager{
             val choiceIndex:Int = getChoiceIndex(choice)
             //If our result is valid, find the outcome that is a result of it.
             if(choiceIndex >= 0){
-                if(chances!!.isEmpty()) //If the chances/outcomes are empty, return null
-                     return null
+                if(chances!!.isEmpty()) { //If the chances/outcomes are empty, return null
+                    Gdx.app.log("Event", "Event $name with title $title doesn't have any chances for the outcomes. Returning null.")
+                    return null
+                }
 
                 outcomeIndex = getOutcome(choiceIndex, chance)
 
@@ -85,7 +88,6 @@ object DataManager{
                     return null
 
                 val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]!!
-                outcomeEvent.randomName = GroupManager.getRandomPerson().firstName
                 return outcomeEvent
             }
 

@@ -2,7 +2,7 @@
   {
     "root": true,
     "name": "CheckAmmo",
-    "title": "Crystals!",
+    "title": "This Goes... Here?",
     "description": ["%n checks the groups Ammo storage."],
     "choices": ["Continue"],
     "outcomes": [["ExtraAmmo", "LessAmmo"]],
@@ -39,7 +39,7 @@
   {
     "root" : true,
     "name": "BadCrystal",
-    "title": "Crystals!",
+    "title": "Force It!",
     "description": ["It seems some of these crystals don’t fit the weapons specifications."],
     "choices": ["Who Knew?"],
     "outcomes": [],

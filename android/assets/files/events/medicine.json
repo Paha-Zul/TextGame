@@ -1,0 +1,49 @@
+[
+  {
+    "root": true,
+    "name": "FoundHerbs",
+    "title": "Pretty. Green. Herbs!",
+    "description": ["%n thinks he found some Medicinal Herbs."],
+    "choices": ["Great!"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "2", "medkits"]]
+  },
+  {
+    "root": true,
+    "name": "NotHerbs",
+    "title": "No Blazin' Tonight.",
+    "description": ["It turns out those “herbs” are just flowers…"],
+    "choices": ["Great..."],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-2", "medkits"]]
+  },
+  {
+    "root": true,
+    "name": "NotHerbs",
+    "title": "Maybe This Will Help",
+    "description": ["%n samples a new poultice."],
+    "choices": ["Is That Safe?"],
+    "outcomes": [["SoothingHerbs", "IrritatingHerbs"]],
+    "chances": [[50, 50]]
+  },
+  {
+    "name": "SoothingHerbs",
+    "title": "Oooh... Aaah...",
+    "description": ["It proves to be very soothing!"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "2", "medkits"]]
+  },
+  {
+    "name": "IrritatingHerbs",
+    "title": "*Scratch Scratch*",
+    "description": ["It caused immediate skin irritation!"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-2", "medkits"]]
+  }
+]
