@@ -15,7 +15,7 @@
     "choices": ["Good"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "ammo"]
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "ammo"]]
   },
   {
     "name": "LessAmmo",
@@ -24,7 +24,7 @@
     "choices": ["Alright"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "ammo"]
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "ammo"]]
   },
   {
     "root": true,
@@ -34,7 +34,7 @@
     "choices": ["They Work!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "ammo"]
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "ammo"]]
   },
   {
     "root" : true,
@@ -44,6 +44,6 @@
     "choices": ["Who Knew?"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "ammo"]
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "ammo"]]
   }
 ]

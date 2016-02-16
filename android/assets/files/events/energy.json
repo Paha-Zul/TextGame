@@ -3,7 +3,7 @@
     "root": true,
     "name": "EnergyBranch",
     "title": "Was it Red or Blue?",
-    "description": ["%n tries rearranging the batteries' wiring.", "Such as page 2"],
+    "description": ["%n tries rearranging the batteries' wiring."],
     "choices": ["Careful!"],
     "outcomes": [["MoreEnergy", "LessEnergy"]],
     "chances": [[50, 50]]
@@ -15,7 +15,7 @@
     "choices": ["Yea!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "energy"]
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "energy"]]
   },
   {
     "name": "LessEnergy",
@@ -24,7 +24,7 @@
     "choices": ["WTF?!?!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "energy"]
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "energy"]]
   },
   {
     "root": true,
@@ -34,7 +34,7 @@
     "choices": ["POWER!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "energy"]
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "energy"]]
   },
   {
     "root": true,
@@ -44,6 +44,6 @@
     "choices": ["Darn"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "energy"]
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "energy"]]
   }
 ]

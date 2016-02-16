@@ -422,17 +422,23 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.titleLabel!!.setFontScale(eventTitleFontScale)
         EventInfo.titleLabel!!.setWrap(true)
 
+        EventInfo.outerEventTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
+        EventInfo.outerEventTable.setSize(400f, 400f)
+        EventInfo.outerEventTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
+
+        TextGame.stage.addActor(EventInfo.outerEventTable)
+
         showEventPage(event, callbackTask, 0)
 
     }
 
     private fun showEventPage(event: DataManager.EventJson, callbackTask : (choice:String)->Unit, page:Int){
+        //Clear the tables
         EventInfo.outerEventTable.clear()
         EventInfo.eventTable.clear()
         EventInfo.eventChoicesTable.clear()
 
-        EventInfo.outerEventTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
-
+        //Set some styles
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
@@ -442,8 +448,9 @@ class GameScreenGUI(val game : GameScreen) {
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
-        val padding:Int = 400/(event.choices!!.size+1)/2
+        //val padding:Int = 400/(event.choices!!.size+1)/2
 
+        //Make the buttons for the choices (if any)
         for(choice in event.choices?.iterator()){
             val button = TextButton("- $choice -", textButtonStyle)
             button.pad(0f, 10f, 0f, 10f)
@@ -454,44 +461,68 @@ class GameScreenGUI(val game : GameScreen) {
             button.addListener(object:ChangeListener(){
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     //EventInfo.outerEventTable.remove()
-                    callbackTask(button.text.toString().split(' ')[1])
+                    System.out.println(button.text.toString().substring(2, button.text.length - 2))
+                    callbackTask(button.text.toString().substring(2, button.text.length - 2))
                 }
             })
         }
 
+        //Fix the description
         val desc = event.description[page].replace("%n", event.randomName)
 
+        //Make the description label
         val descLabel = Label(desc, labelStyle)
         descLabel.setAlignment(Align.top)
         descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)
 
+        //Make the next page button
         val nextPageButton:ImageButton = ImageButton(drawable)
 
+        //Add the title and description label
         EventInfo.eventTable.add(EventInfo.titleLabel).width(250f).height(45f).padTop(15f)
-        EventInfo.eventTable.row().expand().fill()
-        EventInfo.eventTable.add(descLabel).width(310f).padTop(10f)
-        EventInfo.eventTable.row().expand().fill()
-        EventInfo.eventTable.add(nextPageButton).size(32f)
+        EventInfo.eventTable.row().expand()
+        EventInfo.eventTable.add(descLabel).width(310f).padTop(10f).expand().fill()
+        EventInfo.eventTable.row().expand()
 
-        EventInfo.outerEventTable.setSize(400f, 400f)
-        EventInfo.outerEventTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
+        //If some things, add the next page button.
+        if(event.description.size - 1 > page || (event.outcomes != null && event.outcomes!!.size > 0) ||
+                (event.choices != null && event.choices!!.size > 0) || (event.resultingAction != null && event.resultingAction!!.size > 0))
+
+            EventInfo.eventTable.add(nextPageButton).size(32f).padBottom(60f).bottom()
+
+        //Otherwise, add a close button.
+        else{
+            val closeButton:TextButton = TextButton("- Close -", textButtonStyle)
+            closeButton.label.setFontScale(buttonFontScale)
+            closeButton.addListener(object:ChangeListener(){
+                override fun changed(evt: ChangeEvent?, actor: Actor?) {
+                    callbackTask("")
+                }
+            })
+
+            EventInfo.eventTable.add(closeButton).padBottom(60f).bottom()
+        }
+
+        //Add all the stuff to the outer table.
         EventInfo.outerEventTable.add(EventInfo.eventTable).expand().fill()
 
-        //        EventInfo.outerEventTable.debugAll()
-        //        EventInfo.eventChoicesTable.debugAll()
 
-        TextGame.stage.addActor(EventInfo.outerEventTable)
-
+        //Kinda complicated listener for the next page button.
         nextPageButton.addListener(object:ChangeListener(){
             override fun changed(evt: ChangeEvent?, actor: Actor?) {
+                val hasOnlyOutcomes = (event.choices == null || (event.choices != null && event.choices!!.size == 0)) && (event.outcomes != null && event.outcomes!!.size > 0)
+                val hasActions = event.resultingAction != null && event.resultingAction!!.size > 0
+
                 if(event.description.size - 1 > page)
                     showEventPage(event, callbackTask, page+1)
-                else {
+                else if(hasOnlyOutcomes || (!hasOnlyOutcomes && hasActions)){
+                    callbackTask("")
+                }else{
                     EventInfo.eventTable.clear()
                     EventInfo.eventTable.add(EventInfo.titleLabel).width(250f).height(45f).padTop(15f)
                     EventInfo.eventTable.row()
-                    EventInfo.eventTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(50f)
+                    EventInfo.eventTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(60f)
                 }
             }
         })

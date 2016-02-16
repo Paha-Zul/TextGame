@@ -1,0 +1,151 @@
+[
+  {
+    "root": true,
+    "name": "FoundObject",
+    "title": "What's That?",
+    "description": ["The group spots a small dark object nestled in some tall grass. Upon closer inspection it seems to be a small brownish sack…"],
+    "choices": ["Leave it", "Open it"],
+    "outcomes": [["PassBag"], ["FoundStuff", "EmptyBag", "CreatureBag"]],
+    "chances": [[100], [45,45,10]]
+  },
+  {
+    "name": "PassBag",
+    "title": "What's That?",
+    "description": ["The group decides to pass it by."],
+    "choices": [],
+    "outcomes": [],
+    "chances": []
+  },
+  {
+    "name": "FoundStuff",
+    "title": "What's That?",
+    "description": ["%n cautiously approaches the bag. He peels back the opening and peers inside…",
+                   "It seems the pouch is filled with a few supplies. Not wanting to find out who left them the group hurries on. "],
+    "choices": ["Works for Me"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "edibles"]]
+  },
+  {
+    "name": "EmptyBag",
+    "title": "What's That?",
+    "description": ["%n cautiously approaches the bag. He peels back the opening and peers inside…",
+      "Just dust and dirt, whatever was inside the bag is long gone."],
+    "choices": [],
+    "outcomes": [],
+    "chances": []
+  },
+  {
+    "name": "CreatureBag",
+    "title": "What's That?",
+    "description": ["%n cautiously approaches the bag. He peels back the opening and peers inside…",
+      "Something darts out at him. Startled he falls back and for a brief moment is entangled with the small creature that called the bag home. The creature burst free and scampers into the shrubs. Scratched, bruised, and embarrassed, (NAME) sulks back to the group. "],
+    "choices": ["HOLY ****"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["hurt", "evtPerson", "15"]]
+  },
+  {
+    "root": true,
+    "name": "Hole",
+    "title": "A Hole?",
+    "description": ["%n spots a small burrow-like hole a few feet ahead of the ROV. It's just big enough for a small animal to take shelter or for an adventurous traveler to reach their arm in..."],
+    "choices": ["Pass it By", "Look Inside", "Reach Inside"],
+    "outcomes": [["PassBy"], ["LookInside"], ["ReachInside"]],
+    "chances": [[100], [100], [100]]
+  },
+  {
+    "name": "PassBy",
+    "title": "A Hole?",
+    "description": ["The group decides to leave it be and continues onwards."],
+    "choices": [],
+    "outcomes": [],
+    "chances": []
+  },
+  {
+    "name": "LookInside",
+    "title": "A Hole?",
+    "description": ["%n crawls over to the opening and looks inside…"],
+    "choices": [],
+    "outcomes": [["EmptyBurrow", "FoodBurrow", "CreatureHurtBurrow", "CreatureHurtFoodBurrow"]],
+    "chances": [[25,25,25,25]]
+  },
+  {
+    "name": "EmptyBurrow",
+    "title": "A Hole?",
+    "description": ["It's too dark to see anything at first, but once his eyes adjust he can make out the back wall of the small burrow. It’s empty, it looks like there isn’t anyone home."],
+    "choices": [],
+    "outcomes": [],
+    "chances": []
+  },
+  {
+    "name": "FoodBurrow",
+    "title": "A Hole?",
+    "description": ["The hole is filled with nuts and seeds, no doubt left by small critter. “Finders keepers” %n thinks as he scoops them up."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmtGroup", "evtPerson", "1", "5", "edibles"]]
+  },
+  {
+    "name": "CreatureHurtBurrow",
+    "title": "A Hole?",
+    "description": ["It's too dark too get a good look, so he leans pressing his face up to the opening. A small rodent like creature lunges out and scratches his face before retreating back into the hole. Surprised %n decides it’s not worth the trouble and heads back to the ROV."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["hurt", "evtPerson", "10", "20"]]
+  },
+  {
+    "name": "CreatureHurtBurrow",
+    "title": "A Hole?",
+    "description": ["An ugly rodent like creature peers out. Not wanting to pass up a free meal, but also not wanting to risk his own fingers; %n unholsters his side arm and fires a few shots into the hole."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmtGroup", "evtPerson", "1", "5", "edibles"], ["addRndAmt", "evtPerson", "-1", "-5", "ammo"]]
+  },
+  {
+    "name": "ReachInside",
+    "title": "A Hole?",
+    "description": ["%n crawls over to the opening of the hole and reaches in…"],
+    "choices": [],
+    "outcomes": [["ReachEmpty", "ReachFood", "ReachFoodHurt", "ReachFoodHurtPerc"]],
+    "chances": [[25, 25, 25, 25]]
+  },
+  {
+    "name": "ReachEmpty",
+    "title": "A Hole?",
+    "description": ["He boldly reaches into the hole and feels around, but the hole is empty."],
+    "choices": [],
+    "outcomes": [],
+    "chances": []
+  },
+  {
+    "name": "ReachFood",
+    "title": "A Hole?",
+    "description": ["He grabs onto something furry and angry. It hisses and thrashes around trying to break free but %n holds tight. After a short struggle he removes the now dead critter from the hole. "],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmtGroup", "evtPerson", "3", "7", "edibles"]]
+  },
+  {
+    "name": "ReachFoodHurt",
+    "title": "A Hole?",
+    "description": ["He grabs onto something furry and angry. It hisses and thrashes around trying break free but %n holds tight. After a short struggle he removes the now dead critter from the hole, but the meal comes with a cost; bites and scratches cover his hands and lower arms."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmtGroup", "evtPerson", "3", "7", "edibles"], ["hurt", "evtPerson", "10", "20"]]
+  },
+  {
+    "name": "ReachFoodHurtPerc",
+    "title": "A Hole?",
+    "description": ["He grabs onto something furry and angry. It hisses and thrashes around, biting and clawing trying to break free from %n’s grasp. After a few moments %n pulls the now dead animal from the hole."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmtGroup", "evtPerson", "3", "7", "edibles"], ["hurtPercent", "evtPerson", "10", "20"]]
+  }
+]

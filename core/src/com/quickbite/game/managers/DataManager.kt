@@ -63,7 +63,7 @@ object DataManager{
         var choices:Array<String>? = null // The choices, like 'yes' or 'no' || 'Kill him', 'Let him go', 'Have him join you'
         var outcomes:Array<Array<String>>? = null //The possible outcomes for each choice, ie: 'He died', 'He killed you first!'
         var chances:Array<IntArray>? = null //The chances of each outcome happening
-        var resultingAction:Array<String>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
+        var resultingAction:Array<Array<String>>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
 
         var randomName:String = ""
 
@@ -73,23 +73,15 @@ object DataManager{
         fun select(choice:String, chance:Int): EventJson?{
             var outcomeIndex:Int = -1
 
-            val choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
+            val choiceIndex:Int = getChoiceIndex(choice)
             //If our result is valid, find the outcome that is a result of it.
             if(choiceIndex >= 0){
-                var counter:Int = 0 //Keep track of percentages
                 if(chances!!.isEmpty()) //If the chances/outcomes are empty, return null
                      return null
 
-                //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
-                for(i in chances!![choiceIndex].indices){
-                    counter += chances!![choiceIndex][i]
-                    if(chance <= counter) {
-                        outcomeIndex = i
-                        break //break out
-                    }
-                }
+                outcomeIndex = getOutcome(choiceIndex, chance)
 
-                if(outcomeIndex < 0)
+                if(outcomeIndex < 0) //If the outcomeIndex is negative, we have no outcome. Return null.
                     return null
 
                 val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]!!
@@ -98,6 +90,38 @@ object DataManager{
             }
 
             return null
+        }
+
+        /**
+         * Gets the index for the choice
+         */
+        private fun getChoiceIndex(choice:String):Int{
+            var choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
+
+            //If the result is -1 but we have outcomes, this is a special case. Return 0!
+            if(choiceIndex == -1 && outcomes != null && outcomes!!.size > 0){
+                return 0
+            }
+
+            return choiceIndex //Otherwise, return the choice index.
+        }
+
+        /**
+         * Gets the outcome index.
+         */
+        private fun getOutcome(choiceIndex:Int, chance:Int):Int{
+            var counter:Int = 0
+            var outcomeIndex = -1
+            //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
+            for(i in chances!![choiceIndex].indices){
+                counter += chances!![choiceIndex][i]
+                if(chance <= counter) {
+                    outcomeIndex = i
+                    break //break out
+                }
+            }
+
+            return outcomeIndex
         }
 
         companion object{
