@@ -1,6 +1,5 @@
 package com.quickbite.game
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -20,7 +19,7 @@ class ScrollingBackground(val sprite: Sprite?, val speed:Float, x:Float, y:Float
     fun update(delta:Float){
         if(sprite != null) {
             sprite.setPosition(sprite.x + speed, sprite.y)
-            if (sprite.x >= Gdx.graphics.width)
+            if (sprite.x >= TextGame.camera.viewportWidth/2f)
                 sprite.setPosition(following.sprite!!.x - following.sprite!!.width + 10f, sprite.y)
         }
     }

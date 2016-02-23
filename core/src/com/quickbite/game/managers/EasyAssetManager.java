@@ -1,5 +1,6 @@
 package com.quickbite.game.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.utils.TimeUtils;
 
 import java.util.HashMap;
 
@@ -23,6 +25,8 @@ public class EasyAssetManager extends AssetManager {
      * @param baseDir The base directory handle to start in.
      */
     public void loadALlPictures(FileHandle baseDir){
+        Long startTime = TimeUtils.millis();
+
         TextureLoader.TextureParameter params = new TextureLoader.TextureParameter();
         params.genMipMaps = true;
         params.magFilter = Texture.TextureFilter.Linear;
@@ -39,6 +43,9 @@ public class EasyAssetManager extends AssetManager {
                 if(log) System.out.println("Loaded "+handle.path());
             }
         }
+
+        Long time = TimeUtils.millis() - startTime;
+        Gdx.app.debug("AssetManager", "Took "+(time/1000f)+"s to load art.");
     }
 
     /**
@@ -46,6 +53,8 @@ public class EasyAssetManager extends AssetManager {
      * @param baseDir The base directory handle to start in.
      */
     public void loadAllFonts(FileHandle baseDir){
+        Long startTime = TimeUtils.millis();
+
         BitmapFontLoader.BitmapFontParameter params = new BitmapFontLoader.BitmapFontParameter();
         params.genMipMaps = true;
         params.magFilter = Texture.TextureFilter.Linear;
@@ -62,6 +71,9 @@ public class EasyAssetManager extends AssetManager {
                 if(log) System.out.println("Loaded "+handle.path());
             }
         }
+
+        Long time = TimeUtils.millis() - startTime;
+        Gdx.app.debug("AssetManager", "Took "+(time/1000f)+"s to load fonts.");
     }
 
     public synchronized <T> T get(String commonName, Class<T> type) {

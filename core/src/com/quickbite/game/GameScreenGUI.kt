@@ -57,17 +57,13 @@ class GameScreenGUI(val game : GameScreen) {
 
     /* Tab buttons */
     private lateinit var supplyButton:TextButton
-    private lateinit var travelInfoButtonTab:TextButton
     private lateinit var groupButtonTab:TextButton
     private lateinit var campButtonTab:TextButton
 
     /* Camp specific stuff */
-    private lateinit var restButton:TextButton
-    private lateinit var scavengeButton:TextButton
-    private lateinit var restHourLabel:Label
-    private lateinit var scavengeHourLabel:Label
-    private lateinit var restHourSlider:Slider
-    private lateinit var scavengeHourSlider:Slider
+    private lateinit var activityHourLabel:Label
+    private lateinit var activityHourSlider:Slider
+    private lateinit var activityButton:TextButton
 
     /* GUI elements for supplies */
 
@@ -80,7 +76,6 @@ class GameScreenGUI(val game : GameScreen) {
     fun init(){
         buildTravelScreenGUI()
         applyTravelTab(groupTable)
-        //applyTravelScreenGUI()
     }
 
     fun update(delta:Float){
@@ -144,53 +139,30 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-//        campButtonTab.addListener(object:ClickListener(){
-//            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-//                super.clicked(event, x, y)
-//                campButtonTab.isChecked = false
-//
-//                if(game.state == GameScreen.State.TRAVELING) {
-//                    game.state = GameScreen.State.CAMP
-//                    campButtonTab.setText("Travel")
-//                    applyCampTab()
-//                }else if(game.state == GameScreen.State.CAMP) {
-//                    game.state = GameScreen.State.TRAVELING
-//                    campButtonTab.setText("Camp")
-//                    applyTravelTab(groupTable)
-//                }
-//            }
-//        })
-
-        restButton.addListener(object:ClickListener(){
+        campButtonTab.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
+                campButtonTab.isChecked = false
 
-                game.numHoursToAdvance = restHourSlider.value.toInt()
+                if(game.state == GameScreen.State.TRAVELING) {
+                    game.changeToCamp()
+                    campButtonTab.setText("Travel")
+                    applyCampTab()
+                }else if(game.state == GameScreen.State.CAMP) {
+                    game.changeToTravel()
+                    campButtonTab.setText("Camp")
+                    applyTravelTab(groupTable)
+                }
             }
         })
 
-        scavengeButton.addListener(object:ClickListener(){
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                super.clicked(event, x, y)
-
-                game.numHoursToAdvance = scavengeHourSlider.value.toInt()
-            }
-        })
-
-        restHourSlider.addListener(object:ChangeListener(){
+        activityHourSlider.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                restHourLabel.setText(restHourSlider.value.toInt().toString() + " hours")
+                activityHourLabel.setText(activityHourSlider.value.toInt().toString() + " hours")
             }
         })
 
-        scavengeHourSlider.addListener(object:ChangeListener(){
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                scavengeHourLabel.setText(scavengeHourSlider.value.toInt().toString() + " hours")
-            }
-        })
-
-        game.timeTickEventList += ChainTask({scavengeHourSlider.value <= 0}, {scavengeHourSlider.setValue(scavengeHourSlider.value-1)})
-        game.timeTickEventList += ChainTask({restHourSlider.value <= 0}, {restHourSlider.setValue(restHourSlider.value-1)})
+        game.timeTickEventList += ChainTask({ activityHourSlider.value <= 0}, { activityHourSlider.setValue(activityHourSlider.value-1)})
     }
 
     fun applyTravelTab(tableToApply:Table){
@@ -205,6 +177,10 @@ class GameScreenGUI(val game : GameScreen) {
         //mainTable.setFillParent(true)
 
         TextGame.stage.addActor(centerInfoTable)
+        TextGame.stage.addActor(leftTable)
+        TextGame.stage.addActor(rightTable)
+        TextGame.stage.addActor(pauseButton)
+        TextGame.stage.addActor(campButtonTab)
     }
 
     /**
@@ -215,15 +191,15 @@ class GameScreenGUI(val game : GameScreen) {
         TextGame.stage.clear()
         mainTable.clear()
 
-        mainTable.add(tabTable).top()
-        mainTable.add(groupStatsTable).left().top().padRight(30f)
+        TextGame.stage.addActor(centerInfoTable)
+        TextGame.stage.addActor(leftTable)
+        TextGame.stage.addActor(rightTable)
+        TextGame.stage.addActor(pauseButton)
+        TextGame.stage.addActor(campButtonTab)
 
-        mainTable.top().left()
-        mainTable.setFillParent(true)
-        campTable.bottom().left()
+        //campTable.bottom().left()
         campTable.setFillParent(true)
 
-        TextGame.stage.addActor(mainTable)
         TextGame.stage.addActor(campTable)
     }
 
@@ -231,6 +207,10 @@ class GameScreenGUI(val game : GameScreen) {
         val barStyle:ProgressBar.ProgressBarStyle = ProgressBar.ProgressBarStyle()
         barStyle.background = TextureRegionDrawable(TextureRegion(Texture(Gdx.files.internal("art/bar.png"))))
         barStyle.knobBefore = TextureRegionDrawable(TextureRegion(Texture(Gdx.files.internal("art/pixel.png"))))
+
+        val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.fontColor = Color.WHITE
 
         val pauseButtonStyle = ImageButton.ImageButtonStyle()
         var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("play", Texture::class.java)))
@@ -246,12 +226,16 @@ class GameScreenGUI(val game : GameScreen) {
 
         pauseButton = ImageButton(pauseButtonStyle)
         pauseButton.setSize(40f, 40f)
-        pauseButton.setPosition(Gdx.graphics.width.toFloat()/1.5f - pauseButton.width, Gdx.graphics.height.toFloat() - pauseButton.height)
+        pauseButton.setPosition(TextGame.viewport.screenWidth/1.4f, TextGame.viewport.screenHeight - pauseButton.height)
+
+        campButtonTab = TextButton("Camp", textButtonStyle)
+        campButtonTab.setSize(40f, 40f)
+        campButtonTab.setOrigin(Align.center)
+        campButtonTab.setPosition(TextGame.viewport.screenWidth/4f, TextGame.viewport.screenHeight - campButtonTab.height)
+        campButtonTab.label.setFontScale(buttonFontScale)
 
         //distanceTable.row()
         //distanceTable.add(distProgressBar).height(25f).width(150f)
-
-        TextGame.stage.addActor(pauseButton)
 
         buildCenterInfoTable()
         buildLeftTable()
@@ -311,7 +295,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         leftTable.top().left()
         leftTable.setFillParent(true)
-        TextGame.stage.addActor(leftTable)
+
     }
 
     fun buildRightTable(){
@@ -332,7 +316,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         rightTable.add(groupButtonTab).right().size(130f, 40f)
         rightTable.row()
-        TextGame.stage.addActor(rightTable)
+
     }
 
     /**
@@ -410,8 +394,10 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun triggerEventGUI(event: DataManager.EventJson, callbackTask : (choice:String)->Unit){
         game.pauseGame()
+        campButtonTab.isDisabled = true;
+        EventInfo.outerEventTable.clear()
 
-//        EventInfo.outerEventTable.debugAll()
+        //        EventInfo.outerEventTable.debugAll()
 //        EventInfo.eventTable.debugAll()
 //        EventInfo.eventChoicesTable.debugAll()
 
@@ -422,19 +408,19 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.titleLabel!!.setFontScale(eventTitleFontScale)
         EventInfo.titleLabel!!.setWrap(true)
 
-        EventInfo.outerEventTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
-        EventInfo.outerEventTable.setSize(400f, 400f)
-        EventInfo.outerEventTable.setPosition(Gdx.graphics.width/2f - 200, Gdx.graphics.height/2f - 200)
+        EventInfo.eventBackgroundTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
+        EventInfo.eventBackgroundTable.setSize(400f, 400f)
 
+        EventInfo.outerEventTable.setFillParent(true)
+        EventInfo.outerEventTable.add(EventInfo.eventBackgroundTable)
         TextGame.stage.addActor(EventInfo.outerEventTable)
 
         showEventPage(event, callbackTask, 0)
-
     }
 
     private fun showEventPage(event: DataManager.EventJson, callbackTask : (choice:String)->Unit, page:Int){
         //Clear the tables
-        EventInfo.outerEventTable.clear()
+        EventInfo.eventBackgroundTable.clear()
         EventInfo.eventTable.clear()
         EventInfo.eventChoicesTable.clear()
 
@@ -452,17 +438,16 @@ class GameScreenGUI(val game : GameScreen) {
 
         //Make the buttons for the choices (if any)
         for(choice in event.choices?.iterator()){
-            val button = TextButton("- $choice -", textButtonStyle)
+            val button = TextButton("($choice)", textButtonStyle)
             button.pad(0f, 10f, 0f, 10f)
             button.label.setFontScale(buttonFontScale)
-            EventInfo.eventChoicesTable.add(button)
+            EventInfo.eventChoicesTable.add(button).height(50f)
             EventInfo.eventChoicesTable.row()
 
             button.addListener(object:ChangeListener(){
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     //EventInfo.outerEventTable.remove()
-                    System.out.println(button.text.toString().substring(2, button.text.length - 2))
-                    callbackTask(button.text.toString().substring(2, button.text.length - 2))
+                    callbackTask(button.text.toString().substring(1, button.text.length - 1))
                 }
             })
         }
@@ -489,7 +474,7 @@ class GameScreenGUI(val game : GameScreen) {
         if(event.description.size - 1 > page || (event.outcomes != null && event.outcomes!!.size > 0) ||
                 (event.choices != null && event.choices!!.size > 0) || (event.resultingAction != null && event.resultingAction!!.size > 0))
 
-            EventInfo.eventTable.add(nextPageButton).size(32f).padBottom(60f).bottom()
+            EventInfo.eventTable.add(nextPageButton).size(50f).padBottom(60f).bottom()
 
         //Otherwise, add a close button.
         else{
@@ -501,11 +486,11 @@ class GameScreenGUI(val game : GameScreen) {
                 }
             })
 
-            EventInfo.eventTable.add(closeButton).padBottom(60f).bottom()
+            EventInfo.eventTable.add(closeButton).padBottom(60f).bottom().height(50f)
         }
 
         //Add all the stuff to the outer table.
-        EventInfo.outerEventTable.add(EventInfo.eventTable).expand().fill()
+        EventInfo.eventBackgroundTable.add(EventInfo.eventTable).expand().fill()
 
 
         //Kinda complicated listener for the next page button.
@@ -540,8 +525,8 @@ class GameScreenGUI(val game : GameScreen) {
         val redLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
         val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
 
-        val okayButton:TextButton = TextButton("- Close -", textButtonStyle)
-        okayButton.label.setFontScale(buttonFontScale)
+        val closeButton:TextButton = TextButton("- Close -", textButtonStyle)
+        closeButton.label.setFontScale(buttonFontScale)
 
         for(item in list){
             val nameLabel = Label(item.second, labelStyle)
@@ -561,18 +546,19 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventTable.row()
         EventInfo.eventTable.add(EventInfo.eventResultsTable).expand().fill()
         EventInfo.eventTable.row()
-        EventInfo.eventTable.add(okayButton).padBottom(60f).bottom()
+        EventInfo.eventTable.add(closeButton).padBottom(60f).bottom().height(50f)
 
-        okayButton.addListener(object:ChangeListener(){
+        closeButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.resumeGame()
-                EventInfo.outerEventTable.remove()
+                closeEvent()
             }
         })
     }
 
     fun closeEvent(){
-        EventInfo.outerEventTable.remove()
+        campButtonTab.isDisabled = false;
+        EventInfo.eventBackgroundTable.remove()
     }
 
     fun buildCampTable(){
@@ -589,30 +575,94 @@ class GameScreenGUI(val game : GameScreen) {
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
 
-        restButton = TextButton("Rest", buttonStyle)
-        restButton.label.setFontScale(0.2f)
+        activityHourLabel = Label("0 hours", labelStyle)
+        activityHourLabel.setFontScale(normalFontScale)
 
-        scavengeButton = TextButton("Scavenge", buttonStyle)
-        scavengeButton.label.setFontScale(0.2f)
+        activityHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
 
-        restHourLabel = Label("0 hours", labelStyle)
-        restHourLabel.setFontScale(normalFontScale)
+        activityButton = TextButton("Activity!", buttonStyle)
+        activityButton.label.setFontScale(buttonFontScale)
 
-        scavengeHourLabel = Label("0 hours", labelStyle)
-        scavengeHourLabel.setFontScale(normalFontScale)
-
-        restHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
-        scavengeHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
-
-        campTable.add(restButton).width(130f).left()
-        campTable.add(restHourSlider).width(140f).left().padLeft(20f)
-        campTable.add(restHourLabel).padLeft(20f)
+        campTable.add(buildDropdownList()).width(300f).height(25f)
+        campTable.row().padTop(20f)
+        campTable.add(activityHourLabel)
         campTable.row()
-        campTable.add(scavengeButton).width(130f).left()
-        campTable.add(scavengeHourSlider).width(140f).left().padLeft(20f)
-        campTable.add(scavengeHourLabel).padLeft(20f)
+        campTable.add(activityHourSlider).width(150f).height(25f)
+        campTable.row()
+        campTable.add(activityButton).width(100f).height(25f)
+        //campTable.add(restButton).width(130f).left()
+        //campTable.add(restHourSlider).width(140f).left().padLeft(20f)
+        //campTable.add(restHourLabel).padLeft(20f)
+        //campTable.row()
+        //campTable.add(scavengeButton).width(130f).left()
+        //campTable.add(scavengeHourSlider).width(140f).left().padLeft(20f)
+        //campTable.add(scavengeHourLabel).padLeft(20f)
 
-        campTable.bottom().left()
+        //campTable.bottom().left()
+    }
+
+    private fun buildDropdownList():Actor{
+        val newFont = BitmapFont(Gdx.files.internal("fonts/spaceFont2.fnt"))
+        newFont.data.setScale(normalFontScale)
+
+        val labelStyle = Label.LabelStyle(newFont, Color.WHITE)
+        labelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+
+        val scrollStyle:ScrollPane.ScrollPaneStyle = ScrollPane.ScrollPaneStyle()
+
+        val listStyle:com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle = com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle()
+        listStyle.font = newFont
+        listStyle.fontColorSelected = Color.WHITE
+        listStyle.fontColorUnselected = Color.WHITE
+        listStyle.selection = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        listStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+
+        val selectBoxStyle:SelectBox.SelectBoxStyle = SelectBox.SelectBoxStyle()
+        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("dropdownBackground", Texture::class.java)))
+        selectBoxStyle.listStyle = listStyle
+        selectBoxStyle.scrollStyle = scrollStyle
+        selectBoxStyle.font = newFont
+        selectBoxStyle.fontColor = Color.WHITE
+
+        val selectBox:SelectBox<Label> = SelectBox(selectBoxStyle)
+        //selectBox.setScale(normalFontScale)
+
+        val rest:Label = CustomLabel("Rest", labelStyle)
+        rest.setFontScale(normalFontScale)
+        rest.setAlignment(Align.center)
+        val repair:Label = CustomLabel("Repair ROV", labelStyle)
+        repair.setFontScale(normalFontScale)
+        val recharge:Label = CustomLabel("Recharge Batteries", labelStyle)
+        recharge.setFontScale(normalFontScale)
+        val searchEdibles:Label = CustomLabel("Search for Edibles", labelStyle)
+        searchEdibles.setFontScale(normalFontScale)
+        val searchMeds:Label = CustomLabel("Search for Med-kits", labelStyle)
+        searchMeds.setFontScale(normalFontScale)
+        val searchWealth:Label = CustomLabel("Search for Wealth", labelStyle)
+        searchWealth.setFontScale(normalFontScale)
+        val searchAmmo:Label = CustomLabel("Search for Ammo", labelStyle)
+        searchAmmo.setFontScale(normalFontScale)
+        val searchParts:Label = CustomLabel("Search for Parts", labelStyle)
+        searchParts.setFontScale(normalFontScale)
+        val searchPieces:Label = CustomLabel("Search for ROV Parts", labelStyle)
+        searchPieces.setFontScale(normalFontScale)
+
+//        val rest = "Rest"
+//        val repair = "Repair ROV"
+//        val recharge = "Recharge Batteries"
+//        val searchEdibles = "Search For Edibles"
+//        val searchMeds = "Search For Med-kits"
+//        val searchWealth = "Search For Wealth"
+//        val searchAmmo = "Search For Ammo"
+//        val searchParts = "Search For Parts"
+//        val searchPieces = "Search For Pieces"
+
+        selectBox.items = com.badlogic.gdx.utils.Array.with(repair, recharge, searchEdibles, searchMeds, searchWealth, searchAmmo, searchParts, searchPieces, rest)
+        selectBox.selected.setAlignment(Align.center)
+
+        selectBox.setSelectedAlignment(Align.center)
+        selectBox.setListAlignment(Align.center)
+        return selectBox
     }
 
     fun applyCampTable(){
@@ -623,7 +673,14 @@ class GameScreenGUI(val game : GameScreen) {
         val eventTable:Table = Table()
         val eventChoicesTable:Table = Table()
         val outerEventTable:Table = Table()
+        val eventBackgroundTable:Table = Table()
         val eventResultsTable:Table = Table()
         var titleLabel:Label? = null
+    }
+
+    private class CustomLabel(text: CharSequence?, style: LabelStyle?): Label(text, style) {
+        override fun toString(): String {
+            return this.text.toString()
+        }
     }
 }

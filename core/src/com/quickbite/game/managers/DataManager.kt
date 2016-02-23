@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
+import com.badlogic.gdx.utils.TimeUtils
 import java.io.BufferedReader
 import java.util.*
 
@@ -22,6 +23,7 @@ object DataManager{
 
     fun loadEvents(dir:FileHandle){
         val list:Array<FileHandle> = dir.list()
+        val startTime:Long = TimeUtils.millis()
 
         for(file: FileHandle in list){
             if(file.isDirectory)
@@ -34,14 +36,22 @@ object DataManager{
                 }
             }
         }
+
+        val time:Long = TimeUtils.millis() - startTime
+        Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load events.")
     }
 
     fun loadRandomNames(firstNameFile:FileHandle, lastNameFile:FileHandle){
+        val startTime:Long = TimeUtils.millis()
+
         var reader:BufferedReader = BufferedReader(firstNameFile.reader());
         reader.forEachLine {line ->  randomFirstNameList += line }
 
         reader = BufferedReader(lastNameFile.reader());
         reader.forEachLine {line ->  randomLastNameList += line }
+
+        val time:Long = TimeUtils.millis() - startTime
+        Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
     }
 
     fun pullRandomName():Pair<String, String>{
@@ -88,6 +98,7 @@ object DataManager{
                     return null
 
                 val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]!!
+                outcomeEvent.randomName = this.randomName
                 return outcomeEvent
             }
 

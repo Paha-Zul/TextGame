@@ -29,8 +29,10 @@ object SupplyManager {
         map.put(name, Supply(name, displayName, amt, maxAmount))
     }
 
-    fun addToSupply(name:String, amt:Float){
-        map[name]!!.amt += amt
+    fun addToSupply(name:String, amt:Float):Supply{
+        val supply = map[name]!!
+        supply.amt += amt
+        return supply
     }
 
     fun update(delta:Float){

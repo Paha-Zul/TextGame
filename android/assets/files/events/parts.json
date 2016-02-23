@@ -1,0 +1,49 @@
+[
+  {
+    "root": true,
+    "name": "FoundTrash",
+    "title": "Trashy",
+    "description": ["The crew stumbles upon a pile of space trash."],
+    "choices": ["One man's trash…"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "parts"]]
+  },
+  {
+    "root": true,
+    "name": "BrokenROV",
+    "title": "Do You Hear That?",
+    "description": ["The ROV makes noises that it shouldn’t…"],
+    "choices": ["That's not good"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "parts"]]
+  },
+  {
+    "root": true,
+    "name": "TinkeringROV",
+    "title": "Tinkering",
+    "description": ["%n tinkers with the ROV."],
+    "choices": ["Careful"],
+    "outcomes": [["MoreParts", "LessParts"]],
+    "chances": [[50,50]]
+  },
+  {
+    "name": "MoreParts",
+    "title": "Tinkering",
+    "description": ["He reconfigures a few systems to save some parts."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "parts"]]
+  },
+  {
+    "name": "LessParts",
+    "title": "Tinkering",
+    "description": ["He finds some weathered parts in need of repair."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "parts"]]
+  }
+]

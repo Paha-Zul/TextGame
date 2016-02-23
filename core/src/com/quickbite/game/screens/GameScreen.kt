@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.quickbite.game.*
 import com.quickbite.game.managers.DataManager
 import com.quickbite.game.managers.EventManager
@@ -28,20 +27,17 @@ class GameScreen(val game: Game): Screen {
 
     val timeTickEventList:LinkedList<ChainTask> = LinkedList()
 
-    private val table: Table = Table()
-
     private val backgroundSky = Texture(Gdx.files.internal("art/backgroundSky.png"), true)
     private val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
 
     private val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
-    private val campScreenBackground: Texture = TextGame.manager.get("Camp", Texture::class.java)
 
-    private val ROV: Texture = TextGame.manager.get("Exomer751ROV", Texture::class.java)
+    private var ROV: Texture = TextGame.manager.get("Exomer751ROV", Texture::class.java)
 
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
 
-    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(1,1).toFloat())
+    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(15,30).toFloat())
 
     private var paused = false
 
@@ -70,18 +66,18 @@ class GameScreen(val game: Game): Screen {
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        val sc1: ScrollingBackground = ScrollingBackground(null, 3f, -100f, -Gdx.graphics.height / 2f)
-        val sc2: ScrollingBackground = ScrollingBackground(null, 3f, 800f, -Gdx.graphics.height / 2f)
+        val sc1: ScrollingBackground = ScrollingBackground(null, 3f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc2: ScrollingBackground = ScrollingBackground(null, 3f, 800f, -TextGame.camera.viewportHeight / 2f)
         sc1.following = sc2
         sc2.following = sc1
 
-        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -Gdx.graphics.height / 2f)
-        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -Gdx.graphics.height / 2f)
+        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
         sc3.following = sc4
         sc4.following = sc3
 
-        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -Gdx.graphics.height / 2f)
-        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -Gdx.graphics.height / 2f)
+        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -TextGame.camera.viewportHeight / 2f)
         sc5.following = sc6
         sc6.following = sc5
 
@@ -128,7 +124,7 @@ class GameScreen(val game: Game): Screen {
                             gui.closeEvent()
                         }
                         currEvent = DataManager.EventJson.getRandomRoot()
-                        eventCustomTimerTest.restart(MathUtils.random(1,1).toFloat())
+                        eventCustomTimerTest.restart(MathUtils.random(15,30).toFloat())
                     }
                 })
             }
@@ -198,9 +194,9 @@ class GameScreen(val game: Game): Screen {
 
             var num = MathUtils.random(Math.abs(min), Math.abs(max))
             if(min < 0 || max < 0) num = -num
-            SupplyManager.addToSupply(supplyName, num.toFloat())
+            val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
 
-            resultsList.add(Pair(num, supplyName))
+            resultsList.add(Pair(num, supply.displayName))
         })
 
         EventManager.onEvent("addRndAmtGroup", {args ->
@@ -211,9 +207,23 @@ class GameScreen(val game: Game): Screen {
 
             var num = MathUtils.random(Math.abs(min), Math.abs(max))*GroupManager.numPeopleAlive
             if(min < 0 || max < 0) num = -num
-            SupplyManager.addToSupply(supplyName, num.toFloat())
+            val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
 
-            resultsList.add(Pair(num, supplyName))
+            resultsList.add(Pair(num, supply.displayName))
+        })
+
+        EventManager.onEvent("addRndItem", {args ->
+            val min:Int = (args[0] as String).toInt()
+            val max:Int = (args[1] as String).toInt()
+            val list:List<Any> = args.subList(2, args.size-1)
+
+            val randomSupply = list[MathUtils.random(list.size-1)] as String
+            var num = MathUtils.random(Math.abs(min), Math.abs(max))
+
+            if(min < 0 || max < 0) num = -num
+            val supply = SupplyManager.addToSupply(randomSupply, num.toFloat())
+
+            resultsList.add(Pair(num, supply.displayName))
         })
     }
 
@@ -250,15 +260,17 @@ class GameScreen(val game: Game): Screen {
     private fun draw(batch: SpriteBatch){
         batch.color = Color.WHITE
 
-        batch.draw(backgroundSky, -400f, -backgroundSky.height.toFloat() + Gdx.graphics.height/2f + (backgroundSky.height - Gdx.graphics.height)*currPosOfBackground)
+        batch.draw(backgroundSky, -400f, -backgroundSky.height.toFloat() + TextGame.camera.viewportHeight/2f + (backgroundSky.height - TextGame.camera.viewportHeight)*currPosOfBackground)
 
         batch.draw(sunMoon, -400f, -sunMoon.height.toFloat()/1.32f, sunMoon.width.toFloat()/2, sunMoon.height.toFloat()/2, sunMoon.width.toFloat(), sunMoon.height.toFloat(), 1f, 1f, MathUtils.radiansToDegrees* currPosOfSun,
                 0, 0, sunMoon.width, sunMoon.height, false, true)
 
-        if(state == State.TRAVELING)
-            drawTravelScreen(batch)
-        else if(state == State.CAMP)
-            drawCampScreen(batch)
+        drawTravelScreen(batch)
+
+//        if(state == State.TRAVELING)
+//            //drawTravelScreen(batch)
+//        else if(state == State.CAMP)
+//            //drawCampScreen(batch)
     }
 
     private fun drawTravelScreen(batch: SpriteBatch){
@@ -274,15 +286,13 @@ class GameScreen(val game: Game): Screen {
             //To draw the ROV in the right area, we have to draw when i == 3 (after both the midgrounds). This lets it be
             //under the foreground but above the midground.
             if(i == 3){
-                val shaking = (GameStats.TimeInfo.totalTimeCounter%0.5f).toFloat()*2f
-                batch.draw(ROV, -ROV.width/2f, -Gdx.graphics.height/3f + shaking)
+                val shaking = if(state == State.TRAVELING) (GameStats.TimeInfo.totalTimeCounter%0.5f).toFloat()*2f else 0f
+                batch.draw(ROV, -ROV.width/2f, -TextGame.camera.viewportHeight/3f + shaking)
             }
         }
-
     }
 
     private fun drawCampScreen(batch: SpriteBatch){
-        batch.draw(campScreenBackground, -Gdx.graphics.width/2f, -Gdx.graphics.height/2f)
 
     }
 
@@ -313,6 +323,16 @@ class GameScreen(val game: Game): Screen {
         timeTickEventList.forEach { evt -> evt.update()}
 
         gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
+    }
+
+    fun changeToCamp(){
+        this.state = State.CAMP
+        this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
+    }
+
+    fun changeToTravel(){
+        this.state = State.TRAVELING
+        this.ROV = TextGame.manager.get("Exomer751ROV", Texture::class.java)
     }
 
     fun Float.clamp(min:Float, max:Float):Float{

@@ -1,0 +1,49 @@
+[
+  {
+    "root": true,
+    "name": "FoundSalvage",
+    "title": "Salvage",
+    "description": ["The crew spots a wrecked space probe just off the road!"],
+    "choices": ["Let's see here..."],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndItem", "1", "1", "solar panels", "tracks", "battery", "storage"]]
+  },
+  {
+    "root": true,
+    "name": "fireROV",
+    "title": "FIRE!",
+    "description": ["%n smells burning plastic and spots dark smoke rising from the ROV"],
+    "choices": ["Electrical fire!"],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndItem", "-1", "-1", "solar panels", "tracks", "battery", "storage"]]
+  },
+  {
+    "root": true,
+    "name": "TinkeringROV",
+    "title": "Reworking",
+    "description": ["%n attempts to wire a subsystem into an existing ROV part…"],
+    "choices": ["Worth the risk?"],
+    "outcomes": [["MorePieces", "LessPieces"]],
+    "chances": [[50,50]]
+  },
+  {
+    "name": "MorePieces",
+    "title": "Reworking",
+    "description": ["Amazingly it works! He restores a previously useless part to a like new condition!"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndItem", "1", "1", "solar panels", "tracks", "battery", "storage"]]
+  },
+  {
+    "name": "LessPieces",
+    "title": "Reworking",
+    "description": ["Disaster strikes, both the subsystem and the existing ROV part are lost…"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndItem", "1", "1", "solar panels", "tracks", "battery", "storage"]]
+  }
+]

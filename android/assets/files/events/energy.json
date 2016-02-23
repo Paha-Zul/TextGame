@@ -2,7 +2,7 @@
   {
     "root": true,
     "name": "EnergyBranch",
-    "title": "Was it Red or Blue?",
+    "title": "Red to Blue?",
     "description": ["%n tries rearranging the batteries' wiring."],
     "choices": ["Careful!"],
     "outcomes": [["MoreEnergy", "LessEnergy"]],

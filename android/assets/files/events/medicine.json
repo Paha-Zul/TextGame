@@ -2,7 +2,7 @@
   {
     "root": true,
     "name": "FoundHerbs",
-    "title": "Pretty. Green. Herbs!",
+    "title": "Herbal",
     "description": ["%n thinks he found some Medicinal Herbs."],
     "choices": ["Great!"],
     "outcomes": [],
@@ -12,7 +12,7 @@
   {
     "root": true,
     "name": "NotHerbs",
-    "title": "No Blazin' Tonight.",
+    "title": "Still Nice...",
     "description": ["It turns out those “herbs” are just flowers…"],
     "choices": ["Great..."],
     "outcomes": [],
@@ -22,7 +22,7 @@
   {
     "root": true,
     "name": "NotHerbs",
-    "title": "Maybe This Will Help",
+    "title": "Poultice Test",
     "description": ["%n samples a new poultice."],
     "choices": ["Is That Safe?"],
     "outcomes": [["SoothingHerbs", "IrritatingHerbs"]],

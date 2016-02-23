@@ -10,7 +10,7 @@
   },
   {
     "name": "MoreEdibles",
-    "title": "Looks Like Meat's Back On the Menu Boys!",
+    "title": "Double Rations!",
     "description": ["He uncovers some misplaced food!"],
     "choices": [],
     "outcomes": [],
@@ -19,7 +19,7 @@
   },
   {
     "name": "LessEdibles",
-    "title": "Where Are Those Tomatoes?",
+    "title": "Hmm...",
     "description": ["He discovers some food has gone missing!"],
     "choices": [],
     "outcomes": [],
@@ -29,7 +29,7 @@
   {
     "root": true,
     "name": "FoundEdibles",
-    "title": "Found Yums",
+    "title": "Fruity!",
     "description": ["%n picks some edible fruit from the road side!"],
     "choices": ["Yum!"],
     "outcomes": [],

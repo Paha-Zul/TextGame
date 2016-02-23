@@ -39,7 +39,7 @@
   {
     "root" : true,
     "name": "BadCrystal",
-    "title": "Force It!",
+    "title": "Apply Force?",
     "description": ["It seems some of these crystals don’t fit the weapons specifications."],
     "choices": ["Who Knew?"],
     "outcomes": [],

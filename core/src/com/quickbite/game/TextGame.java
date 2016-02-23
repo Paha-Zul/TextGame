@@ -1,5 +1,6 @@
 package com.quickbite.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -15,7 +16,7 @@ import com.quickbite.game.managers.EasyAssetManager;
 import com.quickbite.game.screens.MainMenuScreen;
 
 public class TextGame extends Game {
-    public OrthographicCamera camera;
+    public static OrthographicCamera camera;
 	public static SpriteBatch batch;
 	public static BitmapFont font, spaceFont;
 	public static Viewport viewport;
@@ -24,7 +25,9 @@ public class TextGame extends Game {
 
 	@Override
 	public void create () {
-        camera = new OrthographicCamera(800, 480);
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+		camera = new OrthographicCamera(800, 480);
 		viewport = new StretchViewport(800, 480, camera);
 		batch = new SpriteBatch();
         batch.setProjectionMatrix(camera.combined);
@@ -47,7 +50,7 @@ public class TextGame extends Game {
 
 
         Gdx.input.setInputProcessor(stage);
-        setScreen(new MainMenuScreen(this));
+		setScreen(new MainMenuScreen(this));
 	}
 
 	@Override
@@ -56,6 +59,7 @@ public class TextGame extends Game {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		super.render();
+		stage.act();
 	}
 
 	@Override
