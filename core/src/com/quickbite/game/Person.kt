@@ -11,7 +11,18 @@ class Person(private val _firstName:String, private val _lastName:String) {
     var fullName:String = ""
         get() = _firstName+" "+_lastName
 
+    var _health:Float = 100f
     var health:Int = 100
+        get() = _health.toInt()
 
     constructor(name:Pair<String, String>):this(name.first, name.second)
+
+    operator fun component1() = _firstName
+    operator fun component2() = _lastName
+
+    fun addHealth(amt:Float){
+        _health+=amt
+        if(_health >= 100)
+            _health = 100f
+    }
 }

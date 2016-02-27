@@ -49,6 +49,9 @@ class GameScreen(val game: Game): Screen {
 
     private var resultsList:MutableList<Pair<Int, String>> = arrayListOf()
 
+    var searchAmount:SupplyManager.SearchAmount? = null
+    var searchFunc:(()->Unit)? = null
+
     var numHoursToAdvance:Int = 0
     var speedToAdvance:Float = 0.1f
 

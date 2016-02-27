@@ -7,7 +7,8 @@ import java.util.*
  * Created by Paha on 2/8/2016.
  */
 object SupplyManager {
-    private val map:LinkedHashMap<String, Supply> = linkedMapOf()
+    private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
+    private val searchAmounts:HashMap<String, SearchAmount> = hashMapOf()
 
     init{
         addNewSupply("energy", "Energy", MathUtils.random(50, 150).toFloat(), 200)
@@ -21,16 +22,27 @@ object SupplyManager {
         addNewSupply("battery", "Battery", MathUtils.random(0, 2).toFloat(), 5)
         addNewSupply("storage", "Storage", MathUtils.random(0, 2).toFloat(), 5)
 
-        map["edibles"]?.consumePerDay = 5f
-        map["parts"]?.consumePerDay = 3.3f
+        supplyMap["edibles"]?.consumePerDay = 5f
+        supplyMap["parts"]?.consumePerDay = 3.3f
+
+        searchAmounts.put("Recharge Batteries", SearchAmount("energy", 100, 8f, 8f))
+        searchAmounts.put("Search for Edibles", SearchAmount("edibles", 50, 2.5f, 10f, true))
+        searchAmounts.put("Search for Med-kits", SearchAmount("medkits", 5, 1f, 50f))
+        searchAmounts.put("Search for Wealth", SearchAmount("wealth", 25, 8f, 8f))
+        searchAmounts.put("Search for Ammo", SearchAmount("ammo", 25, 8f, 8f))
+        searchAmounts.put("Search for Parts", SearchAmount("parts", 25, 8f, 8f))
+        searchAmounts.put("Search for Solar Panels", SearchAmount("solar panels", 1, 1f, 1f))
+        searchAmounts.put("Search for Tracks", SearchAmount("tracks", 1, 1f, 1f))
+        searchAmounts.put("Search for Batteries", SearchAmount("batteries", 1, 1f, 1f))
+        searchAmounts.put("Search for Storages", SearchAmount("storage", 1, 1f, 1f))
     }
 
     fun addNewSupply(name:String, displayName:String, amt:Float, maxAmount:Int){
-        map.put(name, Supply(name, displayName, amt, maxAmount))
+        supplyMap.put(name, Supply(name, displayName, amt, maxAmount))
     }
 
     fun addToSupply(name:String, amt:Float):Supply{
-        val supply = map[name]!!
+        val supply = supplyMap[name]!!
         supply.amt += amt
         return supply
     }
@@ -40,20 +52,31 @@ object SupplyManager {
     }
 
     fun updatePerTick(){
-        val food = map["edibles"]!!
+        val food = supplyMap["edibles"]!!
         val _f = food.amt- ((food.consumePerDay*GroupManager.numPeopleAlive)/24f)
         food.amt = if (_f >= 0) _f else 0f
 
-        val scrap = map["parts"]!!
+        val scrap = supplyMap["parts"]!!
         val _s = scrap.amt - ((scrap.consumePerDay)/24f)
         scrap.amt = if (_s >= 0) _s else 0f
     }
 
     fun getSupplyList():Array<Supply>{
-        return map.values.toTypedArray()
+        return supplyMap.values.toTypedArray()
     }
+
+    fun getSearchAmount(name:String):SearchAmount? = searchAmounts[name]
 
     class Supply(val name:String, val displayName:String, var amt:Float, var maxAmount:Int){
         var consumePerDay:Float = 0f
+    }
+
+    class SearchAmount(val supplyName:String, val chance:Int, val min:Float, val max:Float, val perPerson:Boolean = false){
+        fun search(rndChance:Int):Float{
+            if(rndChance <= chance)
+                return MathUtils.random(min.toInt(), max.toInt()).toFloat()
+
+            return 0f
+        }
     }
 }

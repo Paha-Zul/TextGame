@@ -5,7 +5,7 @@ package com.quickbite.game
  * A fun little chain task class where a predicate and function is supplied. When the predicate is true, the chain task
  * will try to go to the next task. If null, nothing is called within update()
  */
-class ChainTask(var predicate:(() -> Boolean)? = null, var func:(()->Unit)? = null) {
+class ChainTask(var predicate:(() -> Boolean)? = null, var func:(()->Unit)? = null, var finish:(()->Unit)? = null) {
     private var currChain:ChainTask? = this
     private var chain:ChainTask? = null
 
@@ -23,11 +23,12 @@ class ChainTask(var predicate:(() -> Boolean)? = null, var func:(()->Unit)? = nu
                 //If the predicate is no null, call the predicate to check if we are done.
                 if(currChain!!.predicate != null) {
                     if ((currChain!!.predicate!!)()) {
+                        currChain?.finish?.invoke()
                         if(currChain!!.chain != null)
                             currChain = currChain!!.chain
                     }
 
-                //If the predicate is null, we'll assum we only wanted to call the function once since
+                //If the predicate is null, we'll assume we only wanted to call the function once since
                 //no predicate means infinite.
                 }else{
                     currChain = currChain!!.chain

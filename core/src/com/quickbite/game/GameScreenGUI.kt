@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -65,7 +66,8 @@ class GameScreenGUI(val game : GameScreen) {
     private lateinit var activityHourSlider:Slider
     private lateinit var activityButton:TextButton
 
-    /* GUI elements for supplies */
+    private lateinit var selectBox:SelectBox<Label>
+
 
     private lateinit var pauseButton:ImageButton
 
@@ -162,7 +164,29 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        game.timeTickEventList += ChainTask({ activityHourSlider.value <= 0}, { activityHourSlider.setValue(activityHourSlider.value-1)})
+        activityButton.addListener(object:ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                game.numHoursToAdvance = activityHourSlider.value.toInt()
+                game.searchAmount = SupplyManager.getSearchAmount(selectBox.selected.text.toString())
+                val rest = selectBox.selected.text.toString().equals("Rest")
+                val repair = selectBox.selected.text.toString().equals("Repair ROV")
+                if(rest)
+                    game.searchFunc = {GroupManager.getPeopleList().forEach { person -> person.addHealth(8.3f)}}
+                else if(repair)
+                    game.searchFunc = {System.out.println("Repairing ROV.. Need code here!")} //TODO Replace with actual effects.
+                else{
+                    game.searchFunc = {SupplyManager.addToSupply(game.searchAmount!!.supplyName, game.searchAmount!!.search(MathUtils.random(0, 100)))}
+                }
+
+            }
+        })
+
+        game.timeTickEventList += ChainTask({ activityHourSlider.value <= 0},
+            {
+                activityHourSlider.value = activityHourSlider.value-1
+                game.searchFunc?.invoke()
+            },
+            {game.searchAmount = null; game.searchFunc = null})
     }
 
     fun applyTravelTab(tableToApply:Table){
@@ -437,7 +461,7 @@ class GameScreenGUI(val game : GameScreen) {
         //val padding:Int = 400/(event.choices!!.size+1)/2
 
         //Make the buttons for the choices (if any)
-        for(choice in event.choices?.iterator()){
+        for(choice in event.choices!!.iterator()){
             val button = TextButton("($choice)", textButtonStyle)
             button.pad(0f, 10f, 0f, 10f)
             button.label.setFontScale(buttonFontScale)
@@ -624,7 +648,7 @@ class GameScreenGUI(val game : GameScreen) {
         selectBoxStyle.font = newFont
         selectBoxStyle.fontColor = Color.WHITE
 
-        val selectBox:SelectBox<Label> = SelectBox(selectBoxStyle)
+        selectBox = SelectBox(selectBoxStyle)
         //selectBox.setScale(normalFontScale)
 
         val rest:Label = CustomLabel("Rest", labelStyle)
@@ -660,8 +684,8 @@ class GameScreenGUI(val game : GameScreen) {
         selectBox.items = com.badlogic.gdx.utils.Array.with(repair, recharge, searchEdibles, searchMeds, searchWealth, searchAmmo, searchParts, searchPieces, rest)
         selectBox.selected.setAlignment(Align.center)
 
-        selectBox.setSelectedAlignment(Align.center)
-        selectBox.setListAlignment(Align.center)
+//        selectBox.setSelectedAlignment(Align.center)
+//        selectBox.setListAlignment(Align.center)
         return selectBox
     }
 
