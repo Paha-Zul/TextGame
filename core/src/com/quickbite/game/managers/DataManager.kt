@@ -16,6 +16,8 @@ object DataManager{
     private val rootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     private val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
+    private val searchActivities: LinkedHashMap<String, SearchActivityJSON> = linkedMapOf() //For Json Events
+
     private val randomFirstNameList:MutableList<String> = arrayListOf()
     private val randomLastNameList:MutableList<String> = arrayListOf()
 
@@ -54,6 +56,13 @@ object DataManager{
         Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
     }
 
+    fun loadSearchActivities(file:FileHandle){
+        val activities: Array<SearchActivityJSON> = json.fromJson(Array<SearchActivityJSON>::class.java, file)
+        activities.forEach { activity ->
+            searchActivities.put(activity.buttonTitle, activity) //Hash it by the button title.
+        }
+    }
+
     fun pullRandomName():Pair<String, String>{
         var index = MathUtils.random(0, randomFirstNameList.size - 1)
         val firstName = randomFirstNameList[index]
@@ -65,6 +74,8 @@ object DataManager{
 
         return Pair(firstName, lastName)
     }
+
+    fun getSearchActiviesList() = searchActivities.values.toList()
 
     class EventJson{
         var root:Boolean = false
@@ -143,6 +154,16 @@ object DataManager{
                 event.randomName = GroupManager.getRandomPerson().firstName
                 return event;
             }
+        }
+    }
+
+    class SearchActivityJSON(){
+        var name:String = "def"
+        var buttonTitle:String = "fixme"
+        var action:Array<String>? = null
+
+        companion object{
+            fun getSearchActivity(name:String): SearchActivityJSON? = searchActivities[name]
         }
     }
 }

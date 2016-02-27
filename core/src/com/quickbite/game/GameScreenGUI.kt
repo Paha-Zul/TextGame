@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.game.managers.DataManager
+import com.quickbite.game.managers.EventManager
 import com.quickbite.game.managers.GroupManager
 import com.quickbite.game.managers.SupplyManager
 import com.quickbite.game.screens.GameScreen
@@ -30,25 +31,18 @@ class GameScreenGUI(val game : GameScreen) {
     private val buttonFontScale = 0.15f
 
     private val mainTable: Table = Table()
-    private val travelInfoTable:Table = Table() //For time and distance traveled
-    private val tabTable:Table = Table() //For the button tabs
     private val campTable:Table = Table() //For the camp screen
     private val centerInfoTable:Table = Table()
     private val leftTable:Table = Table()
     private val rightTable:Table = Table()
 
-    private val timeInfoTable:Table = Table()
-    private lateinit var timeTitleLabel:Label
     private lateinit var timeLabel:Label
 
     /* GUI elements for travel info */
-    private val distanceTable:Table = Table()
-    private lateinit var distanceTitleLabel:Label
     private lateinit var distanceLabel:Label
     private lateinit var totalDaysLabel:Label
 
     /* GUI elements for people */
-    private val groupStatsTable:Table = Table() //Holds the group and supply tables
     private val groupTable:Table = Table() //For the group
     private val supplyTable:Table = Table() //For the supplies
 
@@ -70,8 +64,6 @@ class GameScreenGUI(val game : GameScreen) {
 
 
     private lateinit var pauseButton:ImageButton
-
-    private val defLabelStyle = Label.LabelStyle(TextGame.font, Color.WHITE)
 
     private lateinit var distProgressBar:ProgressBar
 
@@ -167,17 +159,18 @@ class GameScreenGUI(val game : GameScreen) {
         activityButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.numHoursToAdvance = activityHourSlider.value.toInt()
-                game.searchAmount = SupplyManager.getSearchAmount(selectBox.selected.text.toString())
-                val rest = selectBox.selected.text.toString().equals("Rest")
-                val repair = selectBox.selected.text.toString().equals("Repair ROV")
-                if(rest)
-                    game.searchFunc = {GroupManager.getPeopleList().forEach { person -> person.addHealth(8.3f)}}
-                else if(repair)
-                    game.searchFunc = {System.out.println("Repairing ROV.. Need code here!")} //TODO Replace with actual effects.
-                else{
-                    game.searchFunc = {SupplyManager.addToSupply(game.searchAmount!!.supplyName, game.searchAmount!!.search(MathUtils.random(0, 100)))}
-                }
 
+                //Get the activity.
+                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
+
+                //If not null, get the action.
+                if(game.searchActivity != null) {
+                    val l = game.searchActivity!!.action
+
+                    //If not null, set up the search function
+                    if(l != null)
+                        game.searchFunc = { EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size))) }
+                }
             }
         })
 
@@ -186,7 +179,7 @@ class GameScreenGUI(val game : GameScreen) {
                 activityHourSlider.value = activityHourSlider.value-1
                 game.searchFunc?.invoke()
             },
-            {game.searchAmount = null; game.searchFunc = null})
+            {game.searchActivity = null; game.searchFunc = null})
     }
 
     fun applyTravelTab(tableToApply:Table){
@@ -442,7 +435,10 @@ class GameScreenGUI(val game : GameScreen) {
         showEventPage(event, callbackTask, 0)
     }
 
-    private fun showEventPage(event: DataManager.EventJson, callbackTask : (choice:String)->Unit, page:Int){
+    /**
+     * Shows an individual event page
+     */
+    private fun showEventPage(event: DataManager.EventJson, nextEventName: (choice:String)->Unit, page:Int){
         //Clear the tables
         EventInfo.eventBackgroundTable.clear()
         EventInfo.eventTable.clear()
@@ -471,7 +467,7 @@ class GameScreenGUI(val game : GameScreen) {
             button.addListener(object:ChangeListener(){
                 override fun changed(event: ChangeEvent?, actor: Actor?) {
                     //EventInfo.outerEventTable.remove()
-                    callbackTask(button.text.toString().substring(1, button.text.length - 1))
+                    nextEventName(button.text.toString().substring(1, button.text.length - 1))
                 }
             })
         }
@@ -506,7 +502,7 @@ class GameScreenGUI(val game : GameScreen) {
             closeButton.label.setFontScale(buttonFontScale)
             closeButton.addListener(object:ChangeListener(){
                 override fun changed(evt: ChangeEvent?, actor: Actor?) {
-                    callbackTask("")
+                    nextEventName("") //This will basically end the event.
                 }
             })
 
@@ -523,10 +519,15 @@ class GameScreenGUI(val game : GameScreen) {
                 val hasOnlyOutcomes = (event.choices == null || (event.choices != null && event.choices!!.size == 0)) && (event.outcomes != null && event.outcomes!!.size > 0)
                 val hasActions = event.resultingAction != null && event.resultingAction!!.size > 0
 
+                //If we have another description, simply go to the next page.
                 if(event.description.size - 1 > page)
-                    showEventPage(event, callbackTask, page+1)
+                    showEventPage(event, nextEventName, page+1)
+
+                //If we have only outcomes or only actions, trigger the end of the event. This will probably result in something being gained or lossed
                 else if(hasOnlyOutcomes || (!hasOnlyOutcomes && hasActions)){
-                    callbackTask("")
+                    nextEventName("")
+
+                //Otherwise, we have a choice to make! Layout the choices!
                 }else{
                     EventInfo.eventTable.clear()
                     EventInfo.eventTable.add(EventInfo.titleLabel).width(250f).height(45f).padTop(15f)
@@ -537,10 +538,14 @@ class GameScreenGUI(val game : GameScreen) {
         })
     }
 
+    /**
+     * Shows the event results
+     */
     fun showEventResults(list: List<Pair<Int, String>>){
         EventInfo.eventResultsTable.clear()
         EventInfo.eventTable.clear()
 
+        /* Styles */
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
@@ -549,9 +554,11 @@ class GameScreenGUI(val game : GameScreen) {
         val redLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
         val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
 
+        //Close button
         val closeButton:TextButton = TextButton("- Close -", textButtonStyle)
         closeButton.label.setFontScale(buttonFontScale)
 
+        //Generate all the button choices.
         for(item in list){
             val nameLabel = Label(item.second, labelStyle)
             var amtLabel:Label? = null
@@ -566,12 +573,14 @@ class GameScreenGUI(val game : GameScreen) {
             EventInfo.eventResultsTable.row()
         }
 
+        //Arrange it in the table.
         EventInfo.eventTable.add(EventInfo.titleLabel).height(45f).width(250f).padTop(15f)
         EventInfo.eventTable.row()
         EventInfo.eventTable.add(EventInfo.eventResultsTable).expand().fill()
         EventInfo.eventTable.row()
         EventInfo.eventTable.add(closeButton).padBottom(60f).bottom().height(50f)
 
+        //Create a listener
         closeButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.resumeGame()
@@ -580,6 +589,9 @@ class GameScreenGUI(val game : GameScreen) {
         })
     }
 
+    /**
+     * Closes the event window.
+     */
     fun closeEvent(){
         campButtonTab.isDisabled = false;
         EventInfo.eventBackgroundTable.remove()
@@ -651,25 +663,14 @@ class GameScreenGUI(val game : GameScreen) {
         selectBox = SelectBox(selectBoxStyle)
         //selectBox.setScale(normalFontScale)
 
-        val rest:Label = CustomLabel("Rest", labelStyle)
-        rest.setFontScale(normalFontScale)
-        rest.setAlignment(Align.center)
-        val repair:Label = CustomLabel("Repair ROV", labelStyle)
-        repair.setFontScale(normalFontScale)
-        val recharge:Label = CustomLabel("Recharge Batteries", labelStyle)
-        recharge.setFontScale(normalFontScale)
-        val searchEdibles:Label = CustomLabel("Search for Edibles", labelStyle)
-        searchEdibles.setFontScale(normalFontScale)
-        val searchMeds:Label = CustomLabel("Search for Med-kits", labelStyle)
-        searchMeds.setFontScale(normalFontScale)
-        val searchWealth:Label = CustomLabel("Search for Wealth", labelStyle)
-        searchWealth.setFontScale(normalFontScale)
-        val searchAmmo:Label = CustomLabel("Search for Ammo", labelStyle)
-        searchAmmo.setFontScale(normalFontScale)
-        val searchParts:Label = CustomLabel("Search for Parts", labelStyle)
-        searchParts.setFontScale(normalFontScale)
-        val searchPieces:Label = CustomLabel("Search for ROV Parts", labelStyle)
-        searchPieces.setFontScale(normalFontScale)
+        val list:com.badlogic.gdx.utils.Array<Label> = com.badlogic.gdx.utils.Array()
+        for(sa in DataManager.getSearchActiviesList()){
+            val label = CustomLabel(sa.buttonTitle, labelStyle)
+            label.setFontScale(normalFontScale)
+            list.add(label)
+        }
+
+        selectBox.items = list
 
 //        val rest = "Rest"
 //        val repair = "Repair ROV"
@@ -681,8 +682,6 @@ class GameScreenGUI(val game : GameScreen) {
 //        val searchParts = "Search For Parts"
 //        val searchPieces = "Search For Pieces"
 
-        selectBox.items = com.badlogic.gdx.utils.Array.with(repair, recharge, searchEdibles, searchMeds, searchWealth, searchAmmo, searchParts, searchPieces, rest)
-        selectBox.selected.setAlignment(Align.center)
 
 //        selectBox.setSelectedAlignment(Align.center)
 //        selectBox.setListAlignment(Align.center)

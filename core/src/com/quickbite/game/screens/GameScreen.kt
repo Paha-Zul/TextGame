@@ -49,7 +49,7 @@ class GameScreen(val game: Game): Screen {
 
     private var resultsList:MutableList<Pair<Int, String>> = arrayListOf()
 
-    var searchAmount:SupplyManager.SearchAmount? = null
+    var searchActivity:DataManager.SearchActivityJSON? = null
     var searchFunc:(()->Unit)? = null
 
     var numHoursToAdvance:Int = 0
@@ -195,29 +195,41 @@ class GameScreen(val game: Game): Screen {
             val max:Int = (args[2] as String).toInt()
             val supplyName:String = args[3] as String
 
-            var num = MathUtils.random(Math.abs(min), Math.abs(max))
-            if(min < 0 || max < 0) num = -num
-            val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
+            var chance = 100f
+            if(args.size > 3)
+                chance = (args[4] as String).toFloat()
 
-            resultsList.add(Pair(num, supply.displayName))
+            if(MathUtils.random(100) <= chance) {
+                var num = MathUtils.random(Math.abs(min), Math.abs(max))
+                if (min < 0 || max < 0) num = -num
+                val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
+
+                resultsList.add(Pair(num, supply.displayName))
+            }
         })
 
         EventManager.onEvent("addRndAmtGroup", {args ->
             val name:String = args[0] as String
-            val min:Int = (args[1] as String).toInt()
-            val max:Int = (args[2] as String).toInt()
+            val min:Float = (args[1] as String).toFloat()
+            val max:Float = (args[2] as String).toFloat()
             val supplyName:String = args[3] as String
 
-            var num = MathUtils.random(Math.abs(min), Math.abs(max))*GroupManager.numPeopleAlive
-            if(min < 0 || max < 0) num = -num
-            val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
+            var chance = 100f
+            if(args.size > 3)
+                chance = (args[4] as String).toFloat()
 
-            resultsList.add(Pair(num, supply.displayName))
+            if(MathUtils.random(100) <= chance) {
+                var num = MathUtils.random(Math.abs(min), Math.abs(max)) * GroupManager.numPeopleAlive
+                if (min < 0 || max < 0) num = -num
+                val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
+
+                resultsList.add(Pair(num.toInt(), supply.displayName))
+            }
         })
 
         EventManager.onEvent("addRndItem", {args ->
-            val min:Int = (args[0] as String).toInt()
-            val max:Int = (args[1] as String).toInt()
+            val min:Float = (args[0] as String).toFloat()
+            val max:Float = (args[1] as String).toFloat()
             val list:List<Any> = args.subList(2, args.size-1)
 
             val randomSupply = list[MathUtils.random(list.size-1)] as String
@@ -226,7 +238,21 @@ class GameScreen(val game: Game): Screen {
             if(min < 0 || max < 0) num = -num
             val supply = SupplyManager.addToSupply(randomSupply, num.toFloat())
 
-            resultsList.add(Pair(num, supply.displayName))
+            resultsList.add(Pair(num.toInt(), supply.displayName))
+        })
+
+        EventManager.onEvent("rest", {args ->
+            val amt = (args[0] as String).toFloat()
+
+            GroupManager.getPeopleList().forEach { person ->
+                person.addHealth(amt)
+            }
+        })
+
+        EventManager.onEvent("repair", {args ->
+            val amt = (args[0] as String).toFloat()
+
+            System.out.println("Repairing ROV, add logic here!") //TODO Add logic here...
         })
     }
 
