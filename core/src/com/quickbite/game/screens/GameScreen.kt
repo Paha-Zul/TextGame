@@ -32,7 +32,7 @@ class GameScreen(val game: Game): Screen {
 
     private val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
 
-    private var ROV: Texture = TextGame.manager.get("Exomer751ROV", Texture::class.java)
+    private var ROV: Texture = com.quickbite.game.Game.manager.get("Exomer751ROV", Texture::class.java)
 
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
@@ -65,22 +65,22 @@ class GameScreen(val game: Game): Screen {
         //Tester.testEvents("Event1", 20)
 
         val multi: InputMultiplexer = InputMultiplexer()
-        multi.addProcessor(TextGame.stage)
+        multi.addProcessor(com.quickbite.game.Game.stage)
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        val sc1: ScrollingBackground = ScrollingBackground(null, 3f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc2: ScrollingBackground = ScrollingBackground(null, 3f, 800f, -TextGame.camera.viewportHeight / 2f)
+        val sc1: ScrollingBackground = ScrollingBackground(null, 3f, -100f, -com.quickbite.game.Game.camera.viewportHeight / 2f)
+        val sc2: ScrollingBackground = ScrollingBackground(null, 3f, 800f, -com.quickbite.game.Game.camera.viewportHeight / 2f)
         sc1.following = sc2
         sc2.following = sc1
 
-        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
+        val sc3: ScrollingBackground = ScrollingBackground(Sprite(com.quickbite.game.Game.manager.get("Midground2", Texture::class.java)), 2f, -100f, -com.quickbite.game.Game.camera.viewportHeight / 2f)
+        val sc4: ScrollingBackground = ScrollingBackground(Sprite(com.quickbite.game.Game.manager.get("Midground2", Texture::class.java)), 2f, 800f, -com.quickbite.game.Game.camera.viewportHeight / 2f)
         sc3.following = sc4
         sc4.following = sc3
 
-        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -TextGame.camera.viewportHeight / 2f)
+        val sc5: ScrollingBackground = ScrollingBackground(Sprite(com.quickbite.game.Game.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -com.quickbite.game.Game.camera.viewportHeight / 2f)
+        val sc6: ScrollingBackground = ScrollingBackground(Sprite(com.quickbite.game.Game.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -com.quickbite.game.Game.camera.viewportHeight / 2f)
         sc5.following = sc6
         sc6.following = sc5
 
@@ -196,7 +196,7 @@ class GameScreen(val game: Game): Screen {
             val supplyName:String = args[3] as String
 
             var chance = 100f
-            if(args.size > 3)
+            if(args.count() > 4)
                 chance = (args[4] as String).toFloat()
 
             if(MathUtils.random(100) <= chance) {
@@ -215,7 +215,7 @@ class GameScreen(val game: Game): Screen {
             val supplyName:String = args[3] as String
 
             var chance = 100f
-            if(args.size > 3)
+            if(args.count() > 4)
                 chance = (args[4] as String).toFloat()
 
             if(MathUtils.random(100) <= chance) {
@@ -261,7 +261,7 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun resize(width: Int, height: Int) {
-        TextGame.viewport.update(width, height)
+        com.quickbite.game.Game.viewport.update(width, height)
         //throw UnsupportedOperationException()
     }
 
@@ -278,18 +278,18 @@ class GameScreen(val game: Game): Screen {
         if(!paused && state == State.TRAVELING) travelUpdate(delta)
         else if(!paused && state == State.CAMP) campUpdate(delta)
 
-        TextGame.batch.begin()
-        draw(TextGame.batch)
-        TextGame.batch.end()
+        com.quickbite.game.Game.batch.begin()
+        draw(com.quickbite.game.Game.batch)
+        com.quickbite.game.Game.batch.end()
 
         gui.update(delta)
-        TextGame.stage.draw()
+        com.quickbite.game.Game.stage.draw()
     }
 
     private fun draw(batch: SpriteBatch){
         batch.color = Color.WHITE
 
-        batch.draw(backgroundSky, -400f, -backgroundSky.height.toFloat() + TextGame.camera.viewportHeight/2f + (backgroundSky.height - TextGame.camera.viewportHeight)*currPosOfBackground)
+        batch.draw(backgroundSky, -400f, -backgroundSky.height.toFloat() + com.quickbite.game.Game.camera.viewportHeight/2f + (backgroundSky.height - com.quickbite.game.Game.camera.viewportHeight)*currPosOfBackground)
 
         batch.draw(sunMoon, -400f, -sunMoon.height.toFloat()/1.32f, sunMoon.width.toFloat()/2, sunMoon.height.toFloat()/2, sunMoon.width.toFloat(), sunMoon.height.toFloat(), 1f, 1f, MathUtils.radiansToDegrees* currPosOfSun,
                 0, 0, sunMoon.width, sunMoon.height, false, true)
@@ -316,7 +316,7 @@ class GameScreen(val game: Game): Screen {
             //under the foreground but above the midground.
             if(i == 3){
                 val shaking = if(state == State.TRAVELING) (GameStats.TimeInfo.totalTimeCounter%0.5f).toFloat()*2f else 0f
-                batch.draw(ROV, -ROV.width/2f, -TextGame.camera.viewportHeight/3f + shaking)
+                batch.draw(ROV, -ROV.width/2f, -com.quickbite.game.Game.camera.viewportHeight/3f + shaking)
             }
         }
     }
@@ -356,12 +356,12 @@ class GameScreen(val game: Game): Screen {
 
     fun changeToCamp(){
         this.state = State.CAMP
-        this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
+        this.ROV = com.quickbite.game.Game.manager.get("NewCamp", Texture::class.java)
     }
 
     fun changeToTravel(){
         this.state = State.TRAVELING
-        this.ROV = TextGame.manager.get("Exomer751ROV", Texture::class.java)
+        this.ROV = com.quickbite.game.Game.manager.get("Exomer751ROV", Texture::class.java)
     }
 
     fun Float.clamp(min:Float, max:Float):Float{

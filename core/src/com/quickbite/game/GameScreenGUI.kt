@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -193,11 +192,11 @@ class GameScreenGUI(val game : GameScreen) {
         //mainTable.top().left()
         //mainTable.setFillParent(true)
 
-        TextGame.stage.addActor(centerInfoTable)
-        TextGame.stage.addActor(leftTable)
-        TextGame.stage.addActor(rightTable)
-        TextGame.stage.addActor(pauseButton)
-        TextGame.stage.addActor(campButtonTab)
+        Game.stage.addActor(centerInfoTable)
+        Game.stage.addActor(leftTable)
+        Game.stage.addActor(rightTable)
+        Game.stage.addActor(pauseButton)
+        Game.stage.addActor(campButtonTab)
     }
 
     /**
@@ -205,19 +204,19 @@ class GameScreenGUI(val game : GameScreen) {
      * and supplies info.
      */
     fun applyCampTab(){
-        TextGame.stage.clear()
+        Game.stage.clear()
         mainTable.clear()
 
-        TextGame.stage.addActor(centerInfoTable)
-        TextGame.stage.addActor(leftTable)
-        TextGame.stage.addActor(rightTable)
-        TextGame.stage.addActor(pauseButton)
-        TextGame.stage.addActor(campButtonTab)
+        Game.stage.addActor(centerInfoTable)
+        Game.stage.addActor(leftTable)
+        Game.stage.addActor(rightTable)
+        Game.stage.addActor(pauseButton)
+        Game.stage.addActor(campButtonTab)
 
         //campTable.bottom().left()
         campTable.setFillParent(true)
 
-        TextGame.stage.addActor(campTable)
+        Game.stage.addActor(campTable)
     }
 
     fun buildTravelScreenGUI(){
@@ -226,15 +225,15 @@ class GameScreenGUI(val game : GameScreen) {
         barStyle.knobBefore = TextureRegionDrawable(TextureRegion(Texture(Gdx.files.internal("art/pixel.png"))))
 
         val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
         val pauseButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("play", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("play", Texture::class.java)))
         pauseButtonStyle.imageChecked = drawable
         pauseButtonStyle.imageCheckedOver = drawable
 
-        drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pause", Texture::class.java)))
+        drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("pause", Texture::class.java)))
         pauseButtonStyle.imageUp =  drawable
         pauseButtonStyle.imageOver =  drawable
         pauseButtonStyle.imageDown =  drawable
@@ -243,12 +242,12 @@ class GameScreenGUI(val game : GameScreen) {
 
         pauseButton = ImageButton(pauseButtonStyle)
         pauseButton.setSize(40f, 40f)
-        pauseButton.setPosition(TextGame.viewport.screenWidth/1.4f, TextGame.viewport.screenHeight - pauseButton.height)
+        pauseButton.setPosition(Game.viewport.screenWidth/1.4f, Game.viewport.screenHeight - pauseButton.height)
 
         campButtonTab = TextButton("Camp", textButtonStyle)
         campButtonTab.setSize(40f, 40f)
         campButtonTab.setOrigin(Align.center)
-        campButtonTab.setPosition(TextGame.viewport.screenWidth/4f, TextGame.viewport.screenHeight - campButtonTab.height)
+        campButtonTab.setPosition(Game.viewport.screenWidth/4f, Game.viewport.screenHeight - campButtonTab.height)
         campButtonTab.label.setFontScale(buttonFontScale)
 
         //distanceTable.row()
@@ -268,9 +267,9 @@ class GameScreenGUI(val game : GameScreen) {
         centerInfoTable.setFillParent(true)
 
         val innerTable = Table()
-        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        innerTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
-        val style:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val style:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         totalDaysLabel = Label("Day "+GameStats.TimeInfo.totalDaysTraveled, style)
         timeLabel = Label("12:00 AM", style)
@@ -297,10 +296,10 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildLeftTable(){
         buildSupplyTable()
 
-        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.WHITE
         buttonStyle.up = drawable
 
@@ -318,10 +317,10 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildRightTable(){
         rightTable.clear()
 
-        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
         val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.WHITE
         buttonStyle.up = drawable
 
@@ -342,10 +341,10 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildGroupTable(){
         groupTable.clear()
 
-        groupTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        groupTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
         groupTable.padRight(10f)
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person:Person in list.iterator()){
@@ -370,9 +369,9 @@ class GameScreenGUI(val game : GameScreen) {
         supplyAmountList.clear()
 
         supplyTable.padLeft(10f)
-        supplyTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        supplyTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val title = Label("Supplies", labelStyle)
         title.setFontScale(titleFontScale)
@@ -418,19 +417,19 @@ class GameScreenGUI(val game : GameScreen) {
 //        EventInfo.eventTable.debugAll()
 //        EventInfo.eventChoicesTable.debugAll()
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         EventInfo.titleLabel = Label(event.title, labelStyle)
         EventInfo.titleLabel!!.setAlignment(Align.center)
         EventInfo.titleLabel!!.setFontScale(eventTitleFontScale)
         EventInfo.titleLabel!!.setWrap(true)
 
-        EventInfo.eventBackgroundTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
+        EventInfo.eventBackgroundTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("log2", Texture::class.java)))
         EventInfo.eventBackgroundTable.setSize(400f, 400f)
 
         EventInfo.outerEventTable.setFillParent(true)
         EventInfo.outerEventTable.add(EventInfo.eventBackgroundTable)
-        TextGame.stage.addActor(EventInfo.outerEventTable)
+        Game.stage.addActor(EventInfo.outerEventTable)
 
         showEventPage(event, callbackTask, 0)
     }
@@ -445,13 +444,13 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventChoicesTable.clear()
 
         //Set some styles
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhite", Texture::class.java)))
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
         //val padding:Int = 400/(event.choices!!.size+1)/2
@@ -547,12 +546,12 @@ class GameScreenGUI(val game : GameScreen) {
 
         /* Styles */
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-        val redLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
-        val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val redLabelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
+        val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
 
         //Close button
         val closeButton:TextButton = TextButton("- Close -", textButtonStyle)
@@ -602,14 +601,14 @@ class GameScreenGUI(val game : GameScreen) {
         campTable.remove()
         campTable.setFillParent(true)
 
-        val slider = TextureRegionDrawable(TextureRegion(TextGame.manager.get("slider", Texture::class.java)))
-        val knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnob", Texture::class.java)))
+        val slider = TextureRegionDrawable(TextureRegion(Game.manager.get("slider", Texture::class.java)))
+        val knob = TextureRegionDrawable(TextureRegion(Game.manager.get("sliderKnob", Texture::class.java)))
 
         val sliderStyle:Slider.SliderStyle = Slider.SliderStyle(slider, knob)
-        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
 
         activityHourLabel = Label("0 hours", labelStyle)
         activityHourLabel.setFontScale(normalFontScale)
@@ -619,22 +618,19 @@ class GameScreenGUI(val game : GameScreen) {
         activityButton = TextButton("Activity!", buttonStyle)
         activityButton.label.setFontScale(buttonFontScale)
 
-        campTable.add(buildDropdownList()).width(300f).height(25f)
-        campTable.row().padTop(20f)
-        campTable.add(activityHourLabel)
-        campTable.row()
-        campTable.add(activityHourSlider).width(150f).height(25f)
-        campTable.row()
-        campTable.add(activityButton).width(100f).height(25f)
-        //campTable.add(restButton).width(130f).left()
-        //campTable.add(restHourSlider).width(140f).left().padLeft(20f)
-        //campTable.add(restHourLabel).padLeft(20f)
-        //campTable.row()
-        //campTable.add(scavengeButton).width(130f).left()
-        //campTable.add(scavengeHourSlider).width(140f).left().padLeft(20f)
-        //campTable.add(scavengeHourLabel).padLeft(20f)
+        val innerTable:Table = Table()
+        innerTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
-        //campTable.bottom().left()
+        innerTable.add(buildDropdownList()).width(300f).height(25f)
+        innerTable.row().padTop(20f)
+        innerTable.add(activityHourLabel)
+        innerTable.row()
+        innerTable.add(activityHourSlider).width(150f).height(25f)
+        innerTable.row()
+        innerTable.add(activityButton).width(100f).height(25f)
+
+
+        campTable.add(innerTable)
     }
 
     private fun buildDropdownList():Actor{
@@ -642,7 +638,7 @@ class GameScreenGUI(val game : GameScreen) {
         newFont.data.setScale(normalFontScale)
 
         val labelStyle = Label.LabelStyle(newFont, Color.WHITE)
-        labelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        labelStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
         val scrollStyle:ScrollPane.ScrollPaneStyle = ScrollPane.ScrollPaneStyle()
 
@@ -650,11 +646,11 @@ class GameScreenGUI(val game : GameScreen) {
         listStyle.font = newFont
         listStyle.fontColorSelected = Color.WHITE
         listStyle.fontColorUnselected = Color.WHITE
-        listStyle.selection = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
-        listStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        listStyle.selection = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        listStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
         val selectBoxStyle:SelectBox.SelectBoxStyle = SelectBox.SelectBoxStyle()
-        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("dropdownBackground", Texture::class.java)))
+        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("dropdownBackground", Texture::class.java)))
         selectBoxStyle.listStyle = listStyle
         selectBoxStyle.scrollStyle = scrollStyle
         selectBoxStyle.font = newFont
@@ -672,24 +668,13 @@ class GameScreenGUI(val game : GameScreen) {
 
         selectBox.items = list
 
-//        val rest = "Rest"
-//        val repair = "Repair ROV"
-//        val recharge = "Recharge Batteries"
-//        val searchEdibles = "Search For Edibles"
-//        val searchMeds = "Search For Med-kits"
-//        val searchWealth = "Search For Wealth"
-//        val searchAmmo = "Search For Ammo"
-//        val searchParts = "Search For Parts"
-//        val searchPieces = "Search For Pieces"
-
-
 //        selectBox.setSelectedAlignment(Align.center)
 //        selectBox.setListAlignment(Align.center)
         return selectBox
     }
 
     fun applyCampTable(){
-        TextGame.stage.addActor(campTable)
+        Game.stage.addActor(campTable)
     }
 
     private object EventInfo{

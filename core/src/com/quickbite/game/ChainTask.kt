@@ -7,7 +7,9 @@ package com.quickbite.game
  */
 class ChainTask(var predicate:(() -> Boolean)? = null, var func:(()->Unit)? = null, var finish:(()->Unit)? = null) {
     private var currChain:ChainTask? = this
-    private var chain:ChainTask? = null
+    var chain:ChainTask? = null
+        get
+        private set
 
     var done:Boolean = false
         get() = currChain == null

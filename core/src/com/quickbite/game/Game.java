@@ -1,7 +1,6 @@
 package com.quickbite.game;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,15 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.quickbite.game.managers.EasyAssetManager;
-import com.quickbite.game.screens.MainMenuScreen;
+import com.quickbite.game.screens.LoadingScreen;
 
-public class TextGame extends Game {
+public class Game extends com.badlogic.gdx.Game {
     public static OrthographicCamera camera;
 	public static SpriteBatch batch;
 	public static BitmapFont font, spaceFont;
 	public static Viewport viewport;
     public static Stage stage;
     public static EasyAssetManager manager;
+	public static int tick=0;
 
 	@Override
 	public void create () {
@@ -43,14 +43,8 @@ public class TextGame extends Game {
 		manager.loadALlPictures(Gdx.files.internal("art/"));
 		manager.loadAllFonts(Gdx.files.internal("fonts/"));
 
-		boolean done = false;
-		while(!done){
-			done = manager.update();
-		}
-
-
         Gdx.input.setInputProcessor(stage);
-		setScreen(new MainMenuScreen(this));
+		setScreen(new LoadingScreen(this));
 	}
 
 	@Override
@@ -60,6 +54,7 @@ public class TextGame extends Game {
 
 		super.render();
 		stage.act();
+		tick++;
 	}
 
 	@Override

@@ -7,13 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.quickbite.game.TextGame
+import com.quickbite.game.Game
 import com.quickbite.game.managers.DataManager
 
 /**
  * Created by Paha on 2/3/2016.
  */
-class MainMenuScreen(val game: TextGame) : Screen {
+class MainMenuScreen(val game: Game) : Screen {
     val table: Table = Table()
 
     override fun show() {
@@ -23,7 +23,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
         DataManager.loadSearchActivities(Gdx.files.internal("files/searchActivities.json"))
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        style.font = TextGame.font
+        style.font = Game.font
         style.fontColor = Color.BLACK
 
         val startButton = TextButton("Start", style);
@@ -38,7 +38,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
         table.add(startButton).width(150f).height(50f)
         table.setFillParent(true)
 
-        TextGame.stage.addActor(table)
+        Game.stage.addActor(table)
     }
 
     override fun hide() {
@@ -54,7 +54,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
     }
 
     override fun render(delta: Float) {
-        TextGame.stage.draw()
+        Game.stage.draw()
         //throw UnsupportedOperationException()
     }
 
