@@ -40,8 +40,6 @@ public class Game extends com.badlogic.gdx.Game {
 		spaceFont.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
 		manager = new EasyAssetManager();
-		manager.loadALlPictures(Gdx.files.internal("art/"));
-		manager.loadAllFonts(Gdx.files.internal("fonts/"));
 
         Gdx.input.setInputProcessor(stage);
 		setScreen(new LoadingScreen(this));

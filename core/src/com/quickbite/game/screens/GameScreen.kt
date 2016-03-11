@@ -136,6 +136,8 @@ class GameScreen(val game: Game): Screen {
         eventCustomTimerTest.callback = func
 
         makeEvents()
+
+        gui.openTradeWindow()
     }
 
     private fun makeEvents(){

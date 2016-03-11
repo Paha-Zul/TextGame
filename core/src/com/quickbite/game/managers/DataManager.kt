@@ -18,6 +18,8 @@ object DataManager{
 
     private val searchActivities: LinkedHashMap<String, SearchActivityJSON> = linkedMapOf() //For Json Events
 
+    private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
+
     private val randomFirstNameList:MutableList<String> = arrayListOf()
     private val randomLastNameList:MutableList<String> = arrayListOf()
 
@@ -41,6 +43,18 @@ object DataManager{
 
         val time:Long = TimeUtils.millis() - startTime
         Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load events.")
+    }
+
+    fun loadItems(dir:FileHandle){
+        val startTime:Long = TimeUtils.millis()
+
+        val items: Array<ItemJson> = json.fromJson(Array<ItemJson>::class.java, dir)
+        items.forEach { item ->
+            itemMap.put(item.name, item)
+        }
+
+        val time:Long = TimeUtils.millis() - startTime
+        Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load items.")
     }
 
     fun loadRandomNames(firstNameFile:FileHandle, lastNameFile:FileHandle){
@@ -76,6 +90,19 @@ object DataManager{
     }
 
     fun getSearchActiviesList() = searchActivities.values.toList()
+
+    fun getItemList() = itemMap.values.toList()
+
+    fun getItem(name:String) = itemMap[name]
+
+    class ItemJson{
+        var name:String = ""
+        var displayName:String = ""
+        var max:Int = 0
+        var worth:Array<Int>? = null
+        var perMember:Boolean = false
+        var randStartAmt:Array<Int>? = null
+    }
 
     class EventJson{
         var root:Boolean = false

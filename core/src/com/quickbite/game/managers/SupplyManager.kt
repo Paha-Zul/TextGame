@@ -10,16 +10,25 @@ object SupplyManager {
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
     init{
-        addNewSupply("energy", "Energy", MathUtils.random(50, 150).toFloat(), 200)
-        addNewSupply("edibles", "Edibles", (MathUtils.random(75, 225)*GroupManager.numPeopleAlive).toFloat(), 250*GroupManager.numPeopleAlive) //Initially set the food
-        addNewSupply("parts", "Parts", MathUtils.random(50, 150).toFloat(), 250)
-        addNewSupply("medkits", "Med-kits", MathUtils.random(0, 5).toFloat(), 10)
-        addNewSupply("wealth", "Wealth", MathUtils.random(1, 100).toFloat(), 250)
-        addNewSupply("ammo", "Ammo", MathUtils.random(50, 150).toFloat(), 250)
-        addNewSupply("solar panels", "Solar Panels", MathUtils.random(0, 2).toFloat(), 5)
-        addNewSupply("tracks", "Tracks", MathUtils.random(0, 2).toFloat(), 5)
-        addNewSupply("battery", "Battery", MathUtils.random(0, 2).toFloat(), 5)
-        addNewSupply("storage", "Storage", MathUtils.random(0, 2).toFloat(), 5)
+        var list = DataManager.getItemList()
+        for(item in list){
+            val randStart = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()
+            if(item.perMember) randStart*GroupManager.numPeopleAlive
+            val maxAmount = if(item.perMember) item.max*GroupManager.numPeopleAlive else item.max
+
+            addNewSupply(item.name, item.displayName, randStart, maxAmount)
+        }
+
+//        addNewSupply("energy", "Energy", MathUtils.random(50, 150).toFloat(), 200)
+//        addNewSupply("edibles", "Edibles", (MathUtils.random(75, 225)*GroupManager.numPeopleAlive).toFloat(), 250*GroupManager.numPeopleAlive) //Initially set the food
+//        addNewSupply("parts", "Parts", MathUtils.random(50, 150).toFloat(), 250)
+//        addNewSupply("medkits", "Med-kits", MathUtils.random(0, 5).toFloat(), 10)
+//        addNewSupply("wealth", "Wealth", MathUtils.random(1, 100).toFloat(), 250)
+//        addNewSupply("ammo", "Ammo", MathUtils.random(50, 150).toFloat(), 250)
+//        addNewSupply("solar panels", "Solar Panels", MathUtils.random(0, 2).toFloat(), 5)
+//        addNewSupply("tracks", "Tracks", MathUtils.random(0, 2).toFloat(), 5)
+//        addNewSupply("battery", "Battery", MathUtils.random(0, 2).toFloat(), 5)
+//        addNewSupply("storage", "Storage", MathUtils.random(0, 2).toFloat(), 5)
 
         supplyMap["edibles"]?.consumePerDay = 5f
         supplyMap["parts"]?.consumePerDay = 3.3f
@@ -53,8 +62,13 @@ object SupplyManager {
         return supplyMap.values.toTypedArray()
     }
 
+    fun getSupply(name:String):Supply = supplyMap[name]!!
 
     class Supply(val name:String, val displayName:String, var amt:Float, var maxAmount:Int){
         var consumePerDay:Float = 0f
+
+        operator fun component1() = displayName
+        operator fun component2() = amt
+        operator fun component3() = maxAmount
     }
 }

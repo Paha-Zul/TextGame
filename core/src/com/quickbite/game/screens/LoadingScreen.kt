@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.quickbite.game.ChainTask
 import com.quickbite.game.GH
 import com.quickbite.game.Game
+import com.quickbite.game.managers.DataManager
 
 /**
  * Created by Paha on 2/27/2016.
@@ -18,13 +19,19 @@ class LoadingScreen(val game: Game): Screen {
     var opacity:Float = 0f
     var counter = 0
     var done = false
+    var scale = 1f
 
     override fun show() {
-        logo.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
-        chain = ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 0.5f)})
-        chain.setChain(ChainTask({counter >= 30}, {counter++})).
-                setChain(ChainTask({opacity <= 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.5f)}))
-        .setChain(ChainTask({done}, {}, {game.screen = MainMenuScreen(game)}))
+        logo.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
+
+        Game.manager.loadALlPictures(Gdx.files.internal("art/"))
+        Game.manager.loadAllFonts(Gdx.files.internal("fonts/"))
+
+        chain = ChainTask({counter>=20}, {counter++}, {counter=0})
+        chain.setChain(ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager()})). //Fade in
+                setChain(ChainTask({counter >= 60}, {counter++}, {counter=0})). //Wait
+                setChain(ChainTask({opacity <= 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})). //Fade out
+                setChain(ChainTask({done && counter >= 20}, {counter++}, {game.screen = MainMenuScreen(game)})) //Wait
     }
 
     override fun hide() {
@@ -37,6 +44,8 @@ class LoadingScreen(val game: Game): Screen {
     }
 
     override fun render(delta: Float) {
+        scale+=0.0005f
+
         chain.update()
         done = Game.manager.update()
         val color = Game.batch.color
@@ -44,15 +53,25 @@ class LoadingScreen(val game: Game): Screen {
         Game.batch.begin()
         Game.batch.setColor(color.r, color.g, color.b, opacity)
 
-        Game.batch.draw(logo, -150f, -150f, 300f, 300f)
+        Game.batch.draw(logo, -150f*scale, -150f*scale, 300f*scale, 300f*scale)
 
         Game.batch.color = Color.WHITE
         Game.batch.end()
     }
 
     override fun resume() {
+
     }
 
     override fun dispose() {
+
+    }
+
+    private fun loadDataManager() {
+        DataManager.loadEvents(Gdx.files.internal("files/events/"))
+        DataManager.loadRandomNames(Gdx.files.internal("files/text/firstNames.txt"), Gdx.files.internal("files/text/lastNames.txt"))
+        DataManager.loadSearchActivities(Gdx.files.internal("files/searchActivities.json"))
+        DataManager.loadItems(Gdx.files.internal("files/items.json"))
+
     }
 }

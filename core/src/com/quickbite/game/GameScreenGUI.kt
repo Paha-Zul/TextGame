@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -36,6 +37,14 @@ class GameScreenGUI(val game : GameScreen) {
     private val rightTable:Table = Table()
 
     private lateinit var timeLabel:Label
+
+    /* GUI elements for trade */
+    private val mainTradeWindowTable:Table = Table()
+    private val tradeWindowTable:Table = Table()
+    private val leftTradeTable:Table = Table()
+    private val rightTradeTable:Table = Table()
+    private val middleTradeTable:Table = Table()
+
 
     /* GUI elements for travel info */
     private lateinit var distanceLabel:Label
@@ -629,7 +638,6 @@ class GameScreenGUI(val game : GameScreen) {
         innerTable.row()
         innerTable.add(activityButton).width(100f).height(25f)
 
-
         campTable.add(innerTable)
     }
 
@@ -650,7 +658,7 @@ class GameScreenGUI(val game : GameScreen) {
         listStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
 
         val selectBoxStyle:SelectBox.SelectBoxStyle = SelectBox.SelectBoxStyle()
-        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("dropdownBackground", Texture::class.java)))
+        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
         selectBoxStyle.listStyle = listStyle
         selectBoxStyle.scrollStyle = scrollStyle
         selectBoxStyle.font = newFont
@@ -675,6 +683,218 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun applyCampTable(){
         Game.stage.addActor(campTable)
+    }
+
+    fun openTradeWindow(){
+        tradeWindowTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("TradeWindow", Texture::class.java)))
+        tradeWindowTable.setSize(400f, 400f)
+
+        val labelTable:Table = Table()
+        val listTable:Table = Table()
+        val offerTable:Table = Table()
+
+        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val textButtonStyle = TextButton.TextButtonStyle()
+        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.fontColor = Color.WHITE
+
+        val exomerLabel = Label("Exomer751", labelStyle)
+        exomerLabel.setFontScale(0.15f)
+        exomerLabel.setAlignment(Align.center)
+
+        val nativeLabel = Label("Natives", labelStyle)
+        nativeLabel.setFontScale(0.15f)
+        nativeLabel.setAlignment(Align.center)
+
+        TradeManager.generateLists()
+
+        val exomerList = TradeManager.exomerList
+        val otherList = TradeManager.otherList
+
+        for(i in exomerList!!.indices){
+            val exItem = exomerList[i]
+            val otherItem = otherList!![i]
+
+            val _leftTable:Table = Table()
+            val _centerTable:Table = Table()
+            val _rightTable:Table = Table()
+
+            val exomerItemNameLabel = Label(exItem.val1, labelStyle)
+            exomerItemNameLabel.setFontScale(0.13f)
+            exomerItemNameLabel.setAlignment(Align.left)
+
+            val exomerItemAmountLabel = Label(exItem.val2.toInt().toString(), labelStyle)
+            exomerItemAmountLabel.setFontScale(0.13f)
+
+            val nativeItemNameLabel = Label(otherItem.val1, labelStyle)
+            nativeItemNameLabel.setFontScale(0.13f)
+            nativeItemNameLabel.setAlignment(Align.right)
+
+            val nativeItemAmountLabel = Label(otherItem.val2.toInt().toString(), labelStyle)
+            nativeItemAmountLabel.setFontScale(0.13f)
+
+            _leftTable.add(exomerItemNameLabel).left()
+            _leftTable.add(exomerItemAmountLabel).left().padLeft(10f)
+
+            _rightTable.add(nativeItemAmountLabel).right().padRight((10f))
+            _rightTable.add(nativeItemNameLabel).right()
+
+            _leftTable.left()
+            _rightTable.right()
+
+            listTable.add(_leftTable).left().fillX().expandX()
+            listTable.add(_centerTable).fillX().expandX()
+            listTable.add(_rightTable).right().fillX().expandX()
+            listTable.row()
+        }
+
+//        tradeWindowLeft()
+//        tradeWindowCenter()
+//        tradeWindowRight()
+
+        val yourOfferLabel = Label("Your Offer:", labelStyle)
+        val yourOfferAmtLabel = Label("0", labelStyle)
+        yourOfferLabel.setFontScale(0.15f)
+        yourOfferAmtLabel.setFontScale(0.15f)
+
+        val otherOfferAmtLabel = Label("0", labelStyle)
+        val otherOfferLabel = Label(":Their Offer", labelStyle)
+        otherOfferAmtLabel.setFontScale(0.15f)
+        otherOfferLabel.setFontScale(0.15f)
+
+        val acceptButton = TextButton("Accept", textButtonStyle)
+        acceptButton.label.setFontScale(0.2f)
+
+        offerTable.add(yourOfferLabel).left().padLeft(20f).padRight(5f)
+        offerTable.add(yourOfferAmtLabel).left()
+        offerTable.add().fillX().expandX()
+        offerTable.add(otherOfferAmtLabel).right().padRight(5f)
+        offerTable.add(otherOfferLabel).right().padRight(20f)
+
+        labelTable.add(exomerLabel).fillX().expandX().left().height(30f).width(125f)
+        labelTable.add().fillX().expandX()
+        labelTable.add(nativeLabel).fillX().expandX().right().height(30f).width(125f)
+
+        tradeWindowTable.add(labelTable).fillX().expandX().pad(20f, 20f, 0f, 20f)
+        tradeWindowTable.row()
+        tradeWindowTable.add(listTable).fill().expand().pad(0f, 20f, 0f, 20f).top()
+        tradeWindowTable.row()
+        tradeWindowTable.add(offerTable).fillX().expandX().padBottom(15f)
+        tradeWindowTable.row()
+        tradeWindowTable.add(acceptButton).padBottom(20f)
+
+        mainTradeWindowTable.add(tradeWindowTable)
+
+        mainTradeWindowTable.setFillParent(true)
+//        mainTradeWindowTable.debugAll()
+        Game.stage.addActor(mainTradeWindowTable)
+    }
+
+    private fun tradeWindowLeft(){
+        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val exomerLabel = Label("Exomer751", labelStyle)
+        exomerLabel.setFontScale(0.15f)
+        exomerLabel.setAlignment(Align.center)
+
+        val listTable = Table()
+        val list = SupplyManager.getSupplyList()
+        for((name, amt) in list){
+            val t = Table()
+
+            val nLabel = Label(name, labelStyle)
+            nLabel.setFontScale(0.15f)
+            nLabel.setAlignment(Align.left)
+            val aLabel = Label(amt.toInt().toString(), labelStyle)
+            aLabel.setFontScale(0.15f)
+
+            t.add(nLabel).left()
+            t.add(aLabel).left().padLeft(10f)
+            listTable.add(t).left()
+            listTable.row()
+        }
+
+        //Add the label and list to the left trade table.
+        leftTradeTable.add(exomerLabel).width(120f).height(30f).left()
+        leftTradeTable.row().padTop(15f)
+        leftTradeTable.add(listTable)
+
+        //Add the left trade table to the trade window table and position it!
+        leftTradeTable.left().top()
+        tradeWindowTable.add(leftTradeTable).left().top().padLeft(25f).padTop(20f).width(170f)
+        tradeWindowTable.debugAll()
+    }
+
+    private fun tradeWindowRight(){
+        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val nativeLabel = Label("Native", labelStyle)
+        nativeLabel.setFontScale(0.15f)
+        nativeLabel.setAlignment(Align.center)
+
+        val listTable = Table()
+        val list = SupplyManager.getSupplyList()
+        for((name, amt, max) in list){
+            val t = Table()
+
+            val nLabel = Label(name, labelStyle)
+            nLabel.setFontScale(0.15f)
+            nLabel.setAlignment(Align.right)
+            val aLabel = Label(MathUtils.random(0, max).toString(), labelStyle)
+            aLabel.setFontScale(0.15f)
+            aLabel.setAlignment(Align.right)
+
+            t.add(aLabel).right().padRight(10f)
+            t.add(nLabel).right()
+            listTable.add(t).right()
+            listTable.row()
+        }
+
+        rightTradeTable.add(nativeLabel).width(120f).height(30f).right()
+        rightTradeTable.row().padTop(15f)
+        rightTradeTable.add(listTable)
+
+        rightTradeTable.right().top()
+        tradeWindowTable.add(rightTradeTable).right().top().padRight(25f).padTop(20f).width(170f)
+        tradeWindowTable.debugAll()
+    }
+
+    private fun tradeWindowCenter(){
+        val drawable:TextureRegionDrawable = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhite", Texture::class.java)))
+
+        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
+        imageButtonStyle.up = drawable
+        imageButtonStyle.over = drawable
+        imageButtonStyle.down = drawable
+
+        val nativeLabel = Label("Native", labelStyle)
+        nativeLabel.setFontScale(0.15f)
+        nativeLabel.setAlignment(Align.center)
+
+        val listTable = Table()
+        val list = SupplyManager.getSupplyList()
+        for((name, amt, max) in list){
+            val t = Table()
+
+            val leftArrows = ImageButton(imageButtonStyle)
+            val rightArrows = ImageButton(imageButtonStyle)
+            rightArrows.rotation = 180f
+
+            t.add(leftArrows).size(16f)
+            t.add(rightArrows).size(16f)
+            listTable.add(t).fillX().expandX()
+            listTable.row()
+        }
+
+        middleTradeTable.add().height(30f)
+        middleTradeTable.row().padTop(15f)
+        middleTradeTable.add(listTable).center().fillX().expandX()
+
+        middleTradeTable.center()
+        tradeWindowTable.add(middleTradeTable).right().top().padRight(25f).padTop(20f).fill().expand().center()
+        tradeWindowTable.debugAll()
     }
 
     private object EventInfo{
