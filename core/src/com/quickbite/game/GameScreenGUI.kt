@@ -688,7 +688,7 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun buildTradeWindow(){
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("TradeWindow", Texture::class.java)))
-        tradeWindowTable.setSize(400f, 400f)
+        tradeWindowTable.setSize(600f, 400f)
 
         val labelTable:Table = Table()
         val listTable:Table = Table()
@@ -726,6 +726,30 @@ class GameScreenGUI(val game : GameScreen) {
 
         TradeManager.generateLists()
 
+        val amountLabel = Label("Amt", labelStyle)
+        amountLabel.setFontScale(0.15f)
+        amountLabel.setAlignment(Align.center)
+
+        val otherAmountLabel = Label("Amt", labelStyle)
+        otherAmountLabel.setFontScale(0.15f)
+        otherAmountLabel.setAlignment(Align.center)
+
+        val nameLabel = Label("Name", labelStyle)
+        nameLabel.setFontScale(0.15f)
+        nameLabel.setAlignment(Align.center)
+
+        val otherNameLabel = Label("Name", labelStyle)
+        otherNameLabel.setFontScale(0.15f)
+        otherNameLabel.setAlignment(Align.center)
+
+        val valueLabel = Label("Value", labelStyle)
+        valueLabel.setFontScale(0.15f)
+        valueLabel.setAlignment(Align.center)
+
+        val otherValueLabel = Label("Value", labelStyle)
+        otherValueLabel.setFontScale(0.15f)
+        otherValueLabel.setAlignment(Align.center)
+
         val exomerList = TradeManager.exomerList
         val otherList = TradeManager.otherList
 
@@ -739,29 +763,49 @@ class GameScreenGUI(val game : GameScreen) {
 
             val exomerItemNameLabel = Label(exItem.displayName, labelStyle)
             exomerItemNameLabel.setFontScale(0.13f)
-            exomerItemNameLabel.setAlignment(Align.left)
+            exomerItemNameLabel.setAlignment(Align.center)
 
             val exomerItemAmountLabel = Label(exItem.amt.toInt().toString(), labelStyle)
             exomerItemAmountLabel.setFontScale(0.13f)
             exomerItemAmountLabel.setAlignment(Align.center)
 
+            val exomerItemValueLabel = Label(exItem.worth.toString(), labelStyle)
+            exomerItemValueLabel.setFontScale(0.13f)
+            exomerItemValueLabel.setAlignment(Align.center)
+
             val nativeItemNameLabel = Label(otherItem.displayName, labelStyle)
             nativeItemNameLabel.setFontScale(0.13f)
-            nativeItemNameLabel.setAlignment(Align.right)
+            nativeItemNameLabel.setAlignment(Align.center)
 
             val nativeItemAmountLabel = Label(otherItem.amt.toInt().toString(), labelStyle)
             nativeItemAmountLabel.setFontScale(0.13f)
             nativeItemAmountLabel.setAlignment(Align.center)
 
+            val nativeItemValueLabel = Label(otherItem.worth.toString(), labelStyle)
+            nativeItemValueLabel.setFontScale(0.13f)
+            nativeItemValueLabel.setAlignment(Align.center)
 
-            _leftTable.add(exomerItemNameLabel).left()
-            _leftTable.add(exomerItemAmountLabel).left().padLeft(3f).size(25f)
+            if(i == 0){
+                _leftTable.add(amountLabel).uniformX()
+                _leftTable.add(nameLabel)
+                _leftTable.add(valueLabel)
+                _leftTable.row()
 
-            _rightTable.add(nativeItemAmountLabel).right().padRight((3f)).size(25f)
-            _rightTable.add(nativeItemNameLabel).right()
+                _rightTable.add(otherValueLabel)
+                _rightTable.add(otherNameLabel)
+                _rightTable.add(otherAmountLabel).uniformX()
+                _rightTable.row()
+            }
 
-            _leftTable.left()
-            _rightTable.right()
+            //Add the amount then name to the left table.
+            _leftTable.add(exomerItemAmountLabel).left()
+            _leftTable.add(exomerItemNameLabel).padLeft(3f).width(120f)
+            _leftTable.add(exomerItemValueLabel).padLeft(3f).width(30f)
+
+            //Add the name then amount to the right table.
+            _rightTable.add(nativeItemValueLabel).padRight((3f)).width(30f)
+            _rightTable.add(nativeItemNameLabel).padRight((3f)).width(120f)
+            _rightTable.add(nativeItemAmountLabel).right()
 
             val takeButton = ImageButton(takeButtonStyle)
             val giveButton = ImageButton(giveButtonStyle)
@@ -826,19 +870,19 @@ class GameScreenGUI(val game : GameScreen) {
                 }
             })
 
+            //Add the stuff to the center table.
             _centerTable.add(takeButton).size(24f).right()
             _centerTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(30f).center()
             _centerTable.add(giveButton).size(24f).left()
 
+
+
+            //Add all the stuff to the table.
             listTable.add(_leftTable).left()
             listTable.add(_centerTable).fillX().expandX().center()
             listTable.add(_rightTable).right()
             listTable.row()
         }
-
-//        tradeWindowLeft()
-//        tradeWindowCenter()
-//        tradeWindowRight()
 
         val acceptButton = TextButton("Accept", textButtonStyle)
         acceptButton.label.setFontScale(0.2f)
@@ -857,27 +901,30 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
+        //Add stuff to the offer (your/their offer) table
         offerTable.add(yourOfferLabel).left().padLeft(20f).padRight(5f)
         offerTable.add(yourOfferAmtLabel).left()
         offerTable.add().fillX().expandX()
         offerTable.add(otherOfferAmtLabel).right().padRight(5f)
         offerTable.add(otherOfferLabel).right().padRight(20f)
 
-        labelTable.add(exomerLabel).fillX().expandX().left().height(30f).width(125f)
+        //The titles table
+        labelTable.add(exomerLabel).fillX().expandX().left().height(30f).width(125f).padLeft(35f)
         labelTable.add().fillX().expandX()
-        labelTable.add(nativeLabel).fillX().expandX().right().height(30f).width(125f)
+        labelTable.add(nativeLabel).fillX().expandX().right().height(30f).width(125f).padRight(35f)
 
-        tradeWindowTable.add(labelTable).fillX().expandX().pad(20f, 20f, 0f, 20f)
+        // Add all the tables to the main table.
+        tradeWindowTable.add(labelTable).fillX().expandX().pad(10f, 20f, 0f, 20f)
         tradeWindowTable.row()
         tradeWindowTable.add(listTable).fill().expand().pad(10f, 20f, 0f, 20f).top()
         tradeWindowTable.row()
         tradeWindowTable.add(offerTable).fillX().expandX().padBottom(15f)
         tradeWindowTable.row()
-        tradeWindowTable.add(acceptButton).padBottom(20f)
+        tradeWindowTable.add(acceptButton).padBottom(15f)
 
         mainTradeWindowTable.add(tradeWindowTable)
 
-//        mainTradeWindowTable.debugAll()
+        mainTradeWindowTable.debugAll()
         mainTradeWindowTable.setFillParent(true)
     }
 
