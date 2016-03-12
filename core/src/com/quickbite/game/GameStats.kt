@@ -22,7 +22,7 @@ object GameStats {
 
         if(TimeInfo.currTime != TimeInfo.lastTime){
             TimeInfo.lastTime = TimeInfo.currTime
-            game.onTimeTick(delta)
+            game.onHourTick(delta)
         }
     }
 

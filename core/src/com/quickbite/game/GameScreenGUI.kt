@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -685,7 +686,7 @@ class GameScreenGUI(val game : GameScreen) {
         Game.stage.addActor(campTable)
     }
 
-    fun openTradeWindow(){
+    fun buildTradeWindow(){
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("TradeWindow", Texture::class.java)))
         tradeWindowTable.setSize(400f, 400f)
 
@@ -694,6 +695,12 @@ class GameScreenGUI(val game : GameScreen) {
         val offerTable:Table = Table()
 
         val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val giveButtonStyle = ImageButton.ImageButtonStyle()
+        giveButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhite", Texture::class.java)))
+
+        val takeButtonStyle = ImageButton.ImageButtonStyle()
+        takeButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhiteLeft", Texture::class.java)))
 
         val textButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
@@ -706,6 +713,16 @@ class GameScreenGUI(val game : GameScreen) {
         val nativeLabel = Label("Natives", labelStyle)
         nativeLabel.setFontScale(0.15f)
         nativeLabel.setAlignment(Align.center)
+
+        val yourOfferLabel = Label("Your Offer:", labelStyle)
+        val yourOfferAmtLabel = Label("0", labelStyle)
+        yourOfferLabel.setFontScale(0.15f)
+        yourOfferAmtLabel.setFontScale(0.15f)
+
+        val otherOfferAmtLabel = Label("0", labelStyle)
+        val otherOfferLabel = Label(":Their Offer", labelStyle)
+        otherOfferAmtLabel.setFontScale(0.15f)
+        otherOfferLabel.setFontScale(0.15f)
 
         TradeManager.generateLists()
 
@@ -720,32 +737,102 @@ class GameScreenGUI(val game : GameScreen) {
             val _centerTable:Table = Table()
             val _rightTable:Table = Table()
 
-            val exomerItemNameLabel = Label(exItem.val1, labelStyle)
+            val exomerItemNameLabel = Label(exItem.displayName, labelStyle)
             exomerItemNameLabel.setFontScale(0.13f)
             exomerItemNameLabel.setAlignment(Align.left)
 
-            val exomerItemAmountLabel = Label(exItem.val2.toInt().toString(), labelStyle)
+            val exomerItemAmountLabel = Label(exItem.amt.toInt().toString(), labelStyle)
             exomerItemAmountLabel.setFontScale(0.13f)
+            exomerItemAmountLabel.setAlignment(Align.center)
 
-            val nativeItemNameLabel = Label(otherItem.val1, labelStyle)
+            val nativeItemNameLabel = Label(otherItem.displayName, labelStyle)
             nativeItemNameLabel.setFontScale(0.13f)
             nativeItemNameLabel.setAlignment(Align.right)
 
-            val nativeItemAmountLabel = Label(otherItem.val2.toInt().toString(), labelStyle)
+            val nativeItemAmountLabel = Label(otherItem.amt.toInt().toString(), labelStyle)
             nativeItemAmountLabel.setFontScale(0.13f)
+            nativeItemAmountLabel.setAlignment(Align.center)
+
 
             _leftTable.add(exomerItemNameLabel).left()
-            _leftTable.add(exomerItemAmountLabel).left().padLeft(10f)
+            _leftTable.add(exomerItemAmountLabel).left().padLeft(3f).size(25f)
 
-            _rightTable.add(nativeItemAmountLabel).right().padRight((10f))
+            _rightTable.add(nativeItemAmountLabel).right().padRight((3f)).size(25f)
             _rightTable.add(nativeItemNameLabel).right()
 
             _leftTable.left()
             _rightTable.right()
 
-            listTable.add(_leftTable).left().fillX().expandX()
-            listTable.add(_centerTable).fillX().expandX()
-            listTable.add(_rightTable).right().fillX().expandX()
+            val takeButton = ImageButton(takeButtonStyle)
+            val giveButton = ImageButton(giveButtonStyle)
+
+            val amtLabel = Label("0", labelStyle)
+            amtLabel.setFontScale(0.13f)
+            amtLabel.setAlignment(Align.center)
+
+            val func = {take:Boolean ->
+                var amt = amtLabel.text.toString().toInt()
+                var yourOffer = yourOfferAmtLabel.text.toString().toInt()
+                var otherOffer = otherOfferAmtLabel.text.toString().toInt()
+
+                //If we are taking an item (buying it)
+                if(take && otherItem.amt > 0){
+                    exItem.amt++
+                    otherItem.amt--
+
+                    when{
+                        amt < 0 -> yourOffer -= exItem.worth
+                        else -> otherOffer += otherItem.worth
+                    }
+
+                    amt++
+
+                //If we are giving the item (selling it)
+                }else if(!take && exItem.amt > 0){
+                    exItem.amt--
+                    otherItem.amt++
+
+                    when{
+                        amt <= 0 -> yourOffer += exItem.worth
+                        else -> otherOffer -= otherItem.worth
+                    }
+
+                    amt--
+                }
+
+                exomerItemAmountLabel.setText(exItem.amt.toInt().toString())
+                nativeItemAmountLabel.setText(otherItem.amt.toInt().toString())
+
+                when{
+                    amt > 0 -> amtLabel.color = Color.GREEN
+                    amt < 0 -> amtLabel.color = Color.RED
+                    else -> amtLabel.color = Color.WHITE
+                }
+
+                amtLabel.setText(amt.toString())
+                yourOfferAmtLabel.setText(yourOffer.toString())
+                otherOfferAmtLabel.setText(otherOffer.toString())
+            }
+
+            takeButton.addListener(object:ChangeListener(){
+                override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                    func(true)
+                }
+            })
+
+            giveButton.addListener(object:ChangeListener(){
+                override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                    func(false)
+                }
+            })
+
+            _centerTable.add(takeButton).size(24f).right()
+            _centerTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(30f).center()
+            _centerTable.add(giveButton).size(24f).left()
+
+            listTable.add(_leftTable).left()
+            listTable.add(_centerTable).fillX().expandX().center()
+            listTable.add(_rightTable).right()
             listTable.row()
         }
 
@@ -753,18 +840,22 @@ class GameScreenGUI(val game : GameScreen) {
 //        tradeWindowCenter()
 //        tradeWindowRight()
 
-        val yourOfferLabel = Label("Your Offer:", labelStyle)
-        val yourOfferAmtLabel = Label("0", labelStyle)
-        yourOfferLabel.setFontScale(0.15f)
-        yourOfferAmtLabel.setFontScale(0.15f)
-
-        val otherOfferAmtLabel = Label("0", labelStyle)
-        val otherOfferLabel = Label(":Their Offer", labelStyle)
-        otherOfferAmtLabel.setFontScale(0.15f)
-        otherOfferLabel.setFontScale(0.15f)
-
         val acceptButton = TextButton("Accept", textButtonStyle)
         acceptButton.label.setFontScale(0.2f)
+
+        acceptButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                val yourOffer = yourOfferAmtLabel.text.toString().toInt()
+                val theirOffer = otherOfferAmtLabel.text.toString().toInt()
+                if(yourOffer >= theirOffer){
+                    for(item in exomerList)
+                        SupplyManager.setSupply(item.name, item.amt.toFloat())
+
+                    updateSuppliesGUI()
+                    closeTradeWindow()
+                }
+            }
+        })
 
         offerTable.add(yourOfferLabel).left().padLeft(20f).padRight(5f)
         offerTable.add(yourOfferAmtLabel).left()
@@ -778,7 +869,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         tradeWindowTable.add(labelTable).fillX().expandX().pad(20f, 20f, 0f, 20f)
         tradeWindowTable.row()
-        tradeWindowTable.add(listTable).fill().expand().pad(0f, 20f, 0f, 20f).top()
+        tradeWindowTable.add(listTable).fill().expand().pad(10f, 20f, 0f, 20f).top()
         tradeWindowTable.row()
         tradeWindowTable.add(offerTable).fillX().expandX().padBottom(15f)
         tradeWindowTable.row()
@@ -786,9 +877,16 @@ class GameScreenGUI(val game : GameScreen) {
 
         mainTradeWindowTable.add(tradeWindowTable)
 
-        mainTradeWindowTable.setFillParent(true)
 //        mainTradeWindowTable.debugAll()
+        mainTradeWindowTable.setFillParent(true)
+    }
+
+    fun openTradeWindow(){
         Game.stage.addActor(mainTradeWindowTable)
+    }
+
+    fun closeTradeWindow(){
+        mainTradeWindowTable.remove()
     }
 
     private fun tradeWindowLeft(){

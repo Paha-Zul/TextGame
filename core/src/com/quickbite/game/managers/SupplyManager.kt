@@ -44,6 +44,12 @@ object SupplyManager {
         return supply
     }
 
+    fun setSupply(name:String, amt:Float):Supply{
+        val supply = supplyMap[name]!!
+        supply.amt = amt
+        return supply
+    }
+
     fun update(delta:Float){
 
     }

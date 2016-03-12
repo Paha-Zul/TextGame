@@ -137,9 +137,14 @@ class GameScreen(val game: Game): Screen {
 
         makeEvents()
 
+        gui.buildTradeWindow()
         gui.openTradeWindow()
+        pauseGame()
     }
 
+    /**
+     * Adds events to the EventSystem to be called later.
+     */
     private fun makeEvents(){
         EventManager.onEvent("hurt", { args ->
             var name = currEvent!!.randomName
@@ -288,6 +293,10 @@ class GameScreen(val game: Game): Screen {
         com.quickbite.game.Game.stage.draw()
     }
 
+    /**
+     * Draws the general screen for the game.
+     * @param batch The SpriteBatch to draw with.
+     */
     private fun draw(batch: SpriteBatch){
         batch.color = Color.WHITE
 
@@ -304,6 +313,10 @@ class GameScreen(val game: Game): Screen {
 //            //drawCampScreen(batch)
     }
 
+    /**
+     * Draws the travel specific screen.
+     * @param batch The SpriteBatch to draw with.
+     */
     private fun drawTravelScreen(batch: SpriteBatch){
         val value = currPosOfBackground.clamp(0.3f, 1f)
 
@@ -323,16 +336,20 @@ class GameScreen(val game: Game): Screen {
         }
     }
 
-    private fun drawCampScreen(batch: SpriteBatch){
-
-    }
-
+    /**
+     * Called every frame but only during the camping state.
+     * @param delta Time between frames.
+     */
     private fun campUpdate(delta:Float){
         if(numHoursToAdvance > 0){
             GameStats.update(speedToAdvance)
         }
     }
 
+    /**
+     * Called every frame but only during the traveling state.
+     * @param delta Time between frames.
+     */
     private fun travelUpdate(delta:Float){
         GameStats.update(delta)
         eventCustomTimerTest.update(delta)
@@ -341,14 +358,21 @@ class GameScreen(val game: Game): Screen {
             background.update(delta)
     }
 
+    /**
+     * Called every frame.
+     * @param delta Time between frames.
+     */
     private fun update(delta:Float){
         //the -MathUtils.PI/2f is to offset the value to 0. Since sine goes to -1 and 1 but normalize it 0 - 1, the initial value will be 0.5 and we don't want that!
         currPosOfBackground = (MathUtils.sin((((GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f))* MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
         currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()* MathUtils.PI
     }
 
-    public fun onTimeTick(delta:Float){
-
+    /**
+     * Called on every tick of a new game hour.
+     * @param delta Time between frames.
+     */
+    fun onHourTick(delta:Float){
         GameStats.updateTimeTick()
         if(numHoursToAdvance > 0) numHoursToAdvance--
         timeTickEventList.forEach { evt -> evt.update()}
@@ -356,11 +380,17 @@ class GameScreen(val game: Game): Screen {
         gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
     }
 
+    /**
+     * Changes the game state to camping mode.
+     */
     fun changeToCamp(){
         this.state = State.CAMP
         this.ROV = com.quickbite.game.Game.manager.get("NewCamp", Texture::class.java)
     }
 
+    /**
+     * Changes the game state to travelling mode.
+     */
     fun changeToTravel(){
         this.state = State.TRAVELING
         this.ROV = com.quickbite.game.Game.manager.get("Exomer751ROV", Texture::class.java)
@@ -372,10 +402,16 @@ class GameScreen(val game: Game): Screen {
         return this
     }
 
+    /**
+     * Pauses the game.
+     */
     fun pauseGame(){
         this.paused = true
     }
 
+    /**
+     * Resumes the game.
+     */
     fun resumeGame(){
         this.paused = false;
     }
