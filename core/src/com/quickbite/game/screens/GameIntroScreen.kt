@@ -2,12 +2,12 @@ package com.quickbite.game.screens
 
 import com.badlogic.gdx.Screen
 import com.quickbite.game.GameIntroGUI
-import com.quickbite.game.Game
+import com.quickbite.game.TextGame
 
 /**
  * Created by Paha on 2/10/2016.
  */
-class GameIntroScreen(val game: Game) : Screen {
+class GameIntroScreen(val game: TextGame) : Screen {
     val gameIntroGUI:GameIntroGUI = GameIntroGUI(this)
     var done:Boolean = false
 
@@ -25,7 +25,7 @@ class GameIntroScreen(val game: Game) : Screen {
     }
 
     override fun render(delta: Float) {
-        Game.stage.draw()
+        TextGame.stage.draw()
         gameIntroGUI.update(delta)
 
         if(done)

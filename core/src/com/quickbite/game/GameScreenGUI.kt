@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -36,6 +35,8 @@ class GameScreenGUI(val game : GameScreen) {
     private val centerInfoTable:Table = Table()
     private val leftTable:Table = Table()
     private val rightTable:Table = Table()
+
+    private val numPadTable:Table = Table()
 
     private lateinit var timeLabel:Label
 
@@ -202,11 +203,11 @@ class GameScreenGUI(val game : GameScreen) {
         //mainTable.top().left()
         //mainTable.setFillParent(true)
 
-        Game.stage.addActor(centerInfoTable)
-        Game.stage.addActor(leftTable)
-        Game.stage.addActor(rightTable)
-        Game.stage.addActor(pauseButton)
-        Game.stage.addActor(campButtonTab)
+        TextGame.stage.addActor(centerInfoTable)
+        TextGame.stage.addActor(leftTable)
+        TextGame.stage.addActor(rightTable)
+        TextGame.stage.addActor(pauseButton)
+        TextGame.stage.addActor(campButtonTab)
     }
 
     /**
@@ -214,19 +215,19 @@ class GameScreenGUI(val game : GameScreen) {
      * and supplies info.
      */
     fun applyCampTab(){
-        Game.stage.clear()
+        TextGame.stage.clear()
         mainTable.clear()
 
-        Game.stage.addActor(centerInfoTable)
-        Game.stage.addActor(leftTable)
-        Game.stage.addActor(rightTable)
-        Game.stage.addActor(pauseButton)
-        Game.stage.addActor(campButtonTab)
+        TextGame.stage.addActor(centerInfoTable)
+        TextGame.stage.addActor(leftTable)
+        TextGame.stage.addActor(rightTable)
+        TextGame.stage.addActor(pauseButton)
+        TextGame.stage.addActor(campButtonTab)
 
         //campTable.bottom().left()
         campTable.setFillParent(true)
 
-        Game.stage.addActor(campTable)
+        TextGame.stage.addActor(campTable)
     }
 
     fun buildTravelScreenGUI(){
@@ -235,15 +236,15 @@ class GameScreenGUI(val game : GameScreen) {
         barStyle.knobBefore = TextureRegionDrawable(TextureRegion(Texture(Gdx.files.internal("art/pixel.png"))))
 
         val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
         val pauseButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("play", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("play", Texture::class.java)))
         pauseButtonStyle.imageChecked = drawable
         pauseButtonStyle.imageCheckedOver = drawable
 
-        drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("pause", Texture::class.java)))
+        drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pause", Texture::class.java)))
         pauseButtonStyle.imageUp =  drawable
         pauseButtonStyle.imageOver =  drawable
         pauseButtonStyle.imageDown =  drawable
@@ -252,12 +253,12 @@ class GameScreenGUI(val game : GameScreen) {
 
         pauseButton = ImageButton(pauseButtonStyle)
         pauseButton.setSize(40f, 40f)
-        pauseButton.setPosition(Game.viewport.screenWidth/1.4f, Game.viewport.screenHeight - pauseButton.height)
+        pauseButton.setPosition(TextGame.viewport.screenWidth/1.4f, TextGame.viewport.screenHeight - pauseButton.height)
 
         campButtonTab = TextButton("Camp", textButtonStyle)
         campButtonTab.setSize(40f, 40f)
         campButtonTab.setOrigin(Align.center)
-        campButtonTab.setPosition(Game.viewport.screenWidth/4f, Game.viewport.screenHeight - campButtonTab.height)
+        campButtonTab.setPosition(TextGame.viewport.screenWidth/4f, TextGame.viewport.screenHeight - campButtonTab.height)
         campButtonTab.label.setFontScale(buttonFontScale)
 
         //distanceTable.row()
@@ -277,9 +278,9 @@ class GameScreenGUI(val game : GameScreen) {
         centerInfoTable.setFillParent(true)
 
         val innerTable = Table()
-        innerTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
-        val style:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val style:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         totalDaysLabel = Label("Day "+GameStats.TimeInfo.totalDaysTraveled, style)
         timeLabel = Label("12:00 AM", style)
@@ -306,10 +307,10 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildLeftTable(){
         buildSupplyTable()
 
-        val drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.WHITE
         buttonStyle.up = drawable
 
@@ -327,10 +328,10 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildRightTable(){
         rightTable.clear()
 
-        val drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.WHITE
         buttonStyle.up = drawable
 
@@ -351,10 +352,10 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildGroupTable(){
         groupTable.clear()
 
-        groupTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        groupTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
         groupTable.padRight(10f)
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person:Person in list.iterator()){
@@ -379,9 +380,9 @@ class GameScreenGUI(val game : GameScreen) {
         supplyAmountList.clear()
 
         supplyTable.padLeft(10f)
-        supplyTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        supplyTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val title = Label("Supplies", labelStyle)
         title.setFontScale(titleFontScale)
@@ -427,19 +428,19 @@ class GameScreenGUI(val game : GameScreen) {
 //        EventInfo.eventTable.debugAll()
 //        EventInfo.eventChoicesTable.debugAll()
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         EventInfo.titleLabel = Label(event.title, labelStyle)
         EventInfo.titleLabel!!.setAlignment(Align.center)
         EventInfo.titleLabel!!.setFontScale(eventTitleFontScale)
         EventInfo.titleLabel!!.setWrap(true)
 
-        EventInfo.eventBackgroundTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("log2", Texture::class.java)))
+        EventInfo.eventBackgroundTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
         EventInfo.eventBackgroundTable.setSize(400f, 400f)
 
         EventInfo.outerEventTable.setFillParent(true)
         EventInfo.outerEventTable.add(EventInfo.eventBackgroundTable)
-        Game.stage.addActor(EventInfo.outerEventTable)
+        TextGame.stage.addActor(EventInfo.outerEventTable)
 
         showEventPage(event, callbackTask, 0)
     }
@@ -454,13 +455,13 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventChoicesTable.clear()
 
         //Set some styles
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        val drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhite", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
         //val padding:Int = 400/(event.choices!!.size+1)/2
@@ -556,12 +557,12 @@ class GameScreenGUI(val game : GameScreen) {
 
         /* Styles */
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-        val redLabelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
-        val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val redLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.RED)
+        val greenLabelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.GREEN)
 
         //Close button
         val closeButton:TextButton = TextButton("- Close -", textButtonStyle)
@@ -611,14 +612,14 @@ class GameScreenGUI(val game : GameScreen) {
         campTable.remove()
         campTable.setFillParent(true)
 
-        val slider = TextureRegionDrawable(TextureRegion(Game.manager.get("slider", Texture::class.java)))
-        val knob = TextureRegionDrawable(TextureRegion(Game.manager.get("sliderKnob", Texture::class.java)))
+        val slider = TextureRegionDrawable(TextureRegion(TextGame.manager.get("slider", Texture::class.java)))
+        val knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnob", Texture::class.java)))
 
         val sliderStyle:Slider.SliderStyle = Slider.SliderStyle(slider, knob)
-        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
 
         activityHourLabel = Label("0 hours", labelStyle)
         activityHourLabel.setFontScale(normalFontScale)
@@ -629,7 +630,7 @@ class GameScreenGUI(val game : GameScreen) {
         activityButton.label.setFontScale(buttonFontScale)
 
         val innerTable:Table = Table()
-        innerTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         innerTable.add(buildDropdownList()).width(300f).height(25f)
         innerTable.row().padTop(20f)
@@ -647,7 +648,7 @@ class GameScreenGUI(val game : GameScreen) {
         newFont.data.setScale(normalFontScale)
 
         val labelStyle = Label.LabelStyle(newFont, Color.WHITE)
-        labelStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        labelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val scrollStyle:ScrollPane.ScrollPaneStyle = ScrollPane.ScrollPaneStyle()
 
@@ -655,11 +656,11 @@ class GameScreenGUI(val game : GameScreen) {
         listStyle.font = newFont
         listStyle.fontColorSelected = Color.WHITE
         listStyle.fontColorUnselected = Color.WHITE
-        listStyle.selection = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
-        listStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        listStyle.selection = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        listStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val selectBoxStyle:SelectBox.SelectBoxStyle = SelectBox.SelectBoxStyle()
-        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(Game.manager.get("darkPixel", Texture::class.java)))
+        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
         selectBoxStyle.listStyle = listStyle
         selectBoxStyle.scrollStyle = scrollStyle
         selectBoxStyle.font = newFont
@@ -683,27 +684,27 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun applyCampTable(){
-        Game.stage.addActor(campTable)
+        TextGame.stage.addActor(campTable)
     }
 
     fun buildTradeWindow(){
-        tradeWindowTable.background = TextureRegionDrawable(TextureRegion(Game.manager.get("TradeWindow", Texture::class.java)))
+        tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow", Texture::class.java)))
         tradeWindowTable.setSize(600f, 400f)
 
         val labelTable:Table = Table()
         val listTable:Table = Table()
         val offerTable:Table = Table()
 
-        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val giveButtonStyle = ImageButton.ImageButtonStyle()
-        giveButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhite", Texture::class.java)))
+        giveButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
 
         val takeButtonStyle = ImageButton.ImageButtonStyle()
-        takeButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhiteLeft", Texture::class.java)))
+        takeButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhiteLeft", Texture::class.java)))
 
         val textButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
         val exomerLabel = Label("Exomer751", labelStyle)
@@ -718,10 +719,14 @@ class GameScreenGUI(val game : GameScreen) {
         val yourOfferAmtLabel = Label("0", labelStyle)
         yourOfferLabel.setFontScale(0.15f)
         yourOfferAmtLabel.setFontScale(0.15f)
+        yourOfferAmtLabel.setAlignment(Align.center)
+        yourOfferAmtLabel.color = Color.GREEN
 
         val otherOfferAmtLabel = Label("0", labelStyle)
         val otherOfferLabel = Label(":Their Offer", labelStyle)
         otherOfferAmtLabel.setFontScale(0.15f)
+        otherOfferAmtLabel.setAlignment(Align.center)
+        otherOfferAmtLabel.color = Color.RED
         otherOfferLabel.setFontScale(0.15f)
 
         TradeManager.generateLists()
@@ -742,13 +747,16 @@ class GameScreenGUI(val game : GameScreen) {
         otherNameLabel.setFontScale(0.15f)
         otherNameLabel.setAlignment(Align.center)
 
-        val valueLabel = Label("Value", labelStyle)
+        val valueLabel = Label("Worth", labelStyle)
         valueLabel.setFontScale(0.15f)
         valueLabel.setAlignment(Align.center)
 
-        val otherValueLabel = Label("Value", labelStyle)
+        val otherValueLabel = Label("Cost", labelStyle)
         otherValueLabel.setFontScale(0.15f)
         otherValueLabel.setAlignment(Align.center)
+
+        val acceptButton = TextButton("Accept", textButtonStyle)
+        acceptButton.label.setFontScale(0.2f)
 
         val exomerList = TradeManager.exomerList
         val otherList = TradeManager.otherList
@@ -756,10 +764,6 @@ class GameScreenGUI(val game : GameScreen) {
         for(i in exomerList!!.indices){
             val exItem = exomerList[i]
             val otherItem = otherList!![i]
-
-            val _leftTable:Table = Table()
-            val _centerTable:Table = Table()
-            val _rightTable:Table = Table()
 
             val exomerItemNameLabel = Label(exItem.displayName, labelStyle)
             exomerItemNameLabel.setFontScale(0.13f)
@@ -786,33 +790,47 @@ class GameScreenGUI(val game : GameScreen) {
             nativeItemValueLabel.setAlignment(Align.center)
 
             if(i == 0){
-                _leftTable.add(amountLabel).uniformX()
-                _leftTable.add(nameLabel)
-                _leftTable.add(valueLabel)
-                _leftTable.row()
+                listTable.add(valueLabel).width(50f)
+                listTable.add(nameLabel).width(110f)
+                listTable.add(amountLabel).width(50f)
 
-                _rightTable.add(otherValueLabel)
-                _rightTable.add(otherNameLabel)
-                _rightTable.add(otherAmountLabel).uniformX()
-                _rightTable.row()
+                listTable.add().colspan(3)
+
+                listTable.add(otherAmountLabel).width(50f)
+                listTable.add(otherNameLabel).width(110f)
+                listTable.add(otherValueLabel).width(50f)
+
+                listTable.row().spaceTop(10f)
             }
-
-            //Add the amount then name to the left table.
-            _leftTable.add(exomerItemAmountLabel).left()
-            _leftTable.add(exomerItemNameLabel).padLeft(3f).width(120f)
-            _leftTable.add(exomerItemValueLabel).padLeft(3f).width(30f)
-
-            //Add the name then amount to the right table.
-            _rightTable.add(nativeItemValueLabel).padRight((3f)).width(30f)
-            _rightTable.add(nativeItemNameLabel).padRight((3f)).width(120f)
-            _rightTable.add(nativeItemAmountLabel).right()
-
-            val takeButton = ImageButton(takeButtonStyle)
-            val giveButton = ImageButton(giveButtonStyle)
 
             val amtLabel = Label("0", labelStyle)
             amtLabel.setFontScale(0.13f)
             amtLabel.setAlignment(Align.center)
+
+            val takeButton = ImageButton(takeButtonStyle)
+            val giveButton = ImageButton(giveButtonStyle)
+
+            //Add the amount then name to the left table.
+            listTable.add(exomerItemValueLabel).left().fillX()
+            listTable.add(exomerItemNameLabel).padLeft(3f).fillX()
+            listTable.add(exomerItemAmountLabel).padLeft(3f).fillX()
+
+            //Add the stuff to the center table.
+            listTable.add(takeButton).size(25f).right().expandX().fillX().space(5f, 0f, 5f, 0f)
+            listTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(30f)
+            listTable.add(giveButton).size(25f).left().expandX().fillX().space(5f, 0f, 5f, 0f)
+
+            //Add the name then amount to the right table.
+            listTable.add(nativeItemAmountLabel).padRight((3f)).fillX()
+            listTable.add(nativeItemNameLabel).padRight((3f)).fillX()
+            listTable.add(nativeItemValueLabel).right().fillX()
+
+            amtLabel.addListener(object:ClickListener(){
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    openNumPad(exomerList, otherList, i, amtLabel)
+                    super.clicked(event, x, y)
+                }
+            })
 
             val func = {take:Boolean ->
                 var amt = amtLabel.text.toString().toInt()
@@ -853,6 +871,11 @@ class GameScreenGUI(val game : GameScreen) {
                     else -> amtLabel.color = Color.WHITE
                 }
 
+                when{
+                    yourOffer < otherOffer -> acceptButton.label.color = Color.RED
+                    else -> acceptButton.label.color = Color.WHITE
+                }
+
                 amtLabel.setText(amt.toString())
                 yourOfferAmtLabel.setText(yourOffer.toString())
                 otherOfferAmtLabel.setText(otherOffer.toString())
@@ -870,22 +893,8 @@ class GameScreenGUI(val game : GameScreen) {
                 }
             })
 
-            //Add the stuff to the center table.
-            _centerTable.add(takeButton).size(24f).right()
-            _centerTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(30f).center()
-            _centerTable.add(giveButton).size(24f).left()
-
-
-
-            //Add all the stuff to the table.
-            listTable.add(_leftTable).left()
-            listTable.add(_centerTable).fillX().expandX().center()
-            listTable.add(_rightTable).right()
             listTable.row()
         }
-
-        val acceptButton = TextButton("Accept", textButtonStyle)
-        acceptButton.label.setFontScale(0.2f)
 
         acceptButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
@@ -902,11 +911,11 @@ class GameScreenGUI(val game : GameScreen) {
         })
 
         //Add stuff to the offer (your/their offer) table
-        offerTable.add(yourOfferLabel).left().padLeft(20f).padRight(5f)
-        offerTable.add(yourOfferAmtLabel).left()
-        offerTable.add().fillX().expandX()
-        offerTable.add(otherOfferAmtLabel).right().padRight(5f)
-        offerTable.add(otherOfferLabel).right().padRight(20f)
+        offerTable.add(yourOfferLabel).right().padRight(5f)
+        offerTable.add(yourOfferAmtLabel).right().spaceRight(30f).width(25f)
+        offerTable.add()
+        offerTable.add(otherOfferAmtLabel).left().padRight(5f).spaceLeft(30f).width(25f)
+        offerTable.add(otherOfferLabel).left()
 
         //The titles table
         labelTable.add(exomerLabel).fillX().expandX().left().height(30f).width(125f).padLeft(35f)
@@ -916,131 +925,135 @@ class GameScreenGUI(val game : GameScreen) {
         // Add all the tables to the main table.
         tradeWindowTable.add(labelTable).fillX().expandX().pad(10f, 20f, 0f, 20f)
         tradeWindowTable.row()
-        tradeWindowTable.add(listTable).fill().expand().pad(10f, 20f, 0f, 20f).top()
+        tradeWindowTable.add(listTable).fill().expand().pad(20f, 20f, 0f, 20f).top()
         tradeWindowTable.row()
-        tradeWindowTable.add(offerTable).fillX().expandX().padBottom(15f)
+        tradeWindowTable.add(offerTable).fillX().expandX().padBottom(15f).spaceTop(20f)
         tradeWindowTable.row()
-        tradeWindowTable.add(acceptButton).padBottom(15f)
+        tradeWindowTable.add(acceptButton).padBottom(10f)
 
         mainTradeWindowTable.add(tradeWindowTable)
 
-        mainTradeWindowTable.debugAll()
+//        mainTradeWindowTable.debugAll()
         mainTradeWindowTable.setFillParent(true)
     }
 
-    fun openTradeWindow(){
-        Game.stage.addActor(mainTradeWindowTable)
-    }
+    fun openTradeWindow() = TextGame.stage.addActor(mainTradeWindowTable)
 
-    fun closeTradeWindow(){
-        mainTradeWindowTable.remove()
-    }
+    fun closeTradeWindow() = mainTradeWindowTable.remove()
 
-    private fun tradeWindowLeft(){
-        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+    fun openNumPad(exomerList:List<TradeManager.TradeSupply>, otherList:List<TradeManager.TradeSupply>, itemIndex:Int, callback:(Int)->Unit){
+        val innerTable = Table()
+        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
-        val exomerLabel = Label("Exomer751", labelStyle)
-        exomerLabel.setFontScale(0.15f)
-        exomerLabel.setAlignment(Align.center)
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
-        val listTable = Table()
-        val list = SupplyManager.getSupplyList()
-        for((name, amt) in list){
-            val t = Table()
+        val buttonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.fontColor = Color.WHITE
 
-            val nLabel = Label(name, labelStyle)
-            nLabel.setFontScale(0.15f)
-            nLabel.setAlignment(Align.left)
-            val aLabel = Label(amt.toInt().toString(), labelStyle)
-            aLabel.setFontScale(0.15f)
+        val amtLabel = Label("0", labelStyle)
+        amtLabel.setFontScale(0.15f)
+        amtLabel.setAlignment(Align.center)
 
-            t.add(nLabel).left()
-            t.add(aLabel).left().padLeft(10f)
-            listTable.add(t).left()
-            listTable.row()
+        val negativeButton = TextButton("-", buttonStyle)
+        negativeButton.label.setFontScale(0.15f)
+
+        val backButton = TextButton("<-", buttonStyle)
+        backButton.label.setFontScale(0.15f)
+
+        val zeroButton = TextButton(0.toString(), buttonStyle)
+        zeroButton.label.setFontScale(0.15f)
+
+        val okButton = TextButton("Ok", buttonStyle)
+        okButton.label.setFontScale(0.15f)
+
+        //Hit the negative button
+        negativeButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                var amt = amtLabel.text.toString().toInt()
+                if(amt != 0) amt = -amt
+                amtLabel.setText(amt.toString())
+            }
+        })
+
+        //When you hit the ok button.
+        okButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                callback(amtLabel.text.toString().toInt())
+                closeNumPad()
+            }
+        })
+
+        innerTable.add(negativeButton).fillX()
+        innerTable.add(amtLabel).fillX()
+        innerTable.row()
+
+        val func = {_amt:Int ->
+            var amt = _amt
+            if(amt >= 0){
+                if(amt > exomerList[itemIndex].amt)
+                    amt = exomerList[itemIndex].amt.toInt()
+            }else if(amt < 0){
+                var absAmt = Math.abs(amt)
+                if(absAmt > otherList[itemIndex].amt)
+                    absAmt = otherList[itemIndex].amt.toInt()
+                amt = -absAmt
+            }
+            amtLabel.setText(amt.toString())
         }
 
-        //Add the label and list to the left trade table.
-        leftTradeTable.add(exomerLabel).width(120f).height(30f).left()
-        leftTradeTable.row().padTop(15f)
-        leftTradeTable.add(listTable)
+        for(i in 1..9){
+            val button = TextButton(i.toString(), buttonStyle)
+            button.label.setFontScale(0.15f)
 
-        //Add the left trade table to the trade window table and position it!
-        leftTradeTable.left().top()
-        tradeWindowTable.add(leftTradeTable).left().top().padLeft(25f).padTop(20f).width(170f)
-        tradeWindowTable.debugAll()
-    }
+            button.addListener(object:ChangeListener(){
+                override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                    var amt = (amtLabel.text.toString() + button.text.toString()).toInt()
+                    func(amt)
+                }
+            })
 
-    private fun tradeWindowRight(){
-        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-
-        val nativeLabel = Label("Native", labelStyle)
-        nativeLabel.setFontScale(0.15f)
-        nativeLabel.setAlignment(Align.center)
-
-        val listTable = Table()
-        val list = SupplyManager.getSupplyList()
-        for((name, amt, max) in list){
-            val t = Table()
-
-            val nLabel = Label(name, labelStyle)
-            nLabel.setFontScale(0.15f)
-            nLabel.setAlignment(Align.right)
-            val aLabel = Label(MathUtils.random(0, max).toString(), labelStyle)
-            aLabel.setFontScale(0.15f)
-            aLabel.setAlignment(Align.right)
-
-            t.add(aLabel).right().padRight(10f)
-            t.add(nLabel).right()
-            listTable.add(t).right()
-            listTable.row()
+            innerTable.add(button).size(50f)
+            if(i%3 == 0) {
+                innerTable.row()
+            }
         }
 
-        rightTradeTable.add(nativeLabel).width(120f).height(30f).right()
-        rightTradeTable.row().padTop(15f)
-        rightTradeTable.add(listTable)
+        zeroButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                var amt = (amtLabel.text.toString() + zeroButton.text.toString()).toInt()
+                func(amt)
+            }
+        })
 
-        rightTradeTable.right().top()
-        tradeWindowTable.add(rightTradeTable).right().top().padRight(25f).padTop(20f).width(170f)
-        tradeWindowTable.debugAll()
+        backButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                var string = amtLabel.text.toString()
+                if(string.length <= 1)
+                    string = "0"
+                else{
+                    string = string.substring(0, string.length-1)
+                    if(string.equals("-"))
+                        string = "0"
+                }
+
+                amtLabel.setText(string)
+            }
+        })
+
+        innerTable.add(okButton).size(50f)
+        innerTable.add(zeroButton).size(50f)
+        innerTable.add(backButton).size(50f)
+
+        innerTable.debugAll()
+
+        numPadTable.setPosition(200f, 200f)
+        numPadTable.clear()
+        numPadTable.add(innerTable)
+        TextGame.stage.addActor(numPadTable)
     }
 
-    private fun tradeWindowCenter(){
-        val drawable:TextureRegionDrawable = TextureRegionDrawable(TextureRegion(Game.manager.get("nextButtonWhite", Texture::class.java)))
-
-        val labelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-        val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        imageButtonStyle.up = drawable
-        imageButtonStyle.over = drawable
-        imageButtonStyle.down = drawable
-
-        val nativeLabel = Label("Native", labelStyle)
-        nativeLabel.setFontScale(0.15f)
-        nativeLabel.setAlignment(Align.center)
-
-        val listTable = Table()
-        val list = SupplyManager.getSupplyList()
-        for((name, amt, max) in list){
-            val t = Table()
-
-            val leftArrows = ImageButton(imageButtonStyle)
-            val rightArrows = ImageButton(imageButtonStyle)
-            rightArrows.rotation = 180f
-
-            t.add(leftArrows).size(16f)
-            t.add(rightArrows).size(16f)
-            listTable.add(t).fillX().expandX()
-            listTable.row()
-        }
-
-        middleTradeTable.add().height(30f)
-        middleTradeTable.row().padTop(15f)
-        middleTradeTable.add(listTable).center().fillX().expandX()
-
-        middleTradeTable.center()
-        tradeWindowTable.add(middleTradeTable).right().top().padRight(25f).padTop(20f).fill().expand().center()
-        tradeWindowTable.debugAll()
-    }
+    fun closeNumPad() = numPadTable.remove()
 
     private object EventInfo{
         val eventTable:Table = Table()

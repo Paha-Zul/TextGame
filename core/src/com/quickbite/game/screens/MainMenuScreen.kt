@@ -9,23 +9,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.quickbite.game.Game
+import com.quickbite.game.TextGame
 import com.quickbite.game.managers.DataManager
 
 /**
  * Created by Paha on 2/3/2016.
  */
-class MainMenuScreen(val game: Game) : Screen {
+class MainMenuScreen(val game: TextGame) : Screen {
     val buttonTable: Table = Table()
     val titleTable:Table = Table()
 
     override fun show() {
         //game.setScreen(GameScreen(game))
 
-        var labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+        var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        style.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        style.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         style.fontColor = Color.BLACK
 
         val contButton = TextButton("Continue (does nothing)", style);
@@ -55,8 +55,8 @@ class MainMenuScreen(val game: Game) : Screen {
         titleTable.setFillParent(true)
         titleTable.top()
 
-        Game.stage.addActor(titleTable)
-        Game.stage.addActor(buttonTable)
+        TextGame.stage.addActor(titleTable)
+        TextGame.stage.addActor(buttonTable)
     }
 
     override fun hide() {
@@ -72,7 +72,7 @@ class MainMenuScreen(val game: Game) : Screen {
     }
 
     override fun render(delta: Float) {
-        Game.stage.draw()
+        TextGame.stage.draw()
         //throw UnsupportedOperationException()
     }
 

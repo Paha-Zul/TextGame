@@ -6,14 +6,14 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.quickbite.game.ChainTask
 import com.quickbite.game.GH
-import com.quickbite.game.Game
+import com.quickbite.game.TextGame
 import com.quickbite.game.managers.DataManager
 
 /**
  * Created by Paha on 2/27/2016.
  */
 
-class LoadingScreen(val game: Game): Screen {
+class LoadingScreen(val game: TextGame): Screen {
     lateinit var  chain: ChainTask
     val logo = Texture(Gdx.files.internal("art/Logo.png"), true)
     var opacity:Float = 0f
@@ -24,8 +24,8 @@ class LoadingScreen(val game: Game): Screen {
     override fun show() {
         logo.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
 
-        Game.manager.loadALlPictures(Gdx.files.internal("art/"))
-        Game.manager.loadAllFonts(Gdx.files.internal("fonts/"))
+        TextGame.manager.loadALlPictures(Gdx.files.internal("art/"))
+        TextGame.manager.loadAllFonts(Gdx.files.internal("fonts/"))
 
         chain = ChainTask({counter>=20}, {counter++}, {counter=0})
         chain.setChain(ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager()})). //Fade in
@@ -47,16 +47,16 @@ class LoadingScreen(val game: Game): Screen {
         scale+=0.0005f
 
         chain.update()
-        done = Game.manager.update()
-        val color = Game.batch.color
+        done = TextGame.manager.update()
+        val color = TextGame.batch.color
 
-        Game.batch.begin()
-        Game.batch.setColor(color.r, color.g, color.b, opacity)
+        TextGame.batch.begin()
+        TextGame.batch.setColor(color.r, color.g, color.b, opacity)
 
-        Game.batch.draw(logo, -150f*scale, -150f*scale, 300f*scale, 300f*scale)
+        TextGame.batch.draw(logo, -150f*scale, -150f*scale, 300f*scale, 300f*scale)
 
-        Game.batch.color = Color.WHITE
-        Game.batch.end()
+        TextGame.batch.color = Color.WHITE
+        TextGame.batch.end()
     }
 
     override fun resume() {

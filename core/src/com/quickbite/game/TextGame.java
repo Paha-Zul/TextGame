@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.quickbite.game.managers.EasyAssetManager;
 import com.quickbite.game.screens.LoadingScreen;
 
-public class Game extends com.badlogic.gdx.Game {
+public class TextGame extends com.badlogic.gdx.Game {
     public static OrthographicCamera camera;
 	public static SpriteBatch batch;
 	public static BitmapFont font, spaceFont;

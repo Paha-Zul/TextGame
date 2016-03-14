@@ -33,12 +33,12 @@ class GameIntroGUI(val game:GameIntroScreen) {
     }
 
     fun firstPage(){
-        Game.stage.clear()
+        TextGame.stage.clear()
         reader = BufferedReader(page1.reader());
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("nextPage", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextPage", Texture::class.java)))
         buttonStyle.up = drawable
         buttonStyle.over = drawable
         buttonStyle.down = drawable
@@ -71,7 +71,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
             }
         })
 
-        Game.stage.addActor(layoutTable)
+        TextGame.stage.addActor(layoutTable)
 
         chainTask = ChainTask({titleLabel.color.a >= 1}, {
             titleLabel.color.a = GH.lerpValue(titleLabel.color.a, 0f, 1f, 1f)
@@ -87,13 +87,13 @@ class GameIntroGUI(val game:GameIntroScreen) {
     }
 
     fun secondPage(){
-        Game.stage.clear()
+        TextGame.stage.clear()
 
         reader = BufferedReader(page2.reader());
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(Game.manager.get("nextPage", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextPage", Texture::class.java)))
         buttonStyle.up = drawable
         buttonStyle.over = drawable
         buttonStyle.down = drawable
@@ -127,17 +127,17 @@ class GameIntroGUI(val game:GameIntroScreen) {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 
-        Game.stage.addActor(layoutTable)
+        TextGame.stage.addActor(layoutTable)
     }
 
     fun thirdPage(){
-        Game.stage.clear()
+        TextGame.stage.clear()
 
         reader = BufferedReader(page3.reader());
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.BLACK
 
         val layoutTable: Table = Table()
@@ -170,17 +170,17 @@ class GameIntroGUI(val game:GameIntroScreen) {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 
-        Game.stage.addActor(layoutTable)
+        TextGame.stage.addActor(layoutTable)
     }
 
     fun suppliesPage(){
-        Game.stage.clear()
+        TextGame.stage.clear()
 
         reader = BufferedReader(page3.reader());
 
-        val labelStyle:Label.LabelStyle = Label.LabelStyle(Game.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = Game.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         buttonStyle.fontColor = Color.BLACK
 
         val layoutTable: Table = Table()
@@ -215,7 +215,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
         nextPageButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 chainTask = ChainTask({layoutTable.color.a <= 0}, {layoutTable.color.a = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f)})
-                chainTask.setChain(ChainTask(null, { Game.stage.clear(); game.done = true;}))
+                chainTask.setChain(ChainTask(null, { TextGame.stage.clear(); game.done = true;}))
 
             }
         })
@@ -233,7 +233,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 
-        Game.stage.addActor(layoutTable)
+        TextGame.stage.addActor(layoutTable)
     }
 
     fun update(delta:Float){
