@@ -696,6 +696,8 @@ class GameScreenGUI(val game : GameScreen) {
         val offerTable:Table = Table()
 
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val amtLabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        amtLabelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numPadButton", Texture::class.java)))
 
         val giveButtonStyle = ImageButton.ImageButtonStyle()
         giveButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
@@ -803,7 +805,7 @@ class GameScreenGUI(val game : GameScreen) {
                 listTable.row().spaceTop(10f)
             }
 
-            val amtLabel = Label("0", labelStyle)
+            val amtLabel = Label("0", amtLabelStyle)
             amtLabel.setFontScale(0.13f)
             amtLabel.setAlignment(Align.center)
 
@@ -816,9 +818,9 @@ class GameScreenGUI(val game : GameScreen) {
             listTable.add(exomerItemAmountLabel).padLeft(3f).fillX()
 
             //Add the stuff to the center table.
-            listTable.add(takeButton).size(25f).right().expandX().fillX().space(5f, 0f, 5f, 0f)
-            listTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(30f)
-            listTable.add(giveButton).size(25f).left().expandX().fillX().space(5f, 0f, 5f, 0f)
+            listTable.add().size(25f).right().expandX().fillX().space(5f, 0f, 5f, 0f)
+            listTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(80f)
+            listTable.add().size(25f).left().expandX().fillX().space(5f, 0f, 5f, 0f)
 
             //Add the name then amount to the right table.
             listTable.add(nativeItemAmountLabel).padRight((3f)).fillX()
@@ -849,11 +851,11 @@ class GameScreenGUI(val game : GameScreen) {
                     otherOffer -= otherItem.worth*toZero
 
                 }else if(tradeAmt >= 0 && changeAmt >= 0){
-                    yourOffer += exItem.worth*(changeAmt - tradeAmt)
+                    otherOffer += exItem.worth*(changeAmt - tradeAmt)
                     //otherOffer -= otherItem.worth*(changeAmt - tradeAmt)
                 }else if(tradeAmt <= 0 && changeAmt <= 0){
                     //yourOffer -= exItem.worth*(changeAmt - tradeAmt)
-                    otherOffer -= otherItem.worth*(changeAmt - tradeAmt)
+                    yourOffer -= otherItem.worth*(changeAmt - tradeAmt)
                 }
 
                 //Change the amt that we got from the text.
@@ -887,55 +889,6 @@ class GameScreenGUI(val game : GameScreen) {
                     super.clicked(event, x, y)
                 }
             })
-
-//            val func = {take:Boolean ->
-//                var amt = amtLabel.text.toString().toInt()
-//                var yourOffer = yourOfferAmtLabel.text.toString().toInt()
-//                var otherOffer = otherOfferAmtLabel.text.toString().toInt()
-//
-//                //If we are taking an item (buying it)
-//                if(take && otherItem.amt > 0){
-//                    exItem.amt++
-//                    otherItem.amt--
-//
-//                    when{
-//                        amt < 0 -> yourOffer -= exItem.worth
-//                        else -> otherOffer += otherItem.worth
-//                    }
-//
-//                    amt++
-//
-//                //If we are giving the item (selling it)
-//                }else if(!take && exItem.amt > 0){
-//                    exItem.amt--
-//                    otherItem.amt++
-//
-//                    when{
-//                        amt <= 0 -> yourOffer += exItem.worth
-//                        else -> otherOffer -= otherItem.worth
-//                    }
-//
-//                    amt--
-//                }
-//
-//                exomerItemAmountLabel.setText(exItem.amt.toInt().toString())
-//                nativeItemAmountLabel.setText(otherItem.amt.toInt().toString())
-//
-//                when{
-//                    amt > 0 -> amtLabel.color = Color.GREEN
-//                    amt < 0 -> amtLabel.color = Color.RED
-//                    else -> amtLabel.color = Color.WHITE
-//                }
-//
-//                when{
-//                    yourOffer < otherOffer -> acceptButton.label.color = Color.RED
-//                    else -> acceptButton.label.color = Color.WHITE
-//                }
-//
-//                amtLabel.setText(amt.toString())
-//                yourOfferAmtLabel.setText(yourOffer.toString())
-//                otherOfferAmtLabel.setText(otherOffer.toString())
-//            }
 
             takeButton.addListener(object:ChangeListener(){
                 override fun changed(p0: ChangeEvent?, p1: Actor?) {
@@ -999,7 +952,8 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun openNumPad(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, itemIndex:Int, callback:(Int)->Unit){
         val innerTable = Table()
-
+        val moreLessTable = Table()
+        val minMaxTable = Table()
 
         val numPadButtonBackground = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numPadButton", Texture::class.java)))
 
@@ -1014,7 +968,7 @@ class GameScreenGUI(val game : GameScreen) {
         amtLabel.setFontScale(0.15f)
         amtLabel.setAlignment(Align.center)
 
-        val negativeButton = TextButton("-", buttonStyle)
+        val negativeButton = TextButton("(-)", buttonStyle)
         negativeButton.label.setFontScale(0.15f)
 
         val backButton = TextButton("<-", buttonStyle)
@@ -1023,8 +977,25 @@ class GameScreenGUI(val game : GameScreen) {
         val zeroButton = TextButton(0.toString(), buttonStyle)
         zeroButton.label.setFontScale(0.15f)
 
-        val okButton = TextButton("Ok", buttonStyle)
+        val okButton = TextButton("OK", buttonStyle)
         okButton.label.setFontScale(0.15f)
+        okButton.label.color = Color.GREEN
+
+        val exitButton = TextButton("X", buttonStyle)
+        exitButton.label.setFontScale(0.15f)
+        exitButton.label.color = Color.RED
+
+        val maxButton = TextButton("max", buttonStyle)
+        maxButton.label.setFontScale(0.15f)
+
+        val minButton = TextButton("min", buttonStyle)
+        minButton.label.setFontScale(0.15f)
+
+        val moreButton = TextButton("+", buttonStyle)
+        moreButton.label.setFontScale(0.15f)
+
+        val lessButton = TextButton("-", buttonStyle)
+        lessButton.label.setFontScale(0.15f)
 
         //Hit the negative button
         negativeButton.addListener(object:ChangeListener(){
@@ -1045,10 +1016,12 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        //Add the negative button and the amount label.
-        innerTable.add(negativeButton).size(50f)
-        innerTable.add(amtLabel).fillX()
-        innerTable.row()
+        //When you hit the ok button.
+        exitButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                closeNumPad()
+            }
+        })
 
         //This function is to be called inside the button listeners.
         val func = {_amt:Int ->
@@ -1065,6 +1038,48 @@ class GameScreenGUI(val game : GameScreen) {
             amtLabel.setText(amt.toString())
         }
 
+        //When you hit the ok button.
+        maxButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                func(999999999)
+            }
+        })
+
+        //When you hit the ok button.
+        minButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                func(-999999999)
+            }
+        })
+
+        //When you hit the ok button.
+        moreButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                func(amtLabel.text.toString().toInt() + 1)
+            }
+        })
+
+        //When you hit the ok button.
+        lessButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                func(amtLabel.text.toString().toInt() - 1)
+            }
+        })
+
+        moreLessTable.add(lessButton).expandX().fillX()
+        moreLessTable.add(moreButton).expandX().fillX()
+
+        //Add the more and less button table.
+        innerTable.add(moreLessTable).colspan(3).expandX().fillX()
+        innerTable.row()
+
+        //Add the negative button, amt label, and back button.
+        innerTable.add(negativeButton).size(50f)
+        innerTable.add(amtLabel).size(50f)
+        innerTable.add(backButton).size(50f)
+        innerTable.row()
+
+        //For 9 buttons (1 - 9)
         for(i in 1..9){
             val button = TextButton(i.toString(), buttonStyle)
             button.label.setFontScale(0.15f)
@@ -1104,10 +1119,15 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
+        minMaxTable.add(minButton).fillX().expandX()
+        minMaxTable.add(maxButton).fillX().expandX()
+
         //Add the okButton, zeroButton, and back button.
-        innerTable.add(okButton).size(50f)
+        innerTable.add(exitButton).size(50f)
         innerTable.add(zeroButton).size(50f)
-        innerTable.add(backButton).size(50f)
+        innerTable.add(okButton).size(50f)
+        innerTable.row()
+        innerTable.add(minMaxTable).colspan(3).expandX().fillX()
 
 //        innerTable.debugAll()
 //        numPadTable.debugAll()
@@ -1116,7 +1136,7 @@ class GameScreenGUI(val game : GameScreen) {
         container.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numpadBackground", Texture::class.java)))
         container.pad(10f, 10f, 10f, 10f)
 
-        numPadTable.setPosition(200f, 200f)
+        numPadTable.setPosition(TextGame.viewport.screenWidth/2f, TextGame.viewport.screenHeight/2f)
         numPadTable.clear()
         numPadTable.add(container)
 
