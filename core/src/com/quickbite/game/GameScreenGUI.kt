@@ -761,6 +761,10 @@ class GameScreenGUI(val game : GameScreen) {
         otherValueLabel.setFontScale(0.15f)
         otherValueLabel.setAlignment(Align.center)
 
+        val tradeTitleLabel = Label("Trade", labelStyle)
+        tradeTitleLabel.setFontScale(0.15f)
+        tradeTitleLabel.setAlignment(Align.center)
+
         val acceptButton = TextButton("Accept", textButtonStyle)
         acceptButton.label.setFontScale(0.15f)
 
@@ -786,6 +790,7 @@ class GameScreenGUI(val game : GameScreen) {
             val exomerItemValueLabel = Label(exItem.worth.toString(), labelStyle)
             exomerItemValueLabel.setFontScale(0.13f)
             exomerItemValueLabel.setAlignment(Align.center)
+            exomerItemValueLabel.color = Color.GREEN
 
             val nativeItemNameLabel = Label(otherItem.displayName, labelStyle)
             nativeItemNameLabel.setFontScale(0.13f)
@@ -798,21 +803,18 @@ class GameScreenGUI(val game : GameScreen) {
             val nativeItemValueLabel = Label(otherItem.worth.toString(), labelStyle)
             nativeItemValueLabel.setFontScale(0.13f)
             nativeItemValueLabel.setAlignment(Align.center)
-
-            val tradeTitleLabel = Label("Trade", labelStyle)
-            tradeTitleLabel.setFontScale(0.13f)
-            tradeTitleLabel.setAlignment(Align.center)
+            nativeItemValueLabel.color = Color.RED
 
             if(i == 0){
-                listTable.add(valueLabel).width(54f).spaceRight(spaceX).height(24f)
-                listTable.add(nameLabel).width(84f).spaceRight(spaceX)
-                listTable.add(amountLabel).width(49f).spaceRight(spaceX)
+                listTable.add(valueLabel).width(60f).spaceRight(spaceX).height(24f)
+                listTable.add(nameLabel).width(76f).spaceRight(spaceX)
+                listTable.add(amountLabel).width(44f).spaceRight(spaceX)
 
-                listTable.add(tradeTitleLabel).width(44f).spaceRight(spaceX)
+                listTable.add(tradeTitleLabel).width(58f).spaceRight(spaceX)
 
-                listTable.add(otherAmountLabel).width(49f).spaceRight(spaceX)
-                listTable.add(otherNameLabel).width(84f).spaceRight(spaceX)
-                listTable.add(otherValueLabel).width(54f)
+                listTable.add(otherAmountLabel).width(44f).spaceRight(spaceX)
+                listTable.add(otherNameLabel).width(76f).spaceRight(spaceX)
+                listTable.add(otherValueLabel).width(60f)
 
                 listTable.row().spaceTop(5f)
             }
@@ -1017,7 +1019,7 @@ class GameScreenGUI(val game : GameScreen) {
                 var amt = amtLabel.text.toString().toInt()
                 if(amt != 0) amt = -amt
                 if(amt > 0 &&  amt >= exItem.amt) amt = exItem.amt.toInt()
-                if(amt < 0 &&  amt <= oItem.amt) amt = -oItem.amt.toInt()
+                if(amt < 0 &&  amt <= -oItem.amt) amt = -oItem.amt.toInt()
                 amtLabel.setText(amt.toString())
             }
         })
