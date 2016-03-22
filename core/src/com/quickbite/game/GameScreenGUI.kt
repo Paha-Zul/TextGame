@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
@@ -11,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.game.managers.DataManager
@@ -688,16 +690,18 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun buildTradeWindow(){
-        tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow", Texture::class.java)))
-        tradeWindowTable.setSize(600f, 400f)
+        tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow2", Texture::class.java)))
+        tradeWindowTable.setSize(450f, 400f)
+
+        val gridPatchDrawable = NinePatchDrawable(NinePatch(TextGame.manager.get("tradeGridBackground", Texture::class.java), 4, 4, 4, 4))
 
         val labelTable:Table = Table()
         val listTable:Table = Table()
         val offerTable:Table = Table()
 
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
         val amtLabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-        amtLabelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numPadButton", Texture::class.java)))
 
         val giveButtonStyle = ImageButton.ImageButtonStyle()
         giveButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
@@ -758,11 +762,15 @@ class GameScreenGUI(val game : GameScreen) {
         otherValueLabel.setAlignment(Align.center)
 
         val acceptButton = TextButton("Accept", textButtonStyle)
-        acceptButton.label.setFontScale(0.2f)
+        acceptButton.label.setFontScale(0.15f)
 
+        //The item list.
         val exomerList = TradeManager.exomerList
         val otherList = TradeManager.otherList
 
+        val spaceX = 4f
+
+        //For each item....
         for(i in exomerList!!.indices){
             val exItem = exomerList[i]
             val otherItem = otherList!![i]
@@ -791,18 +799,22 @@ class GameScreenGUI(val game : GameScreen) {
             nativeItemValueLabel.setFontScale(0.13f)
             nativeItemValueLabel.setAlignment(Align.center)
 
+            val tradeTitleLabel = Label("Trade", labelStyle)
+            tradeTitleLabel.setFontScale(0.13f)
+            tradeTitleLabel.setAlignment(Align.center)
+
             if(i == 0){
-                listTable.add(valueLabel).width(50f)
-                listTable.add(nameLabel).width(110f)
-                listTable.add(amountLabel).width(50f)
+                listTable.add(valueLabel).width(54f).spaceRight(spaceX).height(24f)
+                listTable.add(nameLabel).width(84f).spaceRight(spaceX)
+                listTable.add(amountLabel).width(49f).spaceRight(spaceX)
 
-                listTable.add().colspan(3)
+                listTable.add(tradeTitleLabel).width(44f).spaceRight(spaceX)
 
-                listTable.add(otherAmountLabel).width(50f)
-                listTable.add(otherNameLabel).width(110f)
-                listTable.add(otherValueLabel).width(50f)
+                listTable.add(otherAmountLabel).width(49f).spaceRight(spaceX)
+                listTable.add(otherNameLabel).width(84f).spaceRight(spaceX)
+                listTable.add(otherValueLabel).width(54f)
 
-                listTable.row().spaceTop(10f)
+                listTable.row().spaceTop(5f)
             }
 
             val amtLabel = Label("0", amtLabelStyle)
@@ -813,19 +825,17 @@ class GameScreenGUI(val game : GameScreen) {
             val giveButton = ImageButton(giveButtonStyle)
 
             //Add the amount then name to the left table.
-            listTable.add(exomerItemValueLabel).left().fillX()
-            listTable.add(exomerItemNameLabel).padLeft(3f).fillX()
-            listTable.add(exomerItemAmountLabel).padLeft(3f).fillX()
+            listTable.add(exomerItemValueLabel).left().fillX().spaceRight(spaceX).spaceBottom(spaceX).height(24f)
+            listTable.add(exomerItemNameLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
+            listTable.add(exomerItemAmountLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
 
             //Add the stuff to the center table.
-            listTable.add().size(25f).right().expandX().fillX().space(5f, 0f, 5f, 0f)
-            listTable.add(amtLabel).pad(0f, 5f, 0f, 5f).width(80f)
-            listTable.add().size(25f).left().expandX().fillX().space(5f, 0f, 5f, 0f)
+            listTable.add(amtLabel).space(0f, 5f, 0f, 5f).fillX().spaceRight(spaceX).spaceBottom(spaceX)
 
             //Add the name then amount to the right table.
-            listTable.add(nativeItemAmountLabel).padRight((3f)).fillX()
-            listTable.add(nativeItemNameLabel).padRight((3f)).fillX()
-            listTable.add(nativeItemValueLabel).right().fillX()
+            listTable.add(nativeItemAmountLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
+            listTable.add(nativeItemNameLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
+            listTable.add(nativeItemValueLabel).right().fillX().spaceBottom(spaceX)
 
             val func = { changeAmt: Int ->
 
@@ -921,34 +931,38 @@ class GameScreenGUI(val game : GameScreen) {
 
         //Add stuff to the offer (your/their offer) table
         offerTable.add(yourOfferLabel).right().padRight(5f)
-        offerTable.add(yourOfferAmtLabel).right().spaceRight(30f).width(25f)
+        offerTable.add(yourOfferAmtLabel).right().spaceRight(30f).width(25f).height(25f)
         offerTable.add()
-        offerTable.add(otherOfferAmtLabel).left().padRight(5f).spaceLeft(30f).width(25f)
+        offerTable.add(otherOfferAmtLabel).left().padRight(5f).spaceLeft(30f).width(25f).height(25f)
         offerTable.add(otherOfferLabel).left()
 
         //The titles table
-        labelTable.add(exomerLabel).fillX().expandX().left().height(30f).width(125f).padLeft(35f)
-        labelTable.add().fillX().expandX()
-        labelTable.add(nativeLabel).fillX().expandX().right().height(30f).width(125f).padRight(35f)
+        labelTable.add(exomerLabel).width(215f).height(30f)
+        labelTable.add(nativeLabel).width(215f).height(30f)
+        labelTable.top()
 
         // Add all the tables to the main table.
-        tradeWindowTable.add(labelTable).fillX().expandX().pad(10f, 20f, 0f, 20f)
+        tradeWindowTable.add(labelTable).fillX().expandX().pad(0f, 10f, 4f, 10f).top().height(30f)
         tradeWindowTable.row()
-        tradeWindowTable.add(listTable).fill().expand().pad(20f, 20f, 0f, 20f).top()
+        tradeWindowTable.add(listTable).pad(0f, 5f, 5f, 5f).top()
         tradeWindowTable.row()
-        tradeWindowTable.add(offerTable).fillX().expandX().padBottom(15f).spaceTop(20f)
+        tradeWindowTable.add(offerTable).fillX().expandX().top().spaceBottom(0f)
         tradeWindowTable.row()
-        tradeWindowTable.add(acceptButton).padBottom(10f)
+        tradeWindowTable.add(acceptButton).fill().expand().padBottom(4f)
 
-        mainTradeWindowTable.add(tradeWindowTable)
+        tradeWindowTable.setPosition(TextGame.viewport.screenWidth/2f - 450/2f, TextGame.viewport.screenHeight/2f - 400/2f)
 
-//        mainTradeWindowTable.debugAll()
-        mainTradeWindowTable.setFillParent(true)
+//        tradeWindowTable.debugAll()
+//        listTable.debugAll()
+
+//        mainTradeWindowTable.add(tradeWindowTable).left()
+
+//        mainTradeWindowTable.setFillParent(true)
     }
 
-    fun openTradeWindow() = TextGame.stage.addActor(mainTradeWindowTable)
+    fun openTradeWindow() = TextGame.stage.addActor(tradeWindowTable)
 
-    fun closeTradeWindow() = mainTradeWindowTable.remove()
+    fun closeTradeWindow() = tradeWindowTable.remove()
 
     fun openNumPad(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, itemIndex:Int, callback:(Int)->Unit){
         val innerTable = Table()
