@@ -396,12 +396,6 @@ class GameScreen(val game: Game): Screen {
         this.ROV = TextGame.manager.get("Exomer751ROV", Texture::class.java)
     }
 
-    fun Float.clamp(min:Float, max:Float):Float{
-        if(this <= min) return min
-        if(this >= max) return max
-        return this
-    }
-
     /**
      * Pauses the game.
      */
@@ -419,4 +413,16 @@ class GameScreen(val game: Game): Screen {
     override fun dispose() {
         //throw UnsupportedOperationException()
     }
+}
+
+fun Float.clamp(min:Float, max:Float):Float{
+    if(this <= min) return min
+    if(this >= max) return max
+    return this
+}
+
+fun Int.clamp(min:Int, max:Int):Int{
+    if(this <= min) return min
+    if(this >= max) return max
+    return this
 }

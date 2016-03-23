@@ -43,11 +43,8 @@ class GameScreenGUI(val game : GameScreen) {
     private lateinit var timeLabel:Label
 
     /* GUI elements for trade */
-    private val mainTradeWindowTable:Table = Table()
     private val tradeWindowTable:Table = Table()
-    private val leftTradeTable:Table = Table()
-    private val rightTradeTable:Table = Table()
-    private val middleTradeTable:Table = Table()
+    private val tradeSliderWindow:Table = Table()
 
 
     /* GUI elements for travel info */
@@ -839,39 +836,44 @@ class GameScreenGUI(val game : GameScreen) {
             listTable.add(nativeItemNameLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
             listTable.add(nativeItemValueLabel).right().fillX().spaceBottom(spaceX)
 
-            val func = { changeAmt: Int ->
+            val func = { newAmt: Int ->
 
-                val absChangeAmt:Int = Math.abs(changeAmt)
+                val absChangeAmt:Int = Math.abs(newAmt)
 
                 var tradeAmt = amtLabel.text.toString().toInt()
                 var yourOffer = yourOfferAmtLabel.text.toString().toInt()
                 var otherOffer = otherOfferAmtLabel.text.toString().toInt()
 
                 //If the trade amount is positive and change amount is negative.
-                if(tradeAmt > 0 && changeAmt < 0){
+                if(tradeAmt > 0 && newAmt < 0){
                     val toZero = tradeAmt
-                    val toChange = -changeAmt
+                    val toChange = newAmt
 
-                    yourOffer -= exItem.worth*toZero
-                    otherOffer += otherItem.worth*toChange
-                //If trade amount is negative and change amount is positive.
-                }else if(tradeAmt < 0 && changeAmt > 0){
-                    val toZero = -tradeAmt
-                    val toChange = changeAmt
-
-                    yourOffer += exItem.worth*toChange
+                    yourOffer -= exItem.worth*toChange
                     otherOffer -= otherItem.worth*toZero
+                    if(otherOffer <= 0) otherOffer = 0
 
-                }else if(tradeAmt >= 0 && changeAmt >= 0){
-                    otherOffer += exItem.worth*(changeAmt - tradeAmt)
+                //If trade amount is negative and change amount is positive.
+                }else if(tradeAmt < 0 && newAmt > 0){
+                    val toZero = tradeAmt
+                    val toChange = newAmt
+
+                    yourOffer += exItem.worth*toZero
+                    otherOffer += otherItem.worth*toChange
+                    if(otherOffer <= 0) otherOffer = 0
+
+                }else if(tradeAmt >= 0 && newAmt >= 0){
+                    otherOffer += otherItem.worth*(newAmt - tradeAmt)
+                    if(otherOffer <=0) otherOffer = 0
                     //otherOffer -= otherItem.worth*(changeAmt - tradeAmt)
-                }else if(tradeAmt <= 0 && changeAmt <= 0){
+                }else if(tradeAmt <= 0 && newAmt <= 0){
                     //yourOffer -= exItem.worth*(changeAmt - tradeAmt)
-                    yourOffer -= otherItem.worth*(changeAmt - tradeAmt)
+                    yourOffer -= exItem.worth*(newAmt - tradeAmt)
+                    if(yourOffer <= 0) yourOffer = 0
                 }
 
                 //Change the amt that we got from the text.
-                tradeAmt=changeAmt
+                tradeAmt = newAmt
 
                 //Set the exomer and other item amount label.
                 exomerItemAmountLabel.setText(exItem.currAmt.toInt().toString())
@@ -897,7 +899,7 @@ class GameScreenGUI(val game : GameScreen) {
 
             amtLabel.addListener(object:ClickListener(){
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    openNumPad(exomerList[i], otherList[i], i, func)
+                    openTradeSlider(exomerList[i], otherList[i], func)
                     super.clicked(event, x, y)
                 }
             })
@@ -965,6 +967,100 @@ class GameScreenGUI(val game : GameScreen) {
     fun openTradeWindow() = TextGame.stage.addActor(tradeWindowTable)
 
     fun closeTradeWindow() = tradeWindowTable.remove()
+
+    fun openTradeSlider(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, callback:(Int)->Unit){
+        tradeSliderWindow.clear()
+        tradeSliderWindow.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pixelBlack", Texture::class.java)))
+        tradeSliderWindow.setSize(300f, 100f)
+        tradeSliderWindow.setPosition(TextGame.viewport.screenWidth/2f - 300f/2f, TextGame.viewport.screenHeight/2f - 100f/2f)
+
+        val buttonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.fontColor = Color.WHITE
+//        buttonStyle.up = TextureRegionDrawable(TextureRegion(TextGame.manager.get("", Texture::class.java)))
+
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val sliderStyle = Slider.SliderStyle()
+        sliderStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderWhite", Texture::class.java)))
+        sliderStyle.knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnob", Texture::class.java)))
+
+        val tradeSlider = Slider(-oItem.amt, exItem.amt, 1f, false, sliderStyle)
+        tradeSlider.value = 0f
+
+        val currLabel = Label("0", labelStyle)
+        currLabel.setFontScale(0.15f)
+        currLabel.setAlignment(Align.center)
+
+        val minLabel = Label((-oItem.amt).toInt().toString(), labelStyle)
+        minLabel.setFontScale(0.15f)
+        minLabel.setAlignment(Align.center)
+
+        val maxLabel = Label(exItem.amt.toInt().toString(), labelStyle)
+        maxLabel.setFontScale(0.15f)
+        maxLabel.setAlignment(Align.center)
+
+        val lessButton = TextButton("-", buttonStyle)
+        lessButton.label.setFontScale(0.15f)
+        lessButton.label.setAlignment(Align.center)
+
+        val moreButton = TextButton("+", buttonStyle)
+        moreButton.label.setFontScale(0.15f)
+        moreButton.label.setAlignment(Align.center)
+
+        val acceptButton = TextButton("Accept", buttonStyle)
+        acceptButton.label.setFontScale(0.15f)
+        acceptButton.label.setAlignment(Align.center)
+
+        tradeSliderWindow.add(lessButton)
+        tradeSliderWindow.add(currLabel)
+        tradeSliderWindow.add(moreButton)
+
+        tradeSliderWindow.row()
+
+        tradeSliderWindow.add(minLabel).spaceRight(5f)
+        tradeSliderWindow.add(tradeSlider).spaceRight(5f)
+        tradeSliderWindow.add(maxLabel)
+
+        tradeSliderWindow.row()
+
+        tradeSliderWindow.add(acceptButton).colspan(3)
+
+        tradeSlider.addListener(object:ClickListener(){
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                currLabel.setText(tradeSlider.value.toInt().toString())
+                callback(tradeSlider.value.toInt())
+                super.clicked(event, x, y)
+            }
+        })
+
+        moreButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                tradeSlider.value += 1
+                currLabel.setText(tradeSlider.value.toInt().toString())
+                callback(tradeSlider.value.toInt())
+            }
+        })
+
+        lessButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                tradeSlider.value -= 1
+                currLabel.setText(tradeSlider.value.toInt().toString())
+                callback(tradeSlider.value.toInt())
+            }
+        })
+
+        acceptButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                closeTradeSlider()
+            }
+        })
+
+
+        TextGame.stage.addActor(tradeSliderWindow)
+    }
+
+    fun closeTradeSlider() = tradeSliderWindow.remove()
 
     fun openNumPad(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, itemIndex:Int, callback:(Int)->Unit){
         val innerTable = Table()
