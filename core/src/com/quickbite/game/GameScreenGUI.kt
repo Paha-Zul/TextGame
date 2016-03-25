@@ -1,6 +1,7 @@
 package com.quickbite.game
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -954,7 +956,7 @@ class GameScreenGUI(val game : GameScreen) {
         tradeWindowTable.row()
         tradeWindowTable.add(acceptButton).fill().expand().padBottom(4f)
 
-        tradeWindowTable.setPosition(TextGame.viewport.screenWidth/2f - 450/2f, TextGame.viewport.screenHeight/2f - 400/2f)
+        tradeWindowTable.setPosition(TextGame.viewport.worldWidth/2f - tradeWindowTable.width/2f, TextGame.viewport.worldHeight/2f - tradeWindowTable.height/2f)
 
 //        tradeWindowTable.debugAll()
 //        listTable.debugAll()
@@ -972,7 +974,7 @@ class GameScreenGUI(val game : GameScreen) {
         tradeSliderWindow.clear()
         tradeSliderWindow.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pixelBlack", Texture::class.java)))
         tradeSliderWindow.setSize(300f, 100f)
-        tradeSliderWindow.setPosition(TextGame.viewport.screenWidth/2f - 300f/2f, TextGame.viewport.screenHeight/2f - 100f/2f)
+        tradeSliderWindow.setPosition(TextGame.viewport.worldWidth/2f - 300f/2f, TextGame.viewport.worldHeight/2f - 100f/2f)
 
         val buttonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -1001,11 +1003,11 @@ class GameScreenGUI(val game : GameScreen) {
         maxLabel.setAlignment(Align.center)
 
         val lessButton = TextButton("-", buttonStyle)
-        lessButton.label.setFontScale(0.15f)
+        lessButton.label.setFontScale(0.17f)
         lessButton.label.setAlignment(Align.center)
 
         val moreButton = TextButton("+", buttonStyle)
-        moreButton.label.setFontScale(0.15f)
+        moreButton.label.setFontScale(0.17f)
         moreButton.label.setAlignment(Align.center)
 
         val acceptButton = TextButton("Accept", buttonStyle)
@@ -1026,27 +1028,30 @@ class GameScreenGUI(val game : GameScreen) {
 
         tradeSliderWindow.add(acceptButton).colspan(3)
 
-        tradeSlider.addListener(object:ClickListener(){
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+//        tradeSlider.addListener(object:ClickListener(){
+//            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+//                currLabel.setText(tradeSlider.value.toInt().toString())
+//                callback(tradeSlider.value.toInt())
+//                super.clicked(event, x, y)
+//            }
+//        })
+
+        tradeSlider.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 currLabel.setText(tradeSlider.value.toInt().toString())
                 callback(tradeSlider.value.toInt())
-                super.clicked(event, x, y)
             }
         })
 
         moreButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 tradeSlider.value += 1
-                currLabel.setText(tradeSlider.value.toInt().toString())
-                callback(tradeSlider.value.toInt())
             }
         })
 
         lessButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 tradeSlider.value -= 1
-                currLabel.setText(tradeSlider.value.toInt().toString())
-                callback(tradeSlider.value.toInt())
             }
         })
 

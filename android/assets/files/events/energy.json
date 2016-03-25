@@ -15,7 +15,7 @@
     "choices": ["Yea!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "energy"]]
+    "resultingAction": [["addRndAmt", "1", "25", "energy"]]
   },
   {
     "name": "LessEnergy",
@@ -24,7 +24,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "energy"]]
+    "resultingAction": [["addRndAmt", "-1", "-25", "energy"]]
   },
   {
     "root": true,
@@ -34,7 +34,7 @@
     "choices": ["POWER!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "energy"]]
+    "resultingAction": [["addRndAmt", "1", "25", "energy"]]
   },
   {
     "root": true,
@@ -44,6 +44,6 @@
     "choices": ["Darn"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "energy"]]
+    "resultingAction": [["addRndAmt", "-1", "-25", "energy"]]
   }
 ]

@@ -135,7 +135,8 @@ object DataManager{
                 if(outcomeIndex < 0) //If the outcomeIndex is negative, we have no outcome. Return null.
                     return null
 
-                val outcomeEvent = DataManager.eventMap[outcomes!![choiceIndex][outcomeIndex]]!!
+                val outcomeText = outcomes!![choiceIndex][outcomeIndex]
+                val outcomeEvent = DataManager.eventMap[outcomeText]!!
                 outcomeEvent.randomName = this.randomName
                 return outcomeEvent
             }

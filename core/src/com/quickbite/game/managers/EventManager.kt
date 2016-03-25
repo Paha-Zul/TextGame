@@ -1,5 +1,6 @@
 package com.quickbite.game.managers
 
+import com.badlogic.gdx.Gdx
 import java.util.*
 
 /**
@@ -16,11 +17,15 @@ object EventManager {
         val func = eventMap[name]
         if(func != null)
             func(listOf(args[0]))
+        else
+            Gdx.app.error("EventSystem", "No event found for $name, is it spelled correctly?")
     }
 
     fun callEvent(name:String, args:List<Any>){
         val func = eventMap[name]
         if(func != null)
             func(args)
+        else
+            Gdx.app.error("EventSystem", "No event found for $name, is it spelled correctly?")
     }
 }

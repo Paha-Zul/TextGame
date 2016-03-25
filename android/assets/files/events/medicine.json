@@ -7,7 +7,7 @@
     "choices": ["Great!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "2", "medkits"]]
+    "resultingAction": [["addRndAmt", "1", "2", "medkits"]]
   },
   {
     "root": true,
@@ -17,7 +17,7 @@
     "choices": ["Great..."],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-2", "medkits"]]
+    "resultingAction": [["addRndAmt", "-1", "-2", "medkits"]]
   },
   {
     "root": true,
@@ -35,7 +35,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "2", "medkits"]]
+    "resultingAction": [["addRndAmt", "1", "2", "medkits"]]
   },
   {
     "name": "IrritatingHerbs",
@@ -44,6 +44,6 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-2", "medkits"]]
+    "resultingAction": [["addRndAmt", "-1", "-2", "medkits"]]
   }
 ]

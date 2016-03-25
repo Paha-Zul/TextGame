@@ -15,7 +15,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "2", "5", "edibles"]]
+    "resultingAction": [["addRndAmt", "2", "5", "edibles", "true"]]
   },
   {
     "name": "LessEdibles",
@@ -24,7 +24,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-2", "-5", "edibles"]]
+    "resultingAction": [["addRndAmt", "-2", "-5", "edibles", "true"]]
   },
   {
     "root": true,
@@ -34,7 +34,7 @@
     "choices": ["Yum!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "2", "5", "edibles"]]
+    "resultingAction": [["addRndAmt", "2", "5", "edibles", "true"]]
   },
   {
     "root": true,
@@ -44,6 +44,6 @@
     "choices": ["That's a Shame..."],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-2", "-5", "edibles"]]
+    "resultingAction": [["addRndAmt", "-2", "-5", "edibles", "true"]]
   }
 ]

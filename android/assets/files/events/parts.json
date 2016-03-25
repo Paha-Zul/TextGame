@@ -7,7 +7,7 @@
     "choices": ["One man's trash…"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "parts"]]
+    "resultingAction": [["addRndAmt", "1", "25", "parts"]]
   },
   {
     "root": true,
@@ -17,7 +17,7 @@
     "choices": ["That's not good"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "parts"]]
+    "resultingAction": [["addRndAmt", "-1", "-25", "parts"]]
   },
   {
     "root": true,
@@ -35,7 +35,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "parts"]]
+    "resultingAction": [["addRndAmt", "1", "25", "parts"]]
   },
   {
     "name": "LessParts",
@@ -44,6 +44,6 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "-1", "-25", "parts"]]
+    "resultingAction": [["addRndAmt", "-1", "-25", "parts"]]
   }
 ]

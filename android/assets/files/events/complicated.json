@@ -24,7 +24,7 @@
     "choices": ["Works for Me"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmt", "evtPerson", "1", "25", "edibles"]]
+    "resultingAction": [["addRndAmt", "1", "25", "edibles"]]
   },
   {
     "name": "EmptyBag",
@@ -39,11 +39,11 @@
     "name": "CreatureBag",
     "title": "What's That?",
     "description": ["%n cautiously approaches the bag. He peels back the opening and peers inside…",
-      "Something darts out at him. Startled he falls back and for a brief moment is entangled with the small creature that called the bag home. The creature burst free and scampers into the shrubs. Scratched, bruised, and embarrassed, (NAME) sulks back to the group. "],
+      "Something darts out at him. Startled he falls back and for a brief moment is entangled with the small creature that called the bag home. The creature burst free and scampers into the shrubs. Scratched, bruised, and embarrassed, %n sulks back to the group. "],
     "choices": ["HOLY ****"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["hurt", "evtPerson", "15"]]
+    "resultingAction": [["hurt", "15"]]
   },
   {
     "root": true,
@@ -73,7 +73,7 @@
   {
     "name": "EmptyBurrow",
     "title": "A Hole?",
-    "description": ["It's too dark to see anything at first, but once his eyes adjust he can make out the back wall of the small burrow. It’s empty, it looks like there isn’t anyone home."],
+    "description": ["It's too dark to see anything at first, but once his eyes adjust he can make out the back wall of the small burrow. It's empty, it looks like there isn't anyone home."],
     "choices": [],
     "outcomes": [],
     "chances": []
@@ -85,25 +85,25 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmtGroup", "evtPerson", "1", "5", "edibles"]]
+    "resultingAction": [["addRndAmt", "1", "5", "edibles", "true"]]
   },
   {
     "name": "CreatureHurtBurrow",
     "title": "A Hole?",
-    "description": ["It's too dark too get a good look, so he leans pressing his face up to the opening. A small rodent like creature lunges out and scratches his face before retreating back into the hole. Surprised %n decides it’s not worth the trouble and heads back to the ROV."],
+    "description": ["It's too dark too get a good look, so he leans pressing his face up to the opening. A small rodent like creature lunges out and scratches his face before retreating back into the hole. Surprised %n decides it's not worth the trouble and heads back to the ROV."],
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["hurt", "evtPerson", "10", "20"]]
+    "resultingAction": [["hurt", "10", "20"]]
   },
   {
-    "name": "CreatureHurtBurrow",
+    "name": "CreatureHurtFoodBurrow",
     "title": "A Hole?",
     "description": ["An ugly rodent like creature peers out. Not wanting to pass up a free meal, but also not wanting to risk his own fingers; %n unholsters his side arm and fires a few shots into the hole."],
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmtGroup", "evtPerson", "1", "5", "edibles"], ["addRndAmt", "evtPerson", "-1", "-5", "ammo"]]
+    "resultingAction": [["addRndAmt", "1", "5", "edibles", "true"], ["addRndAmt", "-1", "-5", "ammo"]]
   },
   {
     "name": "ReachInside",
@@ -128,7 +128,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmtGroup", "evtPerson", "3", "7", "edibles"]]
+    "resultingAction": [["addRndAmt", "3", "7", "edibles", "true"]]
   },
   {
     "name": "ReachFoodHurt",
@@ -137,15 +137,87 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmtGroup", "evtPerson", "3", "7", "edibles"], ["hurt", "evtPerson", "10", "20"]]
+    "resultingAction": [["addRndAmt", "3", "7", "edibles", "true"], ["hurt", "10", "20"]]
   },
   {
     "name": "ReachFoodHurtPerc",
     "title": "A Hole?",
-    "description": ["He grabs onto something furry and angry. It hisses and thrashes around, biting and clawing trying to break free from %n’s grasp. After a few moments %n pulls the now dead animal from the hole."],
+    "description": ["He grabs onto something furry and angry. It hisses and thrashes around, biting and clawing trying to break free from %n's grasp. After a few moments %n pulls the now dead animal from the hole."],
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndAmtGroup", "evtPerson", "3", "7", "edibles"], ["hurtPercent", "evtPerson", "10", "20"]]
+    "resultingAction": [["addRndAmt", "3", "7", "edibles", "true"], ["hurt", "10", "20", "true"]]
+  },
+  {
+    "root": true,
+    "name": "NativeEncounter",
+    "title": "Natives!",
+    "description": ["The ROV grinds to a stop. Shadowy figures dot the horizon along the path ahead. Natives no doubt, but their intentions are unclear. Upon closer inspection they seem to be quite large in stature, with rugged bark-like skin and features. They appear to be wearing simple garb most likely made from local flora and fauna."],
+    "choices": ["ApproachPeacefully", "ApproachHostility", "AvoidNatives"],
+    "outcomes": [["TradeNatives", "FightNatives"], ["DriveOverNatives", "StuckInNatives"], ["AvoidSuccess", "AvoidAmbushed"]],
+    "chances": [[75, 25], [75, 25], [75, 25]],
+    "resultingAction": []
+  },
+  {
+    "name": "TradeNatives",
+    "title": "Trade",
+    "description": ["The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.",
+                    "The natives grunt and grumble to each other until the larger native settles them. The group parts to reveal a pile of treasures of their own. Thankfully, it seems they are friendlier than they look and welcome the trade!"],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["openTrade"]]
+  },
+  {
+    "name": "FightNatives",
+    "title": "Fight",
+    "description": ["The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.",
+                    "The large native roars and knocks %n to the ground and unsheathes his weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["hurt", "10", "35", "false", "-1"], ["addRndAmt", "1", "25", "wealth"]]
+  },
+  {
+    "name": "DriveOverNatives",
+    "title": "Fight",
+    "description": ["%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, killing the main bulk of the natives in the first pass. A few of the surviving natives try to retaliate, but their simple spears are no match for the group's firepower."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "1", "25", "energy"], ["addRndAmt", "2", "5", "edibles", "true"], ["addRndAmt", "0", "2", "medkits"], ["addRndAmt", "1", "25", "wealth"],
+                        ["addRndAmt", "1", "25", "ammo"], ["addRndAmt", "1", "25", "parts"], ["damageROV", "1", "15"]]
+  },
+  {
+    "name": "StuckInNatives",
+    "title": "Fight",
+    "description": ["%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back…",
+                    "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["damageROV", "25", "55"], ["hurt", "1", "15", "false", "-1"], ["addRndAmt", "1", "25", "energy"], ["addRndAmt", "2", "5", "edibles", "true"], ["addRndAmt", "0", "2", "medkits"], ["addRndAmt", "1", "25", "wealth"],
+                        ["addRndAmt", "1", "25", "ammo"], ["addRndAmt", "1", "25", "parts"]]
+  },
+  {
+    "name": "AvoidSuccess",
+    "title": "Avoid",
+    "description": ["The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group's progress but eventually they reunite with their previous course, safely avoiding the natives' roadblock."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["cutMiles", "120", "360"]]
+  },
+  {
+    "name": "AvoidAmbushed",
+    "title": "Avoid",
+    "description": ["The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group’s progress. As the ROV rounds a bend the crew finds the path blocked by a huge bolder. Natives spring up from behind every rock and every hill, surrounding the ROV and closing fast.",
+                    "%n) puts the ROV in reverse and plows into a multitude of natives. They cling to the ROV and start tearing away at the exterior. More natives pile on the ROV as it accelerated forward and around the blockage. The crew fires though the ROV’s gun ports, dislodging as many natives as they can…",
+                    "Finally, the ROV clears the main horde, dispatching the remaining natives clinging to the sides of the ROV. Breathing a sigh of relief and wiping the sweat from their brows the group watches as the natives disappear into the distance."],
+    "choices": [],
+    "outcomes": [],
+    "chances": [],
+    "resultingAction": [["addRndAmt", "-1", "-25", "energy"], ["addRndAmt", "-2", "-5", "edibles", "true"], ["addRndAmt", "-0", "-2", "medkits"], ["addRndAmt", "-1", "-25", "wealth"],
+                        ["addRndAmt", "-1", "-25", "ammo"], ["addRndAmt", "-1", "-25", "parts"], ["hurt", "1", "15", "false", "-1"], ["damageROV", "25", "55"]]
   }
 ]

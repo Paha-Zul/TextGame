@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.utils.Array
 import com.quickbite.game.*
 import com.quickbite.game.managers.DataManager
 import com.quickbite.game.managers.EventManager
@@ -25,7 +26,7 @@ class GameScreen(val game: Game): Screen {
     }
     var state = State.TRAVELING
 
-    val timeTickEventList:LinkedList<ChainTask> = LinkedList()
+    val timeTickEventList: LinkedList<ChainTask> = LinkedList()
 
     private val backgroundSky = Texture(Gdx.files.internal("art/backgroundSky.png"), true)
     private val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
@@ -106,7 +107,7 @@ class GameScreen(val game: Game): Screen {
                         for (l in list.iterator()) {
                             if (l.size > 0) {
                                 exit = false
-                                EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size)))
+                                EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size-1)))
                             }
                         }
                         gui.showEventResults(resultsList)
@@ -137,43 +138,54 @@ class GameScreen(val game: Game): Screen {
 
         makeEvents()
 
-        gui.buildTradeWindow()
-        gui.openTradeWindow()
-        pauseGame()
+//        gui.buildTradeWindow()
+//        gui.openTradeWindow()
+//        pauseGame()
     }
 
     /**
      * Adds events to the EventSystem to be called later.
      */
     private fun makeEvents(){
+
+        //We are hurting a person/people
         EventManager.onEvent("hurt", { args ->
             var name = currEvent!!.randomName
-            val min = ((args[1]) as String).toInt()
-            val max = if(args.size >= 3) ((args[1]) as String).toInt() else min
+            val min = ((args[0]) as String).toInt()
+            val max = if(args.count() >= 2) ((args[1]) as String).toInt() else min
+            val perc = if(args.count() >= 3) ((args[2]) as String).toBoolean() else false
+            var numPeople = if(args.count() >= 4) ((args[3]) as String).toInt() else 1
+            if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
 
-            val person = GroupManager.getPerson(name)!!
-            val amt = MathUtils.random(min, max)
-            person.health -= amt
-            if(person.health <= 0)
-                GroupManager.killPerson(person.firstName)
+            //If we are applying to all the people...
+            if(numPeople == GroupManager.numPeopleAlive){
+                val amt = MathUtils.random(min, max)
+                val list = GroupManager.getPeopleList()
+                list.forEach { person ->
+                    var res = 0
+                    if(perc)
+                        res = person.addPercentHealth(-amt.toFloat()).toInt()
+                    else
+                        res = person.addHealth(-amt.toFloat()).toInt()
+                    resultsList.add(Pair(res, person.firstName + "'s HP"))}
+
+                //If we are doing it to multiple people...
+            }else if(numPeople > 1){
+                //TODO no use for it yet...
+
+            //For only one person...
+            }else{
+                var amt = MathUtils.random(min, max)
+                val person = GroupManager.getPerson(name)!!
+                if(perc)
+                    amt = person.addPercentHealth(-amt.toFloat()).toInt()
+                else
+                    amt = person.addHealth(-amt.toFloat()).toInt()
+
+                resultsList.add(Pair(amt, person.firstName + "'s HP"))
+            }
 
             gui.buildGroupTable()
-            resultsList.add(Pair(-amt, person.firstName))
-        })
-
-        EventManager.onEvent("hurtPercent", { args ->
-            var name = currEvent!!.randomName
-            val min = ((args[1]) as String).toInt()
-            val max = if(args.size >= 3) ((args[1]) as String).toInt() else min
-
-            val person = GroupManager.getPerson(name)!!
-            val amt = (MathUtils.random(min*0.001f, max*0.001f)*100).toInt() //Percentage of 100 health
-            person.health -= amt
-            if(person.health <= 0)
-                GroupManager.killPerson(person.firstName)
-
-            gui.buildGroupTable()
-            resultsList.add(Pair(-amt, person.firstName))
         })
 
         EventManager.onEvent("die", { args ->
@@ -193,14 +205,14 @@ class GameScreen(val game: Game): Screen {
             if(person.health >= 100) person.health = 100;
 
             gui.buildGroupTable()
-            resultsList.add(Pair(amt, person.firstName))
+            resultsList.add(Pair(amt, person.firstName + "'s HP"))
         })
 
         EventManager.onEvent("addRndAmt", {args ->
-            val name:String = args[0] as String
-            val min:Int = (args[1] as String).toInt()
-            val max:Int = (args[2] as String).toInt()
-            val supplyName:String = args[3] as String
+            val min:Int = (args[0] as String).toInt()
+            val max:Int = (args[1] as String).toInt()
+            val supplyName:String = args[2] as String
+            val perPerson = if(args.count() >= 4) (args[3] as String).toBoolean() else false
 
             var chance = 100f
             if(args.count() > 4)
@@ -209,28 +221,11 @@ class GameScreen(val game: Game): Screen {
             if(MathUtils.random(100) <= chance) {
                 var num = MathUtils.random(Math.abs(min), Math.abs(max))
                 if (min < 0 || max < 0) num = -num
+                if(perPerson) num *= GroupManager.numPeopleAlive
+
                 val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
 
                 resultsList.add(Pair(num, supply.displayName))
-            }
-        })
-
-        EventManager.onEvent("addRndAmtGroup", {args ->
-            val name:String = args[0] as String
-            val min:Float = (args[1] as String).toFloat()
-            val max:Float = (args[2] as String).toFloat()
-            val supplyName:String = args[3] as String
-
-            var chance = 100f
-            if(args.count() > 4)
-                chance = (args[4] as String).toFloat()
-
-            if(MathUtils.random(100) <= chance) {
-                var num = MathUtils.random(Math.abs(min), Math.abs(max)) * GroupManager.numPeopleAlive
-                if (min < 0 || max < 0) num = -num
-                val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
-
-                resultsList.add(Pair(num.toInt(), supply.displayName))
             }
         })
 
@@ -256,10 +251,36 @@ class GameScreen(val game: Game): Screen {
             }
         })
 
-        EventManager.onEvent("repair", {args ->
-            val amt = (args[0] as String).toFloat()
+        EventManager.onEvent("damageROV", {args ->
+            val min = (args[0] as String).toFloat()
+            val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
 
-            System.out.println("Repairing ROV, add logic here!") //TODO Add logic here...
+            val amt = MathUtils.random(min, max)
+
+            System.out.println("Damage ROV by $amt, add logic here!") //TODO Add logic here...
+        })
+
+        EventManager.onEvent("repairROV", {args ->
+            val min = (args[0] as String).toFloat()
+            val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
+
+            val amt = MathUtils.random(min, max)
+
+            System.out.println("Repaired ROV by $amt, add logic here!") //TODO Add logic here...
+        })
+
+        EventManager.onEvent("cutMiles", {args ->
+            val min = (args[0] as String).toFloat()
+            val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
+
+            val amt = MathUtils.random(min, max)
+
+            System.out.println("Repaired ROV by $amt, add logic here!") //TODO Add logic here...
+        })
+
+        EventManager.onEvent("openTrade", {args ->
+            gui.buildTradeWindow()
+            gui.openTradeWindow()
         })
     }
 
