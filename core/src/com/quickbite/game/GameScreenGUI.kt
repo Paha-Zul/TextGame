@@ -139,6 +139,7 @@ class GameScreenGUI(val game : GameScreen) {
                     rightTable.add(groupTable)
                 }else if(ROVTable.parent == null){
                     groupTable.remove()
+                    rightTable.debugAll()
                     buildROVTable()
                     rightTable.add(ROVTable)
                 }else{
@@ -349,7 +350,7 @@ class GameScreenGUI(val game : GameScreen) {
         rightTable.setFillParent(true)
         rightTable.top().right()
 
-        rightTable.add(groupButtonTab).right().size(130f, 40f)
+        rightTable.add(groupButtonTab).right().top().size(130f, 40f)
         rightTable.row()
     }
 
@@ -850,7 +851,7 @@ class GameScreenGUI(val game : GameScreen) {
             val exItem = exomerList[i]
             val otherItem = otherList!![i]
 
-            val exomerItemNameLabel = Label(exItem.displayName, labelStyle)
+            val exomerItemNameLabel = Label(exItem.abbrName, labelStyle)
             exomerItemNameLabel.setFontScale(0.13f)
             exomerItemNameLabel.setAlignment(Align.center)
 
@@ -863,7 +864,7 @@ class GameScreenGUI(val game : GameScreen) {
             exomerItemValueLabel.setAlignment(Align.center)
             exomerItemValueLabel.color = Color.GREEN
 
-            val nativeItemNameLabel = Label(otherItem.displayName, labelStyle)
+            val nativeItemNameLabel = Label(otherItem.abbrName, labelStyle)
             nativeItemNameLabel.setFontScale(0.13f)
             nativeItemNameLabel.setAlignment(Align.center)
 
@@ -1051,7 +1052,7 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Opens the slider for a particular trade item.
      */
-    private fun openTradeSlider(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, callback:(Int)->Unit){
+    private fun openTradeSlider(exItem: TradeManager.TradeSupply, oItem: TradeManager.TradeSupply, callback:(Int)->Unit){
         tradeSliderWindow.clear()
         tradeSliderWindow.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pixelBlack", Texture::class.java)))
         tradeSliderWindow.setSize(300f, 100f)
@@ -1147,203 +1148,6 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun closeTradeSlider() = tradeSliderWindow.remove()
-
-    fun openNumPad(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, itemIndex:Int, callback:(Int)->Unit){
-        val innerTable = Table()
-        val moreLessTable = Table()
-        val minMaxTable = Table()
-
-        val numPadButtonBackground = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numPadButton", Texture::class.java)))
-
-        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-
-        val buttonStyle = TextButton.TextButtonStyle()
-        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        buttonStyle.fontColor = Color.WHITE
-        buttonStyle.up = numPadButtonBackground
-
-        val amtLabel = Label("0", labelStyle)
-        amtLabel.setFontScale(0.15f)
-        amtLabel.setAlignment(Align.center)
-
-        val negativeButton = TextButton("(-)", buttonStyle)
-        negativeButton.label.setFontScale(0.15f)
-
-        val backButton = TextButton("<-", buttonStyle)
-        backButton.label.setFontScale(0.15f)
-
-        val zeroButton = TextButton(0.toString(), buttonStyle)
-        zeroButton.label.setFontScale(0.15f)
-
-        val okButton = TextButton("OK", buttonStyle)
-        okButton.label.setFontScale(0.15f)
-        okButton.label.color = Color.GREEN
-
-        val exitButton = TextButton("X", buttonStyle)
-        exitButton.label.setFontScale(0.15f)
-        exitButton.label.color = Color.RED
-
-        val maxButton = TextButton("max", buttonStyle)
-        maxButton.label.setFontScale(0.15f)
-
-        val minButton = TextButton("min", buttonStyle)
-        minButton.label.setFontScale(0.15f)
-
-        val moreButton = TextButton("+", buttonStyle)
-        moreButton.label.setFontScale(0.15f)
-
-        val lessButton = TextButton("-", buttonStyle)
-        lessButton.label.setFontScale(0.15f)
-
-        //Hit the negative button
-        negativeButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                var amt = amtLabel.text.toString().toInt()
-                if(amt != 0) amt = -amt
-                if(amt > 0 &&  amt >= exItem.amt) amt = exItem.amt.toInt()
-                if(amt < 0 &&  amt <= -oItem.amt) amt = -oItem.amt.toInt()
-                amtLabel.setText(amt.toString())
-            }
-        })
-
-        //When you hit the ok button.
-        okButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                callback(amtLabel.text.toString().toInt())
-                closeNumPad()
-            }
-        })
-
-        //When you hit the ok button.
-        exitButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                closeNumPad()
-            }
-        })
-
-        //This function is to be called inside the button listeners.
-        val func = {_amt:Int ->
-            var amt = _amt
-            if(amt >= 0){
-                if(amt > exItem.amt)
-                    amt = exItem.amt.toInt()
-            }else if(amt < 0){
-                var absAmt = Math.abs(amt)
-                if(absAmt > oItem.amt)
-                    absAmt = oItem.amt.toInt()
-                amt = -absAmt
-            }
-            amtLabel.setText(amt.toString())
-        }
-
-        //When you hit the ok button.
-        maxButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                func(999999999)
-            }
-        })
-
-        //When you hit the ok button.
-        minButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                func(-999999999)
-            }
-        })
-
-        //When you hit the ok button.
-        moreButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                func(amtLabel.text.toString().toInt() + 1)
-            }
-        })
-
-        //When you hit the ok button.
-        lessButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                func(amtLabel.text.toString().toInt() - 1)
-            }
-        })
-
-        moreLessTable.add(lessButton).expandX().fillX()
-        moreLessTable.add(moreButton).expandX().fillX()
-
-        //Add the more and less button table.
-        innerTable.add(moreLessTable).colspan(3).expandX().fillX()
-        innerTable.row()
-
-        //Add the negative button, amt label, and back button.
-        innerTable.add(negativeButton).size(50f)
-        innerTable.add(amtLabel).size(50f)
-        innerTable.add(backButton).size(50f)
-        innerTable.row()
-
-        //For 9 buttons (1 - 9)
-        for(i in 1..9){
-            val button = TextButton(i.toString(), buttonStyle)
-            button.label.setFontScale(0.15f)
-
-            button.addListener(object:ChangeListener(){
-                override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    var amt = (amtLabel.text.toString() + button.text.toString()).toInt()
-                    func(amt)
-                }
-            })
-
-            innerTable.add(button).size(50f)
-            if(i%3 == 0) {
-                innerTable.row()
-            }
-        }
-
-        zeroButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                var amt = (amtLabel.text.toString() + zeroButton.text.toString()).toInt()
-                func(amt)
-            }
-        })
-
-        backButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                var string = amtLabel.text.toString()
-                if(string.length <= 1)
-                    string = "0"
-                else{
-                    string = string.substring(0, string.length-1)
-                    if(string.equals("-"))
-                        string = "0"
-                }
-
-                amtLabel.setText(string)
-            }
-        })
-
-        minMaxTable.add(minButton).fillX().expandX()
-        minMaxTable.add(maxButton).fillX().expandX()
-
-        //Add the okButton, zeroButton, and back button.
-        innerTable.add(exitButton).size(50f)
-        innerTable.add(zeroButton).size(50f)
-        innerTable.add(okButton).size(50f)
-        innerTable.row()
-        innerTable.add(minMaxTable).colspan(3).expandX().fillX()
-
-//        innerTable.debugAll()
-//        numPadTable.debugAll()
-
-        val container = Container<Table>(innerTable)
-        container.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numpadBackground", Texture::class.java)))
-        container.pad(10f, 10f, 10f, 10f)
-
-        numPadTable.setPosition(TextGame.viewport.screenWidth/2f, TextGame.viewport.screenHeight/2f)
-        numPadTable.clear()
-        numPadTable.add(container)
-
-//        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("numpadBackground", Texture::class.java)))
-
-        TextGame.stage.addActor(numPadTable)
-    }
-
-    fun closeNumPad() = numPadTable.remove()
 
     private object EventInfo{
         val eventTable:Table = Table()

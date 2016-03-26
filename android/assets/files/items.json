@@ -1,12 +1,12 @@
 [
-  {"name": "energy", "displayName":"Energy", "max":200, "worth": [1, 5], "randStartAmt": [50, 150]},
-  {"name": "edibles", "displayName":"Edibles", "max":200, "perMember": true, "worth": [1, 5], "randStartAmt": [75, 225]},
-  {"name": "parts", "displayName":"Parts", "max":250, "worth": [1, 5], "randStartAmt": [50, 150]},
-  {"name": "medkits", "displayName":"Med-kits", "max":10, "worth": [1, 5], "randStartAmt": [0, 5]},
-  {"name": "wealth", "displayName":"Wealth", "max":250, "worth": [1, 5], "randStartAmt": [1, 100]},
-  {"name": "ammo", "displayName":"Ammo", "max":250, "worth": [1, 5], "randStartAmt": [50, 150]},
-  {"name": "panel", "displayName":"Sol. Pan.", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
-  {"name": "track", "displayName":"Tracks", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
-  {"name": "battery", "displayName":"Batt.", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
-  {"name": "storage", "displayName":"Storage", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]}
+  {"name": "energy", "abbrName": "Energy", "displayName":"Energy", "max":200, "worth": [1, 5], "randStartAmt": [50, 150]},
+  {"name": "edibles", "abbrName": "Edibles","displayName":"Edibles", "max":200, "perMember": true, "worth": [1, 5], "randStartAmt": [75, 225]},
+  {"name": "parts", "abbrName": "Parts","displayName":"Parts", "max":250, "worth": [1, 5], "randStartAmt": [50, 150]},
+  {"name": "medkits", "abbrName": "Med-kits", "displayName":"Med-kits", "max":10, "worth": [1, 5], "randStartAmt": [0, 5]},
+  {"name": "wealth", "abbrName": "Wealth", "displayName":"Wealth", "max":250, "worth": [1, 5], "randStartAmt": [1, 100]},
+  {"name": "ammo", "abbrName": "Ammo", "displayName":"Ammo", "max":250, "worth": [1, 5], "randStartAmt": [50, 150]},
+  {"name": "panel", "abbrName": "Sol. Pan.", "displayName":"Solar Panels", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
+  {"name": "track", "abbrName": "Tracks", "displayName":"Tracks", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
+  {"name": "battery", "abbrName": "Batt.", "displayName":"Battery", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
+  {"name": "storage", "abbrName": "Storage", "displayName":"Storage", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]}
 ]

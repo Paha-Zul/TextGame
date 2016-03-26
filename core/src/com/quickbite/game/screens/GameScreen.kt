@@ -205,13 +205,13 @@ class GameScreen(val game: Game): Screen {
         })
 
         EventManager.onEvent("addRndAmt", {args ->
-            val min:Int = (args[0] as String).toInt()
-            val max:Int = (args[1] as String).toInt()
+            val min:Float = (args[0] as String).toFloat()
+            val max:Float = (args[1] as String).toFloat()
             val supplyName:String = args[2] as String
             val perPerson = if(args.count() >= 4) (args[3] as String).toBoolean() else false
 
             var chance = 100f
-            if(args.count() > 4)
+            if(args.count() >= 5)
                 chance = (args[4] as String).toFloat()
 
             if(MathUtils.random(100) <= chance) {
@@ -221,7 +221,7 @@ class GameScreen(val game: Game): Screen {
 
                 val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
 
-                resultsList.add(Pair(num, supply.displayName))
+                resultsList.add(Pair(num.toInt(), supply.displayName))
             }
         })
 

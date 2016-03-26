@@ -97,6 +97,7 @@ object DataManager{
 
     class ItemJson{
         var name:String = ""
+        var abbrName:String = ""
         var displayName:String = ""
         var max:Int = 0
         var worth:Array<Int>? = null

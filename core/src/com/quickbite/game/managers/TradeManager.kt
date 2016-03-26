@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.game.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.game.managers.DataManager
@@ -23,12 +23,12 @@ object TradeManager {
         otherList = mutableListOf()
         for(item in list){
             val currAmt = SupplyManager.getSupply(item.name).amt.toFloat()
-            exomerList!!.add(TradeSupply(item.name, item.displayName, currAmt, currAmt, MathUtils.random(item.worth!![0], item.worth!![1])))
+            exomerList!!.add(TradeSupply(item.name, item.abbrName, item.displayName, currAmt, currAmt, MathUtils.random(item.worth!![0], item.worth!![1])))
 
             val rndAmt = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()
-            otherList!!.add(TradeSupply(item.name, item.displayName, rndAmt, rndAmt, MathUtils.random(item.worth!![0], item.worth!![1])))
+            otherList!!.add(TradeSupply(item.name, item.abbrName, item.displayName, rndAmt, rndAmt, MathUtils.random(item.worth!![0], item.worth!![1])))
         }
     }
 
-    class TradeSupply(val name:String, val displayName:String, val amt:Float, var currAmt:Float, val worth:Int)
+    class TradeSupply(val name:String, val abbrName:String, val displayName:String, val amt:Float, var currAmt:Float, val worth:Int)
 }

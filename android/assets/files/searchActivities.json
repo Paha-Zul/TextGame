@@ -3,37 +3,37 @@
     "name": "rest", "buttonTitle": "Rest", "action": ["rest", "8.3"]
   },
   {
-    "name": "repair", "buttonTitle": "Repair ROV", "action": ["repair", "8.3"]
+    "name": "repair", "buttonTitle": "Repair ROV", "action": ["repairROV", "8.3"]
   },
   {
-    "name": "recharge", "buttonTitle": "Recharge Batteries", "action": ["addRndAmt", "evtPerson", "8", "8", "energy", "100"]
+    "name": "recharge", "buttonTitle": "Recharge Batteries", "action": ["addRndAmt", "8", "8", "energy", "false", "100"]
   },
   {
-    "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": ["addRndAmtGroup", "evtPerson", "2.5", "10", "edibles", "50"]
+    "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": ["addRndAmt", "2.5", "10", "edibles", "true", "50"]
   },
   {
-    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": ["addRndAmt", "evtPerson", "1", "1", "medkits", "5"]
+    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": ["addRndAmt", "1", "1", "medkits", "false", "5"]
   },
   {
-    "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": ["addRndAmt", "evtPerson", "1", "50", "wealth", "25"]
+    "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": ["addRndAmt", "1", "50", "wealth", "false", "25"]
   },
   {
-    "name": "searchAmmo", "buttonTitle": "Search For Ammo", "action": ["addRndAmt", "evtPerson", "1", "50", "ammo", "25"]
+    "name": "searchAmmo", "buttonTitle": "Search For Ammo", "action": ["addRndAmt", "1", "50", "ammo", "false", "25"]
   },
   {
-    "name": "searchParts", "buttonTitle": "Search For Parts", "action": ["addRndAmt", "evtPerson", "1", "50", "parts", "25"]
+    "name": "searchParts", "buttonTitle": "Search For Parts", "action": ["addRndAmt", "1", "50", "parts", "false", "25"]
   },
   {
-    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "evtPerson", "1", "1", "solar panels", "1"]
+    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "1", "1", "solar panels", "false", "1"]
   },
   {
-    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "evtPerson", "1", "1", "tracks", "1"]
+    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "1", "1", "tracks", "false", "1"]
   },
   {
-    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "evtPerson", "1", "1", "batteries", "1"]
+    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "1", "1", "batteries", "false", "1"]
   },
   {
-    "name": "searchStorage", "buttonTitle": "Search For Storage", "action": ["addRndAmt", "evtPerson", "1", "1", "storage", "1"]
+    "name": "searchStorage", "buttonTitle": "Search For Storage", "action": ["addRndAmt", "1", "1", "storage", "false", "1"]
   }
 
 ]

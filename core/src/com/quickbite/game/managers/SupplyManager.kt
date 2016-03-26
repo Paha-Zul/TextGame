@@ -17,7 +17,7 @@ object SupplyManager {
             if(item.perMember) randStart*GroupManager.numPeopleAlive
             val maxAmount = if(item.perMember) item.max*GroupManager.numPeopleAlive else item.max
 
-            addNewSupply(item.name, item.displayName, randStart, maxAmount)
+            addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
         }
 
 //        addNewSupply("energy", "Energy", MathUtils.random(50, 150).toFloat(), 200)
@@ -35,8 +35,8 @@ object SupplyManager {
         supplyMap["parts"]?.consumePerDay = 3.3f
     }
 
-    fun addNewSupply(name:String, displayName:String, amt:Float, maxAmount:Int){
-        supplyMap.put(name, Supply(name, displayName, amt, maxAmount))
+    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int){
+        supplyMap.put(name, Supply(name, abbrName, displayName, amt, maxAmount))
     }
 
     fun addToSupply(name:String, amt:Float):Supply{
@@ -72,7 +72,7 @@ object SupplyManager {
 
     fun getSupply(name:String):Supply = supplyMap[name]!!
 
-    class Supply(val name:String, val displayName:String, var amt:Float, var maxAmount:Int){
+    class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int){
         var consumePerDay:Float = 0f
 
         operator fun component1() = displayName
