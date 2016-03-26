@@ -1,8 +1,8 @@
-package com.quickbite.game.screens
+package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Screen
-import com.quickbite.game.GameIntroGUI
-import com.quickbite.game.TextGame
+import com.quickbite.rx2020.GameIntroGUI
+import com.quickbite.rx2020.TextGame
 
 /**
  * Created by Paha on 2/10/2016.

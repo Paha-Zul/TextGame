@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.rx2020
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -12,8 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import com.quickbite.game.managers.SupplyManager
-import com.quickbite.game.screens.GameIntroScreen
+import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.screens.GameIntroScreen
 import java.io.BufferedReader
 
 /**

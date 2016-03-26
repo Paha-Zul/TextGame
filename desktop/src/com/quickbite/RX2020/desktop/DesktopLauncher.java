@@ -1,8 +1,8 @@
-package com.quickbite.game.desktop;
+package com.quickbite.rx2020.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.quickbite.game.TextGame;
+import com.quickbite.rx2020.TextGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

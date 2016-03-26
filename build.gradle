@@ -20,7 +20,7 @@ allprojects {
 
     version = '1.0'
     ext {
-        appName = "TextGame"
+        appName = "RX-2020"
         gdxVersion = '1.8.0'
         roboVMVersion = '1.12.0'
         box2DLightsVersion = '1.4'
@@ -44,9 +44,10 @@ project(":desktop") {
         compile project(":core")
 //        compile files('../libs/gdx-backend-jglfw.jar')
 //        compile files('../libs/gdx-tools.jar')
+        compile files('../libs/gdx.jar')
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+//        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }
@@ -84,7 +85,6 @@ project(":html") {
     apply plugin: "gwt"
     apply plugin: "war"
 
-
     dependencies {
         compile project(":core")
         compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
@@ -103,11 +103,11 @@ project(":core") {
     apply plugin: 'kotlin'
 
     dependencies {
-//        compile files('../libs/gdx.jar')
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile files('../libs/gdx.jar')
+//        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.kotcrab.vis:vis-ui:0.9.4"
         compile "com.kotcrab.vis:vis-runtime:0.3.0"
-        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
+//        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }

@@ -1,4 +1,4 @@
-package com.quickbite.game.screens
+package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.game.*
-import com.quickbite.game.managers.*
+import com.quickbite.rx2020.*
+import com.quickbite.rx2020.managers.*
 import java.util.*
 
 /**

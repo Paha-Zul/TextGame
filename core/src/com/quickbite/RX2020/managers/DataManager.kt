@@ -1,4 +1,4 @@
-package com.quickbite.game.managers
+package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
@@ -188,10 +188,16 @@ object DataManager{
 
     class SearchActivityJSON(){
         var name:String = "def"
+        var description:String = "def"
         var buttonTitle:String = "fixme"
         var action:Array<String>? = null
 
         companion object{
+            /**
+             * Returns a search activity that has a name
+             * @param name The name of the search activity
+             * @return The search activity found, or null if not found.
+             */
             fun getSearchActivity(name:String): SearchActivityJSON? = searchActivities[name]
         }
     }

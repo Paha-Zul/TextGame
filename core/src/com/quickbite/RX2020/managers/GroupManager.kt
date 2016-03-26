@@ -1,7 +1,7 @@
-package com.quickbite.game.managers
+package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.game.Person
+import com.quickbite.rx2020.Person
 
 /**
  * Created by Paha on 2/8/2016.

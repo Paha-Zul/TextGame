@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.rx2020
 
 import com.badlogic.gdx.InputProcessor
 import java.util.*

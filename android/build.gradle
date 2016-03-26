@@ -15,7 +15,7 @@ android {
         instrumentTest.setRoot('tests')
     }
     defaultConfig {
-        applicationId "com.quickbite.game"
+        applicationId "com.quickbite.rx2020"
         minSdkVersion 8
         targetSdkVersion 23
     }

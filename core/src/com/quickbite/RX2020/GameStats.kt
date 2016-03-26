@@ -1,8 +1,8 @@
-package com.quickbite.game
+package com.quickbite.rx2020
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.game.managers.SupplyManager
-import com.quickbite.game.screens.GameScreen
+import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.screens.GameScreen
 
 /**
  * Created by Paha on 2/8/2016.

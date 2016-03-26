@@ -1,4 +1,4 @@
-package com.quickbite.game.managers
+package com.quickbite.rx2020.managers
 
 /**
  * Created by Paha on 3/25/2016.

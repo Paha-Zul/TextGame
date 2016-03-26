@@ -1,4 +1,4 @@
-package com.quickbite.game.managers
+package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
@@ -20,19 +20,9 @@ object SupplyManager {
             addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
         }
 
-//        addNewSupply("energy", "Energy", MathUtils.random(50, 150).toFloat(), 200)
-//        addNewSupply("edibles", "Edibles", (MathUtils.random(75, 225)*GroupManager.numPeopleAlive).toFloat(), 250*GroupManager.numPeopleAlive) //Initially set the food
-//        addNewSupply("parts", "Parts", MathUtils.random(50, 150).toFloat(), 250)
-//        addNewSupply("medkits", "Med-kits", MathUtils.random(0, 5).toFloat(), 10)
-//        addNewSupply("wealth", "Wealth", MathUtils.random(1, 100).toFloat(), 250)
-//        addNewSupply("ammo", "Ammo", MathUtils.random(50, 150).toFloat(), 250)
-//        addNewSupply("solar panels", "Solar Panels", MathUtils.random(0, 2).toFloat(), 5)
-//        addNewSupply("tracks", "Tracks", MathUtils.random(0, 2).toFloat(), 5)
-//        addNewSupply("battery", "Battery", MathUtils.random(0, 2).toFloat(), 5)
-//        addNewSupply("storage", "Storage", MathUtils.random(0, 2).toFloat(), 5)
-
         supplyMap["edibles"]?.consumePerDay = 5f
         supplyMap["parts"]?.consumePerDay = 3.3f
+        supplyMap["energy"]?.consumePerDay = 3.3f
     }
 
     fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int){

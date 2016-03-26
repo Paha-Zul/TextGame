@@ -1,13 +1,13 @@
-package com.quickbite.game.screens
+package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.quickbite.game.ChainTask
-import com.quickbite.game.GH
-import com.quickbite.game.TextGame
-import com.quickbite.game.managers.DataManager
+import com.quickbite.rx2020.ChainTask
+import com.quickbite.rx2020.GH
+import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.managers.DataManager
 
 /**
  * Created by Paha on 2/27/2016.

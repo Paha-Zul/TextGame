@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.rx2020
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Sprite

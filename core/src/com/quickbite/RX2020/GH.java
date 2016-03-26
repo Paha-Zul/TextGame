@@ -1,4 +1,4 @@
-package com.quickbite.game;
+package com.quickbite.rx2020;
 
 /**
  * Created by Paha on 1/24/2016.

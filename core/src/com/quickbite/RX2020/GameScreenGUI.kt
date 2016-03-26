@@ -1,4 +1,4 @@
-package com.quickbite.game
+package com.quickbite.rx2020
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
@@ -17,8 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.quickbite.game.managers.*
-import com.quickbite.game.screens.GameScreen
+import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.screens.GameScreen
 
 /**
  * Created by Paha on 2/5/2016.
@@ -134,14 +134,17 @@ class GameScreenGUI(val game : GameScreen) {
         groupButtonTab.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
+                rightTable.debugAll()
+
                 if(ROVTable.parent == null && groupTable.parent == null) {
                     buildGroupTable()
                     rightTable.add(groupTable)
                 }else if(ROVTable.parent == null){
                     groupTable.remove()
-                    rightTable.debugAll()
                     buildROVTable()
                     rightTable.add(ROVTable)
+
+                    //TODO This is freaking broken.
                 }else{
                     ROVTable.remove()
                     groupTable.remove()
@@ -168,7 +171,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         activityHourSlider.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                activityHourLabel.setText(activityHourSlider.value.toInt().toString() + " hours")
+                activityHourLabel.setText(activityHourSlider.value.toInt().toString())
             }
         })
 
@@ -683,38 +686,64 @@ class GameScreenGUI(val game : GameScreen) {
         campTable.remove()
         campTable.setFillParent(true)
 
-        val slider = TextureRegionDrawable(TextureRegion(TextGame.manager.get("slider", Texture::class.java)))
-        val knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnob", Texture::class.java)))
+        val slider = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderLight", Texture::class.java)))
+        val knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnobWhite", Texture::class.java)))
 
         val sliderStyle:Slider.SliderStyle = Slider.SliderStyle(slider, knob)
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.up = TextureRegionDrawable(TextureRegion(TextGame.manager.get("buttonBackground", Texture::class.java)))
 
-        activityHourLabel = Label("0 hours", labelStyle)
+        val campLabel = Label("Camp", labelStyle)
+        campLabel.setFontScale((normalFontScale))
+        campLabel.setAlignment(Align.center)
+
+        val descLabel = Label("^ Choose one above ^", labelStyle)
+        descLabel.setFontScale((normalFontScale))
+        descLabel.setAlignment(Align.center)
+        descLabel.setWrap(true)
+
+        activityHourLabel = Label("0", labelStyle)
         activityHourLabel.setFontScale(normalFontScale)
+
+        val hourLabel = Label("Hours", labelStyle)
+        hourLabel.setFontScale((normalFontScale))
+        hourLabel.setAlignment(Align.center)
 
         activityHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
 
-        activityButton = TextButton("Activity!", buttonStyle)
-        activityButton.label.setFontScale(buttonFontScale)
+        activityButton = TextButton("Accept!", buttonStyle)
+        activityButton.label.setFontScale(0.15f)
 
         val innerTable:Table = Table()
-        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
 
-        innerTable.add(buildDropdownList()).width(300f).height(25f)
+        val func = {searchAct:DataManager.SearchActivityJSON ->
+            descLabel.setText(searchAct.description)
+        }
+
+        innerTable.add(campLabel).fillX().padTop(15f).height(42f)
+        innerTable.row().spaceTop(25f)
+        innerTable.add(buildDropdownList(func)).width(300f).height(25f)
         innerTable.row().padTop(20f)
+        innerTable.add(descLabel).width(300f)
+        innerTable.row().padTop(20f)
+        innerTable.add(hourLabel)
+        innerTable.row()
         innerTable.add(activityHourLabel)
         innerTable.row()
         innerTable.add(activityHourSlider).width(150f).height(25f)
         innerTable.row()
-        innerTable.add(activityButton).width(100f).height(25f)
+        innerTable.add(activityButton).width(85f).height(37.5f).bottom().fill().expand().padBottom(60f)
 
-        campTable.add(innerTable)
+        innerTable.top()
+//        innerTable.debugAll()
+        campTable.add(innerTable).top()
     }
 
-    private fun buildDropdownList():Actor{
+    private fun buildDropdownList(func: (DataManager.SearchActivityJSON) -> Unit):Actor{
         val newFont = BitmapFont(Gdx.files.internal("fonts/spaceFont2.fnt"))
         newFont.data.setScale(normalFontScale)
 
@@ -722,6 +751,9 @@ class GameScreenGUI(val game : GameScreen) {
         labelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val scrollStyle:ScrollPane.ScrollPaneStyle = ScrollPane.ScrollPaneStyle()
+
+        val initialLabel = Label("Select one", labelStyle)
+        initialLabel.setFontScale(0.13f)
 
         val listStyle:com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle = com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle()
         listStyle.font = newFont
@@ -731,7 +763,7 @@ class GameScreenGUI(val game : GameScreen) {
         listStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
 
         val selectBoxStyle:SelectBox.SelectBoxStyle = SelectBox.SelectBoxStyle()
-        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("dropdownBackground", Texture::class.java)))
         selectBoxStyle.listStyle = listStyle
         selectBoxStyle.scrollStyle = scrollStyle
         selectBoxStyle.font = newFont
@@ -748,9 +780,16 @@ class GameScreenGUI(val game : GameScreen) {
         }
 
         selectBox.items = list
+        selectBox.selected = initialLabel
 
-//        selectBox.setSelectedAlignment(Align.center)
-//        selectBox.setListAlignment(Align.center)
+        selectBox.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                func(DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())!!)
+            }
+        })
+
+        selectBox.setSelectedAlignment(Align.center)
+        selectBox.setListAlignment(Align.center)
         return selectBox
     }
 
@@ -1096,6 +1135,14 @@ class GameScreenGUI(val game : GameScreen) {
         acceptButton.label.setFontScale(0.15f)
         acceptButton.label.setAlignment(Align.center)
 
+        val cancelButton = TextButton("Cancel", buttonStyle)
+        cancelButton.label.setFontScale(0.15f)
+        cancelButton.label.setAlignment(Align.center)
+
+        val buttonTable = Table()
+        buttonTable.add(acceptButton).spaceRight(20f)
+        buttonTable.add(cancelButton)
+
         tradeSliderWindow.add(lessButton)
         tradeSliderWindow.add(currLabel)
         tradeSliderWindow.add(moreButton)
@@ -1108,7 +1155,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         tradeSliderWindow.row()
 
-        tradeSliderWindow.add(acceptButton).colspan(3)
+        tradeSliderWindow.add(buttonTable).colspan(3).spaceBottom(10f)
 
 //        tradeSlider.addListener(object:ClickListener(){
 //            override fun clicked(event: InputEvent?, x: Float, y: Float) {
@@ -1139,6 +1186,13 @@ class GameScreenGUI(val game : GameScreen) {
 
         acceptButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                closeTradeSlider()
+            }
+        })
+
+        cancelButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                callback(0)
                 closeTradeSlider()
             }
         })

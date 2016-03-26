@@ -1,4 +1,4 @@
-package com.quickbite.game;
+package com.quickbite.rx2020;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.quickbite.game.managers.EasyAssetManager;
-import com.quickbite.game.screens.LoadingScreen;
+import com.quickbite.rx2020.managers.EasyAssetManager;
+import com.quickbite.rx2020.screens.LoadingScreen;
 
 public class TextGame extends com.badlogic.gdx.Game {
     public static OrthographicCamera camera;

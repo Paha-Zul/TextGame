@@ -1,6 +1,6 @@
-package com.quickbite.game
+package com.quickbite.rx2020
 
-import com.quickbite.game.managers.GroupManager
+import com.quickbite.rx2020.managers.GroupManager
 
 /**
  * Created by Paha on 2/8/2016.

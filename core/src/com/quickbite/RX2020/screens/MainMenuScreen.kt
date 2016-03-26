@@ -1,4 +1,4 @@
-package com.quickbite.game.screens
+package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.quickbite.game.TextGame
-import com.quickbite.game.managers.DataManager
+import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.managers.DataManager
 
 /**
  * Created by Paha on 2/3/2016.

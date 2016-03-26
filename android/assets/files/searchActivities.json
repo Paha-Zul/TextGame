@@ -1,39 +1,39 @@
 [
   {
-    "name": "rest", "buttonTitle": "Rest", "action": ["rest", "8.3"]
+    "name": "rest", "buttonTitle": "Rest", "action": ["rest", "8.3"], "description": "Regain 8.3 per person HP per hour"
   },
   {
-    "name": "repair", "buttonTitle": "Repair ROV", "action": ["repairROV", "8.3"]
+    "name": "repair", "buttonTitle": "Repair ROV", "action": ["repairROV", "8.3"], "description": "Regain 8.3 ROV health per hour"
   },
   {
-    "name": "recharge", "buttonTitle": "Recharge Batteries", "action": ["addRndAmt", "8", "8", "energy", "false", "100"]
+    "name": "recharge", "buttonTitle": "Recharge Batteries", "action": ["addRndAmt", "8", "8", "energy", "false", "100"], "description": "Regain 8.3 energy per hour"
   },
   {
-    "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": ["addRndAmt", "2.5", "10", "edibles", "true", "50"]
+    "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": ["addRndAmt", "2.5", "10", "edibles", "true", "50"], "description": "5% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": ["addRndAmt", "1", "1", "medkits", "false", "5"]
+    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": ["addRndAmt", "1", "1", "medkits", "false", "5"], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": ["addRndAmt", "1", "50", "wealth", "false", "25"]
+    "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": ["addRndAmt", "1", "50", "wealth", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchAmmo", "buttonTitle": "Search For Ammo", "action": ["addRndAmt", "1", "50", "ammo", "false", "25"]
+    "name": "searchAmmo", "buttonTitle": "Search For Ammo", "action": ["addRndAmt", "1", "50", "ammo", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchParts", "buttonTitle": "Search For Parts", "action": ["addRndAmt", "1", "50", "parts", "false", "25"]
+    "name": "searchParts", "buttonTitle": "Search For Parts", "action": ["addRndAmt", "1", "50", "parts", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "1", "1", "solar panels", "false", "1"]
+    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "1", "1", "solar panels", "false", "1"], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "1", "1", "tracks", "false", "1"]
+    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "1", "1", "tracks", "false", "1"], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "1", "1", "batteries", "false", "1"]
+    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "1", "1", "batteries", "false", "1"], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchStorage", "buttonTitle": "Search For Storage", "action": ["addRndAmt", "1", "1", "storage", "false", "1"]
+    "name": "searchStorage", "buttonTitle": "Search For Storage", "action": ["addRndAmt", "1", "1", "storage", "false", "1"], "description": "1% chance to find 1 per hour"
   }
 
 ]

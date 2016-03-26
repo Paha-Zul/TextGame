@@ -1,4 +1,4 @@
-package com.quickbite.game.managers
+package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.Gdx
 import java.util.*
