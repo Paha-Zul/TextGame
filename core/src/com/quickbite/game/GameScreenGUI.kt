@@ -17,10 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.quickbite.game.managers.DataManager
-import com.quickbite.game.managers.EventManager
-import com.quickbite.game.managers.GroupManager
-import com.quickbite.game.managers.SupplyManager
+import com.quickbite.game.managers.*
 import com.quickbite.game.screens.GameScreen
 
 /**
@@ -56,6 +53,8 @@ class GameScreenGUI(val game : GameScreen) {
     /* GUI elements for people */
     private val groupTable:Table = Table() //For the group
     private val supplyTable:Table = Table() //For the supplies
+
+    private val ROVTable:Table = Table()
 
     /* Gui elements for events */
 
@@ -135,10 +134,15 @@ class GameScreenGUI(val game : GameScreen) {
         groupButtonTab.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
-                if(groupTable.parent == null) {
+                if(ROVTable.parent == null && groupTable.parent == null) {
                     buildGroupTable()
                     rightTable.add(groupTable)
+                }else if(ROVTable.parent == null){
+                    groupTable.remove()
+                    buildROVTable()
+                    rightTable.add(ROVTable)
                 }else{
+                    ROVTable.remove()
                     groupTable.remove()
                 }
             }
@@ -326,6 +330,9 @@ class GameScreenGUI(val game : GameScreen) {
 
     }
 
+    /**
+     * Builds the right table of the main screen which includes the "Exomer" button and backgrounds.
+     */
     fun buildRightTable(){
         rightTable.clear()
 
@@ -344,7 +351,6 @@ class GameScreenGUI(val game : GameScreen) {
 
         rightTable.add(groupButtonTab).right().size(130f, 40f)
         rightTable.row()
-
     }
 
     /**
@@ -371,6 +377,69 @@ class GameScreenGUI(val game : GameScreen) {
             groupTable.add(healthLabel).right()
             groupTable.row()
         }
+    }
+
+    /**
+     * Builds the group table layout.
+     */
+    fun buildROVTable(){
+        ROVTable.clear()
+
+        ROVTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        ROVTable.padRight(10f)
+
+        val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        val ROVNameLabel = Label("ROV", labelStyle)
+        ROVNameLabel.setFontScale(normalFontScale)
+
+        val ROVHealthLabel:Label = Label(""+ROVManager.ROVHealth, labelStyle)
+        ROVHealthLabel.setFontScale(normalFontScale)
+
+        val batteryNameLabel = Label("Battery", labelStyle)
+        batteryNameLabel.setFontScale(normalFontScale)
+
+        val batteryHealthLabel:Label = Label(""+ROVManager.batteryHealth, labelStyle)
+        batteryHealthLabel.setFontScale(normalFontScale)
+
+        val storageNameLabel = Label("Storage", labelStyle)
+        storageNameLabel.setFontScale(normalFontScale)
+
+        val storageHealthLabel:Label = Label(""+ROVManager.storageHealth, labelStyle)
+        storageHealthLabel.setFontScale(normalFontScale)
+
+        val panelNameLabel = Label("Solar Panel", labelStyle)
+        panelNameLabel.setFontScale(normalFontScale)
+
+        val panelHealthLabel:Label = Label(""+ROVManager.solarPanelHealth, labelStyle)
+        panelHealthLabel.setFontScale(normalFontScale)
+
+        val trackNameLabel = Label("Tracks", labelStyle)
+        trackNameLabel.setFontScale(normalFontScale)
+
+        val trackHealthLabel:Label = Label(""+ROVManager.trackHealth, labelStyle)
+        trackHealthLabel.setFontScale(normalFontScale)
+
+        ROVTable.add(ROVNameLabel).right()
+        ROVTable.row()
+        ROVTable.add(ROVHealthLabel).right()
+        ROVTable.row()
+        ROVTable.add(batteryNameLabel).right()
+        ROVTable.row()
+        ROVTable.add(batteryHealthLabel).right()
+        ROVTable.row()
+        ROVTable.add(storageNameLabel).right()
+        ROVTable.row()
+        ROVTable.add(storageHealthLabel).right()
+        ROVTable.row()
+        ROVTable.add(panelNameLabel).right()
+        ROVTable.row()
+        ROVTable.add(panelHealthLabel).right()
+        ROVTable.row()
+        ROVTable.add(trackNameLabel).right()
+        ROVTable.row()
+        ROVTable.add(trackHealthLabel).right()
+        ROVTable.row()
     }
 
     /**
@@ -688,6 +757,9 @@ class GameScreenGUI(val game : GameScreen) {
         TextGame.stage.addActor(campTable)
     }
 
+    /**
+     * Makes the trade window. Needs to be called before openTradeWindow()
+     */
     fun buildTradeWindow(){
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow2", Texture::class.java)))
         tradeWindowTable.setSize(450f, 400f)
@@ -966,11 +1038,20 @@ class GameScreenGUI(val game : GameScreen) {
 //        mainTradeWindowTable.setFillParent(true)
     }
 
+    /**
+     * Opens the trade window. buildTradeWindow() needs to be called before.
+     */
     fun openTradeWindow() = TextGame.stage.addActor(tradeWindowTable)
 
+    /**
+     * Closes the trade window.
+     */
     fun closeTradeWindow() = tradeWindowTable.remove()
 
-    fun openTradeSlider(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, callback:(Int)->Unit){
+    /**
+     * Opens the slider for a particular trade item.
+     */
+    private fun openTradeSlider(exItem:TradeManager.TradeSupply, oItem:TradeManager.TradeSupply, callback:(Int)->Unit){
         tradeSliderWindow.clear()
         tradeSliderWindow.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pixelBlack", Texture::class.java)))
         tradeSliderWindow.setSize(300f, 100f)

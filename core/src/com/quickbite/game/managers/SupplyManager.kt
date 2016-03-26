@@ -1,5 +1,6 @@
 package com.quickbite.game.managers
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
 import java.util.*
 
@@ -39,9 +40,10 @@ object SupplyManager {
     }
 
     fun addToSupply(name:String, amt:Float):Supply{
-        val supply = supplyMap[name]!!
-        supply.amt += amt
-        return supply
+        val supply = supplyMap[name]
+        if(supply == null) Gdx.app.error("SupplyManager", "Trying to add to supply $name which doesn't exist.")
+        else supply.amt += amt
+        return supply!!
     }
 
     fun setSupply(name:String, amt:Float):Supply{

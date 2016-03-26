@@ -7,7 +7,7 @@ import com.quickbite.game.managers.DataManager
  * Created by Paha on 2/6/2016.
  */
 object Tester {
-    fun testEvents(rootEventName:String, numTests:Int){
+    fun testEvents(numTests:Int){
         System.out.println("---------------------")
 
         for(i in 0.rangeTo(numTests)){

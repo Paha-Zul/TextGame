@@ -34,8 +34,17 @@ object GameStats {
     object TravelInfo{
         //Need total distance of the game, distance traveled, distance to go, mph traveling
         var totalDistOfGame:Int = MathUtils.random(36000, 108000)
+            get
+            private set
+
         var totalDistTraveled:Int = 0
+            get
+            set
+
         var currMPH:Int = 10
+            get
+            set
+
         var totalDistToGo:Int = 0
             get() = totalDistOfGame - totalDistTraveled
     }

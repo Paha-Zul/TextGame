@@ -9,12 +9,8 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.utils.Array
 import com.quickbite.game.*
-import com.quickbite.game.managers.DataManager
-import com.quickbite.game.managers.EventManager
-import com.quickbite.game.managers.GroupManager
-import com.quickbite.game.managers.SupplyManager
+import com.quickbite.game.managers.*
 import java.util.*
 
 /**
@@ -38,7 +34,7 @@ class GameScreen(val game: Game): Screen {
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
 
-    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(15,30).toFloat())
+    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(15, 30).toFloat())
 
     private var paused = false
 
@@ -128,7 +124,7 @@ class GameScreen(val game: Game): Screen {
                             gui.closeEvent()
                         }
                         currEvent = DataManager.EventJson.getRandomRoot()
-                        eventCustomTimerTest.restart(MathUtils.random(15,30).toFloat())
+                        eventCustomTimerTest.restart(MathUtils.random(15, 30).toFloat())
                     }
                 })
             }
@@ -164,9 +160,9 @@ class GameScreen(val game: Game): Screen {
                 list.forEach { person ->
                     var res = 0
                     if(perc)
-                        res = person.addPercentHealth(-amt.toFloat()).toInt()
+                        res = person.addPercentHealth(-(amt.toFloat())).toInt()
                     else
-                        res = person.addHealth(-amt.toFloat()).toInt()
+                        res = person.addHealth(-(amt.toFloat())).toInt()
                     resultsList.add(Pair(res, person.firstName + "'s HP"))}
 
                 //If we are doing it to multiple people...
@@ -178,9 +174,9 @@ class GameScreen(val game: Game): Screen {
                 var amt = MathUtils.random(min, max)
                 val person = GroupManager.getPerson(name)!!
                 if(perc)
-                    amt = person.addPercentHealth(-amt.toFloat()).toInt()
+                    amt = person.addPercentHealth(-(amt.toFloat())).toInt()
                 else
-                    amt = person.addHealth(-amt.toFloat()).toInt()
+                    amt = person.addHealth(-(amt.toFloat())).toInt()
 
                 resultsList.add(Pair(amt, person.firstName + "'s HP"))
             }
@@ -257,7 +253,7 @@ class GameScreen(val game: Game): Screen {
 
             val amt = MathUtils.random(min, max)
 
-            System.out.println("Damage ROV by $amt, add logic here!") //TODO Add logic here...
+            ROVManager.addHealthROV(-amt)
         })
 
         EventManager.onEvent("repairROV", {args ->
@@ -266,16 +262,16 @@ class GameScreen(val game: Game): Screen {
 
             val amt = MathUtils.random(min, max)
 
-            System.out.println("Repaired ROV by $amt, add logic here!") //TODO Add logic here...
+            ROVManager.addHealthROV(amt)
         })
 
         EventManager.onEvent("cutMiles", {args ->
-            val min = (args[0] as String).toFloat()
-            val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
+            val min = (args[0] as String).toInt()
+            val max = if(args.count() >= 2) (args[1] as String).toInt() else min
 
             val amt = MathUtils.random(min, max)
 
-            System.out.println("Repaired ROV by $amt, add logic here!") //TODO Add logic here...
+            GameStats.TravelInfo.totalDistTraveled += amt
         })
 
         EventManager.onEvent("openTrade", {args ->

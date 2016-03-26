@@ -35,7 +35,7 @@ class Person(private val _firstName:String, private val _lastName:String) {
     }
 
     fun addPercentHealth(perc:Float):Float{
-        val amt = maxHealth*perc
+        val amt = maxHealth*(perc/100f)
         _health -= amt
         if(_health >= maxHealth)
             _health = maxHealth
