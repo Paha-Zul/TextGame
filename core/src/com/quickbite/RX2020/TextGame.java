@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,6 +23,8 @@ public class TextGame extends com.badlogic.gdx.Game {
     public static Stage stage;
     public static EasyAssetManager manager;
 	public static int tick=0;
+
+	public static TextureAtlas smallGuiAtlas;
 
 	@Override
 	public void create () {

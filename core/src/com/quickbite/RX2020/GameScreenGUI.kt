@@ -241,19 +241,19 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun buildTravelScreenGUI(){
         val barStyle:ProgressBar.ProgressBarStyle = ProgressBar.ProgressBarStyle()
-        barStyle.background = TextureRegionDrawable(TextureRegion(Texture(Gdx.files.internal("art/bar.png"))))
-        barStyle.knobBefore = TextureRegionDrawable(TextureRegion(Texture(Gdx.files.internal("art/pixel.png"))))
+        barStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("bar"))
+        barStyle.knobBefore = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixel"))
 
         val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
         val pauseButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("play", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("play"))
         pauseButtonStyle.imageChecked = drawable
         pauseButtonStyle.imageCheckedOver = drawable
 
-        drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pause", Texture::class.java)))
+        drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pause"))
         pauseButtonStyle.imageUp =  drawable
         pauseButtonStyle.imageOver =  drawable
         pauseButtonStyle.imageDown =  drawable
@@ -287,7 +287,7 @@ class GameScreenGUI(val game : GameScreen) {
         centerInfoTable.setFillParent(true)
 
         val innerTable = Table()
-        innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        innerTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
 
         val style:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -316,7 +316,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildLeftTable(){
         buildSupplyTable()
 
-        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -340,7 +340,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildRightTable(){
         rightTable.clear()
 
-        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
 
         val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -363,7 +363,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildGroupTable(){
         groupTable.clear()
 
-        groupTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        groupTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         groupTable.padRight(10f)
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
@@ -389,7 +389,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildROVTable(){
         ROVTable.clear()
 
-        ROVTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        ROVTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         ROVTable.padRight(10f)
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
@@ -454,7 +454,7 @@ class GameScreenGUI(val game : GameScreen) {
         supplyAmountList.clear()
 
         supplyTable.padLeft(10f)
-        supplyTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        supplyTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -532,7 +532,7 @@ class GameScreenGUI(val game : GameScreen) {
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        val drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
+        val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -686,15 +686,15 @@ class GameScreenGUI(val game : GameScreen) {
         campTable.remove()
         campTable.setFillParent(true)
 
-        val slider = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderLight", Texture::class.java)))
-        val knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnobWhite", Texture::class.java)))
+        val slider = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderLight"))
+        val knob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderKnobWhite"))
 
         val sliderStyle:Slider.SliderStyle = Slider.SliderStyle(slider, knob)
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val buttonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        buttonStyle.up = TextureRegionDrawable(TextureRegion(TextGame.manager.get("buttonBackground", Texture::class.java)))
+        buttonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("buttonBackground"))
 
         val campLabel = Label("Camp", labelStyle)
         campLabel.setFontScale((normalFontScale))
@@ -748,22 +748,23 @@ class GameScreenGUI(val game : GameScreen) {
         newFont.data.setScale(normalFontScale)
 
         val labelStyle = Label.LabelStyle(newFont, Color.WHITE)
-        labelStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        labelStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
 
         val scrollStyle:ScrollPane.ScrollPaneStyle = ScrollPane.ScrollPaneStyle()
 
         val initialLabel = Label("Select one", labelStyle)
         initialLabel.setFontScale(0.13f)
 
+        val darkPixel = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         val listStyle:com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle = com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle()
         listStyle.font = newFont
         listStyle.fontColorSelected = Color.WHITE
         listStyle.fontColorUnselected = Color.WHITE
-        listStyle.selection = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
-        listStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("darkPixel", Texture::class.java)))
+        listStyle.selection = darkPixel
+        listStyle.background = darkPixel
 
         val selectBoxStyle:SelectBox.SelectBoxStyle = SelectBox.SelectBoxStyle()
-        selectBoxStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("dropdownBackground", Texture::class.java)))
+        selectBoxStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("dropdownBackground"))
         selectBoxStyle.listStyle = listStyle
         selectBoxStyle.scrollStyle = scrollStyle
         selectBoxStyle.font = newFont
@@ -815,10 +816,10 @@ class GameScreenGUI(val game : GameScreen) {
         val amtLabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val giveButtonStyle = ImageButton.ImageButtonStyle()
-        giveButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhite", Texture::class.java)))
+        giveButtonStyle.imageUp = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
 
         val takeButtonStyle = ImageButton.ImageButtonStyle()
-        takeButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextButtonWhiteLeft", Texture::class.java)))
+        takeButtonStyle.imageUp = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhiteLeft"))
 
         val textButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -1093,7 +1094,7 @@ class GameScreenGUI(val game : GameScreen) {
      */
     private fun openTradeSlider(exItem: TradeManager.TradeSupply, oItem: TradeManager.TradeSupply, callback:(Int)->Unit){
         tradeSliderWindow.clear()
-        tradeSliderWindow.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("pixelBlack", Texture::class.java)))
+        tradeSliderWindow.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixelBlack"))
         tradeSliderWindow.setSize(300f, 100f)
         tradeSliderWindow.setPosition(TextGame.viewport.worldWidth/2f - 300f/2f, TextGame.viewport.worldHeight/2f - 100f/2f)
 
@@ -1105,8 +1106,8 @@ class GameScreenGUI(val game : GameScreen) {
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val sliderStyle = Slider.SliderStyle()
-        sliderStyle.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderWhite", Texture::class.java)))
-        sliderStyle.knob = TextureRegionDrawable(TextureRegion(TextGame.manager.get("sliderKnob", Texture::class.java)))
+        sliderStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderWhite"))
+        sliderStyle.knob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderKnob"))
 
         val tradeSlider = Slider(-oItem.amt, exItem.amt, 1f, false, sliderStyle)
         tradeSlider.value = 0f

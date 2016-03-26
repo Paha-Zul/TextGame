@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.GH
 import com.quickbite.rx2020.TextGame
@@ -19,13 +20,15 @@ class LoadingScreen(val game: TextGame): Screen {
     var opacity:Float = 0f
     var counter = 0
     var done = false
+    var trigger = false
     var scale = 1f
 
     override fun show() {
         logo.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
 
-        TextGame.manager.loadALlPictures(Gdx.files.internal("art/"))
+        TextGame.manager.loadALlPictures(Gdx.files.internal("art/load/"))
         TextGame.manager.loadAllFonts(Gdx.files.internal("fonts/"))
+        TextGame.manager.loadAllImageSheets(Gdx.files.internal("art/sheets/"))
 
         chain = ChainTask({counter>=20}, {counter++}, {counter=0})
         chain.setChain(ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager()})). //Fade in
@@ -48,6 +51,10 @@ class LoadingScreen(val game: TextGame): Screen {
 
         chain.update()
         done = TextGame.manager.update()
+        if(done && !trigger){
+            TextGame.smallGuiAtlas = TextGame.manager.get("smallUI", TextureAtlas::class.java)
+            trigger = true
+        }
         val color = TextGame.batch.color
 
         TextGame.batch.begin()

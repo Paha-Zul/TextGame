@@ -38,7 +38,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextPage", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButton"))
         buttonStyle.up = drawable
         buttonStyle.over = drawable
         buttonStyle.down = drawable
@@ -93,7 +93,7 @@ class GameIntroGUI(val game:GameIntroScreen) {
 
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity
         val buttonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        var drawable = TextureRegionDrawable(TextureRegion(TextGame.manager.get("nextPage", Texture::class.java)))
+        var drawable = TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("nextButton")))
         buttonStyle.up = drawable
         buttonStyle.over = drawable
         buttonStyle.down = drawable
