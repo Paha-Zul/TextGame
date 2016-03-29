@@ -24,8 +24,8 @@ class GameScreen(val game: Game): Screen {
 
     val timeTickEventList: LinkedList<ChainTask> = LinkedList()
 
-    private val backgroundSky = Texture(Gdx.files.internal("art/backgroundSky.png"), true)
-    private val sunMoon = Texture(Gdx.files.internal("art/sunMoon.png"), true)
+    private val backgroundSky = TextGame.manager.get("backgroundSky", Texture::class.java)
+    private val sunMoon = TextGame.manager.get("sunMoon", Texture::class.java)
 
     private val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
 
@@ -197,8 +197,7 @@ class GameScreen(val game: Game): Screen {
 
             val person = GroupManager.getPerson(name)!!;
 
-            person.health += amt;
-            if(person.health >= 100) person.health = 100;
+            person.addHealth(amt.toFloat())
 
             gui.buildGroupTable()
             resultsList.add(Pair(amt, person.firstName + "'s HP"))

@@ -24,13 +24,13 @@
     "name": "searchParts", "buttonTitle": "Search For Parts", "action": ["addRndAmt", "1", "50", "parts", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "1", "1", "solar panels", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "1", "1", "panel", "false", "1"], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "1", "1", "tracks", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "1", "1", "track", "false", "1"], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "1", "1", "batteries", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "1", "1", "battery", "false", "1"], "description": "1% chance to find 1 per hour"
   },
   {
     "name": "searchStorage", "buttonTitle": "Search For Storage", "action": ["addRndAmt", "1", "1", "storage", "false", "1"], "description": "1% chance to find 1 per hour"

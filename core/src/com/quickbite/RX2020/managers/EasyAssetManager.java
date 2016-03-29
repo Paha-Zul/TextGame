@@ -1,6 +1,5 @@
 package com.quickbite.rx2020.managers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.BitmapFontLoader;
@@ -11,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.quickbite.rx2020.Logger;
 
 import java.util.HashMap;
 
@@ -47,7 +47,7 @@ public class EasyAssetManager extends AssetManager {
         }
 
         Long time = TimeUtils.millis() - startTime;
-        Gdx.app.debug("AssetManager", "Took "+(time/1000f)+"s to load art.");
+        Logger.log("AssetManager", "Took "+(time/1000f)+"s to load art.", Logger.LogLevel.Info);
     }
 
     /**
@@ -75,7 +75,7 @@ public class EasyAssetManager extends AssetManager {
         }
 
         Long time = TimeUtils.millis() - startTime;
-        Gdx.app.debug("AssetManager", "Took "+(time/1000f)+"s to load fonts.");
+        Logger.log("AssetManager", "Took "+(time/1000f)+"s to load fonts.", Logger.LogLevel.Info);
     }
 
     /**
@@ -100,26 +100,25 @@ public class EasyAssetManager extends AssetManager {
         }
 
         Long time = TimeUtils.millis() - startTime;
-        Gdx.app.debug("AssetManager", "Took "+(time/1000f)+"s to load texture atlases.");
+        Logger.log("AssetManager", "Took "+(time/1000f)+"s to load texture atlases..", Logger.LogLevel.Info);
     }
 
     public synchronized <T> T get(String commonName, Class<T> type) {
         //Get the reference from the data map.
         DataReference ref = dataMap.get(commonName);
-        T data = null;
         if(ref == null) {
             //If it's null, let's try to find it in the underlying AssetManager by the common name. This really only is useful in cases where the underlying AssetManager loads its own file,
             //for instance, when you load an Atlas file and it loads the images for you.
             if(this.isLoaded(commonName)) {
-                data = super.get(commonName, type);
-                if(data == null) Gdx.app.error("EasyAssetManager", "Data with name "+commonName+" does not exist.");
-                return data;
+                return super.get(commonName, type);
             }
 
+            Logger.log("AssetManager", "Data with name "+commonName+" does not exist.", Logger.LogLevel.Warning);
             return null;
         }
-        data = super.get(dataMap.get(commonName).path, type);
-        if(data == null) Gdx.app.error("EasyAssetManager", "Data with name "+commonName+" does not exist.");
+
+        T data = super.get(dataMap.get(commonName).path, type);
+        if(data == null) Logger.log("AssetManager", "Data with name "+commonName+" does not exist.", Logger.LogLevel.Info);
         return data;
     }
 

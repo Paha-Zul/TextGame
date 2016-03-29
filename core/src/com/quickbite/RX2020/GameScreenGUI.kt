@@ -1,15 +1,12 @@
 package com.quickbite.rx2020
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.Event
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
@@ -18,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.CustomHealthBar
 import com.quickbite.rx2020.screens.GameScreen
 
 /**
@@ -134,7 +132,7 @@ class GameScreenGUI(val game : GameScreen) {
         groupButtonTab.addListener(object:ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
-                rightTable.debugAll()
+//                rightTable.debugAll()
 
                 if(ROVTable.parent == null && groupTable.parent == null) {
                     buildGroupTable()
@@ -188,7 +186,7 @@ class GameScreenGUI(val game : GameScreen) {
 
                     //If not null, set up the search function
                     if(l != null)
-                        game.searchFunc = { EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size))) }
+                        game.searchFunc = { EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size-1))) }
                 }
             }
         })
@@ -373,13 +371,16 @@ class GameScreenGUI(val game : GameScreen) {
             val nameLabel = Label(person.fullName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
 
-            val healthLabel:Label = Label(""+person.health, labelStyle)
+            val healthLabel:Label = Label(""+person.healthNormal, labelStyle)
             healthLabel.setFontScale(normalFontScale)
+
+            val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
+                    TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
             groupTable.add(nameLabel).right()
             groupTable.row()
-            groupTable.add(healthLabel).right()
-            groupTable.row()
+            groupTable.add(healthBar).right().height(15f).width(100f)
+            groupTable.row().spaceTop(5f)
         }
     }
 
@@ -700,7 +701,7 @@ class GameScreenGUI(val game : GameScreen) {
         campLabel.setFontScale((normalFontScale))
         campLabel.setAlignment(Align.center)
 
-        val descLabel = Label("^ Choose one above ^", labelStyle)
+        val descLabel = Label("", labelStyle)
         descLabel.setFontScale((normalFontScale))
         descLabel.setAlignment(Align.center)
         descLabel.setWrap(true)
@@ -752,9 +753,6 @@ class GameScreenGUI(val game : GameScreen) {
 
         val scrollStyle:ScrollPane.ScrollPaneStyle = ScrollPane.ScrollPaneStyle()
 
-        val initialLabel = Label("Select one", labelStyle)
-        initialLabel.setFontScale(0.13f)
-
         val darkPixel = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         val listStyle:com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle = com.badlogic.gdx.scenes.scene2d.ui.List.ListStyle()
         listStyle.font = newFont
@@ -780,14 +778,14 @@ class GameScreenGUI(val game : GameScreen) {
             list.add(label)
         }
 
-        selectBox.items = list
-        selectBox.selected = initialLabel
-
         selectBox.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 func(DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())!!)
             }
         })
+
+        selectBox.items = list
+        selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
 
         selectBox.setSelectedAlignment(Align.center)
         selectBox.setListAlignment(Align.center)

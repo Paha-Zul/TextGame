@@ -16,25 +16,31 @@ import com.quickbite.rx2020.managers.DataManager
 
 class LoadingScreen(val game: TextGame): Screen {
     lateinit var  chain: ChainTask
-    val logo = Texture(Gdx.files.internal("art/Logo.png"), true)
+    val logo = Texture(Gdx.files.internal("art/load/Logo.png"), true)
     var opacity:Float = 0f
     var counter = 0
     var done = false
     var trigger = false
     var scale = 1f
+    var readyToLoad = false
 
     override fun show() {
         logo.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
 
-        TextGame.manager.loadALlPictures(Gdx.files.internal("art/load/"))
-        TextGame.manager.loadAllFonts(Gdx.files.internal("fonts/"))
-        TextGame.manager.loadAllImageSheets(Gdx.files.internal("art/sheets/"))
-
         chain = ChainTask({counter>=20}, {counter++}, {counter=0})
-        chain.setChain(ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager()})). //Fade in
+        chain.setChain(ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager(); loadManager()})). //Fade in
                 setChain(ChainTask({counter >= 60}, {counter++}, {counter=0})). //Wait
                 setChain(ChainTask({opacity <= 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})). //Fade out
                 setChain(ChainTask({done && counter >= 20}, {counter++}, {game.screen = MainMenuScreen(game)})) //Wait
+
+
+    }
+
+    private fun loadManager(){
+        TextGame.manager.loadALlPictures(Gdx.files.internal("art/load/"))
+        TextGame.manager.loadAllFonts(Gdx.files.internal("fonts/"))
+        TextGame.manager.loadAllImageSheets(Gdx.files.internal("art/sheets/"))
+        readyToLoad = true
     }
 
     override fun hide() {
@@ -50,11 +56,15 @@ class LoadingScreen(val game: TextGame): Screen {
         scale+=0.0005f
 
         chain.update()
-        done = TextGame.manager.update()
-        if(done && !trigger){
-            TextGame.smallGuiAtlas = TextGame.manager.get("smallUI", TextureAtlas::class.java)
-            trigger = true
+
+        if(readyToLoad) {
+            done = TextGame.manager.update()
+            if (done && !trigger) {
+                TextGame.smallGuiAtlas = TextGame.manager.get("smallUI", TextureAtlas::class.java)
+                trigger = true
+            }
         }
+
         val color = TextGame.batch.color
 
         TextGame.batch.begin()
