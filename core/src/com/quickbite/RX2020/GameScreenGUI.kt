@@ -604,7 +604,7 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Shows the event results
      */
-    fun showEventResults(list: List<Pair<Int, String>>){
+    fun showEventResults(list: List<GameScreen.Result>){
         EventInfo.eventResultsTable.clear()
         EventInfo.eventTable.clear()
 
@@ -623,10 +623,11 @@ class GameScreenGUI(val game : GameScreen) {
 
         //Generate all the button choices.
         for(item in list){
-            val nameLabel = Label(item.second, labelStyle)
-            var amtLabel:Label? = null
-            if(item.first < 0) amtLabel = Label(item.first.toString(), redLabelStyle)
-            else amtLabel = Label("+${item.first}", greenLabelStyle)
+            val nameLabel = Label(item.name, labelStyle)
+            var amtLabel:Label?
+            if(item.amt < 0) amtLabel = Label(item.amt.toString(), redLabelStyle)
+            else amtLabel = Label("+${item.amt}", greenLabelStyle)
+            amtLabel.setText(amtLabel.text.toString() + item.desc.toString())
 
             nameLabel.setFontScale(normalFontScale)
             amtLabel.setFontScale(normalFontScale)
