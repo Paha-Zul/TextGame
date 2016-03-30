@@ -48,13 +48,7 @@ class Person(private val _firstName:String, private val _lastName:String) {
 
     fun addPercentHealth(perc:Float):Float{
         val amt = maxHealth*(perc/100f)
-        _healthNormal -= amt
-        if(_healthNormal >= maxHealth - healthInjury)
-            _healthNormal = maxHealth - healthInjury
-        if(_healthNormal <= 0)
-            GroupManager.killPerson(firstName)
-
-        return amt
+        return addHealth(amt)
     }
 
     fun addInjury(type: Injury.InjuryType){

@@ -40,5 +40,7 @@ object GroupManager {
         val person = getPerson(name)
         if(person!=null)
             list -= person
+
+        EventManager.callEvent("death", "")
     }
 }

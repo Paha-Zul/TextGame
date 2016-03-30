@@ -184,10 +184,7 @@ class GameScreen(val game: Game): Screen {
             gui.buildGroupTable()
         })
 
-        EventManager.onEvent("die", { args ->
-            var name = (args[0]) as String
-
-            GroupManager.killPerson(name)
+        EventManager.onEvent("death", { args ->
             gui.buildGroupTable()
         })
 
@@ -204,14 +201,11 @@ class GameScreen(val game: Game): Screen {
         })
 
         EventManager.onEvent("addRndAmt", {args ->
-            val min:Float = (args[0] as String).toFloat()
-            val max:Float = (args[1] as String).toFloat()
-            val supplyName:String = args[2] as String
-            val perPerson = if(args.count() >= 4) (args[3] as String).toBoolean() else false
-
-            var chance = 100f
-            if(args.count() >= 5)
-                chance = (args[4] as String).toFloat()
+            val min:Float = (args[0] as String).toFloat() //The min amt
+            val max:Float = (args[1] as String).toFloat() //The max amt
+            val supplyName:String = args[2] as String //The name of the supply
+            val perPerson = if(args.count() >= 4) (args[3] as String).toBoolean() else false //If it is per person
+            val chance = if(args.count() >= 5) (args[4] as String).toFloat() else 100f //Chance to happen
 
             if(MathUtils.random(100) <= chance) {
                 var num = MathUtils.random(Math.abs(min), Math.abs(max))
@@ -240,9 +234,14 @@ class GameScreen(val game: Game): Screen {
 
         EventManager.onEvent("rest", {args ->
             val amt = (args[0] as String).toFloat()
+            val chance = if(args.size >= 2) (args[0] as String).toFloat() else 100f
 
-            GroupManager.getPeopleList().forEach { person ->
-                person.addHealth(amt)
+            val rnd = MathUtils.random(100)
+
+            if(chance >= rnd) {
+                GroupManager.getPeopleList().forEach { person ->
+                    person.addHealth(amt)
+                }
             }
         })
 

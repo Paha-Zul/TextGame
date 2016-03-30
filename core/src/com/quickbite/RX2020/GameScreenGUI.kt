@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.managers.*
-import com.quickbite.rx2020.CustomHealthBar
 import com.quickbite.rx2020.screens.GameScreen
 
 /**
@@ -182,11 +181,12 @@ class GameScreenGUI(val game : GameScreen) {
 
                 //If not null, get the action.
                 if(game.searchActivity != null) {
-                    val l = game.searchActivity!!.action
+                    val actionList = game.searchActivity!!.action!!
 
-                    //If not null, set up the search function
-                    if(l != null)
-                        game.searchFunc = { EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size-1))) }
+                    for(params in actionList.iterator()) {
+                        //If not null, set up the search function
+                        game.searchFunc = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
+                    }
                 }
             }
         })
@@ -393,58 +393,36 @@ class GameScreenGUI(val game : GameScreen) {
         ROVTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         ROVTable.padRight(10f)
 
+        val bg = TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar")))
+        val pixel = TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite")))
+
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val ROVNameLabel = Label("ROV", labelStyle)
         ROVNameLabel.setFontScale(normalFontScale)
 
-        val ROVHealthLabel:Label = Label(""+ROVManager.ROVHealth, labelStyle)
-        ROVHealthLabel.setFontScale(normalFontScale)
-
-        val batteryNameLabel = Label("Battery", labelStyle)
-        batteryNameLabel.setFontScale(normalFontScale)
-
-        val batteryHealthLabel:Label = Label(""+ROVManager.batteryHealth, labelStyle)
-        batteryHealthLabel.setFontScale(normalFontScale)
-
-        val storageNameLabel = Label("Storage", labelStyle)
-        storageNameLabel.setFontScale(normalFontScale)
-
-        val storageHealthLabel:Label = Label(""+ROVManager.storageHealth, labelStyle)
-        storageHealthLabel.setFontScale(normalFontScale)
-
-        val panelNameLabel = Label("Solar Panel", labelStyle)
-        panelNameLabel.setFontScale(normalFontScale)
-
-        val panelHealthLabel:Label = Label(""+ROVManager.solarPanelHealth, labelStyle)
-        panelHealthLabel.setFontScale(normalFontScale)
-
-        val trackNameLabel = Label("Tracks", labelStyle)
-        trackNameLabel.setFontScale(normalFontScale)
-
-        val trackHealthLabel:Label = Label(""+ROVManager.trackHealth, labelStyle)
-        trackHealthLabel.setFontScale(normalFontScale)
+        val ROVbar: CustomHealthBar = CustomHealthBar(bg, pixel)
 
         ROVTable.add(ROVNameLabel).right()
         ROVTable.row()
-        ROVTable.add(ROVHealthLabel).right()
-        ROVTable.row()
-        ROVTable.add(batteryNameLabel).right()
-        ROVTable.row()
-        ROVTable.add(batteryHealthLabel).right()
-        ROVTable.row()
-        ROVTable.add(storageNameLabel).right()
-        ROVTable.row()
-        ROVTable.add(storageHealthLabel).right()
-        ROVTable.row()
-        ROVTable.add(panelNameLabel).right()
-        ROVTable.row()
-        ROVTable.add(panelHealthLabel).right()
-        ROVTable.row()
-        ROVTable.add(trackNameLabel).right()
-        ROVTable.row()
-        ROVTable.add(trackHealthLabel).right()
-        ROVTable.row()
+        ROVTable.add(ROVbar).right().height(15f).width(100f)
+        ROVTable.row().spaceTop(5f)
+
+        val list = ROVManager.ROVPartList
+        for(supply: SupplyManager.Supply in list.iterator()){
+            val nameLabel = Label(supply.displayName, labelStyle)
+            nameLabel.setFontScale(normalFontScale)
+
+            val healthLabel:Label = Label(""+supply.currHealth, labelStyle)
+            healthLabel.setFontScale(normalFontScale)
+
+            val healthBar: CustomHealthBar = CustomHealthBar(supply, bg, pixel)
+
+            ROVTable.add(nameLabel).right()
+            ROVTable.row()
+            ROVTable.add(healthBar).right().height(15f).width(100f)
+            ROVTable.row().spaceTop(5f)
+        }
     }
 
     /**

@@ -20,7 +20,7 @@ object SupplyManager {
             addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
         }
 
-        supplyMap["edibles"]?.consumePerDay = 5f
+        supplyMap["edibles"]?.consumePerDay = 1000f
         supplyMap["parts"]?.consumePerDay = 3.3f
         supplyMap["energy"]?.consumePerDay = 3.3f
     }
@@ -47,13 +47,21 @@ object SupplyManager {
     }
 
     fun updatePerTick(){
-        val food = supplyMap["edibles"]!!
-        val _f = food.amt- ((food.consumePerDay*GroupManager.numPeopleAlive)/24f)
-        food.amt = if (_f >= 0) _f else 0f
+        var supply = supplyMap["edibles"]!!
+        var amt = supply.amt- ((supply.consumePerDay*GroupManager.numPeopleAlive)/24f)
+        supply.amt = if (amt >= 0) amt else 0f
 
-        val scrap = supplyMap["parts"]!!
-        val _s = scrap.amt - ((scrap.consumePerDay)/24f)
-        scrap.amt = if (_s >= 0) _s else 0f
+        if(supply.amt <= 0)
+            GroupManager.getPeopleList().forEach { person -> person.addHealth(-5f)}
+
+        supply = supplyMap["parts"]!!
+        amt = supply.amt - ((supply.consumePerDay)/24f)
+        supply.amt = if (amt >= 0) amt else 0f
+
+        supply = supplyMap["energy"]!!
+        amt = supply.amt - ((supply.consumePerDay)/24f)
+        supply.amt = if (amt >= 0) amt else 0f
+
     }
 
     fun getSupplyList():Array<Supply>{
@@ -62,7 +70,7 @@ object SupplyManager {
 
     fun getSupply(name:String):Supply = supplyMap[name]!!
 
-    class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int){
+    class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f){
         var consumePerDay:Float = 0f
 
         operator fun component1() = displayName

@@ -190,7 +190,7 @@ object DataManager{
         var name:String = "def"
         var description:String = "def"
         var buttonTitle:String = "fixme"
-        var action:Array<String>? = null
+        var action:Array<Array<String>>? = null
 
         companion object{
             /**

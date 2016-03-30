@@ -1,39 +1,39 @@
 [
   {
-    "name": "rest", "buttonTitle": "Rest", "action": ["rest", "8.3"], "description": "Regain 8.3 per person HP per hour"
+    "name": "rest", "buttonTitle": "Rest", "action": [["rest", "8.3", "25"], ["addRndAmt", "-1", "-25", "edibles", "false", "50"]], "description": "HP: 25% +(1-25)/person/hour \n Edibles: 50% -(1-25)/hour"
   },
   {
-    "name": "repair", "buttonTitle": "Repair ROV", "action": ["repairROV", "8.3"], "description": "Regain 8.3 ROV health per hour"
+    "name": "repair", "buttonTitle": "Repair ROV", "action": [["repairROV", "8.3"]], "description": "Regain 8.3 ROV health per hour"
   },
   {
-    "name": "recharge", "buttonTitle": "Recharge Batteries", "action": ["addRndAmt", "8", "8", "energy", "false", "100"], "description": "Regain 8.3 energy per hour"
+    "name": "recharge", "buttonTitle": "Recharge Batteries", "action": [["addRndAmt", "8", "8", "energy", "false", "100"]], "description": "Regain 8.3 energy per hour"
   },
   {
-    "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": ["addRndAmt", "2.5", "10", "edibles", "true", "50"], "description": "5% chance to find 1 - 50 per hour"
+    "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": [["addRndAmt", "2.5", "10", "edibles", "true", "50"]], "description": "5% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": ["addRndAmt", "1", "1", "medkits", "false", "5"], "description": "25% chance to find 1 - 50 per hour"
+    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": [["addRndAmt", "1", "1", "medkits", "false", "5"]], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": ["addRndAmt", "1", "50", "wealth", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
+    "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": [["addRndAmt", "1", "50", "wealth", "false", "25"]], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchAmmo", "buttonTitle": "Search For Ammo", "action": ["addRndAmt", "1", "50", "ammo", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
+    "name": "searchAmmo", "buttonTitle": "Search For Ammo", "action": [["addRndAmt", "1", "50", "ammo", "false", "25"]], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchParts", "buttonTitle": "Search For Parts", "action": ["addRndAmt", "1", "50", "parts", "false", "25"], "description": "25% chance to find 1 - 50 per hour"
+    "name": "searchParts", "buttonTitle": "Search For Parts", "action": [["addRndAmt", "1", "50", "parts", "false", "25"]], "description": "25% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": ["addRndAmt", "1", "1", "panel", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchPanels", "buttonTitle": "Search For Solar Panels", "action": [["addRndAmt", "1", "1", "panel", "false", "1"]], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": ["addRndAmt", "1", "1", "track", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchTracks", "buttonTitle": "Search For Tracks", "action": [["addRndAmt", "1", "1", "track", "false", "1"]], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": ["addRndAmt", "1", "1", "battery", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchBatteries", "buttonTitle": "Search For Batteries", "action": [["addRndAmt", "1", "1", "battery", "false", "1"]], "description": "1% chance to find 1 per hour"
   },
   {
-    "name": "searchStorage", "buttonTitle": "Search For Storage", "action": ["addRndAmt", "1", "1", "storage", "false", "1"], "description": "1% chance to find 1 per hour"
+    "name": "searchStorage", "buttonTitle": "Search For Storage", "action": [["addRndAmt", "1", "1", "storage", "false", "1"]], "description": "1% chance to find 1 per hour"
   }
 
 ]
