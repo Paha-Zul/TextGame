@@ -766,7 +766,7 @@ class GameScreenGUI(val game : GameScreen) {
         selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
 
         selectBox.setSelectedAlignment(Align.center)
-        selectBox.setListAlignment(Align.center)
+        selectBox.list.setListAlignment(Align.center)
         return selectBox
     }
 
