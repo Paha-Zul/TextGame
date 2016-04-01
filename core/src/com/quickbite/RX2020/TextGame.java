@@ -22,6 +22,8 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 	public static TextureAtlas smallGuiAtlas;
 
+	public static Boolean testMode = true;
+
 	@Override
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -61,7 +63,10 @@ public class TextGame extends com.badlogic.gdx.Game {
 			tick++;
 
 		}catch(Exception e){
-			com.quickbite.rx2020.Logger.log("Crashing", e.getMessage(), com.quickbite.rx2020.Logger.LogLevel.Error);
+			e.printStackTrace();
+			String message = e.getMessage();
+			if(message == null) message = "Hmm?";
+			com.quickbite.rx2020.Logger.log("Crashing", message, com.quickbite.rx2020.Logger.LogLevel.Error);
 			com.quickbite.rx2020.Logger.writeLog("log.txt");
 		}
 	}

@@ -34,7 +34,9 @@ class GameScreen(val game: Game): Screen {
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
 
-    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(15, 30).toFloat())
+    private val minEventTime = if(TextGame.testMode) 1 else 15
+    private val maxEventTime = if(TextGame.testMode) 1 else 30
+    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(minEventTime, maxEventTime).toFloat())
 
     private var paused = false
 
@@ -57,9 +59,6 @@ class GameScreen(val game: Game): Screen {
         gui.init()
 
         sunMoon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
-        //throw UnsupportedOperationException()
-
-        //Tester.testEvents("Event1", 20)
 
         val multi: InputMultiplexer = InputMultiplexer()
         multi.addProcessor(TextGame.stage)
@@ -109,7 +108,7 @@ class GameScreen(val game: Game): Screen {
                         gui.showEventResults(resultsList.values.toList())
                     }
 
-                    currEvent = _evt.select(choice, MathUtils.random(100))
+                    currEvent = _evt.selectChildEvent(choice)
                     if(currEvent != null){
                         eventCustomTimerTest.restart(0.00001f)
                         if(exit){
@@ -124,7 +123,7 @@ class GameScreen(val game: Game): Screen {
                             gui.closeEvent()
                         }
                         currEvent = DataManager.EventJson.getRandomRoot()
-                        eventCustomTimerTest.restart(MathUtils.random(15, 30).toFloat())
+                        eventCustomTimerTest.restart(MathUtils.random(minEventTime, maxEventTime).toFloat())
                     }
                 })
             }
@@ -134,9 +133,13 @@ class GameScreen(val game: Game): Screen {
 
         makeEvents()
 
-//        gui.buildTradeWindow()
-//        gui.openTradeWindow()
-//        pauseGame()
+        if(TextGame.testMode) {
+            Tester.testEvents(500)
+
+            gui.buildTradeWindow()
+            gui.openTradeWindow()
+            pauseGame()
+        }
     }
 
     /**
@@ -238,6 +241,8 @@ class GameScreen(val game: Game): Screen {
 
             val value = resultsList.getOrPut(supply.displayName, { Result(supply.displayName, 0) })
             value.amt += num.toInt()
+
+            //TODO Something in this crap crashes.
         })
 
         EventManager.onEvent("rest", {args ->
