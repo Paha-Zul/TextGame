@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.managers.*
@@ -186,6 +184,7 @@ class GameScreenGUI(val game : GameScreen) {
                     for(params in actionList.iterator()) {
                         //If not null, set up the search function
                         game.searchFunc = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
+                        //TODO This needs to be multiple functions. It only stores one and simply writes over everything else.
                     }
                 }
             }
@@ -782,8 +781,6 @@ class GameScreenGUI(val game : GameScreen) {
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow2", Texture::class.java)))
         tradeWindowTable.setSize(450f, 400f)
 
-        val gridPatchDrawable = NinePatchDrawable(NinePatch(TextGame.manager.get("tradeGridBackground", Texture::class.java), 4, 4, 4, 4))
-
         val labelTable:Table = Table()
         val listTable:Table = Table()
         val offerTable:Table = Table()
@@ -857,63 +854,71 @@ class GameScreenGUI(val game : GameScreen) {
         val acceptButton = TextButton("Accept", textButtonStyle)
         acceptButton.label.setFontScale(0.15f)
 
+        val spaceX = 4f
+
+        listTable.add(valueLabel).width(60f).spaceRight(spaceX).height(24f)
+        listTable.add(nameLabel).width(76f).spaceRight(spaceX)
+        listTable.add(amountLabel).width(44f).spaceRight(spaceX)
+
+        listTable.add(tradeTitleLabel).width(58f).spaceRight(spaceX).colspan(3)
+
+        listTable.add(otherAmountLabel).width(44f).spaceRight(spaceX)
+        listTable.add(otherNameLabel).width(76f).spaceRight(spaceX)
+        listTable.add(otherValueLabel).width(60f)
+
+        listTable.row().spaceTop(5f)
+
         //The item list.
         val exomerList = TradeManager.exomerList
         val otherList = TradeManager.otherList
 
-        val spaceX = 4f
+
+        val rightArrow = TextGame.smallGuiAtlas.findRegion("nextButtonWhite")
+        val leftArrow = TextGame.smallGuiAtlas.findRegion("nextButtonWhiteLeft")
 
         //For each item....
         for(i in exomerList!!.indices){
             val exItem = exomerList[i]
             val otherItem = otherList!![i]
 
+            //Exomer item name
             val exomerItemNameLabel = Label(exItem.abbrName, labelStyle)
             exomerItemNameLabel.setFontScale(0.13f)
             exomerItemNameLabel.setAlignment(Align.center)
 
+            //Exomer amount
             val exomerItemAmountLabel = Label(exItem.amt.toInt().toString(), labelStyle)
             exomerItemAmountLabel.setFontScale(0.13f)
             exomerItemAmountLabel.setAlignment(Align.center)
+            exomerItemAmountLabel.color = Color.SKY
 
+            //Exomer worth
             val exomerItemValueLabel = Label(exItem.worth.toString(), labelStyle)
             exomerItemValueLabel.setFontScale(0.13f)
             exomerItemValueLabel.setAlignment(Align.center)
             exomerItemValueLabel.color = Color.GREEN
 
+            //Other name
             val nativeItemNameLabel = Label(otherItem.abbrName, labelStyle)
             nativeItemNameLabel.setFontScale(0.13f)
             nativeItemNameLabel.setAlignment(Align.center)
 
+            //Other amt
             val nativeItemAmountLabel = Label(otherItem.amt.toInt().toString(), labelStyle)
             nativeItemAmountLabel.setFontScale(0.13f)
             nativeItemAmountLabel.setAlignment(Align.center)
+            nativeItemAmountLabel.color = Color.ORANGE
 
+            //Other worth
             val nativeItemValueLabel = Label(otherItem.worth.toString(), labelStyle)
             nativeItemValueLabel.setFontScale(0.13f)
             nativeItemValueLabel.setAlignment(Align.center)
             nativeItemValueLabel.color = Color.RED
 
-            if(i == 0){
-                listTable.add(valueLabel).width(60f).spaceRight(spaceX).height(24f)
-                listTable.add(nameLabel).width(76f).spaceRight(spaceX)
-                listTable.add(amountLabel).width(44f).spaceRight(spaceX)
-
-                listTable.add(tradeTitleLabel).width(58f).spaceRight(spaceX)
-
-                listTable.add(otherAmountLabel).width(44f).spaceRight(spaceX)
-                listTable.add(otherNameLabel).width(76f).spaceRight(spaceX)
-                listTable.add(otherValueLabel).width(60f)
-
-                listTable.row().spaceTop(5f)
-            }
-
+            //Amt traded
             val amtLabel = Label("0", amtLabelStyle)
             amtLabel.setFontScale(0.13f)
             amtLabel.setAlignment(Align.center)
-
-            val takeButton = ImageButton(takeButtonStyle)
-            val giveButton = ImageButton(giveButtonStyle)
 
             //Add the amount then name to the left table.
             listTable.add(exomerItemValueLabel).left().fillX().spaceRight(spaceX).spaceBottom(spaceX).height(24f)
@@ -921,90 +926,93 @@ class GameScreenGUI(val game : GameScreen) {
             listTable.add(exomerItemAmountLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
 
             //Add the stuff to the center table.
-            listTable.add(amtLabel).space(0f, 5f, 0f, 5f).fillX().spaceRight(spaceX).spaceBottom(spaceX)
+            val leftArrowCell:Cell<Actor> = listTable.add().size(16f, 16f).spaceBottom(spaceX)
+            listTable.add(amtLabel).space(0f, 0f, 0f, 0f).width(26f).spaceBottom(spaceX)
+            val rightArrowCell:Cell<Actor> = listTable.add().size(16f, 16f).spaceRight(spaceX).spaceBottom(spaceX)
 
             //Add the name then amount to the right table.
             listTable.add(nativeItemAmountLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
             listTable.add(nativeItemNameLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
             listTable.add(nativeItemValueLabel).right().fillX().spaceBottom(spaceX)
 
+            val rightArrowImage:Image = Image(rightArrow)
+            rightArrowImage.color = Color.ORANGE
+
+            val leftArrowImage:Image = Image(leftArrow)
+            leftArrowImage.color = Color.SKY
+
             val func = { newAmt: Int ->
-
-                val absChangeAmt:Int = Math.abs(newAmt)
-
-                var tradeAmt = amtLabel.text.toString().toInt()
+                var tradeAmt = amtLabel.text.toString().toInt() //Pull this from the trade manager, not the label which is altered.
+                if(amtLabel.color == Color.ORANGE) tradeAmt = -tradeAmt
                 var yourOffer = yourOfferAmtLabel.text.toString().toInt()
                 var otherOffer = otherOfferAmtLabel.text.toString().toInt()
 
-                //If the trade amount is positive and change amount is negative.
-                if(tradeAmt > 0 && newAmt < 0){
-                    val toZero = tradeAmt
-                    val toChange = newAmt
+                if(tradeAmt != newAmt) {
+                    //If the trade amount is positive and change amount is negative.
+                    if (tradeAmt > 0 && newAmt < 0) {
+                        val toZero = tradeAmt
+                        val toChange = newAmt
 
-                    yourOffer -= exItem.worth*toChange
-                    otherOffer -= otherItem.worth*toZero
-                    if(otherOffer <= 0) otherOffer = 0
+                        yourOffer -= exItem.worth * toChange
+                        otherOffer -= otherItem.worth * toZero
+                        if (otherOffer <= 0) otherOffer = 0
 
-                //If trade amount is negative and change amount is positive.
-                }else if(tradeAmt < 0 && newAmt > 0){
-                    val toZero = tradeAmt
-                    val toChange = newAmt
+                        //If trade amount is negative and change amount is positive.
+                    } else if (tradeAmt < 0 && newAmt > 0) {
+                        val toZero = tradeAmt
+                        val toChange = newAmt
 
-                    yourOffer += exItem.worth*toZero
-                    otherOffer += otherItem.worth*toChange
-                    if(otherOffer <= 0) otherOffer = 0
+                        yourOffer += exItem.worth * toZero
+                        otherOffer += otherItem.worth * toChange
+                        if (otherOffer <= 0) otherOffer = 0
 
-                }else if(tradeAmt >= 0 && newAmt >= 0){
-                    otherOffer += otherItem.worth*(newAmt - tradeAmt)
-                    if(otherOffer <=0) otherOffer = 0
-                    //otherOffer -= otherItem.worth*(changeAmt - tradeAmt)
-                }else if(tradeAmt <= 0 && newAmt <= 0){
-                    //yourOffer -= exItem.worth*(changeAmt - tradeAmt)
-                    yourOffer -= exItem.worth*(newAmt - tradeAmt)
-                    if(yourOffer <= 0) yourOffer = 0
+                    } else if (tradeAmt >= 0 && newAmt >= 0) {
+                        otherOffer += otherItem.worth * (newAmt - tradeAmt)
+                        if (otherOffer <= 0) otherOffer = 0
+
+                    } else if (tradeAmt <= 0 && newAmt <= 0) {
+
+                        yourOffer -= exItem.worth * (newAmt - tradeAmt)
+                        if (yourOffer <= 0) yourOffer = 0
+                    }
+
+                    //Change the amt that we got from the text.
+                    tradeAmt = newAmt
+
+                    //Set the exomer and other item amount label.
+                    exomerItemAmountLabel.setText(exItem.currAmt.toInt().toString())
+                    nativeItemAmountLabel.setText(otherItem.currAmt.toInt().toString())
+
+                    //If amt is positive, make it green. Negative, make it red. 0, make it white.
+                    when {
+                        tradeAmt > 0 -> {
+                            amtLabel.color = Color.SKY; leftArrowCell.setActor(leftArrowImage); rightArrowCell.clearActor()
+                        }
+                        tradeAmt < 0 -> {
+                            amtLabel.color = Color.ORANGE; rightArrowCell.setActor(rightArrowImage); leftArrowCell.clearActor()
+                        }
+                        else -> {
+                            amtLabel.color = Color.WHITE; leftArrowCell.clearActor(); rightArrowCell.clearActor()
+                        }
+                    }
+
+                    //If our offer is not enough, color the accept button RED.
+                    when {
+                        yourOffer < otherOffer -> acceptButton.label.color = Color.RED
+                        else -> acceptButton.label.color = Color.WHITE
+                    }
+
+                    //Change the offer amounts.
+                    amtLabel.setText(Math.abs(tradeAmt).toString())
+                    yourOfferAmtLabel.setText(yourOffer.toString())
+                    otherOfferAmtLabel.setText(otherOffer.toString())
                 }
-
-                //Change the amt that we got from the text.
-                tradeAmt = newAmt
-
-                //Set the exomer and other item amount label.
-                exomerItemAmountLabel.setText(exItem.currAmt.toInt().toString())
-                nativeItemAmountLabel.setText(otherItem.currAmt.toInt().toString())
-
-                //If amt is positive, make it green. Negative, make it red. 0, make it white.
-                when {
-                    tradeAmt > 0 -> amtLabel.color = Color.GREEN
-                    tradeAmt < 0 -> amtLabel.color = Color.RED
-                    else -> amtLabel.color = Color.WHITE
-                }
-
-                when {
-                    yourOffer < otherOffer -> acceptButton.label.color = Color.RED
-                    else -> acceptButton.label.color = Color.WHITE
-                }
-
-                //Change the offer amounts.
-                amtLabel.setText(tradeAmt.toString())
-                yourOfferAmtLabel.setText(yourOffer.toString())
-                otherOfferAmtLabel.setText(otherOffer.toString())
             }
 
             amtLabel.addListener(object:ClickListener(){
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     openTradeSlider(exomerList[i], otherList[i], func)
                     super.clicked(event, x, y)
-                }
-            })
-
-            takeButton.addListener(object:ChangeListener(){
-                override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    func(amtLabel.text.toString().toInt() + 1)
-                }
-            })
-
-            giveButton.addListener(object:ChangeListener(){
-                override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    func(amtLabel.text.toString().toInt() - 1)
                 }
             })
 
@@ -1064,7 +1072,10 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Closes the trade window.
      */
-    fun closeTradeWindow() = tradeWindowTable.remove()
+    fun closeTradeWindow() {
+        tradeWindowTable.remove()
+        updateSuppliesGUI()
+    }
 
     /**
      * Opens the slider for a particular trade item.
@@ -1074,6 +1085,12 @@ class GameScreenGUI(val game : GameScreen) {
         tradeSliderWindow.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixelBlack"))
         tradeSliderWindow.setSize(300f, 100f)
         tradeSliderWindow.setPosition(TextGame.viewport.worldWidth/2f - 300f/2f, TextGame.viewport.worldHeight/2f - 100f/2f)
+
+        val rightButtonStyle = ImageButton.ImageButtonStyle()
+        rightButtonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
+
+        val leftButtonStyle = ImageButton.ImageButtonStyle()
+        leftButtonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhiteLeft"))
 
         val buttonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -1086,6 +1103,7 @@ class GameScreenGUI(val game : GameScreen) {
         sliderStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderWhite"))
         sliderStyle.knob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderKnob"))
 
+        //Make a slider from how much we have (negative side) to how much they have.
         val tradeSlider = Slider(-oItem.amt, exItem.amt, 1f, false, sliderStyle)
         tradeSlider.value = 0f
 
@@ -1093,21 +1111,21 @@ class GameScreenGUI(val game : GameScreen) {
         currLabel.setFontScale(0.15f)
         currLabel.setAlignment(Align.center)
 
-        val minLabel = Label((-oItem.amt).toInt().toString(), labelStyle)
+        val minLabel = Label(oItem.amt.toInt().toString(), labelStyle)
         minLabel.setFontScale(0.15f)
+        minLabel.color = Color.SKY
         minLabel.setAlignment(Align.center)
 
         val maxLabel = Label(exItem.amt.toInt().toString(), labelStyle)
         maxLabel.setFontScale(0.15f)
+        maxLabel.color = Color.ORANGE
         maxLabel.setAlignment(Align.center)
 
-        val lessButton = TextButton("-", buttonStyle)
-        lessButton.label.setFontScale(0.17f)
-        lessButton.label.setAlignment(Align.center)
+        val takeMoreButton = ImageButton(leftButtonStyle)
+        takeMoreButton.color = Color.SKY
 
-        val moreButton = TextButton("+", buttonStyle)
-        moreButton.label.setFontScale(0.17f)
-        moreButton.label.setAlignment(Align.center)
+        val giveMoreButton = ImageButton(rightButtonStyle)
+        giveMoreButton.color = Color.ORANGE
 
         val acceptButton = TextButton("Accept", buttonStyle)
         acceptButton.label.setFontScale(0.15f)
@@ -1121,9 +1139,9 @@ class GameScreenGUI(val game : GameScreen) {
         buttonTable.add(acceptButton).spaceRight(20f)
         buttonTable.add(cancelButton)
 
-        tradeSliderWindow.add(lessButton)
+        tradeSliderWindow.add(takeMoreButton).size(32f, 32f)
         tradeSliderWindow.add(currLabel)
-        tradeSliderWindow.add(moreButton)
+        tradeSliderWindow.add(giveMoreButton).size(32f, 32f)
 
         tradeSliderWindow.row()
 
@@ -1135,28 +1153,24 @@ class GameScreenGUI(val game : GameScreen) {
 
         tradeSliderWindow.add(buttonTable).colspan(3).spaceBottom(10f)
 
-//        tradeSlider.addListener(object:ClickListener(){
-//            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-//                currLabel.setText(tradeSlider.value.toInt().toString())
-//                callback(tradeSlider.value.toInt())
-//                super.clicked(event, x, y)
-//            }
-//        })
-
         tradeSlider.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                currLabel.setText(tradeSlider.value.toInt().toString())
-                callback(tradeSlider.value.toInt())
+                currLabel.setText(Math.abs(tradeSlider.value).toInt().toString())
+                if(tradeSlider.value > 0) currLabel.color = Color.ORANGE
+                else if(tradeSlider.value < 0) currLabel.color = Color.SKY
+                else currLabel.color = Color.WHITE
+
+                callback(-tradeSlider.value.toInt()) //We reverse the value sent here because of how our system/buttons work. <- takes, gives ->
             }
         })
 
-        moreButton.addListener(object:ChangeListener(){
+        giveMoreButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 tradeSlider.value += 1
             }
         })
 
-        lessButton.addListener(object:ChangeListener(){
+        takeMoreButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 tradeSlider.value -= 1
             }
