@@ -1,10 +1,10 @@
 package com.quickbite.rx2020.managers
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
+import com.quickbite.rx2020.Logger
 import java.io.BufferedReader
 import java.util.*
 
@@ -42,7 +42,7 @@ object DataManager{
         }
 
         val time:Long = TimeUtils.millis() - startTime
-        Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load events.")
+        Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load events.")
     }
 
     fun loadItems(dir:FileHandle){
@@ -54,7 +54,7 @@ object DataManager{
         }
 
         val time:Long = TimeUtils.millis() - startTime
-        Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load items.")
+        Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load items.")
     }
 
     fun loadRandomNames(firstNameFile:FileHandle, lastNameFile:FileHandle){
@@ -67,7 +67,7 @@ object DataManager{
         reader.forEachLine {line ->  randomLastNameList += line }
 
         val time:Long = TimeUtils.millis() - startTime
-        Gdx.app.debug("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
+        Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
     }
 
     fun loadSearchActivities(file:FileHandle){
@@ -119,26 +119,32 @@ object DataManager{
 
         /**
          * Selects another Event using a choice and chance.
+         * @param choice The text of the choice (ie: 'Craft a Net')
+         * @return The child event chosen by the choice and chance parameters, or null if no child events match the choice/chance or exist.
          */
-        fun select(choice:String, chance:Int): EventJson?{
+        fun selectChildEvent(choice:String): EventJson?{
             var outcomeIndex:Int = -1
+            var chance = MathUtils.random(100)
 
             val choiceIndex:Int = getChoiceIndex(choice)
             //If our result is valid, find the outcome that is a result of it.
             if(choiceIndex >= 0){
                 if(chances!!.isEmpty()) { //If the chances/outcomes are empty, return null
-                    Gdx.app.log("Event", "Event $name with title $title doesn't have any chances for the outcomes. Returning null.")
+                    Logger.log("DataManager", "Event $name with title $title doesn't have any chances for the outcomes. Returning null.")
                     return null
                 }
 
                 outcomeIndex = getOutcome(choiceIndex, chance)
 
-                if(outcomeIndex < 0) //If the outcomeIndex is negative, we have no outcome. Return null.
+                if(outcomeIndex < 0) { //If the outcomeIndex is negative, we have no outcome. Return null.
+                    Logger.log("DataManager", "$choice does not have any outcomes. This may be intended but notifying for the heck of it.", Logger.LogLevel.Info)
                     return null
+                }
 
                 val outcomeText = outcomes!![choiceIndex][outcomeIndex]
-                val outcomeEvent = DataManager.eventMap[outcomeText]!!
-                outcomeEvent.randomName = this.randomName
+                val outcomeEvent = DataManager.eventMap[outcomeText]
+                if(outcomeEvent == null) Logger.log("DataManager", "Apparently $choice with outcome $outcomeText doesn't have an event that matches it. Make sure it is named right and exists.", Logger.LogLevel.Warning)
+                outcomeEvent!!.randomName = this.randomName
                 return outcomeEvent
             }
 
@@ -152,9 +158,8 @@ object DataManager{
             var choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
 
             //If the result is -1 but we have outcomes, this is a special case. Return 0!
-            if(choiceIndex == -1 && outcomes != null && outcomes!!.size > 0){
+            if(choiceIndex == -1 && outcomes != null && outcomes!!.size > 0)
                 return 0
-            }
 
             return choiceIndex //Otherwise, return the choice index.
         }
@@ -180,7 +185,7 @@ object DataManager{
         companion object{
             fun getRandomRoot():EventJson{
                 val event = DataManager.rootEventMap.values.toTypedArray()[MathUtils.random(DataManager.rootEventMap.size-1)]
-                event.randomName = GroupManager.getRandomPerson().firstName
+                event.randomName = GroupManager.getRandomPerson()!!.firstName
                 return event;
             }
         }

@@ -32,8 +32,11 @@ object GroupManager {
         return list.find {person -> person.firstName.equals(name)}
     }
 
-    fun getRandomPerson():Person{
-        return list[MathUtils.random(0, list.size-1)]
+    fun getRandomPerson():Person?{
+        if(list.size > 0)
+            return list[MathUtils.random(0, list.size-1)]
+        else
+            return null
     }
 
     fun killPerson(name:String){

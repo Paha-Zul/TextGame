@@ -12,7 +12,7 @@
     "name": "searchEdibles", "buttonTitle": "Search For Edibles", "action": [["addRndAmt", "2.5", "10", "edibles", "true", "50"]], "description": "5% chance to find 1 - 50 per hour"
   },
   {
-    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": [["addRndAmt", "1", "1", "medkits", "false", "5"]], "description": "25% chance to find 1 - 50 per hour"
+    "name": "searchMeds", "buttonTitle": "Search For Med-kits", "action": [["addRndAmt", "1", "1", "medkits", "false", "5"]], "description": "5% chance to find 1 per hour"
   },
   {
     "name": "searchWealth", "buttonTitle": "Search For Wealth", "action": [["addRndAmt", "1", "50", "wealth", "false", "25"]], "description": "25% chance to find 1 - 50 per hour"

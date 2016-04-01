@@ -44,6 +44,6 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndItem", "1", "1", "panel", "track", "battery", "storage"]]
+    "resultingAction": [["addRndItem", "-1", "-1", "panel", "track", "battery", "storage"]]
   }
 ]

@@ -1,7 +1,7 @@
 package com.quickbite.rx2020.managers
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.rx2020.Logger
 import java.util.*
 
 /**
@@ -20,7 +20,7 @@ object SupplyManager {
             addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
         }
 
-        supplyMap["edibles"]?.consumePerDay = 1000f
+        supplyMap["edibles"]?.consumePerDay = 3.3f
         supplyMap["parts"]?.consumePerDay = 3.3f
         supplyMap["energy"]?.consumePerDay = 3.3f
     }
@@ -31,9 +31,11 @@ object SupplyManager {
 
     fun addToSupply(name:String, amt:Float):Supply{
         val supply = supplyMap[name]
-        if(supply == null) Gdx.app.error("SupplyManager", "Trying to add to supply $name which doesn't exist.")
-        else supply.amt += amt
-        return supply!!
+        if(supply == null) Logger.log("SupplyManager", "Trying to add to supply $name which doesn't exist.", Logger.LogLevel.Warning)
+        supply!!.amt += amt
+        if(supply!!.amt < 0) supply.amt = 0f
+        else if(supply.amt >= supply.maxAmount) supply.amt = supply.maxAmount.toFloat()
+        return supply
     }
 
     fun setSupply(name:String, amt:Float):Supply{
@@ -52,7 +54,7 @@ object SupplyManager {
         supply.amt = if (amt >= 0) amt else 0f
 
         if(supply.amt <= 0)
-            GroupManager.getPeopleList().forEach { person -> person.addHealth(-5f)}
+            GroupManager.getPeopleList().forEach { person -> person.addHealth(-0.1f)}
 
         supply = supplyMap["parts"]!!
         amt = supply.amt - ((supply.consumePerDay)/24f)
