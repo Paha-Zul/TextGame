@@ -155,6 +155,7 @@ class GameScreen(val game: Game): Screen {
             val perc = if(args.count() >= 3) ((args[2]) as String).toBoolean() else false
             var numPeople = if(args.count() >= 4) ((args[3]) as String).toInt() else 1
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
+            numPeople.clamp(0, GroupManager.numPeopleAlive)
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
@@ -231,18 +232,19 @@ class GameScreen(val game: Game): Screen {
         EventManager.onEvent("addRndItem", {args ->
             val min:Float = (args[0] as String).toFloat()
             val max:Float = (args[1] as String).toFloat()
-            val list:List<Any> = args.subList(2, args.size-1)
+            val chance = (args[2] as String).toFloat()
+            val list:List<Any> = args.subList(3, args.size-1)
 
-            val randomSupply = list[MathUtils.random(list.size-1)] as String
-            var num = MathUtils.random(Math.abs(min), Math.abs(max))
+            if(MathUtils.random(100) <= chance) {
+                val randomSupply = list[MathUtils.random(list.size - 1)] as String
+                var num = MathUtils.random(Math.abs(min), Math.abs(max))
 
-            if(min < 0 || max < 0) num = -num
-            val supply = SupplyManager.addToSupply(randomSupply, num.toFloat())
+                if (min < 0 || max < 0) num = -num
+                val supply = SupplyManager.addToSupply(randomSupply, num.toFloat())
 
-            val value = resultsList.getOrPut(supply.displayName, { Result(supply.displayName, 0) })
-            value.amt += num.toInt()
-
-            //TODO Something in this crap crashes.
+                val value = resultsList.getOrPut(supply.displayName, { Result(supply.displayName, 0) })
+                value.amt += num.toInt()
+            }
         })
 
         EventManager.onEvent("rest", {args ->
