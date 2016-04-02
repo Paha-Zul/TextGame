@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
-import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.managers.*
@@ -767,7 +765,7 @@ class GameScreenGUI(val game : GameScreen) {
         selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
 
         selectBox.setSelectedAlignment(Align.center)
-        selectBox.setListAlignment(Align.center)
+        selectBox.list.setListAlignment(Align.center)
         return selectBox
     }
 
@@ -775,14 +773,9 @@ class GameScreenGUI(val game : GameScreen) {
         TextGame.stage.addActor(campTable)
     }
 
-    /**
-     * Makes the trade window. Needs to be called before openTradeWindow()
-     */
     fun buildTradeWindow(){
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow2", Texture::class.java)))
         tradeWindowTable.setSize(450f, 400f)
-
-        val gridPatchDrawable = NinePatchDrawable(NinePatch(TextGame.manager.get("tradeGridBackground", Texture::class.java), 4, 4, 4, 4))
 
         val labelTable:Table = Table()
         val listTable:Table = Table()
@@ -857,63 +850,70 @@ class GameScreenGUI(val game : GameScreen) {
         val acceptButton = TextButton("Accept", textButtonStyle)
         acceptButton.label.setFontScale(0.15f)
 
+        val spaceX = 4f
+
+        listTable.add(valueLabel).width(60f).spaceRight(spaceX).height(24f)
+        listTable.add(nameLabel).width(76f).spaceRight(spaceX)
+        listTable.add(amountLabel).width(44f).spaceRight(spaceX)
+
+        listTable.add(tradeTitleLabel).width(58f).spaceRight(spaceX).colspan(3)
+
+        listTable.add(otherAmountLabel).width(44f).spaceRight(spaceX)
+        listTable.add(otherNameLabel).width(76f).spaceRight(spaceX)
+        listTable.add(otherValueLabel).width(60f)
+
+        listTable.row().spaceTop(5f)
+
         //The item list.
         val exomerList = TradeManager.exomerList
         val otherList = TradeManager.otherList
 
-        val spaceX = 4f
+        val rightArrow = TextGame.smallGuiAtlas.findRegion("nextButtonWhite")
+        val leftArrow = TextGame.smallGuiAtlas.findRegion("nextButtonWhiteLeft")
 
         //For each item....
         for(i in exomerList!!.indices){
             val exItem = exomerList[i]
             val otherItem = otherList!![i]
 
+            //Exomer item name
             val exomerItemNameLabel = Label(exItem.abbrName, labelStyle)
             exomerItemNameLabel.setFontScale(0.13f)
             exomerItemNameLabel.setAlignment(Align.center)
 
+            //Exomer amount
             val exomerItemAmountLabel = Label(exItem.amt.toInt().toString(), labelStyle)
             exomerItemAmountLabel.setFontScale(0.13f)
             exomerItemAmountLabel.setAlignment(Align.center)
+//            exomerItemAmountLabel.color = Color.SKY
 
+            //Exomer worth
             val exomerItemValueLabel = Label(exItem.worth.toString(), labelStyle)
             exomerItemValueLabel.setFontScale(0.13f)
             exomerItemValueLabel.setAlignment(Align.center)
             exomerItemValueLabel.color = Color.GREEN
 
+            //Other name
             val nativeItemNameLabel = Label(otherItem.abbrName, labelStyle)
             nativeItemNameLabel.setFontScale(0.13f)
             nativeItemNameLabel.setAlignment(Align.center)
 
+            //Other amt
             val nativeItemAmountLabel = Label(otherItem.amt.toInt().toString(), labelStyle)
             nativeItemAmountLabel.setFontScale(0.13f)
             nativeItemAmountLabel.setAlignment(Align.center)
+//            nativeItemAmountLabel.color = Color.ORANGE
 
+            //Other worth
             val nativeItemValueLabel = Label(otherItem.worth.toString(), labelStyle)
             nativeItemValueLabel.setFontScale(0.13f)
             nativeItemValueLabel.setAlignment(Align.center)
             nativeItemValueLabel.color = Color.RED
 
-            if(i == 0){
-                listTable.add(valueLabel).width(60f).spaceRight(spaceX).height(24f)
-                listTable.add(nameLabel).width(76f).spaceRight(spaceX)
-                listTable.add(amountLabel).width(44f).spaceRight(spaceX)
-
-                listTable.add(tradeTitleLabel).width(58f).spaceRight(spaceX)
-
-                listTable.add(otherAmountLabel).width(44f).spaceRight(spaceX)
-                listTable.add(otherNameLabel).width(76f).spaceRight(spaceX)
-                listTable.add(otherValueLabel).width(60f)
-
-                listTable.row().spaceTop(5f)
-            }
-
+            //Amt traded
             val amtLabel = Label("0", amtLabelStyle)
             amtLabel.setFontScale(0.13f)
             amtLabel.setAlignment(Align.center)
-
-            val takeButton = ImageButton(takeButtonStyle)
-            val giveButton = ImageButton(giveButtonStyle)
 
             //Add the amount then name to the left table.
             listTable.add(exomerItemValueLabel).left().fillX().spaceRight(spaceX).spaceBottom(spaceX).height(24f)
@@ -921,17 +921,22 @@ class GameScreenGUI(val game : GameScreen) {
             listTable.add(exomerItemAmountLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
 
             //Add the stuff to the center table.
-            listTable.add(amtLabel).space(0f, 5f, 0f, 5f).fillX().spaceRight(spaceX).spaceBottom(spaceX)
+            val leftArrowCell:Cell<Actor> = listTable.add().size(16f, 16f).spaceBottom(spaceX)
+            listTable.add(amtLabel).space(0f, 0f, 0f, 0f).width(26f).spaceBottom(spaceX)
+            val rightArrowCell:Cell<Actor> = listTable.add().size(16f, 16f).spaceRight(spaceX).spaceBottom(spaceX)
 
             //Add the name then amount to the right table.
             listTable.add(nativeItemAmountLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
             listTable.add(nativeItemNameLabel).fillX().spaceRight(spaceX).spaceBottom(spaceX)
             listTable.add(nativeItemValueLabel).right().fillX().spaceBottom(spaceX)
 
+            val rightArrowImage:Image = Image(rightArrow)
+//            rightArrowImage.color = Color.ORANGE
+
+            val leftArrowImage:Image = Image(leftArrow)
+//            leftArrowImage.color = Color.SKY
+
             val func = { newAmt: Int ->
-
-                val absChangeAmt:Int = Math.abs(newAmt)
-
                 var tradeAmt = amtLabel.text.toString().toInt()
                 var yourOffer = yourOfferAmtLabel.text.toString().toInt()
                 var otherOffer = otherOfferAmtLabel.text.toString().toInt()
@@ -945,7 +950,7 @@ class GameScreenGUI(val game : GameScreen) {
                     otherOffer -= otherItem.worth*toZero
                     if(otherOffer <= 0) otherOffer = 0
 
-                //If trade amount is negative and change amount is positive.
+                    //If trade amount is negative and change amount is positive.
                 }else if(tradeAmt < 0 && newAmt > 0){
                     val toZero = tradeAmt
                     val toChange = newAmt
@@ -973,9 +978,9 @@ class GameScreenGUI(val game : GameScreen) {
 
                 //If amt is positive, make it green. Negative, make it red. 0, make it white.
                 when {
-                    tradeAmt > 0 -> amtLabel.color = Color.GREEN
-                    tradeAmt < 0 -> amtLabel.color = Color.RED
-                    else -> amtLabel.color = Color.WHITE
+                    tradeAmt > 0 -> {amtLabel.color = Color.GREEN; leftArrowCell.setActor(leftArrowImage); rightArrowCell.clearActor()}
+                    tradeAmt < 0 -> {amtLabel.color = Color.RED; rightArrowCell.setActor(rightArrowImage); leftArrowCell.clearActor()}
+                    else -> {amtLabel.color = Color.WHITE; leftArrowCell.clearActor(); rightArrowCell.clearActor()}
                 }
 
                 when {
@@ -993,18 +998,6 @@ class GameScreenGUI(val game : GameScreen) {
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     openTradeSlider(exomerList[i], otherList[i], func)
                     super.clicked(event, x, y)
-                }
-            })
-
-            takeButton.addListener(object:ChangeListener(){
-                override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    func(amtLabel.text.toString().toInt() + 1)
-                }
-            })
-
-            giveButton.addListener(object:ChangeListener(){
-                override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    func(amtLabel.text.toString().toInt() - 1)
                 }
             })
 
@@ -1047,13 +1040,6 @@ class GameScreenGUI(val game : GameScreen) {
         tradeWindowTable.add(acceptButton).fill().expand().padBottom(4f)
 
         tradeWindowTable.setPosition(TextGame.viewport.worldWidth/2f - tradeWindowTable.width/2f, TextGame.viewport.worldHeight/2f - tradeWindowTable.height/2f)
-
-//        tradeWindowTable.debugAll()
-//        listTable.debugAll()
-
-//        mainTradeWindowTable.add(tradeWindowTable).left()
-
-//        mainTradeWindowTable.setFillParent(true)
     }
 
     /**
@@ -1086,18 +1072,18 @@ class GameScreenGUI(val game : GameScreen) {
         sliderStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderWhite"))
         sliderStyle.knob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderKnob"))
 
-        val tradeSlider = Slider(-oItem.amt, exItem.amt, 1f, false, sliderStyle)
+        val tradeSlider = Slider(-exItem.amt, oItem.amt, 1f, false, sliderStyle)
         tradeSlider.value = 0f
 
         val currLabel = Label("0", labelStyle)
         currLabel.setFontScale(0.15f)
         currLabel.setAlignment(Align.center)
 
-        val minLabel = Label((-oItem.amt).toInt().toString(), labelStyle)
+        val minLabel = Label((-exItem.amt).toInt().toString(), labelStyle)
         minLabel.setFontScale(0.15f)
         minLabel.setAlignment(Align.center)
 
-        val maxLabel = Label(exItem.amt.toInt().toString(), labelStyle)
+        val maxLabel = Label(oItem.amt.toInt().toString(), labelStyle)
         maxLabel.setFontScale(0.15f)
         maxLabel.setAlignment(Align.center)
 
