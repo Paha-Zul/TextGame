@@ -180,10 +180,13 @@ class GameScreenGUI(val game : GameScreen) {
                 //If not null, get the action.
                 if(game.searchActivity != null) {
                     val actionList = game.searchActivity!!.action!!
+                    game.searchFunc = Array(actionList.size, {i->null})
 
+                    var i =0
                     for(params in actionList.iterator()) {
                         //If not null, set up the search function
-                        game.searchFunc = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
+                        game.searchFunc!![i] = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
+                        i++
                     }
                 }
             }
@@ -192,7 +195,7 @@ class GameScreenGUI(val game : GameScreen) {
         game.timeTickEventList += ChainTask({ activityHourSlider.value <= 0},
             {
                 activityHourSlider.value = activityHourSlider.value-1
-                game.searchFunc?.invoke()
+                game.searchFunc?.forEach {func->func?.invoke()}
             },
             {game.searchActivity = null; game.searchFunc = null})
     }
@@ -508,14 +511,11 @@ class GameScreenGUI(val game : GameScreen) {
         //Set some styles
         val labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
-        val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
         val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
-
-        //val padding:Int = 400/(event.choices!!.size+1)/2
 
         //Make the buttons for the choices (if any)
         for(choice in event.choices!!.iterator()){

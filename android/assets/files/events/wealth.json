@@ -1,0 +1,46 @@
+[ {
+  "root" : true,
+  "title" : "Gems!",
+  "name" : "Gems",
+  "description" : [ "%n finds a nice gemstone in a roadside dirt clump!" ],
+  "choices" : [ "Nice!" ],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 0 ] ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+}, {
+  "root" : true,
+  "title" : "Gems?",
+  "name" : "GemsMaybe",
+  "description" : [ "%n reexamines the group’s gemstones." ],
+  "choices" : [ "Okay" ],
+  "outcomes" : [ [ "MoreGems", "LessGems", "", "" ] ],
+  "chances" : [ [ 50, 50, 0, 0 ] ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Oops",
+  "name" : "Oops",
+  "description" : [ "%n accidentally crushed a small trinket while moving supplies around…" ],
+  "choices" : [ "Disappointing" ],
+  "outcomes" : [ [ "", "" ] ],
+  "chances" : [ [ 0, 0 ] ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Gems?",
+  "name" : "MoreGems",
+  "description" : [ "Some of the gemstones are much nicer when properly cleaned." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Gems?",
+  "name" : "LessGems",
+  "description" : [ "Some “gemstones” are just colorful rocks." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+} ]

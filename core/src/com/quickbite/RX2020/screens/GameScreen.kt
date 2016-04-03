@@ -49,7 +49,7 @@ class GameScreen(val game: Game): Screen {
     private var resultsList:MutableMap<String, Result> = mutableMapOf()
 
     var searchActivity:DataManager.SearchActivityJSON? = null
-    var searchFunc:(()->Unit)? = null
+    var searchFunc:Array<(()->Unit)?>? = null
 
     var numHoursToAdvance:Int = 0
     var speedToAdvance:Float = 0.1f
@@ -146,6 +146,7 @@ class GameScreen(val game: Game): Screen {
      * Adds events to the EventSystem to be called later.
      */
     private fun makeEvents(){
+        //TODO Need a 'wait' event.
 
         //We are hurting a person/people
         EventManager.onEvent("hurt", { args ->
@@ -198,10 +199,12 @@ class GameScreen(val game: Game): Screen {
 
         EventManager.onEvent("heal", { args ->
             var name = (args[0]) as String
-            val amt = ((args[1]) as String).toInt()
+            val min = ((args[1]) as String).toInt()
+            val max = ((args[2]) as String).toInt()
 
             val person = GroupManager.getPerson(name)!!;
 
+            val amt = MathUtils.random(min, max);
             person.addHealth(amt.toFloat())
 
             gui.buildGroupTable()
@@ -277,13 +280,16 @@ class GameScreen(val game: Game): Screen {
         EventManager.onEvent("repairROV", {args ->
             val min = (args[0] as String).toFloat()
             val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
+            val chance = if(args.count() >= 3) (args[2] as String).toFloat() else 100f
 
-            val amt = MathUtils.random(min, max)
+            if(MathUtils.random(100) <= chance) {
+                val amt = MathUtils.random(min, max)
 
-            ROVManager.addHealthROV(amt)
+                ROVManager.addHealthROV(amt)
 
-            val value = resultsList.getOrPut("ROV", { Result("ROV", 0, "'s HP") })
-            value.amt += amt.toInt()
+                val value = resultsList.getOrPut("ROV", { Result("ROV", 0, "'s HP") })
+                value.amt += amt.toInt()
+            }
         })
 
         EventManager.onEvent("cutMiles", {args ->

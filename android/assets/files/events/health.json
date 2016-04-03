@@ -1,0 +1,100 @@
+[ {
+  "root" : true,
+  "title" : "Box Cutter",
+  "name" : "Cut",
+  "description" : [ "% cut open his hand while moving around supplies." ],
+  "choices" : [ "Ouch" ],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 100 ] ],
+  "resultingAction" : [ [ "hurt", "1", "15" ] ]
+}, {
+  "root" : true,
+  "title" : "Sappy",
+  "name" : "Sap",
+  "description" : [ "While searching for food %n notices a thick oozy sap dripping from some of the trees. He touches the tip of his finger to the sap…" ],
+  "choices" : [],
+  "outcomes" : [ [ "SapGood" ] ],
+  "chances" : [ [ 0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Fruity",
+  "name" : "Fruity",
+  "description" : [ "While out searching for food (Name) spots a piece of fruit hanging high up on a tree. He jumps up and manages to snag it with his fingertips. It snaps free showering him with leaves and twigs…" ],
+  "choices" : [],
+  "outcomes" : [ [ "FruityBad" ] ],
+  "chances" : [ [ 0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Berries",
+  "name" : "BerryGood",
+  "description" : [ "It’s tart and sappy, but he feels immediately invigorated." ],
+  "choices" : [],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 0, 0, 50 ] ],
+  "resultingAction" : [ [ "heal", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Berries",
+  "name" : "BerryBad",
+  "description" : [ "It’s bitter and sour, leaving him with a soapy feeling in his mouth. He spits out the remaining berry, but he can feel an upset stomach setting in." ],
+  "choices" : [],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 0, 0, 50 ] ],
+  "resultingAction" : [ [ "hurt", "1", "25" ] ]
+}, {
+  "root" : true,
+  "title" : "Berries",
+  "name" : "Berry",
+  "description" : [ "While searching for food %n uncovers a thicket of unusual dark red berries. Their plump, juicy, and look very tasty, but looks can be deceiving..." ],
+  "choices" : [],
+  "outcomes" : [ [ "BerryEat" ] ],
+  "chances" : [ [ 0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Sappy",
+  "name" : "SapGood",
+  "description" : [ "It’s sticky but soothing on the small cuts his fingers." ],
+  "choices" : [],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 0 ] ],
+  "resultingAction" : [ [ "heal", "1", "25" ] ]
+}, {
+  "root" : true,
+  "title" : "Watch the Road",
+  "name" : "Bump",
+  "description" : [ "The ROV hits an unexpected dip in the road, it was pretty jarring." ],
+  "choices" : [ "Whoa!" ],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 100 ] ],
+  "resultingAction" : [ [ "hurt", "1", "10" ], [ "damageROV", "1", "10" ] ]
+}, {
+  "root" : false,
+  "title" : "Berries",
+  "name" : "BerryEat",
+  "description" : [ "He pops one of the berries into his mouth…" ],
+  "choices" : [],
+  "outcomes" : [ [ "BerryGood", "BerrBad" ] ],
+  "chances" : [ [ 50, 0, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Fruity",
+  "name" : "FruityBad",
+  "description" : [ "…unfortunately also showering him in angry stinging wasp-like creatures. He feels them fall onto his arms and down his back of his shirt. He screams, dropping the fruit and runs, wafting his clothes and swatting the air around him! By the time he reaches the ROV he’s lost the swarm and most of his clothes." ],
+  "choices" : [],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 0 ] ],
+  "resultingAction" : [ [ "hurt", "1", "25" ] ]
+}, {
+  "root" : true,
+  "title" : "Road Rash",
+  "name" : "Fell",
+  "description" : [ "% slipped while trying to climb an embankment for a better view of the path ahead. He scratched his hands and knees during the fall." ],
+  "choices" : [ "Ouch" ],
+  "outcomes" : [ [] ],
+  "chances" : [ [ 100 ] ],
+  "resultingAction" : [ [ "hurt", "1", "15" ] ]
+} ]

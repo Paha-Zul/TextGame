@@ -7,7 +7,7 @@
     "choices": ["Let's see here..."],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndItem", "1", "1", "panel", "track", "battery", "storage"]]
+    "resultingAction": [["addRndItem", "1", "1", "100", "panel", "track", "battery", "storage"]]
   },
   {
     "root": true,
@@ -17,7 +17,7 @@
     "choices": ["Electrical fire!"],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndItem", "-1", "-1", "panel", "track", "battery", "storage"]]
+    "resultingAction": [["addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage"]]
   },
   {
     "root": true,
@@ -35,7 +35,7 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndItem", "1", "1", "panel", "track", "battery", "storage"]]
+    "resultingAction": [["addRndItem", "1", "1", "100", "panel", "track", "battery", "storage"]]
   },
   {
     "name": "LessPieces",
@@ -44,6 +44,6 @@
     "choices": [],
     "outcomes": [],
     "chances": [],
-    "resultingAction": [["addRndItem", "-1", "-1", "panel", "track", "battery", "storage"]]
+    "resultingAction": [["addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage"]]
   }
 ]
