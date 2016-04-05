@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.quickbite.rx2020.managers.EasyAssetManager;
 import com.quickbite.rx2020.screens.LoadingScreen;
+import com.quickbite.rx2020.util.Logger;
 
 public class TextGame extends com.badlogic.gdx.Game {
     public static OrthographicCamera camera;
@@ -44,7 +45,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 				StackTraceElement[] list = mainThread.getStackTrace();
 				for(StackTraceElement element : list)
 					Logger.log("Crash", element.toString(), Logger.LogLevel.Warning);
-				com.quickbite.rx2020.Logger.writeLog("log.txt");
+				Logger.writeLog("log.txt");
 			}
 		}));
 
@@ -66,8 +67,8 @@ public class TextGame extends com.badlogic.gdx.Game {
 			e.printStackTrace();
 			String message = e.getMessage();
 			if(message == null) message = "Hmm?";
-			com.quickbite.rx2020.Logger.log("Crashing", message, com.quickbite.rx2020.Logger.LogLevel.Error);
-			com.quickbite.rx2020.Logger.writeLog("log.txt");
+			Logger.log("Crashing", message, Logger.LogLevel.Error);
+			Logger.writeLog("log.txt");
 		}
 	}
 

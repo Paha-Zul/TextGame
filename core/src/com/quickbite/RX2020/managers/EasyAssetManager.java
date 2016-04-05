@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.quickbite.rx2020.Logger;
+import com.quickbite.rx2020.util.Logger;
 
 import java.util.HashMap;
 

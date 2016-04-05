@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.util.Tester
 import java.util.*
 
 /**
@@ -34,9 +35,13 @@ class GameScreen(val game: Game): Screen {
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
 
-    private val minEventTime = if(TextGame.testMode) 1 else 15
-    private val maxEventTime = if(TextGame.testMode) 1 else 30
-    private val eventCustomTimerTest: CustomTimer = CustomTimer(null, MathUtils.random(minEventTime, maxEventTime).toFloat())
+    private val commonEventTime = object {val min=12f; val max = 36f}
+    private val rareEventTime = object {val min=84f; val max = 252f}
+    private val epicEventTime = object {val min=360f; val max = 1080f}
+
+    private val commonEventTimer: CustomTimer = CustomTimer(null, MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
+    private val rareEventTimer: CustomTimer = CustomTimer(null, MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
+    private val epicEventTimer: CustomTimer = CustomTimer(null, MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
 
     private var paused = false
 
@@ -44,9 +49,8 @@ class GameScreen(val game: Game): Screen {
 
     private val gameInput: GameScreenInput = GameScreenInput()
 
-    private var currEvent: DataManager.EventJson? = DataManager.EventJson.getRandomRoot()
-
     private var resultsList:MutableMap<String, Result> = mutableMapOf()
+    private var deathResultsList:MutableMap<String, Result> = mutableMapOf()
 
     var searchActivity:DataManager.SearchActivityJSON? = null
     var searchFunc:Array<(()->Unit)?>? = null
@@ -89,52 +93,14 @@ class GameScreen(val game: Game): Screen {
 
         //gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
 
-        val func = {
-            if(currEvent!=null){
-                val _evt = currEvent as DataManager.EventJson
-                gui.triggerEventGUI(_evt, { choice ->
-
-                    //If the list has a resulting action, call it!
-                    val list = currEvent!!.resultingAction;
-                    var exit:Boolean = true
-                    if(list != null) {
-                        resultsList.clear()
-                        for (l in list.iterator()) {
-                            if (l.size > 0) {
-                                exit = false
-                                EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size-1)))
-                            }
-                        }
-                        gui.showEventResults(resultsList.values.toList())
-                    }
-
-                    currEvent = _evt.selectChildEvent(choice)
-                    if(currEvent != null){
-                        eventCustomTimerTest.restart(0.00001f)
-                        if(exit){
-                            resumeGame()
-                            gui.closeEvent()
-                        }
-
-                    //Get a new root sometime.
-                    }else{
-                        if(exit){
-                            resumeGame()
-                            gui.closeEvent()
-                        }
-                        currEvent = DataManager.EventJson.getRandomRoot()
-                        eventCustomTimerTest.restart(MathUtils.random(minEventTime, maxEventTime).toFloat())
-                    }
-                })
-            }
-        }
-
-        eventCustomTimerTest.callback = func
+        commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
+        rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
+        epicEventTimer.callback = timerFunc("epic", epicEventTimer, epicEventTime.min, epicEventTime.max)
 
         makeEvents()
 
         if(TextGame.testMode) {
-            Tester.testEvents(500)
+            Tester.testEvents(50)
 
             gui.buildTradeWindow()
             gui.openTradeWindow()
@@ -150,7 +116,7 @@ class GameScreen(val game: Game): Screen {
 
         //We are hurting a person/people
         EventManager.onEvent("hurt", { args ->
-            var name = currEvent!!.randomName
+            var name = GameEventManager.currActiveEvent!!.randomName
             val min = ((args[0]) as String).toInt()
             val max = if(args.count() >= 2) ((args[1]) as String).toInt() else min
             val perc = if(args.count() >= 3) ((args[2]) as String).toBoolean() else false
@@ -158,16 +124,19 @@ class GameScreen(val game: Game): Screen {
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
+            var randomPerPerson = if(args.count() >= 5) ((args[4]) as String).toBoolean() else false
+
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
-                val amt = MathUtils.random(min, max)
+                var dmg = MathUtils.random(min, max)
                 val list = GroupManager.getPeopleList()
                 list.forEach { person ->
+                    if(randomPerPerson) dmg = MathUtils.random(min, max)
                     var res = 0
                     if (perc)
-                        res = person.addPercentHealth(-(amt.toFloat())).toInt()
+                        res = person.addPercentHealth(-(dmg.toFloat())).toInt()
                     else
-                        res = person.addHealth(-(amt.toFloat())).toInt()
+                        res = person.addHealth(-(dmg.toFloat())).toInt()
 
                     val value = resultsList.getOrPut(person.firstName, { Result(person.firstName, 0, "'s HP") })
                     value.amt += res
@@ -194,15 +163,17 @@ class GameScreen(val game: Game): Screen {
         })
 
         EventManager.onEvent("death", { args ->
+            val name = args[0] as String
+
             gui.buildGroupTable()
+            deathResultsList.getOrPut(name, { Result(name, 0, " died...") })
         })
 
         EventManager.onEvent("heal", { args ->
-            var name = (args[0]) as String
-            val min = ((args[1]) as String).toInt()
-            val max = ((args[2]) as String).toInt()
+            val min = ((args[0]) as String).toInt()
+            val max = ((args[1]) as String).toInt()
 
-            val person = GroupManager.getPerson(name)!!;
+            val person = GroupManager.getPerson(GameEventManager.currActiveEvent!!.randomName)!!;
 
             val amt = MathUtils.random(min, max);
             person.addHealth(amt.toFloat())
@@ -220,7 +191,8 @@ class GameScreen(val game: Game): Screen {
             val perPerson = if(args.count() >= 4) (args[3] as String).toBoolean() else false //If it is per person
             val chance = if(args.count() >= 5) (args[4] as String).toFloat() else 100f //Chance to happen
 
-            if(MathUtils.random(100) <= chance) {
+            val rand = MathUtils.random(100)
+            if(rand <= chance) {
                 var num = MathUtils.random(Math.abs(min), Math.abs(max))
                 if (min < 0 || max < 0) num = -num
                 if(perPerson) num *= GroupManager.numPeopleAlive
@@ -268,13 +240,16 @@ class GameScreen(val game: Game): Screen {
         EventManager.onEvent("damageROV", {args ->
             val min = (args[0] as String).toFloat()
             val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
+            val chance = if(args.count() >= 3) (args[2] as String).toFloat() else 0f
 
-            val amt = MathUtils.random(min, max)
+            val rand = MathUtils.random(1, 100)
+            if(rand <= chance) {
+                val amt = -MathUtils.random(min, max)
+                ROVManager.addHealthROV(amt)
 
-            ROVManager.addHealthROV(-amt)
-
-            val value = resultsList.getOrPut("ROV", { Result("ROV", 0, "'s HP") })
-            value.amt += amt.toInt()
+                val value = resultsList.getOrPut("ROV", { Result("ROV", 0, "'s HP") })
+                value.amt += amt.toInt()
+            }
         })
 
         EventManager.onEvent("repairROV", {args ->
@@ -399,7 +374,9 @@ class GameScreen(val game: Game): Screen {
      */
     private fun travelUpdate(delta:Float){
         GameStats.update(delta)
-        eventCustomTimerTest.update(delta)
+        commonEventTimer.update(delta)
+        rareEventTimer.update(delta)
+        epicEventTimer.update(delta)
 
         for(background in scrollingBackgroundList)
             background.update(delta)
@@ -461,8 +438,61 @@ class GameScreen(val game: Game): Screen {
         //throw UnsupportedOperationException()
     }
 
-    class Result(val name:String, var amt:Int, val desc:String = ""){
+    class Result(val name:String, var amt:Int, val desc:String = "")
 
+    fun timerFunc(eventType:String, timer:CustomTimer, min:Float, max:Float):()->Unit{
+        val func = {
+            var currEvent = GameEventManager.currActiveEvent
+            if(currEvent == null) currEvent = GameEventManager.setNewRandomRoot(eventType);
+            GameEventManager.currActiveEvent = currEvent;
+
+            gui.triggerEventGUI(currEvent, { choice ->
+
+                //If the list has a resulting action, call it!
+                val list = currEvent!!.resultingAction;
+                var exit:Boolean = true
+
+                resultsList.clear()         //Clear both lists so we display clean results.
+                deathResultsList.clear()
+                //We are about to perform some actions and generate results for the event.
+                if(list != null && list.size != 0) {
+                    //Call each event through the event manager.
+                    for (l in list.iterator()) {
+                        if (l.size > 0) {
+                            exit = false
+                            EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size-1)))
+                        }
+                    }
+
+                    //Display the event results to the player.
+                    gui.showEventResults(resultsList.values.toList(), deathResultsList.values.toList())
+                }
+
+                //Get event related to the choice we selected.
+                currEvent = currEvent!!.selectChildEvent(choice)
+                //If the event is not null, restart the timer to make the next event display.
+                if(currEvent != null){
+                    timer.restart(0.00001f)
+                    if(exit){
+                        resumeGame()
+                        gui.closeEvent()
+                    }
+
+                    GameEventManager.currActiveEvent = currEvent
+                //Otherwise if it is null, we need to pick a new root.
+                }else{
+                    if(exit){
+                        resumeGame()
+                        gui.closeEvent()
+                    }
+                    timer.restart(MathUtils.random(min, max).toFloat())
+                    GameEventManager.setNewRandomRoot(eventType)
+                }
+
+            })
+        }
+
+        return func
     }
 }
 
