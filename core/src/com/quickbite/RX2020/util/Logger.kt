@@ -1,4 +1,4 @@
-package com.quickbite.rx2020
+package com.quickbite.rx2020.util
 
 import com.badlogic.gdx.Gdx
 

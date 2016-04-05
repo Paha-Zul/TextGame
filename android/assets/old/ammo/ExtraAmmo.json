@@ -1,8 +1,0 @@
-{
-  "name": "More Ammo",
-  "description": "He finds some extra Ammo",
-  "choices": ["Good"],
-  "outcomes": [],
-  "chances": [],
-  "resultingAction": ["addRndAmt", "evtPerson", "1", "25", "ammo"]
-}

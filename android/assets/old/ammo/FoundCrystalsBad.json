@@ -1,9 +1,0 @@
-{
-  "root" : true,
-  "name": "Crystals!",
-  "description": "It seems some of these crystals don’t fit the weapons specifications.",
-  "choices": ["Who Knew?"],
-  "outcomes": [],
-  "chances": [],
-  "resultingAction": ["addRndAmt", "evtPerson", "-1", "-25", "ammo"]
-}

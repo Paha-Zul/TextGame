@@ -75,4 +75,8 @@ class Person(private val _firstName:String, private val _lastName:String) {
             }
         }
     }
+
+    override fun toString(): String {
+        return firstName;
+    }
 }

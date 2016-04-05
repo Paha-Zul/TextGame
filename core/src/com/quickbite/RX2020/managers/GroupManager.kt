@@ -1,6 +1,7 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.Person
 
 /**
@@ -28,22 +29,23 @@ object GroupManager {
     }
 
     fun getPerson(name:String): Person?{
-        if(name.equals("random")) return list[MathUtils.random(list.size-1)]
-        return list.find {person -> person.firstName.equals(name)}
+        val person = list.find {person -> person.firstName.equals(name)}
+        if(person == null) Logger.log("GroupManager", "Trying to find person with name $name and it doesn't exist. People: ${list.toString()}")
+        return person;
     }
 
     fun getRandomPerson():Person?{
-        if(list.size > 0)
-            return list[MathUtils.random(0, list.size-1)]
-        else
+        if(list.size > 0) {
+            return list[MathUtils.random(0, list.size - 1)]
+        }else
             return null
     }
 
     fun killPerson(name:String){
         val person = getPerson(name)
-        if(person!=null)
+        if(person!=null) {
             list -= person
-
-        EventManager.callEvent("death", "")
+            EventManager.callEvent("death", "${person.firstName} ${person.lastName}")
+        }
     }
 }

@@ -22,7 +22,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 	public static TextureAtlas smallGuiAtlas;
 
-	public static Boolean testMode = true;
+	public static Boolean testMode = false;
 
 	@Override
 	public void create () {

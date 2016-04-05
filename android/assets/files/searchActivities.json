@@ -56,6 +56,6 @@
 }, {
   "name" : "searchEdibles",
   "buttonTitle" : "Search For Edibles",
-  "action" : [ [ "addRndAmt", "2.5", "10", "edibles", "true", "50" ], [ "addRndItem", "-1", "-25", "25", "wealth", "edibles", "parts", "energy", "ammo" ], [ "addRndAmt", "-1", "-25", "ammo", "false", "25" ] ],
+  "action" : [ [ "addRndAmt", "2.5", "10", "edibles", "false", "50" ], [ "addRndItem", "-1", "-25", "25", "wealth", "edibles", "parts", "energy", "ammo" ], [ "addRndAmt", "-1", "-25", "ammo", "false", "25" ] ],
   "description" : "Edibles: 25% chance to find (1-25) Per Hour\nAmmo: 50% Chance to lose (1-25) Per Hour\nOther: 25% Chance to lose (1-25) Per Hour"
 } ]

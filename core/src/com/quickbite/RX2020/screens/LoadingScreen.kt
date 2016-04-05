@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.quickbite.rx2020.ChainTask
-import com.quickbite.rx2020.GH
+import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.DataManager
 

@@ -1,7 +1,7 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.Logger
+import com.quickbite.rx2020.util.Logger
 import java.util.*
 
 /**

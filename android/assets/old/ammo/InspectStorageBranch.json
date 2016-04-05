@@ -1,8 +1,0 @@
-{
-  "root": true,
-  "name": "Crystals!",
-  "description": "%n checks the groups Ammo storage.",
-  "choices": ["Continue"],
-  "outcomes": [["ExtraAmmo", "LessAmmo"]],
-  "chances": [[50, 50]]
-}
