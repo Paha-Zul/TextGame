@@ -30,6 +30,8 @@ class GameScreenGUI(val game : GameScreen) {
     private val leftTable:Table = Table()
     private val rightTable:Table = Table()
 
+    private val recentChangeTable:Table = Table()
+
     private val numPadTable:Table = Table()
 
     private lateinit var timeLabel:Label
@@ -65,10 +67,13 @@ class GameScreenGUI(val game : GameScreen) {
 
     private lateinit var selectBox:SelectBox<Label>
 
-
     private lateinit var pauseButton:ImageButton
 
     private lateinit var distProgressBar:ProgressBar
+
+    init{
+        instance = this
+    }
 
     fun init(){
         buildTravelScreenGUI()
@@ -94,6 +99,7 @@ class GameScreenGUI(val game : GameScreen) {
         distProgressBar.setValue(GameStats.TravelInfo.totalDistTraveled.toFloat())
 
         updateSuppliesGUI()
+        buildRecentChangeTable()
     }
 
     private fun updateSuppliesGUI(){
@@ -171,31 +177,64 @@ class GameScreenGUI(val game : GameScreen) {
         activityButton.addListener(object:ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 game.numHoursToAdvance = activityHourSlider.value.toInt()
-
-                //Get the activity.
                 game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
-
                 //If not null, get the action.
-                if(game.searchActivity != null) {
-                    val actionList = game.searchActivity!!.action!!
-                    game.searchFunc = Array(actionList.size, {i->null})
+                val actionList = game.searchActivity!!.action!! //Get the action list
+                game.searchFunc = Array(actionList.size, {i->null}) //Initialize an array to hold the events.
 
-                    var i =0
-                    for(params in actionList.iterator()) {
-                        //If not null, set up the search function
-                        game.searchFunc!![i] = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
-                        i++
-                    }
+                var i =0
+                for(params in actionList.iterator()) {
+                    //If not null, set up the search function
+                    game.searchFunc!![i] = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
+                    i++
                 }
             }
         })
 
-        game.timeTickEventList += ChainTask({ activityHourSlider.value <= 0},
+        selectBox.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
+                val resultList = game.searchActivity!!.restrictions!!.filter {res -> SupplyManager.getSupply(res).amt <= 0 }
+                if(resultList.size > 0)
+                    disableActivityButton()
+                else
+                    enableActivityButton()
+            }
+        })
+
+        var task:ChainTask? = null
+        task = ChainTask(
+            {activityHourSlider.value <= 0 || game.searchActivity == null},
             {
-                activityHourSlider.value = activityHourSlider.value-1
-                game.searchFunc?.forEach {func->func?.invoke()}
+                if(game.searchActivity != null) {
+                    val list = game.searchActivity!!.restrictions!!.filter { res -> SupplyManager.getSupply(res).amt <= 0 } //Filter out any restrictions that are less than 0
+                    //If our list is 0, that means all the restrictions passed. We are good to proceed.
+                    if (list.size == 0) {
+                        activityHourSlider.value = activityHourSlider.value - 1
+                        game.searchFunc?.forEach { func -> func?.invoke() }
+
+                    //Otherwise, stop such.
+                    } else {
+                        game.searchActivity = null
+                        game.searchFunc = null
+                        disableActivityButton()
+                    }
+                }
             },
-            {game.searchActivity = null; game.searchFunc = null})
+            {game.searchActivity = null; game.searchFunc = null; game.numHoursToAdvance = 0; activityHourSlider.value = 0f;}
+        )
+
+        game.timeTickEventList += task
+    }
+
+    private fun disableActivityButton(){
+        activityButton.label.color = Color.RED
+        activityButton.isDisabled = true
+    }
+
+    private fun enableActivityButton(){
+        activityButton.label.color = Color.WHITE
+        activityButton.isDisabled = false
     }
 
     fun applyTravelTab(tableToApply:Table){
@@ -610,7 +649,7 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Shows the event results
      */
-    fun showEventResults(list: List<GameScreen.Result>, deathList: List<GameScreen.Result>){
+    fun showEventResults(list: List<Result>, deathList: List<Result>){
         EventInfo.eventResultsTable.clear()
         EventInfo.eventTable.clear()
 
@@ -793,10 +832,6 @@ class GameScreenGUI(val game : GameScreen) {
         selectBox.setSelectedAlignment(Align.center)
         selectBox.list.setListAlignment(Align.center)
         return selectBox
-    }
-
-    fun applyCampTable(){
-        TextGame.stage.addActor(campTable)
     }
 
     fun buildTradeWindow(){
@@ -1187,11 +1222,36 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-
         TextGame.stage.addActor(tradeSliderWindow)
     }
 
     fun closeTradeSlider() = tradeSliderWindow.remove()
+
+    fun buildRecentChangeTable(){
+        val list = Result.recentResultMap.values.toList()
+        recentChangeTable.clear()
+        recentChangeTable.remove()
+//        recentChangeTable.debugAll()
+
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
+        for(result in list){
+            val nameLabel = Label(result.name, labelStyle)
+            nameLabel.setFontScale(0.15f)
+
+            val amtLabel = Label(result.amt.toString(), labelStyle)
+            amtLabel.setFontScale(0.15f)
+            if(result.amt < 0) amtLabel.color = Color.RED
+            if(result.amt > 0) amtLabel.color = Color.GREEN
+
+            recentChangeTable.add(amtLabel).spaceRight(10f)
+            recentChangeTable.add(nameLabel)
+            recentChangeTable.row()
+        }
+
+        recentChangeTable.setPosition(50f, TextGame.viewport.worldHeight/2f - recentChangeTable.height/2f)
+        TextGame.stage.addActor(recentChangeTable)
+    }
 
     private object EventInfo{
         val eventTable:Table = Table()
@@ -1205,5 +1265,9 @@ class GameScreenGUI(val game : GameScreen) {
         override fun toString(): String {
             return this.text.toString()
         }
+    }
+
+    companion object{
+        lateinit var instance:GameScreenGUI
     }
 }

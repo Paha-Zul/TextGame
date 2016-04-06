@@ -7,14 +7,14 @@ import com.quickbite.rx2020.screens.GameScreen
 /**
  * Created by Paha on 2/8/2016.
  */
-object GameStats {
+object GameStats : Updateable {
     lateinit var game: GameScreen
 
     fun init(gameScreen: GameScreen){
         game = gameScreen
     }
 
-    fun update(delta:Float){
+    override fun update(delta:Float){
         SupplyManager.update(delta)
 
         TimeInfo.totalTimeCounter+=delta
@@ -26,8 +26,8 @@ object GameStats {
         }
     }
 
-    fun updateTimeTick(){
-        SupplyManager.updatePerTick()
+    override fun updateHourly(delta:Float){
+        SupplyManager.updateHourly(delta)
         TravelInfo.totalDistTraveled += TravelInfo.currMPH
     }
 

@@ -1,6 +1,6 @@
 package com.quickbite.rx2020.managers
 
-import com.badlogic.gdx.Gdx
+import com.quickbite.rx2020.util.Logger
 import java.util.*
 
 /**
@@ -16,9 +16,9 @@ object EventManager {
     fun callEvent(name:String, vararg args:Any){
         val func = eventMap[name]
         if(func != null)
-            func(listOf(args[0]))
+            func(args.toList())
         else
-            Gdx.app.error("EventSystem", "No event found for $name, is it spelled correctly?")
+            Logger.log("EventSystem", "No event found for $name, is it spelled correctly?")
     }
 
     fun callEvent(name:String, args:List<Any>){
@@ -26,6 +26,6 @@ object EventManager {
         if(func != null)
             func(args)
         else
-            Gdx.app.error("EventSystem", "No event found for $name, is it spelled correctly?")
+            Logger.log("EventSystem", "No event found for $name, is it spelled correctly?")
     }
 }

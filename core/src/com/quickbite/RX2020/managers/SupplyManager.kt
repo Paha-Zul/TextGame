@@ -1,13 +1,14 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.rx2020.Updateable
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
 /**
  * Created by Paha on 2/8/2016.
  */
-object SupplyManager {
+object SupplyManager : Updateable {
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
     init{
@@ -20,8 +21,7 @@ object SupplyManager {
             addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
         }
 
-        supplyMap["edibles"]?.consumePerDay = 3.3f
-        supplyMap["parts"]?.consumePerDay = 3.3f
+        supplyMap["edibles"]?.consumePerDay = 5f
         supplyMap["energy"]?.consumePerDay = 3.3f
     }
 
@@ -35,6 +35,8 @@ object SupplyManager {
         supply!!.amt += amt
         if(supply!!.amt < 0) supply.amt = 0f
         else if(supply.amt >= supply.maxAmount) supply.amt = supply.maxAmount.toFloat()
+
+        EventManager.callEvent("supplyChanged", supply, amt)
         return supply
     }
 
@@ -44,26 +46,21 @@ object SupplyManager {
         return supply
     }
 
-    fun update(delta:Float){
+    override fun update(delta:Float){
 
     }
 
-    fun updatePerTick(){
+    override fun updateHourly(delta:Float){
         var supply = supplyMap["edibles"]!!
         var amt = supply.amt- ((supply.consumePerDay*GroupManager.numPeopleAlive)/24f)
         supply.amt = if (amt >= 0) amt else 0f
 
         if(supply.amt <= 0)
-            GroupManager.getPeopleList().forEach { person -> person.addHealth(-0.1f)}
-
-        supply = supplyMap["parts"]!!
-        amt = supply.amt - ((supply.consumePerDay)/24f)
-        supply.amt = if (amt >= 0) amt else 0f
+            GroupManager.getPeopleList().forEach { person -> person.addHealth(-0.30f)}
 
         supply = supplyMap["energy"]!!
         amt = supply.amt - ((supply.consumePerDay)/24f)
         supply.amt = if (amt >= 0) amt else 0f
-
     }
 
     fun getSupplyList():Array<Supply>{

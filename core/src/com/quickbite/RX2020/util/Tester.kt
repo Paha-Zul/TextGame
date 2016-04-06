@@ -45,9 +45,10 @@ object Tester {
         val rand = MathUtils.random(1, 100)
 
         when{
-            rand >= 33 -> return "common"
-            rand >= 66 -> return "rare"
-            else -> return "epic"
+            //TODO Don't forget epic events when they are actually implemented
+            rand >= 50 -> return "common"
+//            rand >= 66 -> return "rare"
+            else -> return "rare"
         }
     }
 }

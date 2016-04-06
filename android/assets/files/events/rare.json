@@ -1,157 +1,21 @@
 [ {
-  "root" : true,
-  "title" : "Salvage",
-  "name" : "SalvagePass",
-  "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
-  "choices" : [ "Investigate?", "Pass By" ],
-  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvagePass" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "Still Nice...",
-  "name" : "RootExtract",
-  "description" : [ "While running further test on an extract derived from the root of a recently collected flower %n discovers potentially harmful side effects from its consumption.", "Not willing to take the risk, he is forced to dump out the extract." ],
+  "root" : false,
+  "title" : "Avoid",
+  "name" : "AvoidAmbushed",
+  "description" : [ "The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group's progress. As the ROV rounds a bend the crew finds the path blocked by a huge bolder. Natives spring up from behind every rock and every hill, surrounding the ROV and closing fast.", "%n) puts the ROV in reverse and plows into a multitude of natives. They cling to the ROV and start tearing away at the exterior. More natives pile on the ROV as it accelerated forward and around the blockage. The crew fires though the ROV's gun ports, dislodging as many natives as they can…", "Finally, the ROV clears the main horde, dispatching the remaining natives clinging to the sides of the ROV. Breathing a sigh of relief and wiping the sweat from their brows the group watches as the natives disappear into the distance." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-2", "medkits" ] ]
-}, {
-  "root" : true,
-  "title" : "Poultice Test",
-  "name" : "Poultice",
-  "description" : [ "While rooting through the groups medical supplies (Name) sees that a few containers of poultice have become discolored. " ],
-  "choices" : [ ],
-  "outcomes" : [ [ "PoulticeGood", "PoulticeBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
-  "resultingAction" : [ ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "hurt", "1", "15", "false", "-1" ], [ "damageROV", "25", "55" ] ]
 }, {
   "root" : false,
-  "title" : "Salvage",
-  "name" : "SalvageOnFoot",
-  "description" : [ "The party disembarks from the ROV and heads through the trees on foot and before long the broken trees make way to a deep ditch tearing across a permafrost field. At the end of the trench is the large wreckage of an old space probe, sent by who knows who to relate valuable information about Secturn’s surface. Parts litter the small clearing and the probes weathering indicates that it has been here for quite some time, but a probe the size of a minivan is bound to have some riches, so the crew gets to work picking through the debris." ],
+  "title" : "Avoid",
+  "name" : "AvoidSuccess",
+  "description" : [ "The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group's progress but eventually they reunite with their previous course, safely avoiding the natives' roadblock." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "1", "1", "25", "panel", "track", "battery", "storage" ] ]
-}, {
-  "root" : false,
-  "title" : "Poultice Test",
-  "name" : "PoulticeBad",
-  "description" : [ "It causes immediate skin irritation and redness. He chucks the rest of the poultices out of the ROV." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ] ]
-}, {
-  "root" : false,
-  "title" : "Salvage",
-  "name" : "SalvageTurnBack",
-  "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "Salvage",
-  "name" : "Salvage",
-  "description" : [ "Perched atop the ROV (Name) notices some downed trees alongside the path ahead…" ],
-  "choices" : [ "Investigate?", "Pass By" ],
-  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvagePass" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Salvage",
-  "name" : "SalvageInvestigate",
-  "description" : [ "The ROV screeches to a halt next to the mangled trees. Through the trees the crew can see parts strewn about and many of the trees are snapped as if something landed with great force here.." ],
-  "choices" : [ "Continue on Foot?", "Turn Back?" ],
-  "outcomes" : [ [ "SalvageOnFoot" ], [ "SalvageTurnBack" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "Reworking",
-  "name" : "Reworking",
-  "description" : [ "%n attempts to wire a subsystem into an existing ROV part…" ],
-  "choices" : [ "Worth the Risk?" ],
-  "outcomes" : [ [ "ReworkingSuccess", "ReworkingFailure" ] ],
-  "chances" : [ [ 50, 50 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Reworking",
-  "name" : "ReworkingFailure",
-  "description" : [ "Disaster strikes, both the subsystem and the existing ROV part are lost…" ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-1", "track", "panel", "battery", "storage" ] ]
-}, {
-  "root" : true,
-  "title" : "Fire",
-  "name" : "Fire",
-  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!", "After a few frantic moments the fire is under control, but not before ravaging the ROV’s vital components." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-1", "25", "panel", "track", "battery", "storage" ], [ "damageROV", "1", "25", "35" ], [ "addRndAmt", "-1", "-25", "parts", "false", "35" ] ]
-}, {
-  "root" : false,
-  "title" : "Reworking",
-  "name" : "ReworkingSuccess",
-  "description" : [ "Amazingly it works! He restores a previously useless part to a like new condition!" ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "1", "1", "track", "panel", "battery", "storage" ] ]
-}, {
-  "root" : true,
-  "title" : "Herbal",
-  "name" : "Herbal",
-  "description" : [ "While out stretching his legs %n comes across a very strange looking flower. He plucks it up and brings it back to the ROV for further study.", "After running some simple test he discovers the flower can be used to make an extract that, when ingested, helps reduce wound recovery time." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
-}, {
-  "root" : false,
-  "title" : "Poultice Test",
-  "name" : "PoulticeGood",
-  "description" : [ "It proves to be very soothing, maybe even better than previously thought, so he places it back on the shelf." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
-},
-{
-  "root" : true,
-  "title" : "Natives!",
-  "name" : "NativeEncounter",
-  "description" : [ "The ROV grinds to a stop. Shadowy figures dot the horizon along the path ahead. Natives no doubt, but their intentions are unclear. Upon closer inspection they seem to be quite large in stature, with rugged bark-like skin and features. They appear to be wearing simple garb most likely made from local flora and fauna." ],
-  "choices" : [ "Approach Peacefully", "Approach Hostilely", "Avoid Natives" ],
-  "outcomes" : [ [ "TradeNatives", "FightNatives" ], [ "DriveOverNatives", "StuckInNatives" ], [ "AvoidSuccess", "AvoidAmbushed" ] ],
-  "chances" : [ [ 75, 25 ], [ 75, 25 ], [ 75, 25 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Trade",
-  "name" : "TradeNatives",
-  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The natives grunt and grumble to each other until the larger native settles them. The group parts to reveal a pile of treasures of their own. Thankfully, it seems they are friendlier than they look and welcome the trade!" ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "openTrade" ] ]
-}, {
-  "root" : false,
-  "title" : "Fight",
-  "name" : "StuckInNatives",
-  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back…", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "hurt", "1", "15", "false", "-1" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
+  "resultingAction" : [ [ "cutMiles", "120", "360" ] ]
 }, {
   "root" : false,
   "title" : "Fight",
@@ -172,20 +36,155 @@
   "resultingAction" : [ [ "hurt", "10", "35", "false", "-1" ], [ "addRndAmt", "1", "25", "wealth" ] ]
 }, {
   "root" : false,
-  "title" : "Avoid",
-  "name" : "AvoidSuccess",
-  "description" : [ "The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group's progress but eventually they reunite with their previous course, safely avoiding the natives' roadblock." ],
+  "title" : "Fight",
+  "name" : "StuckInNatives",
+  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back…", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "cutMiles", "120", "360" ] ]
+  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "hurt", "1", "15", "false", "-1" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
+}, {
+  "root" : true,
+  "title" : "Fire",
+  "name" : "Fire",
+  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!", "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndItem", "-1", "-1", "25", "panel", "track", "battery", "storage" ], [ "damageROV", "1", "25", "35" ], [ "addRndAmt", "-1", "-25", "parts", "false", "35" ] ]
+}, {
+  "root" : true,
+  "title" : "Herbal",
+  "name" : "Herbal",
+  "description" : [ "While out stretching his legs %n comes across a very strange looking flower. He plucks it up and brings it back to the ROV for further study.", "After running some simple test he discovers the flower can be used to make an extract that, when ingested, helps reduce wound recovery time." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
+}, {
+  "root" : true,
+  "title" : "Natives!",
+  "name" : "NativeEncounter",
+  "description" : [ "The ROV grinds to a stop. Shadowy figures dot the horizon along the path ahead. Natives no doubt, but their intentions are unclear. Upon closer inspection they seem to be quite large in stature, with rugged bark-like skin and features. They appear to be wearing simple garb most likely made from local flora and fauna." ],
+  "choices" : [ "Approach Peacefully", "Approach Hostilely", "Avoid Natives" ],
+  "outcomes" : [ [ "TradeNatives", "FightNatives" ], [ "DriveOverNatives", "StuckInNatives" ], [ "AvoidSuccess", "AvoidAmbushed" ] ],
+  "chances" : [ [ 75, 25 ], [ 75, 25 ], [ 75, 25 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Poultice Test",
+  "name" : "Poultice",
+  "description" : [ "While rooting through the groups medical supplies (Name) sees that a few containers of poultice have become discolored. " ],
+  "choices" : [ ],
+  "outcomes" : [ [ "PoulticeGood", "PoulticeBad" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
 }, {
   "root" : false,
-  "title" : "Avoid",
-  "name" : "AvoidAmbushed",
-  "description" : [ "The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group's progress. As the ROV rounds a bend the crew finds the path blocked by a huge bolder. Natives spring up from behind every rock and every hill, surrounding the ROV and closing fast.", "%n) puts the ROV in reverse and plows into a multitude of natives. They cling to the ROV and start tearing away at the exterior. More natives pile on the ROV as it accelerated forward and around the blockage. The crew fires though the ROV's gun ports, dislodging as many natives as they can…", "Finally, the ROV clears the main horde, dispatching the remaining natives clinging to the sides of the ROV. Breathing a sigh of relief and wiping the sweat from their brows the group watches as the natives disappear into the distance." ],
+  "title" : "Poultice Test",
+  "name" : "PoulticeBad",
+  "description" : [ "It causes immediate skin irritation and redness. He chucks the rest of the poultices out of the ROV." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "hurt", "1", "15", "false", "-1" ], [ "damageROV", "25", "55" ] ]
-}]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Poultice Test",
+  "name" : "PoulticeGood",
+  "description" : [ "It proves to be very soothing, maybe even better than previously thought, so he places it back on the shelf." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
+}, {
+  "root" : true,
+  "title" : "Reworking",
+  "name" : "Reworking",
+  "description" : [ "%n attempts to wire a subsystem into an existing ROV part…" ],
+  "choices" : [ "Worth the Risk?" ],
+  "outcomes" : [ [ "ReworkingSuccess", "ReworkingFailure" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Reworking",
+  "name" : "ReworkingFailure",
+  "description" : [ "Disaster strikes, both the subsystem and the existing ROV part are lost…" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndItem", "-1", "-1", "track", "panel", "battery", "storage" ] ]
+}, {
+  "root" : false,
+  "title" : "Reworking",
+  "name" : "ReworkingSuccess",
+  "description" : [ "Amazingly it works! He restores a previously useless part to a like new condition!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndItem", "1", "1", "track", "panel", "battery", "storage" ] ]
+}, {
+  "root" : true,
+  "title" : "Salvage",
+  "name" : "SalvagePass",
+  "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Salvage",
+  "name" : "SalvageOnFoot",
+  "description" : [ "The party disembarks from the ROV and heads through the trees on foot and before long the broken trees make way to a deep ditch tearing across a permafrost field. At the end of the trench is the large wreckage of an old space probe, sent by who knows who to relate valuable information about Secturn's surface. Parts litter the small clearing and the probes weathering indicates that it has been here for quite some time, but a probe the size of a minivan is bound to have some riches, so the crew gets to work picking through the debris." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndItem", "1", "1", "25", "panel", "track", "battery", "storage" ] ]
+}, {
+  "root" : false,
+  "title" : "Salvage",
+  "name" : "SalvageTurnBack",
+  "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Salvage",
+  "name" : "Salvage",
+  "description" : [ "Perched atop the ROV (Name) notices some downed trees alongside the path ahead…" ],
+  "choices" : [ "Investigate?", "Pass By" ],
+  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvageTurnBack" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Salvage",
+  "name" : "SalvageInvestigate",
+  "description" : [ "The ROV screeches to a halt next to the mangled trees. Through the trees the crew can see parts strewn about and many of the trees are snapped as if something landed with great force here.." ],
+  "choices" : [ "Continue on Foot?", "Turn Back?" ],
+  "outcomes" : [ [ "SalvageOnFoot" ], [ "SalvageTurnBack" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Still Nice...",
+  "name" : "RootExtract",
+  "description" : [ "While running further test on an extract derived from the root of a recently collected flower %n discovers potentially harmful side effects from its consumption.", "Not willing to take the risk, he is forced to dump out the extract." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndItem", "-1", "-2", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Trade",
+  "name" : "TradeNatives",
+  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The natives grunt and grumble to each other until the larger native settles them. The group parts to reveal a pile of treasures of their own. Thankfully, it seems they are friendlier than they look and welcome the trade!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "openTrade" ] ]
+} ]

@@ -39,9 +39,11 @@ class GameScreen(val game: Game): Screen {
     private val rareEventTime = object {val min=84f; val max = 252f}
     private val epicEventTime = object {val min=360f; val max = 1080f}
 
-    private val commonEventTimer: CustomTimer = CustomTimer(null, MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
-    private val rareEventTimer: CustomTimer = CustomTimer(null, MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
-    private val epicEventTimer: CustomTimer = CustomTimer(null, MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
+    private val commonEventTimer: CustomTimer = CustomTimer(MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
+    private val rareEventTimer: CustomTimer = CustomTimer(MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
+    private val epicEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
+
+    private val purgeRecentChangeTimer: CustomTimer = CustomTimer(3f)
 
     private var paused = false
 
@@ -49,8 +51,7 @@ class GameScreen(val game: Game): Screen {
 
     private val gameInput: GameScreenInput = GameScreenInput()
 
-    private var resultsList:MutableMap<String, Result> = mutableMapOf()
-    private var deathResultsList:MutableMap<String, Result> = mutableMapOf()
+    private var currGameTime:Double = 0.0
 
     var searchActivity:DataManager.SearchActivityJSON? = null
     var searchFunc:Array<(()->Unit)?>? = null
@@ -116,6 +117,9 @@ class GameScreen(val game: Game): Screen {
 
         //We are hurting a person/people
         EventManager.onEvent("hurt", { args ->
+            if(GameEventManager.currActiveEvent == null)
+                return@onEvent
+
             var name = GameEventManager.currActiveEvent!!.randomName
             val min = ((args[0]) as String).toInt()
             val max = if(args.count() >= 2) ((args[1]) as String).toInt() else min
@@ -138,8 +142,7 @@ class GameScreen(val game: Game): Screen {
                     else
                         res = person.addHealth(-(dmg.toFloat())).toInt()
 
-                    val value = resultsList.getOrPut(person.firstName, { Result(person.firstName, 0, "'s HP") })
-                    value.amt += res
+                    Result.addResult(person.firstName, res.toFloat(), currGameTime, "'s HP", gui)
                 }
 
                 //If we are doing it to multiple people...
@@ -155,18 +158,8 @@ class GameScreen(val game: Game): Screen {
                 else
                     amt = person.addHealth(-(amt.toFloat())).toInt()
 
-                val value = resultsList.getOrPut(person.firstName, { Result(person.firstName, 0, "'s HP") })
-                value.amt += amt
+                Result.addResult(person.firstName, amt.toFloat(), currGameTime, "'s HP", gui)
             }
-
-            gui.buildGroupTable()
-        })
-
-        EventManager.onEvent("death", { args ->
-            val name = args[0] as String
-
-            gui.buildGroupTable()
-            deathResultsList.getOrPut(name, { Result(name, 0, " died...") })
         })
 
         EventManager.onEvent("heal", { args ->
@@ -178,10 +171,7 @@ class GameScreen(val game: Game): Screen {
             val amt = MathUtils.random(min, max);
             person.addHealth(amt.toFloat())
 
-            gui.buildGroupTable()
-
-            val value = resultsList.getOrPut(person.firstName, { Result(person.firstName, 0, "'s HP") })
-            value.amt += amt
+            Result.addResult(person.firstName, amt.toFloat(), currGameTime, "'s HP", gui)
         })
 
         EventManager.onEvent("addRndAmt", {args ->
@@ -197,10 +187,7 @@ class GameScreen(val game: Game): Screen {
                 if (min < 0 || max < 0) num = -num
                 if(perPerson) num *= GroupManager.numPeopleAlive
 
-                val supply = SupplyManager.addToSupply(supplyName, num.toFloat())
-
-                val value = resultsList.getOrPut(supply.displayName, { Result(supply.displayName, 0) })
-                value.amt += num.toInt()
+                SupplyManager.addToSupply(supplyName, num.toFloat())
             }
         })
 
@@ -215,10 +202,7 @@ class GameScreen(val game: Game): Screen {
                 var num = MathUtils.random(Math.abs(min), Math.abs(max))
 
                 if (min < 0 || max < 0) num = -num
-                val supply = SupplyManager.addToSupply(randomSupply, num.toFloat())
-
-                val value = resultsList.getOrPut(supply.displayName, { Result(supply.displayName, 0) })
-                value.amt += num.toInt()
+                SupplyManager.addToSupply(randomSupply, num.toFloat())
             }
         })
 
@@ -231,8 +215,7 @@ class GameScreen(val game: Game): Screen {
             if(chance >= rnd) {
                 GroupManager.getPeopleList().forEach { person ->
                     person.addHealth(amt)
-                    val value = resultsList.getOrPut(person.firstName, { Result(person.firstName, 0, "'s HP") })
-                    value.amt += amt.toInt()
+                    Result.addResult(person.firstName, amt.toFloat(), currGameTime, "'s HP", gui)
                 }
             }
         })
@@ -247,8 +230,7 @@ class GameScreen(val game: Game): Screen {
                 val amt = -MathUtils.random(min, max)
                 ROVManager.addHealthROV(amt)
 
-                val value = resultsList.getOrPut("ROV", { Result("ROV", 0, "'s HP") })
-                value.amt += amt.toInt()
+                Result.addResult("ROV", amt.toFloat(), currGameTime, "'s HP", gui)
             }
         })
 
@@ -262,8 +244,7 @@ class GameScreen(val game: Game): Screen {
 
                 ROVManager.addHealthROV(amt)
 
-                val value = resultsList.getOrPut("ROV", { Result("ROV", 0, "'s HP") })
-                value.amt += amt.toInt()
+                Result.addResult("ROV", amt.toFloat(), currGameTime, "'s HP", gui)
             }
         })
 
@@ -275,37 +256,59 @@ class GameScreen(val game: Game): Screen {
 
             GameStats.TravelInfo.totalDistTraveled += amt
 
-            val value = resultsList.getOrPut("miles", { Result("Miles", 0) })
-            value.amt += amt.toInt()
+            Result.addResult("miles", -amt.toFloat(), currGameTime, gui = gui)
         })
 
         EventManager.onEvent("openTrade", {args ->
             gui.buildTradeWindow()
             gui.openTradeWindow()
         })
+
+        EventManager.onEvent("death", { args ->
+            val person = args[0] as Person
+
+            gui.buildGroupTable()
+
+            Result.addDeath(person)
+        })
+
+        EventManager.onEvent("healthChanged", {args ->
+            val person = args[0] as Person
+            val amt = args[1] as Float
+
+            gui.buildGroupTable()
+
+            Result.addResult(person.firstName, amt, currGameTime, "'s HP", gui)
+        })
+
+        EventManager.onEvent("supplyChanged", { args ->
+            val supply = args[0] as SupplyManager.Supply
+            val amt = args[1] as Float
+
+            Result.addResult(supply.displayName, amt, currGameTime, "", gui)
+        })
     }
 
     override fun hide() {
-        //throw UnsupportedOperationException()
     }
 
     override fun resize(width: Int, height: Int) {
         TextGame.viewport.update(width, height)
-        //throw UnsupportedOperationException()
     }
 
     override fun pause() {
-        //throw UnsupportedOperationException()
     }
 
     override fun resume() {
-        //throw UnsupportedOperationException()
     }
 
     override fun render(delta: Float) {
         update(delta)
-        if(!paused && state == State.TRAVELING) travelUpdate(delta)
-        else if(!paused && state == State.CAMP) campUpdate(delta)
+
+        if(!paused) {
+            if (state == State.TRAVELING) travelUpdate(delta)
+            else if (state == State.CAMP) campUpdate(delta)
+        }
 
         TextGame.batch.begin()
         draw(TextGame.batch)
@@ -328,11 +331,6 @@ class GameScreen(val game: Game): Screen {
                 0, 0, sunMoon.width, sunMoon.height, false, true)
 
         drawTravelScreen(batch)
-
-//        if(state == State.TRAVELING)
-//            //drawTravelScreen(batch)
-//        else if(state == State.CAMP)
-//            //drawCampScreen(batch)
     }
 
     /**
@@ -390,6 +388,14 @@ class GameScreen(val game: Game): Screen {
         //the -MathUtils.PI/2f is to offset the value to 0. Since sine goes to -1 and 1 but normalize it 0 - 1, the initial value will be 0.5 and we don't want that!
         currPosOfBackground = (MathUtils.sin((((GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f))* MathUtils.PI).toFloat() - MathUtils.PI/2f).toFloat() + 1f)/2f
         currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()* MathUtils.PI
+
+        purgeRecentChangeTimer.update(delta)
+        if(purgeRecentChangeTimer.expired){
+            Result.purgeRecentResults(currGameTime)
+            purgeRecentChangeTimer.reset()
+        }
+
+        currGameTime+=delta;
     }
 
     /**
@@ -397,7 +403,7 @@ class GameScreen(val game: Game): Screen {
      * @param delta Time between frames.
      */
     fun onHourTick(delta:Float){
-        GameStats.updateTimeTick()
+        GameStats.updateHourly(delta)
         if(numHoursToAdvance > 0) numHoursToAdvance--
         timeTickEventList.forEach { evt -> evt.update()}
 
@@ -438,8 +444,6 @@ class GameScreen(val game: Game): Screen {
         //throw UnsupportedOperationException()
     }
 
-    class Result(val name:String, var amt:Int, val desc:String = "")
-
     fun timerFunc(eventType:String, timer:CustomTimer, min:Float, max:Float):()->Unit{
         val func = {
             var currEvent = GameEventManager.currActiveEvent
@@ -452,8 +456,7 @@ class GameScreen(val game: Game): Screen {
                 val list = currEvent!!.resultingAction;
                 var exit:Boolean = true
 
-                resultsList.clear()         //Clear both lists so we display clean results.
-                deathResultsList.clear()
+                Result.clearResultLists()
                 //We are about to perform some actions and generate results for the event.
                 if(list != null && list.size != 0) {
                     //Call each event through the event manager.
@@ -465,7 +468,7 @@ class GameScreen(val game: Game): Screen {
                     }
 
                     //Display the event results to the player.
-                    gui.showEventResults(resultsList.values.toList(), deathResultsList.values.toList())
+                    gui.showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList())
                 }
 
                 //Get event related to the choice we selected.

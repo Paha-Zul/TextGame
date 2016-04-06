@@ -1,8 +1,8 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.Person
+import com.quickbite.rx2020.util.Logger
 
 /**
  * Created by Paha on 2/8/2016.
@@ -45,7 +45,7 @@ object GroupManager {
         val person = getPerson(name)
         if(person!=null) {
             list -= person
-            EventManager.callEvent("death", "${person.firstName} ${person.lastName}")
+            EventManager.callEvent("death", person)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.quickbite.rx2020
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
 
 /**
@@ -12,7 +13,7 @@ class Person(private val _firstName:String, private val _lastName:String) {
     var lastName:String = ""
         get() = _lastName
     var fullName:String = ""
-        get() = _firstName+" "+_lastName
+        get() = "$_firstName $_lastName"
 
     private var _healthNormal:Float = 100f
     val healthNormal:Int
@@ -43,11 +44,14 @@ class Person(private val _firstName:String, private val _lastName:String) {
         if(_healthNormal <= 0)
             GroupManager.killPerson(firstName)
 
+        EventManager.callEvent("healthChanged", this, amt)
         return amt
     }
 
     fun addPercentHealth(perc:Float):Float{
         val amt = maxHealth*(perc/100f)
+
+        EventManager.callEvent("healthChanged", this, amt)
         return addHealth(amt)
     }
 

@@ -31,7 +31,7 @@ object DataManager{
                 loadEvents(file)
             else {
                 val events: Array<GameEventManager.EventJson> = json.fromJson(Array<GameEventManager.EventJson>::class.java, file)
-                var rootMap = GameEventManager.rootEventMap
+                var rootMap:HashMap<String, GameEventManager.EventJson>? = null
                 if(file.name().equals("rare.json"))
                     rootMap = GameEventManager.rareRootEventMap
                 else if(file.name().equals("common.json"))
@@ -40,7 +40,7 @@ object DataManager{
                     rootMap = GameEventManager.epicRootEventMap
 
                 events.forEach { event ->
-                    if (event.root) rootMap.put(event.name, event)
+                    if (event.root) rootMap!!.put(event.name, event)
                     else GameEventManager.eventMap.put(event.name, event)
                 }
             }
@@ -110,13 +110,12 @@ object DataManager{
         var randStartAmt:Array<Int>? = null
     }
 
-
-
     class SearchActivityJSON(){
         var name:String = "def"
         var description:String = "def"
         var buttonTitle:String = "fixme"
         var action:Array<Array<String>>? = null
+        var restrictions:Array<String>? = null
 
         companion object{
             /**

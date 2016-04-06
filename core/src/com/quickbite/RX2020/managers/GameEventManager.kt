@@ -19,7 +19,6 @@ object GameEventManager{
     val rareRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     val epicRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
-    val rootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     fun getRandomRoot(type:String):EventJson{
