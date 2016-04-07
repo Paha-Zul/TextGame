@@ -25,8 +25,10 @@ object SupplyManager : Updateable {
         supplyMap["energy"]?.consumePerDay = 3.3f
     }
 
-    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int){
-        supplyMap.put(name, Supply(name, abbrName, displayName, amt, maxAmount))
+    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int):Supply{
+        val supply = Supply(name, abbrName, displayName, amt, maxAmount)
+        supplyMap.put(name, supply)
+        return supply
     }
 
     fun addToSupply(name:String, amt:Float):Supply{
@@ -68,6 +70,8 @@ object SupplyManager : Updateable {
     }
 
     fun getSupply(name:String):Supply = supplyMap[name]!!
+
+    fun clearSupplies() = supplyMap.clear()
 
     class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f){
         var consumePerDay:Float = 0f

@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
+import format
 
 /**
  * Created by Paha on 2/5/2016.
@@ -669,7 +670,7 @@ class GameScreenGUI(val game : GameScreen) {
             val nameLabel = Label(item.name + item.desc.toString(), labelStyle)
             var amtLabel:Label?
             amtLabel = Label("", labelStyle)
-            if(item.amt != 0) {
+            if(item.amt != 0f) {
                 amtLabel.setText(item.amt.toString())
                 if (item.amt < 0) amtLabel.color = Color.RED
                 else amtLabel.color = Color.GREEN
@@ -687,7 +688,7 @@ class GameScreenGUI(val game : GameScreen) {
             val nameLabel = Label(item.name + item.desc.toString(), labelStyle)
             var amtLabel:Label?
             amtLabel = Label("", labelStyle)
-            if(item.amt != 0) {
+            if(item.amt != 0f) {
                 amtLabel.setText(item.amt.toString())
                 if (item.amt < 0) amtLabel.color = Color.RED
                 else amtLabel.color = Color.GREEN
@@ -1239,7 +1240,7 @@ class GameScreenGUI(val game : GameScreen) {
             val nameLabel = Label(result.name, labelStyle)
             nameLabel.setFontScale(0.15f)
 
-            val amtLabel = Label(result.amt.toString(), labelStyle)
+            val amtLabel = Label(result.amt.format(1), labelStyle)
             amtLabel.setFontScale(0.15f)
             if(result.amt < 0) amtLabel.color = Color.RED
             if(result.amt > 0) amtLabel.color = Color.GREEN
@@ -1249,7 +1250,7 @@ class GameScreenGUI(val game : GameScreen) {
             recentChangeTable.row()
         }
 
-        recentChangeTable.setPosition(50f, TextGame.viewport.worldHeight/2f - recentChangeTable.height/2f)
+        recentChangeTable.setPosition(75f, TextGame.viewport.worldHeight/2f - recentChangeTable.height/2f)
         TextGame.stage.addActor(recentChangeTable)
     }
 

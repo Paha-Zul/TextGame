@@ -35,7 +35,7 @@ object GameStats : Updateable {
         //Need total distance of the game, distance traveled, distance to go, mph traveling
         var totalDistOfGame:Int = MathUtils.random(36000, 108000)
             get
-            private set
+            set
 
         var totalDistTraveled:Int = 0
             get
@@ -52,14 +52,15 @@ object GameStats : Updateable {
     object TimeInfo{
         val timeScale:Int = 24
         var totalTimeCounter:Float = 0f
-        var currTime:Int = 0
-        var lastTime:Int = 0
-        var timeOfDay:Int = 0
+        var currTime:Int = 0 //The total time accumulated while traveling
+        var lastTime:Int = 0 //The last tick of time. Only really used for determining when the hourly update should be called.
+        var timeOfDay:Int = 0 //The time of day, formatted to 12 hour cycles.
             get() {
                 var _t = ((GameStats.TimeInfo.currTime.toInt())%12)
                 if(_t == 0) _t = 12
                 return _t
             }
+
         var totalDaysTraveled:Int = 0
             get() = (totalTimeCounter/timeScale).toInt() + 1
 

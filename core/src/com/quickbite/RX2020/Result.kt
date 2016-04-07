@@ -3,7 +3,7 @@ package com.quickbite.rx2020
 /**
  * Created by Paha on 4/5/2016.
  */
-class Result(val name:String, var amt:Int, val desc:String = "", var timeLastUpdated:Double = 0.0) {
+class Result(val name:String, var amt:Float, val desc:String = "", var timeLastUpdated:Double = 0.0) {
 
     companion object{
         var eventResultMap:MutableMap<String, Result> = mutableMapOf()
@@ -19,18 +19,18 @@ class Result(val name:String, var amt:Int, val desc:String = "", var timeLastUpd
         }
 
         fun addResult(name: String, amt: Float, currTime: Double, desc: String = "", gui: GameScreenGUI){
-            var result = eventResultMap.getOrPut(name, {Result(name, 0, desc)})
-            result.amt += amt.toInt()
+            var result = eventResultMap.getOrPut(name, {Result(name, 0f, desc)})
+            result.amt += amt
 
-            result = recentResultMap.getOrPut(name, {Result(name, 0, desc)})
-            result.amt += amt.toInt()
+            result = recentResultMap.getOrPut(name, {Result(name, 0f, desc)})
+            result.amt += amt
             result.timeLastUpdated = currTime
 
             gui.buildRecentChangeTable()
         }
 
         fun addDeath(person:Person){
-            deathResultMap.put(person.firstName, Result(person.fullName, 0, " died"))
+            deathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
         }
 
         fun purgeRecentResults(currTime: Double){

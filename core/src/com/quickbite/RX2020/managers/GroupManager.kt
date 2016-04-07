@@ -41,6 +41,14 @@ object GroupManager {
             return null
     }
 
+    fun clearPeople(){
+        list.clear()
+    }
+
+    fun addPerson(person:Person){
+        list += person
+    }
+
     fun killPerson(name:String){
         val person = getPerson(name)
         if(person!=null) {
