@@ -107,6 +107,9 @@ class GameScreen(val game: Game): Screen {
             gui.openTradeWindow()
             pauseGame()
         }
+
+        SaveLoad.saveGame()
+//        SaveLoad.loadGame()
     }
 
     /**
@@ -252,7 +255,8 @@ class GameScreen(val game: Game): Screen {
             val min = (args[0] as String).toInt()
             val max = if(args.count() >= 2) (args[1] as String).toInt() else min
 
-            val amt = MathUtils.random(min, max)
+            var amt = MathUtils.random(Math.abs(min), Math.abs(max))
+            if(min < 0 || max < 0) amt = -amt
 
             GameStats.TravelInfo.totalDistTraveled += amt
 

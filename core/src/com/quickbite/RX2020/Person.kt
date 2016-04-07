@@ -15,13 +15,13 @@ class Person(private val _firstName:String, private val _lastName:String) {
     var fullName:String = ""
         get() = "$_firstName $_lastName"
 
-    private var _healthNormal:Float = 100f
-    val healthNormal:Int
-        get() = _healthNormal.toInt()
+    var healthNormal:Float = 100f
+        get
+        private set
 
-    private var _healthInjury:Float = 0f
-    val healthInjury:Int
-        get() = _healthInjury.toInt()
+    var healthInjury:Float = 0f
+        get
+        private set
 
     var maxHealth = 100f
         get
@@ -29,8 +29,9 @@ class Person(private val _firstName:String, private val _lastName:String) {
 
 
     private var injuries:MutableList<Injury> = mutableListOf()
-    private val injuryList:List<Injury>
+    var injuryList:List<Injury>
         get() = injuries.toList()
+        set(value){injuries = value.toMutableList()}
 
     constructor(name:Pair<String, String>):this(name.first, name.second)
 
@@ -38,10 +39,10 @@ class Person(private val _firstName:String, private val _lastName:String) {
     operator fun component2() = _lastName
 
     fun addHealth(amt:Float):Float{
-        _healthNormal +=amt
-        if(_healthNormal >= maxHealth - healthInjury)
-            _healthNormal = maxHealth - healthInjury
-        if(_healthNormal <= 0)
+        healthNormal +=amt
+        if(healthNormal >= maxHealth - healthInjury)
+            healthNormal = maxHealth - healthInjury
+        if(healthNormal <= 0)
             GroupManager.killPerson(firstName)
 
         EventManager.callEvent("healthChanged", this, amt)
@@ -58,8 +59,8 @@ class Person(private val _firstName:String, private val _lastName:String) {
     fun addInjury(type: Injury.InjuryType){
         val injury = Injury(type)
         injuries.add(injury)
-        _healthNormal -= injury.hpLost
-        _healthInjury += injury.hpLost
+        healthNormal -= injury.hpLost
+        healthInjury += injury.hpLost
     }
 
     class Injury(val type:InjuryType){
@@ -79,6 +80,7 @@ class Person(private val _firstName:String, private val _lastName:String) {
             }
         }
     }
+
 
     override fun toString(): String {
         return firstName;
