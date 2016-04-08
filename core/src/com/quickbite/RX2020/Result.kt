@@ -10,6 +10,7 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
         var deathResultMap:MutableMap<String, Result> = mutableMapOf()
 
         var recentResultMap:MutableMap<String, Result> = mutableMapOf()
+        var recentDeathResultMap:MutableMap<String, Result> = mutableMapOf()
 
         private val hangTime = 3
 
@@ -31,6 +32,8 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
 
         fun addDeath(person:Person){
             deathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
+
+            recentDeathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
         }
 
         fun purgeRecentResults(currTime: Double){

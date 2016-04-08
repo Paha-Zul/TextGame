@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.quickbite.rx2020.ChainTask
-import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.DataManager
+import com.quickbite.rx2020.managers.GroupManager
+import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.util.GH
 
 /**
  * Created by Paha on 2/27/2016.
@@ -32,14 +34,15 @@ class LoadingScreen(val game: TextGame): Screen {
                 setChain(ChainTask({counter >= 60}, {counter++}, {counter=0})). //Wait
                 setChain(ChainTask({opacity <= 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})). //Fade out
                 setChain(ChainTask({done && counter >= 20}, {counter++}, {game.screen = MainMenuScreen(game)})) //Wait
-
-
     }
 
     private fun loadManager(){
         TextGame.manager.loadALlPictures(Gdx.files.internal("art/load/"))
         TextGame.manager.loadAllFonts(Gdx.files.internal("fonts/"))
         TextGame.manager.loadAllImageSheets(Gdx.files.internal("art/sheets/"))
+
+        GroupManager.init()
+        SupplyManager.init()
         readyToLoad = true
     }
 

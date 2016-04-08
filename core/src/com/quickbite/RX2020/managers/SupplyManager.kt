@@ -11,11 +11,11 @@ import java.util.*
 object SupplyManager : Updateable {
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
-    init{
+    fun init(){
         var list = DataManager.getItemList()
         for(item in list){
-            val randStart = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()
-            if(item.perMember) randStart*GroupManager.numPeopleAlive
+            var randStart = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()
+            if(item.perMember) randStart = randStart*GroupManager.numPeopleAlive
             val maxAmount = if(item.perMember) item.max*GroupManager.numPeopleAlive else item.max
 
             addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)

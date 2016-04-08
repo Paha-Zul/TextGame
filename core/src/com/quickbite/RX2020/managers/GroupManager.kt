@@ -13,7 +13,7 @@ object GroupManager {
     val numPeopleAlive:Int
         get() = list.size
 
-    init{
+    fun init(){
         list += Person(DataManager.pullRandomName())
         list += Person(DataManager.pullRandomName())
         list += Person(DataManager.pullRandomName())
