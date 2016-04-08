@@ -41,7 +41,6 @@ class GameScreenGUI(val game : GameScreen) {
     private val tradeWindowTable:Table = Table()
     private val tradeSliderWindow:Table = Table()
 
-
     /* GUI elements for travel info */
     private lateinit var distanceLabel:Label
     private lateinit var totalDaysLabel:Label
@@ -284,6 +283,7 @@ class GameScreenGUI(val game : GameScreen) {
         val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
+        textButtonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("buttonBackground"))
 
         val pauseButtonStyle = ImageButton.ImageButtonStyle()
         var drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("play"))
@@ -302,9 +302,9 @@ class GameScreenGUI(val game : GameScreen) {
         pauseButton.setPosition(TextGame.viewport.screenWidth/1.4f, TextGame.viewport.screenHeight - pauseButton.height)
 
         campButtonTab = TextButton("Camp", textButtonStyle)
-        campButtonTab.setSize(40f, 40f)
+        campButtonTab.setSize(100f, 40f)
         campButtonTab.setOrigin(Align.center)
-        campButtonTab.setPosition(TextGame.viewport.screenWidth/4f, TextGame.viewport.screenHeight - campButtonTab.height)
+        campButtonTab.setPosition(TextGame.viewport.worldWidth/2f - campButtonTab.width/2f, 0f)
         campButtonTab.label.setFontScale(buttonFontScale)
 
         //distanceTable.row()

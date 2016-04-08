@@ -93,6 +93,7 @@ class GameScreen(val game: Game): Screen {
         scrollingBackgroundList.add(sc1)
 
         //gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
+//        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -108,7 +109,7 @@ class GameScreen(val game: Game): Screen {
             pauseGame()
         }
 
-        SaveLoad.saveGame()
+//        SaveLoad.saveGame()
 //        SaveLoad.loadGame()
     }
 
