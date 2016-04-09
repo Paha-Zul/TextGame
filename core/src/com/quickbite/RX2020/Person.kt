@@ -31,7 +31,10 @@ class Person(private val _firstName:String, private val _lastName:String) {
     private var injuries:MutableList<Injury> = mutableListOf()
     var injuryList:List<Injury>
         get() = injuries.toList()
-        set(value){injuries = value.toMutableList()}
+        set(value){
+            injuries.clear()
+            value.forEach { injury -> addInjury(injury) }
+        }
 
     constructor(name:Pair<String, String>):this(name.first, name.second)
 
@@ -63,7 +66,20 @@ class Person(private val _firstName:String, private val _lastName:String) {
         healthInjury += injury.hpLost
     }
 
-    class Injury(val type:InjuryType){
+    /**
+     * Used for loading in injuries from a save mostly.
+     */
+    private fun addInjury(injury:Injury){
+        injuries.add(injury)
+        healthNormal -= injury.hpLost
+        healthInjury += injury.hpLost
+    }
+
+    class Injury(var type:InjuryType){
+
+        //Need this empty constructor for loading/saving to json files.
+        private constructor():this(InjuryType.Minor)
+
         enum class InjuryType{
             Minor, Regular, Major, Trauma
         }

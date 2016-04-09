@@ -1,14 +1,14 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.Updateable
+import com.quickbite.rx2020.IUpdateable
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
 /**
  * Created by Paha on 2/8/2016.
  */
-object SupplyManager : Updateable {
+object SupplyManager : IUpdateable {
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
     fun init(){
@@ -56,9 +56,6 @@ object SupplyManager : Updateable {
         var supply = supplyMap["edibles"]!!
         var amt = supply.amt- ((supply.consumePerDay*GroupManager.numPeopleAlive)/24f)
         supply.amt = if (amt >= 0) amt else 0f
-
-        if(supply.amt <= 0)
-            GroupManager.getPeopleList().forEach { person -> person.addHealth(-0.30f)}
 
         supply = supplyMap["energy"]!!
         amt = supply.amt - ((supply.consumePerDay)/24f)

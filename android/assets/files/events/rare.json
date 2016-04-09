@@ -44,14 +44,41 @@
   "chances" : [ ],
   "resultingAction" : [ [ "damageROV", "25", "55" ], [ "hurt", "1", "15", "false", "-1" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
 }, {
+  "root" : false,
+  "title" : "Fire",
+  "name" : "FireLosePart",
+  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!", "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components.", "" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Fire",
+  "name" : "FireNothing",
+  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!", "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components.", "" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ ] ]
+}, {
   "root" : true,
   "title" : "Fire",
   "name" : "Fire",
   "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!", "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
   "choices" : [ ],
+  "outcomes" : [ [ "FireDamageRov", "FireLosePart", "FireNothing" ] ],
+  "chances" : [ [ 35, 35, 30 ] ],
+  "resultingAction" : [ [ "addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage" ] ]
+}, {
+  "root" : false,
+  "title" : "Fire",
+  "name" : "FireDamageROV",
+  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!", "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components.", "" ],
+  "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-1", "25", "panel", "track", "battery", "storage" ], [ "damageROV", "1", "25", "35" ], [ "addRndAmt", "-1", "-25", "parts", "false", "35" ] ]
+  "resultingAction" : [ [ "damageROV", "1", "25", "100" ] ]
 }, {
   "root" : true,
   "title" : "Herbal",
@@ -114,7 +141,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-1", "track", "panel", "battery", "storage" ] ]
+  "resultingAction" : [ [ "addRndItem", "-1", "-1", "100", "track", "panel", "battery", "storage" ] ]
 }, {
   "root" : false,
   "title" : "Reworking",
@@ -123,9 +150,9 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "1", "1", "track", "panel", "battery", "storage" ] ]
+  "resultingAction" : [ [ "addRndItem", "1", "1", "100", "track", "panel", "battery", "storage" ] ]
 }, {
-  "root" : true,
+  "root" : false,
   "title" : "Salvage",
   "name" : "SalvagePass",
   "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
@@ -177,7 +204,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-2", "medkits" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ] ]
 }, {
   "root" : false,
   "title" : "Trade",

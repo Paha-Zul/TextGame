@@ -1,13 +1,14 @@
-package com.quickbite.rx2020
+package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.IUpdateable
 import com.quickbite.rx2020.screens.GameScreen
 
 /**
  * Created by Paha on 2/8/2016.
+ * Holds game stats like travel information (distance, speed, ect.) and time information (the total time traveled, current day, ect)
  */
-object GameStats : Updateable {
+object GameStats : IUpdateable {
     lateinit var game: GameScreen
 
     fun init(gameScreen: GameScreen){
@@ -18,7 +19,7 @@ object GameStats : Updateable {
         SupplyManager.update(delta)
 
         TimeInfo.totalTimeCounter+=delta
-        TimeInfo.currTime = (TimeInfo.totalTimeCounter%TimeInfo.timeScale).toInt()
+        TimeInfo.currTime = (TimeInfo.totalTimeCounter% TimeInfo.timeScale).toInt()
 
         if(TimeInfo.currTime != TimeInfo.lastTime){
             TimeInfo.lastTime = TimeInfo.currTime
@@ -27,7 +28,6 @@ object GameStats : Updateable {
     }
 
     override fun updateHourly(delta:Float){
-        SupplyManager.updateHourly(delta)
         TravelInfo.totalDistTraveled += TravelInfo.currMPH
     }
 
@@ -56,13 +56,13 @@ object GameStats : Updateable {
         var lastTime:Int = 0 //The last tick of time. Only really used for determining when the hourly update should be called.
         var timeOfDay:Int = 0 //The time of day, formatted to 12 hour cycles.
             get() {
-                var _t = ((GameStats.TimeInfo.currTime.toInt())%12)
+                var _t = ((currTime.toInt())%12)
                 if(_t == 0) _t = 12
                 return _t
             }
 
         var totalDaysTraveled:Int = 0
-            get() = (totalTimeCounter/timeScale).toInt() + 1
+            get() = (totalTimeCounter / timeScale).toInt() + 1
 
     }
 }

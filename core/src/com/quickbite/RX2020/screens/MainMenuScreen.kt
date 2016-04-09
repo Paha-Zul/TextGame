@@ -1,6 +1,5 @@
 package com.quickbite.rx2020.screens
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
@@ -9,8 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
-import com.quickbite.rx2020.managers.DataManager
 
 /**
  * Created by Paha on 2/3/2016.
@@ -20,16 +19,19 @@ class MainMenuScreen(val game: TextGame) : Screen {
     val titleTable:Table = Table()
 
     override fun show() {
-        //game.setScreen(GameScreen(game))
-
         var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         style.fontColor = Color.BLACK
 
-        val contButton = TextButton("Continue (does nothing)", style);
-        contButton.label.setFontScale(0.4f)
+        val continueButton = TextButton("Continue", style);
+        continueButton.label.setFontScale(0.4f)
+        if(!SaveLoad.saveExists()) {
+            continueButton.setColor(0f, 0f, 0f, 0.3f)
+            continueButton.isDisabled = true
+        }
+
         val startButton = TextButton("Start", style);
         startButton.label.setFontScale(0.4f)
 
@@ -38,14 +40,22 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
         startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                buttonTable.remove()
+                TextGame.stage.clear()
                 game.screen = GameIntroScreen(game)
+            }
+        })
+
+        continueButton.addListener(object: ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                TextGame.stage.clear()
+                game.screen = GameScreen(game)
+                SaveLoad.loadGame()
             }
         })
 
         titleTable.add(titleLabel).pad(20f)
 
-        buttonTable.add(contButton).width(150f).height(50f)
+        buttonTable.add(continueButton).width(150f).height(50f)
         buttonTable.row().padTop(20f)
         buttonTable.add(startButton).width(150f).height(50f).padBottom(50f)
 

@@ -184,7 +184,7 @@
   "name" : "HerdCrossing",
   "description" : [ "A herd of cow-like creatures are lumbering across the path head. They're too vast to easily go around." ],
   "choices" : [ "Go Through", "Wait" ],
-  "outcomes" : [ [ "HitHerd", "HerdMiss" ], [ "HerdWait" ] ],
+  "outcomes" : [ [ "HerdHit", "HerdMiss" ], [ "HerdWait" ] ],
   "chances" : [ [ 50, 50 ], [ ] ],
   "resultingAction" : [ ]
 }, {
@@ -652,9 +652,9 @@
   "name" : "GemsMaybe",
   "description" : [ "%n reexamines the group's gemstones." ],
   "choices" : [ "Okay" ],
-  "outcomes" : [ [ "MoreGems", "LessGems", "", "" ] ],
-  "chances" : [ [ 50, 50, 0, 0 ] ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+  "outcomes" : [ [ "MoreGems", "LessGems"] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
 }, {
   "root" : false,
   "title" : "Gems?",
@@ -663,7 +663,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "wealth" ] ]
 }, {
   "root" : false,
   "title" : "Gems?",
