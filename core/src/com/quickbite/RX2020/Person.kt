@@ -66,6 +66,14 @@ class Person(private val _firstName:String, private val _lastName:String) {
         healthInjury += injury.hpLost
     }
 
+    fun removeInjury(injury: Injury){
+        val removed = injuries.remove(injury)
+        if(removed) {
+            healthNormal += injury.hpLost
+            healthInjury -= injury.hpLost
+        }
+    }
+
     /**
      * Used for loading in injuries from a save mostly.
      */
@@ -75,7 +83,9 @@ class Person(private val _firstName:String, private val _lastName:String) {
         healthInjury += injury.hpLost
     }
 
-    class Injury(var type:InjuryType){
+    class Injury(var type:InjuryType):IUpdateable{
+        val done:Boolean
+            get() = hoursRemaining <= 0
 
         //Need this empty constructor for loading/saving to json files.
         private constructor():this(InjuryType.Minor)
@@ -84,16 +94,24 @@ class Person(private val _firstName:String, private val _lastName:String) {
             Minor, Regular, Major, Trauma
         }
 
-        var daysRemaining = 0
+        var hoursRemaining = 0
         var hpLost = 0
 
         init{
             when(type){
-                InjuryType.Minor ->{ daysRemaining = MathUtils.random(10, 30); hpLost = MathUtils.random(0, 25)}
-                InjuryType.Regular ->{ daysRemaining = MathUtils.random(30, 50); hpLost = MathUtils.random(25, 50)}
-                InjuryType.Major ->{ daysRemaining = MathUtils.random(50, 70); hpLost = MathUtils.random(50, 75)}
-                InjuryType.Trauma ->{ daysRemaining = MathUtils.random(70, 90); hpLost = MathUtils.random(75, 100)}
+                InjuryType.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25)}
+                InjuryType.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50)}
+                InjuryType.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75)}
+                InjuryType.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100)}
             }
+        }
+
+        override fun update(delta: Float) {
+
+        }
+
+        override fun updateHourly(delta: Float) {
+            this.hoursRemaining--
         }
     }
 

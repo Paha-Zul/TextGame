@@ -11,6 +11,8 @@ import com.quickbite.rx2020.util.Logger
 object GroupManager : IUpdateable {
     private val list:MutableList<Person> = arrayListOf()
 
+    private val emptyFoodHealthDrain = 0.3f
+
     val numPeopleAlive:Int
         get() = list.size
 
@@ -30,8 +32,22 @@ object GroupManager : IUpdateable {
     }
 
     override fun updateHourly(delta: Float) {
-        if(SupplyManager.getSupply("edibles").amt <= 0)
-            getPeopleList().forEach { person -> person.addHealth(-0.3f) }
+        val outOfFood = SupplyManager.getSupply("edibles").amt <= 0
+
+        //For each person...
+        getPeopleList().forEach { person ->
+            //Update their injuries. If they are done, remove them from the person.
+            person.injuryList.forEach { injury ->
+                injury.updateHourly(delta)
+                if(injury.done)
+                    person.removeInjury(injury)
+            }
+
+            //If we are out of food, drain the person's health
+            if(outOfFood)
+                person.addHealth(emptyFoodHealthDrain)
+        }
+
     }
 
     fun getPeopleList():Array<Person> = list.toTypedArray()

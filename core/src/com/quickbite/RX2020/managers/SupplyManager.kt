@@ -2,6 +2,7 @@ package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.IUpdateable
+import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
@@ -18,7 +19,11 @@ object SupplyManager : IUpdateable {
             if(item.perMember) randStart = randStart*GroupManager.numPeopleAlive
             val maxAmount = if(item.perMember) item.max*GroupManager.numPeopleAlive else item.max
 
-            addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
+            if(!TextGame.testMode)
+                addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
+            else
+                addNewSupply(item.name, item.abbrName, item.displayName, 10000000f, 10000000)
+
         }
 
         supplyMap["edibles"]?.consumePerDay = 5f

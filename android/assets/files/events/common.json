@@ -164,7 +164,7 @@
   "root" : false,
   "title" : "Crossing",
   "name" : "HerdWait",
-  "description" : [ "" ],
+  "description" : [  ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -733,7 +733,7 @@
   "name" : "Oops",
   "description" : [ "%n accidentally crushed a small trinket while moving supplies around…" ],
   "choices" : [ "Disappointing" ],
-  "outcomes" : [ [ "", "" ] ],
+  "outcomes" : [ [] ],
   "chances" : [ [ 0, 0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
 }, {
@@ -877,7 +877,7 @@
   "name" : "Traps",
   "description" : [ "%n decided to set some traps which caught some extra food for the crew." ],
   "choices" : [ "Good Job" ],
-  "outcomes" : [ [ "" ] ],
+  "outcomes" : [ [  ] ],
   "chances" : [ [ 100 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ] ]
 }, {
