@@ -11,8 +11,10 @@ object Tester {
     fun testEvents(numTests:Int){
         System.out.println("---------------------")
 
-        for(i in 0.rangeTo(numTests)){
-            var evt: GameEventManager.EventJson? = GameEventManager.getRandomRoot(getRandom())
+        //TODO This needs to be more thorough and check every choice and outcome (FREAKING BAD)
+
+        val func = {event:GameEventManager.EventJson ->
+            var evt:GameEventManager.EventJson? = event
             System.out.println("Event: "+evt?.name)
 
             //While the event is no null and has choices, loop over them
@@ -39,6 +41,12 @@ object Tester {
             System.out.println("Result: "+evt?.resultingAction)
             System.out.println("---------------------")
         }
+
+        for(event in GameEventManager.commonRootEventMap.values)
+            func(event)
+
+        for(event in GameEventManager.rareRootEventMap.values)
+            func(event)
     }
 
     fun getRandom():String{

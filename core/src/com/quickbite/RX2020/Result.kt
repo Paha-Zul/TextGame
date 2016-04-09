@@ -1,5 +1,7 @@
 package com.quickbite.rx2020
 
+import com.quickbite.rx2020.gui.GameScreenGUI
+
 /**
  * Created by Paha on 4/5/2016.
  */

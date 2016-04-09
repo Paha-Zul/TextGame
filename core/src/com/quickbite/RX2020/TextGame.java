@@ -13,6 +13,10 @@ import com.quickbite.rx2020.managers.EasyAssetManager;
 import com.quickbite.rx2020.screens.LoadingScreen;
 import com.quickbite.rx2020.util.Logger;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
 public class TextGame extends com.badlogic.gdx.Game {
     public static OrthographicCamera camera;
 	public static SpriteBatch batch;
@@ -24,6 +28,8 @@ public class TextGame extends com.badlogic.gdx.Game {
 	public static TextureAtlas smallGuiAtlas;
 
 	public static Boolean testMode = false;
+
+	public static ExecutorService threadPool;
 
 	@Override
 	public void create () {
@@ -42,6 +48,12 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
+				try {
+					threadPool.shutdown();
+					threadPool.awaitTermination(10, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				StackTraceElement[] list = mainThread.getStackTrace();
 				for(StackTraceElement element : list)
 					Logger.log("Crash", element.toString(), Logger.LogLevel.Warning);
@@ -49,7 +61,10 @@ public class TextGame extends com.badlogic.gdx.Game {
 			}
 		}));
 
-        Gdx.input.setInputProcessor(stage);
+		int cores = Runtime.getRuntime().availableProcessors();
+		if(cores < 1) cores = 1;
+		threadPool = Executors.newFixedThreadPool(cores);
+		Gdx.input.setInputProcessor(stage);
 		setScreen(new LoadingScreen(this));
 	}
 

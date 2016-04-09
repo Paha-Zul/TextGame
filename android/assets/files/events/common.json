@@ -652,7 +652,7 @@
   "name" : "GemsMaybe",
   "description" : [ "%n reexamines the group's gemstones." ],
   "choices" : [ "Okay" ],
-  "outcomes" : [ [ "MoreGems", "LessGems"] ],
+  "outcomes" : [ [ "MoreGems", "LessGems" ] ],
   "chances" : [ [ 50, 50 ] ],
   "resultingAction" : [ ]
 }, {
@@ -863,13 +863,13 @@
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
 }, {
-  "root" : true,
+  "root" : false,
   "title" : "Traps",
   "name" : "TrapsBad",
   "description" : [ "%n decided to use some of the crew's food for traps, but all they caught was spoiled food." ],
   "choices" : [ "Oh Well" ],
-  "outcomes" : [ [ "" ] ],
-  "chances" : [ [ 100 ] ],
+  "outcomes" : [ [ ] ],
+  "chances" : [ [ ] ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
 }, {
   "root" : true,
