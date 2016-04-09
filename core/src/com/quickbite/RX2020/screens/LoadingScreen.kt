@@ -18,7 +18,7 @@ import com.quickbite.rx2020.util.GH
 
 class LoadingScreen(val game: TextGame): Screen {
     lateinit var  chain: ChainTask
-    val logo = Texture(Gdx.files.internal("art/load/Logo.png"), true)
+    val logo = Texture(Gdx.files.internal("art/load/logoWhite.png"), true)
     var opacity:Float = 0f
     var counter = 0
     var done = false
@@ -29,11 +29,11 @@ class LoadingScreen(val game: TextGame): Screen {
     override fun show() {
         logo.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest)
 
-        chain = ChainTask({counter>=20}, {counter++}, {counter=0})
-        chain.setChain(ChainTask({opacity >= 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager(); loadManager()})). //Fade in
-                setChain(ChainTask({counter >= 60}, {counter++}, {counter=0})). //Wait
-                setChain(ChainTask({opacity <= 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})). //Fade out
-                setChain(ChainTask({done && counter >= 20}, {counter++}, {game.screen = MainMenuScreen(game)})) //Wait
+        chain = ChainTask({counter<20}, {counter++}, {counter=0})
+        chain.setChain(ChainTask({opacity < 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager(); loadManager()})). //Fade in
+                setChain(ChainTask({counter < 60}, {counter++}, {counter=0})). //Wait
+                setChain(ChainTask({opacity > 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})). //Fade out
+                setChain(ChainTask({!done && counter < 20}, {counter++}, {game.screen = MainMenuScreen(game)})) //Wait
     }
 
     private fun loadManager(){

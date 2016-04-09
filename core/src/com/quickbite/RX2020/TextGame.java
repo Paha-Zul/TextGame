@@ -2,6 +2,7 @@ package com.quickbite.rx2020;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,6 +31,8 @@ public class TextGame extends com.badlogic.gdx.Game {
 	public static Boolean testMode = false;
 
 	public static ExecutorService threadPool;
+
+	public static Color backgroundColor = new Color(0,0,0,1);
 
 	@Override
 	public void create () {
@@ -71,7 +74,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 	@Override
 	public void render () {
 		try {
-			Gdx.gl.glClearColor(1, 1, 1, 1);
+			Gdx.gl.glClearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, backgroundColor.a);
 			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 			super.render();

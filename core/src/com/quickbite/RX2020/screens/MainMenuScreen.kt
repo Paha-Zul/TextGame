@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
+import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
 
@@ -15,15 +16,17 @@ import com.quickbite.rx2020.TextGame
  * Created by Paha on 2/3/2016.
  */
 class MainMenuScreen(val game: TextGame) : Screen {
-    val buttonTable: Table = Table()
-    val titleTable:Table = Table()
+    private val buttonTable: Table = Table()
+    private val titleTable:Table = Table()
+
+    private var task:ChainTask? = null
 
     override fun show() {
-        var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+        var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        style.fontColor = Color.BLACK
+        style.fontColor = Color.WHITE
 
         val continueButton = TextButton("Continue", style);
         continueButton.label.setFontScale(0.4f)
@@ -41,7 +44,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
         startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 TextGame.stage.clear()
-                game.screen = GameIntroScreen(game)
+                task = crazyFade();
             }
         })
 
@@ -83,7 +86,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
     override fun render(delta: Float) {
         TextGame.stage.draw()
-        //throw UnsupportedOperationException()
+        if(task != null)
+            task!!.update()
     }
 
     override fun resume() {
@@ -92,5 +96,11 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
     override fun dispose() {
         //throw UnsupportedOperationException()
+    }
+
+    fun crazyFade():ChainTask{
+        val tsk = ChainTask({TextGame.backgroundColor.r < 1f}, {TextGame.backgroundColor.r+=0.05f; TextGame.backgroundColor.g+=0.05f; TextGame.backgroundColor.b+=0.05f}, {game.screen = GameIntroScreen(game)})
+
+        return tsk
     }
 }

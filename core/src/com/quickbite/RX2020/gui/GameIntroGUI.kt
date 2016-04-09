@@ -77,15 +77,15 @@ class GameIntroGUI(val game: GameIntroScreen) {
 
         TextGame.stage.addActor(layoutTable)
 
-        chainTask = ChainTask({ titleLabel.color.a >= 1 }, {
+        chainTask = ChainTask({ titleLabel.color.a < 1 }, {
             titleLabel.color.a = GH.lerpValue(titleLabel.color.a, 0f, 1f, 1f)
         })
 
-        val secondChain = chainTask.setChain(ChainTask({ bodyLabel.color.a >= 1 }, {
+        val secondChain = chainTask.setChain(ChainTask({ bodyLabel.color.a < 1 }, {
             bodyLabel.color.a = GH.lerpValue(bodyLabel.color.a, 0f, 1f, 1f)
         }))
 
-        secondChain.setChain(ChainTask({ nextPageButton.color.a >= 1 }, {
+        secondChain.setChain(ChainTask({ nextPageButton.color.a < 1 }, {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
     }
@@ -123,11 +123,11 @@ class GameIntroGUI(val game: GameIntroScreen) {
             }
         })
 
-        chainTask = ChainTask({ bodyLabel.color.a >= 1 }, {
+        chainTask = ChainTask({ bodyLabel.color.a < 1 }, {
             bodyLabel.color.a = GH.lerpValue(bodyLabel.color.a, 0f, 1f, 1f)
         })
 
-        chainTask.setChain(ChainTask({ nextPageButton.color.a >= 1 }, {
+        chainTask.setChain(ChainTask({ nextPageButton.color.a < 1 }, {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 
@@ -166,11 +166,11 @@ class GameIntroGUI(val game: GameIntroScreen) {
             }
         })
 
-        chainTask = ChainTask({ bodyLabel.color.a >= 1 }, {
+        chainTask = ChainTask({ bodyLabel.color.a < 1 }, {
             bodyLabel.color.a = GH.lerpValue(bodyLabel.color.a, 0f, 1f, 1f)
         })
 
-        chainTask.setChain(ChainTask({ nextPageButton.color.a >= 1 }, {
+        chainTask.setChain(ChainTask({ nextPageButton.color.a < 1 }, {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 
@@ -218,22 +218,21 @@ class GameIntroGUI(val game: GameIntroScreen) {
 
         nextPageButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                chainTask = ChainTask({ layoutTable.color.a <= 0 }, { layoutTable.color.a = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f) })
+                chainTask = ChainTask({ layoutTable.color.a > 0 }, { layoutTable.color.a = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f) })
                 chainTask.setChain(ChainTask(null, { TextGame.stage.clear(); game.done = true; }))
-
             }
         })
 
-        chainTask = ChainTask({ titleLabel.color.a >= 1 }, { titleLabel.color.a = GH.lerpValue(titleLabel.color.a, 0f, 1f, 0.1f) })
+        chainTask = ChainTask({ titleLabel.color.a < 1 }, { titleLabel.color.a = GH.lerpValue(titleLabel.color.a, 0f, 1f, 0.1f) })
         var nextChain: ChainTask = chainTask;
 
         for(label in labelList){
-            nextChain = nextChain.setChain(ChainTask({ label.color.a >= 1 }, {
+            nextChain = nextChain.setChain(ChainTask({ label.color.a < 1 }, {
                 label.color.a = GH.lerpValue(label.color.a, 0f, 1f, 0.1f)
             }))
         }
 
-        nextChain.setChain(ChainTask({ nextPageButton.color.a >= 1 }, {
+        nextChain.setChain(ChainTask({ nextPageButton.color.a < 1 }, {
             nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
         }))
 
