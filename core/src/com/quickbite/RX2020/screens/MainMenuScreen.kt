@@ -11,15 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.util.GH
 
 /**
  * Created by Paha on 2/3/2016.
  */
 class MainMenuScreen(val game: TextGame) : Screen {
+    private val mainTable:Table = Table()
     private val buttonTable: Table = Table()
     private val titleTable:Table = Table()
-
-    private var task:ChainTask? = null
 
     override fun show() {
         var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
@@ -44,15 +44,13 @@ class MainMenuScreen(val game: TextGame) : Screen {
         startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 TextGame.stage.clear()
-                task = crazyFade();
+                ChainTask.addTaskToList(crazyFade())
             }
         })
 
         continueButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                TextGame.stage.clear()
-                game.screen = GameScreen(game)
-                SaveLoad.loadGame()
+                ChainTask.addTaskToList(continueGameFade())
             }
         })
 
@@ -62,14 +60,45 @@ class MainMenuScreen(val game: TextGame) : Screen {
         buttonTable.row().padTop(20f)
         buttonTable.add(startButton).width(150f).height(50f).padBottom(50f)
 
-        buttonTable.setFillParent(true)
         buttonTable.bottom()
 
-        titleTable.setFillParent(true)
         titleTable.top()
 
-        TextGame.stage.addActor(titleTable)
-        TextGame.stage.addActor(buttonTable)
+        mainTable.add(titleTable).fill().expand()
+        mainTable.row()
+        mainTable.add(buttonTable).fill().expand()
+        mainTable.setFillParent(true)
+
+        TextGame.stage.addActor(mainTable)
+    }
+
+    fun continueGameFade():ChainTask{
+        val chainTask = ChainTask({ mainTable.color.a > 0 }, {
+            val value = GH.lerpValue(mainTable.color.a, 1f, 0f, 1f)
+            mainTable.color.a = value
+        },{
+            TextGame.stage.clear();
+
+            //Load the game!
+            game.screen = GameScreen(game)
+            SaveLoad.loadGame()
+
+            TextGame.backgroundColor.a = 0f
+            TextGame.batch.color = Color(0f,0f,0f,0f)
+            val blackPixel = TextGame.smallGuiAtlas.findRegion("pixelBlack")
+            val task = ChainTask({TextGame.backgroundColor.r < 1},
+                    {
+                        TextGame.batch.begin()
+                        var amt = TextGame.backgroundColor.r + 0.01f
+                        TextGame.backgroundColor.r = amt; TextGame.backgroundColor.g=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.a=amt
+                        TextGame.batch.color = Color(0f, 0f, 0f, (1-amt))
+                        TextGame.batch.draw(blackPixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
+                        TextGame.batch.end()
+                    })
+            ChainTask.addTaskToList(task)
+        })
+
+        return chainTask
     }
 
     override fun hide() {
@@ -86,8 +115,6 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
     override fun render(delta: Float) {
         TextGame.stage.draw()
-        if(task != null)
-            task!!.update()
     }
 
     override fun resume() {

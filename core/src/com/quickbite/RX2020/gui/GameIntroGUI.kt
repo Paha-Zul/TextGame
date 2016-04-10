@@ -218,8 +218,26 @@ class GameIntroGUI(val game: GameIntroScreen) {
 
         nextPageButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                chainTask = ChainTask({ layoutTable.color.a > 0 }, { layoutTable.color.a = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f) })
-                chainTask.setChain(ChainTask(null, { TextGame.stage.clear(); game.done = true; }))
+                chainTask = ChainTask({ layoutTable.color.a > 0 }, {
+                    val value = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f)
+                    layoutTable.color.a = value
+                    TextGame.backgroundColor.r = value; TextGame.backgroundColor.g = value; TextGame.backgroundColor.b = value
+                },{
+                    TextGame.stage.clear(); game.done = true;
+                    TextGame.backgroundColor.a = 0f
+                    TextGame.batch.color = Color(0f,0f,0f,0f)
+                    val blackPixel = TextGame.smallGuiAtlas.findRegion("pixelBlack")
+                    val task = ChainTask({TextGame.backgroundColor.r < 1},
+                        {
+                            TextGame.batch.begin()
+                            var amt = TextGame.backgroundColor.r + 0.01f
+                            TextGame.backgroundColor.r = amt; TextGame.backgroundColor.g=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.a=amt
+                            TextGame.batch.color = Color(0f, 0f, 0f, (1-amt))
+                            TextGame.batch.draw(blackPixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
+                            TextGame.batch.end()
+                        })
+                    ChainTask.addTaskToList(task)
+                })
             }
         })
 
