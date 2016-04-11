@@ -588,9 +588,14 @@ class GameScreenGUI(val game : GameScreen) {
         scrollPaneStyle.vScroll = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollBar"))
 
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
+
+        val nextPageButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        nextPageButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        nextPageButtonStyle.fontColor = Color.WHITE
 
         //Make the buttons for the choices (if any)
         for(choice in event.choices!!.iterator()){
@@ -627,20 +632,24 @@ class GameScreenGUI(val game : GameScreen) {
         scrollPane.setFadeScrollBars(false)
 
         //Make the next page button
-        val nextPageButton: ImageButton = ImageButton(drawable)
+        val nextPageButton: TextButton = TextButton("", nextPageButtonStyle)
+        nextPageButton.label.setFontScale(0.15f)
 
         //Add the title and description label
         EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 5f, 0f, 10f)
         EventInfo.eventInnerTable.row().expandX().fillX()
 
-        val hasNextPage = event.description.size - 1 > pageNumber ||
-                (event.outcomes != null && event.outcomes!!.size > 0) ||
-                (event.choices != null && event.choices!!.size > 0) ||
-                (event.resultingAction != null && event.resultingAction!!.size > 0)
+        val hasNextPage = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1)
+                event.hasOutcomes || event.hasActions
 
         //If we have another page, add a next page button.
-        if(hasNextPage)
+        if(hasNextPage || event.hasChoices && event.choices!!.size == 1) {
             EventInfo.eventInnerTable.add(nextPageButton).size(50f).padBottom(5f).bottom()
+            if(event.choices!!.size == 1)
+                nextPageButton.label.setText(event.choices!![0])
+            else
+                nextPageButton.style.up = drawable
+        }
 
         //Otherwise, add a close button.
         else{
@@ -658,16 +667,23 @@ class GameScreenGUI(val game : GameScreen) {
         //Kinda complicated listener for the next page button.
         nextPageButton.addListener(object: ChangeListener(){
             override fun changed(evt: ChangeEvent?, actor: Actor?) {
-                val hasOnlyOutcomes = (event.choices == null || (event.choices != null && event.choices!!.size == 0)) && (event.outcomes != null && event.outcomes!!.size > 0)
+                val hasOnlyOutcomes = (!event.hasChoices) && event.hasOutcomes
 
                 //If we have another description, simply go to the next page.
                 if(event.description.size - 1 > pageNumber)
                     showEventPage(event, pageNumber +1)
 
                 //If we have choices, layout the choices.
-                else if(event.choices != null && event.choices!!.size > 0){
-                    EventInfo.eventInnerTable.clear()
-                    EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(60f)
+                else if(event.hasChoices){
+                    //If we have more than one choice
+                    if(event.choices!!.size > 1) {
+                        EventInfo.eventInnerTable.clear()
+                        EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(60f)
+
+                    //If we only have one choice, trigger the event GUI again.
+                    }else{
+                        triggerEventGUI(GH.getEventFromChoice(event, ""))
+                    }
                 }
 
                 //Otherwise, we only have outcomes or actions. Deal with it!
