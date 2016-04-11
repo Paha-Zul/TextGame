@@ -185,7 +185,7 @@
   "description" : [ "A herd of cow-like creatures are lumbering across the path head. They're too vast to easily go around." ],
   "choices" : [ "Go Through", "Wait" ],
   "outcomes" : [ [ "HerdHit", "HerdMiss" ], [ "HerdWait" ] ],
-  "chances" : [ [ 50, 50 ], [ ] ],
+  "chances" : [ [ 50, 50 ], [100 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,

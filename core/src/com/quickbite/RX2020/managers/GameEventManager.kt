@@ -75,6 +75,18 @@ object GameEventManager{
 
         var randomName:String = ""
 
+        val hasChoices:Boolean
+            get() = choices != null && choices!!.size > 0
+
+        val hasOutcomes:Boolean
+            get() = outcomes != null && outcomes!!.size > 0 && outcomes!![0].size > 0
+
+        val hasActions:Boolean
+            get() = resultingAction != null && resultingAction!!.size > 0 && resultingAction!![0].size > 0
+
+        val hasDescriptions:Boolean
+            get() = description.size > 0
+
         /**
          * Selects another Event using a choice and chance.
          * @param choice The text of the choice (ie: 'Craft a Net')
@@ -145,11 +157,5 @@ object GameEventManager{
 
             return outcomeIndex
         }
-
-        fun areChoicesEmpty():Boolean = (this.choices == null || this.choices!!.size == 0)
-
-        fun areOutcomesEmpty():Boolean = (this.outcomes == null || this.outcomes!!.size == 0 || this.outcomes!![0].size == 0)
-
-        fun areActionsEmpty():Boolean = (this.resultingAction == null || this.resultingAction!!.size == 0 || this.resultingAction!![0].size == 0)
     }
 }

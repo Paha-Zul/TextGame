@@ -42,8 +42,17 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
         }
 
         fun purgeRecentResults(currTime: Double){
-            val list:List<Result> = recentResultMap.values.toList()
+            var list:List<Result> = recentResultMap.values.toList()
             var changed = false
+
+            for(result in list){
+                if(result.timeLastUpdated + hangTime <= currTime) {
+                    recentResultMap.remove(result.name)
+                    changed = true
+                }
+            }
+
+            list = recentDeathResultMap.values.toList()
 
             for(result in list){
                 if(result.timeLastUpdated + hangTime <= currTime) {

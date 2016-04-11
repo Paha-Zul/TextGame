@@ -17,7 +17,7 @@ object SaveLoad{
 
     private val json:Json = Json()
 
-    fun saveGame(){
+    fun saveGame(threaded:Boolean){
         json.setIgnoreUnknownFields(false)
         json.setUsePrototypes(true)
 
@@ -34,11 +34,18 @@ object SaveLoad{
 
         Logger.log("SaveLoad", "Gather game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
 
-        TextGame.threadPool.execute {
+        if(threaded)
+            TextGame.threadPool.submit {
+                val start = TimeUtils.nanoTime()
+                var file = Gdx.files.local(saveName)
+                file.writeString(json.toJson(save), false)
+                Logger.log("SaveLoad", "Saved game (threaded) in ${(TimeUtils.nanoTime() - start)/1000000000.0} seconds")
+            }
+        else{
             val start = TimeUtils.nanoTime()
             var file = Gdx.files.local(saveName)
             file.writeString(json.toJson(save), false)
-            Logger.log("SaveLoad", "Saved game (threaded) in ${(TimeUtils.nanoTime() - start)/1000000000.0} seconds")
+            Logger.log("SaveLoad", "Saved game (non-threaded) in ${(TimeUtils.nanoTime() - start)/1000000000.0} seconds")
         }
     }
 

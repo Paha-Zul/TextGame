@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
+import com.quickbite.rx2020.screens.MainMenuScreen
 import com.quickbite.rx2020.util.GH
 
 /**
@@ -49,6 +50,10 @@ class GameScreenGUI(val game : GameScreen) {
     private val supplyTable: Table = Table() //For the supplies
 
     private val ROVTable: Table = Table()
+
+    /* Settings Table & stuff */
+    private lateinit var settingsButton:ImageButton
+    private val settingsTable = Table()
 
     /* Gui elements for events */
 
@@ -202,6 +207,12 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
+        settingsButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                openSettings()
+            }
+        })
+
         var task: ChainTask? = null
         task = ChainTask(
                 { activityHourSlider.value <= 0 || game.searchActivity == null },
@@ -242,12 +253,6 @@ class GameScreenGUI(val game : GameScreen) {
         mainTable.clear()
         campTable.remove()
 
-        //mainTable.add(tabTable).top()
-        //mainTable.add(tableToApply).left().top()
-
-        //mainTable.top().left()
-        //mainTable.setFillParent(true)
-
         TextGame.stage.addActor(centerInfoTable)
         TextGame.stage.addActor(leftTable)
         TextGame.stage.addActor(rightTable)
@@ -280,6 +285,9 @@ class GameScreenGUI(val game : GameScreen) {
         barStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("bar"))
         barStyle.knobBefore = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixel"))
 
+//        val settingsButtonStyle = ImageButton.ImageButtonStyle()
+//        settingsButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("gear", Texture::class.java)))
+
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
@@ -295,6 +303,10 @@ class GameScreenGUI(val game : GameScreen) {
         pauseButtonStyle.imageOver =  drawable
         pauseButtonStyle.imageDown =  drawable
 
+        settingsButton = ImageButton(TextureRegionDrawable(TextureRegion(TextGame.manager.get("gear", Texture::class.java))))
+        settingsButton.setSize(35f, 35f)
+        settingsButton.setPosition(TextGame.viewport.worldWidth - 45f, 10f)
+
         distProgressBar = ProgressBar(0f, GameStats.TravelInfo.totalDistOfGame.toFloat(), 20f, false, barStyle)
 
         pauseButton = ImageButton(pauseButtonStyle)
@@ -309,6 +321,8 @@ class GameScreenGUI(val game : GameScreen) {
 
         //distanceTable.row()
         //distanceTable.add(distProgressBar).height(25f).width(150f)
+
+        TextGame.stage.addActor(settingsButton)
 
         buildCenterInfoTable()
         buildLeftTable()
@@ -521,10 +535,13 @@ class GameScreenGUI(val game : GameScreen) {
      * Initially starts the event GUI
      */
     fun triggerEventGUI(event: GameEventManager.EventJson?){
-        if(event == null && Result.hasEventResults){
+        if(event!=null)
+            GH.executeEventActions(event)
+
+        if((event == null || !event.hasDescriptions) && Result.hasEventResults){
             showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList(), {closeEvent()})
             return
-        }else if(event == null){
+        }else if(event == null || !event.hasDescriptions){
             closeEvent()
             return
         }
@@ -551,8 +568,6 @@ class GameScreenGUI(val game : GameScreen) {
 
         EventInfo.eventContainer.add(EventInfo.eventTable).expand().fill()
         TextGame.stage.addActor(EventInfo.eventContainer)
-
-        GH.executeEventActions(event)
 
         showEventPage(event, 0)
     }
@@ -737,7 +752,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun closeEvent(){
         campButton.isDisabled = false;
         EventInfo.eventContainer.remove()
-        SaveLoad.saveGame()
+        EventManager.callEvent("eventFinished")
         game.resumeGame()
     }
 
@@ -1280,6 +1295,66 @@ class GameScreenGUI(val game : GameScreen) {
         recentChangeTable.setPosition(75f, TextGame.viewport.worldHeight/2f - recentChangeTable.height/2f)
         TextGame.stage.addActor(recentChangeTable)
     }
+
+    fun openSettings(){
+        game.pauseGame()
+        settingsTable.clear()
+
+        settingsTable.setSize(200f, 200f)
+        settingsTable.setOrigin(Align.center)
+        settingsTable.setPosition(TextGame.viewport.worldWidth/2f - 100f, TextGame.viewport.worldHeight/2f - 100f)
+        settingsTable.background = TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelBlack")))
+
+        val buttonStyle = TextButton.TextButtonStyle()
+        buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        buttonStyle.fontColor = Color.WHITE
+
+        val saveAndQuitButton = TextButton("Save and Quit", buttonStyle)
+        saveAndQuitButton.label.setFontScale(0.15f)
+
+        val saveAndExitButton = TextButton("Save and Exit", buttonStyle)
+        saveAndExitButton.label.setFontScale(0.15f)
+
+        val returnButton = TextButton("Return", buttonStyle)
+        returnButton.label.setFontScale(0.15f)
+
+        settingsTable.add(saveAndQuitButton).height(60f)
+        settingsTable.row()
+        settingsTable.add(saveAndExitButton).height(60f)
+        settingsTable.row()
+        settingsTable.add(returnButton).height(60f)
+
+        saveAndQuitButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                SaveLoad.saveGame(false)
+                TextGame.stage.clear()
+                game.game.screen = MainMenuScreen(game.game)
+            }
+        })
+
+        saveAndExitButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                SaveLoad.saveGame(false)
+                TextGame.stage.clear()
+                game.game.screen = MainMenuScreen(game.game)
+                Gdx.app.exit()
+            }
+        })
+
+        returnButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                closeSettings()
+            }
+        })
+
+        TextGame.stage.addActor(settingsTable)
+    }
+
+    fun closeSettings(){
+        settingsTable.remove()
+        game.resumeGame()
+    }
+
 
     private object EventInfo{
         val eventTable: Table = Table()

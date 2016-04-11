@@ -3,6 +3,7 @@ package com.quickbite.rx2020.managers
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.Result
+import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.clamp
 import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.util.Logger
@@ -162,7 +163,7 @@ object EventManager {
         EventManager.onEvent("damageROV", {args ->
             val min = (args[0] as String).toFloat()
             val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
-            val chance = if(args.count() >= 3) (args[2] as String).toFloat() else 0f
+            val chance = if(args.count() >= 3) (args[2] as String).toFloat() else 100f
 
             val rand = MathUtils.random(1, 100)
             if(rand <= chance) {
@@ -197,6 +198,17 @@ object EventManager {
             GameStats.TravelInfo.totalDistTraveled += amt
 
             Result.addResult("miles", -amt.toFloat(), gameScreen.currGameTime, gui = gameScreen.gui)
+        })
+
+        EventManager.onEvent("wait", {args ->
+            val min = (args[0] as String).toInt()
+            val max = if(args.count() >= 2) (args[1] as String).toInt() else min
+
+            var amt = MathUtils.random(Math.abs(min), Math.abs(max))
+
+            GameStats.TimeInfo.totalTimeCounter += amt
+
+            Result.addResult("hours waited", amt.toFloat(), gameScreen.currGameTime, gui = gameScreen.gui)
         })
 
         EventManager.onEvent("openTrade", {args ->
@@ -236,8 +248,7 @@ object EventManager {
         })
 
         EventManager.onEvent("eventFinished", { args ->
-            //TODO Needs to be called somewhere
-//            SaveLoad.saveGame(true)
+            SaveLoad.saveGame(true)
         })
     }
 }
