@@ -3,7 +3,6 @@ package com.quickbite.rx2020.managers
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.Result
-import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.clamp
 import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.util.Logger
@@ -211,6 +210,9 @@ object EventManager {
             gameScreen.gui.buildGroupTable()
 
             Result.addDeath(person)
+
+            if(GroupManager.numPeopleAlive == 0) //OH MY GAWD GAME OVER!!
+                gameScreen.setGameOver()
         })
 
         EventManager.onEvent("healthChanged", {args ->
@@ -234,7 +236,8 @@ object EventManager {
         })
 
         EventManager.onEvent("eventFinished", { args ->
-            SaveLoad.saveGame()
+            //TODO Needs to be called somewhere
+//            SaveLoad.saveGame(true)
         })
     }
 }

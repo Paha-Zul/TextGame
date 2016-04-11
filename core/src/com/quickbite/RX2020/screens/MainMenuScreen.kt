@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.managers.GroupManager
+import com.quickbite.rx2020.managers.SupplyManager
 import com.quickbite.rx2020.util.GH
 
 /**
@@ -22,6 +24,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
     private val titleTable:Table = Table()
 
     override fun show() {
+        TextGame.backgroundColor = Color(0f,0f,0f,1f)
+
         var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
@@ -45,6 +49,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 TextGame.stage.clear()
                 ChainTask.addTaskToList(crazyFade())
+                GroupManager.init()
+                SupplyManager.init()
             }
         })
 

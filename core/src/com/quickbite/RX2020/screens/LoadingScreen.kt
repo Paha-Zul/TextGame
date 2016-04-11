@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.DataManager
-import com.quickbite.rx2020.managers.GroupManager
-import com.quickbite.rx2020.managers.SupplyManager
 import com.quickbite.rx2020.util.GH
 
 /**
@@ -41,8 +39,6 @@ class LoadingScreen(val game: TextGame): Screen {
         TextGame.manager.loadAllFonts(Gdx.files.internal("fonts/"))
         TextGame.manager.loadAllImageSheets(Gdx.files.internal("art/sheets/"))
 
-        GroupManager.init()
-        SupplyManager.init()
         readyToLoad = true
     }
 

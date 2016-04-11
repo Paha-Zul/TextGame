@@ -1,6 +1,5 @@
 package com.quickbite.rx2020.screens
 
-import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
@@ -12,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.gui.GameScreenGUI
 import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Tester
 import java.util.*
@@ -19,7 +19,7 @@ import java.util.*
 /**
  * Created by Paha on 2/3/2016.
  */
-class GameScreen(val game: Game): Screen {
+class GameScreen(val game: TextGame): Screen {
     enum class State{
         TRAVELING, CAMP
     }
@@ -115,7 +115,7 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun hide() {
-       SaveLoad.saveGame()
+       SaveLoad.saveGame(true)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -123,9 +123,11 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun pause() {
+
     }
 
     override fun resume() {
+
     }
 
     override fun render(delta: Float) {
@@ -268,6 +270,29 @@ class GameScreen(val game: Game): Screen {
     fun resumeGame(){
         this.paused = false;
     }
+
+    fun setGameOver(){
+        pauseGame()
+        SaveLoad.deleteSave()
+        var counter = 0
+        var opacity = 0f
+        var whitePixel = TextGame.smallGuiAtlas.findRegion("pixelWhite")
+        val task = ChainTask({opacity < 1}, {
+            counter++
+            opacity = GH.lerpValue(opacity, 0f, 1f, 1f)
+            TextGame.batch.color = Color(1f, 0f, 0f, opacity)
+            TextGame.batch.begin()
+            TextGame.batch.draw(whitePixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
+            TextGame.batch.end()
+            TextGame.batch.color = Color.WHITE
+        }, {
+            TextGame.stage.clear() //Make sure to clear the stage
+            game.screen = MainMenuScreen(game)
+        })
+
+        ChainTask.addTaskToList(task)
+    }
+
 
     override fun dispose() {
 
