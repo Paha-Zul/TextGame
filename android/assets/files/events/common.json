@@ -816,7 +816,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "1", "10", "false", "-1" ], [ "damageROV", "1", "10" ] ]
+  "resultingAction" : [ [ "hurt", "1", "10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
 }, {
   "root" : true,
   "title" : "Solar Power!",
@@ -897,7 +897,7 @@
   "choices" : [ "Whoa!" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "1", "10", "false", "-1" ], [ "damageROV", "1", "10" ] ]
+  "resultingAction" : [ [ "hurt", "1", "10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
 }, {
   "root" : false,
   "title" : "Well...",

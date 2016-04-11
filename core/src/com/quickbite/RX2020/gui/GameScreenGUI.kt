@@ -258,6 +258,7 @@ class GameScreenGUI(val game : GameScreen) {
         TextGame.stage.addActor(rightTable)
         TextGame.stage.addActor(pauseButton)
         TextGame.stage.addActor(campButton)
+        TextGame.stage.addActor(settingsButton)
     }
 
     /**
@@ -319,10 +320,6 @@ class GameScreenGUI(val game : GameScreen) {
         campButton.setPosition(TextGame.viewport.worldWidth/2f - campButton.width/2f, 0f)
         campButton.label.setFontScale(buttonFontScale)
 
-        //distanceTable.row()
-        //distanceTable.add(distProgressBar).height(25f).width(150f)
-
-        TextGame.stage.addActor(settingsButton)
 
         buildCenterInfoTable()
         buildLeftTable()
@@ -639,20 +636,19 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 5f, 0f, 10f)
         EventInfo.eventInnerTable.row().expandX().fillX()
 
-        val hasNextPage = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1)
-                event.hasOutcomes || event.hasActions
+        val hasAnotherPage = event.description.size - 1 > pageNumber
+        val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions
 
         //If we have another page, add a next page button.
-        if(hasNextPage || event.hasChoices && event.choices!!.size == 1) {
+        if(hasAnotherSomething || event.hasChoices && event.choices!!.size == 1) {
             EventInfo.eventInnerTable.add(nextPageButton).size(50f).padBottom(5f).bottom()
-            if(event.choices!!.size == 1)
+            if(event.choices!!.size == 1 && !hasAnotherPage)
                 nextPageButton.label.setText(event.choices!![0])
             else
                 nextPageButton.style.up = drawable
-        }
 
         //Otherwise, add a close button.
-        else{
+        }else{
             val closeButton: TextButton = TextButton("- Close -", textButtonStyle)
             closeButton.label.setFontScale(buttonFontScale)
             closeButton.addListener(object: ChangeListener(){
