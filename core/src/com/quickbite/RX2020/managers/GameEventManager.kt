@@ -35,10 +35,11 @@ object GameEventManager{
         val person = GroupManager.getRandomPerson()!!;
         event.randomName = person.firstName
         currActiveEvent = event
+        Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
         when(type){
             "common" -> currCommonEvent = event;
             "rare" -> currRareEvent = event;
-            "epic" -> currEpicEvent = event;
+            else -> currEpicEvent = event;
         }
         return event;
     }
@@ -110,6 +111,8 @@ object GameEventManager{
 
         /**
          * Gets the index for the choice
+         * @param choice The text choice (eg: 'Craft Net')
+         * @return The index of the choice text in the event, 0 if there are no choices but there are outcomes, and -1 if there are no choices or outcomes.
          */
         private fun getChoiceIndex(choice:String):Int{
             var choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
@@ -142,5 +145,11 @@ object GameEventManager{
 
             return outcomeIndex
         }
+
+        fun areChoicesEmpty():Boolean = (this.choices == null || this.choices!!.size == 0)
+
+        fun areOutcomesEmpty():Boolean = (this.outcomes == null || this.outcomes!!.size == 0 || this.outcomes!![0].size == 0)
+
+        fun areActionsEmpty():Boolean = (this.resultingAction == null || this.resultingAction!!.size == 0 || this.resultingAction!![0].size == 0)
     }
 }

@@ -24,7 +24,7 @@ object SaveLoad{
         val startTime = TimeUtils.nanoTime()
         val save = SaveGamePOJO()
 
-        save.currTime = GameStats.TimeInfo.currTime
+        save.currTime = GameStats.TimeInfo.totalTimeCounter
         save.currMiles = GameStats.TravelInfo.totalDistTraveled
         save.maxTripMileage = GameStats.TravelInfo.totalDistOfGame
 
@@ -51,7 +51,7 @@ object SaveLoad{
         var file = Gdx.files.local(saveName)
         val save = json.fromJson(SaveGamePOJO::class.java, file)
 
-        GameStats.TimeInfo.currTime = save.currTime
+        GameStats.TimeInfo.totalTimeCounter = save.currTime
         GameStats.TravelInfo.totalDistTraveled = save.currMiles
         GameStats.TravelInfo.totalDistOfGame = save.maxTripMileage
 
@@ -78,7 +78,7 @@ object SaveLoad{
     fun deleteSave():Boolean = Gdx.files.local(saveName).delete()
 
     private class SaveGamePOJO(){
-        var currTime:Int = 0
+        var currTime:Float = 0f
         var currMiles:Int = 0
         var maxTripMileage:Int = 0
         var personList:MutableList<PersonPOJO> = mutableListOf()

@@ -51,8 +51,8 @@ object GameStats : IUpdateable {
 
     object TimeInfo{
         val timeScale:Int = 24
-        var totalTimeCounter:Float = 0f
-        var currTime:Int = 0 //The total time accumulated while traveling
+        var totalTimeCounter:Float = 0f //The total time traveled
+        var currTime:Int = 0 //The current time of the current 24 hour day period
         var lastTime:Int = 0 //The last tick of time. Only really used for determining when the hourly update should be called.
         var timeOfDay:Int = 0 //The time of day, formatted to 12 hour cycles.
             get() {

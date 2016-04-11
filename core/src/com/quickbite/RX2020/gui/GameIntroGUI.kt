@@ -209,14 +209,14 @@ class GameIntroGUI(val game: GameIntroScreen) {
             labelList.add(label)
         }
 
-        val nextPageButton: TextButton = TextButton("Embark", buttonStyle)
-        nextPageButton.color.a = 0f
-        nextPageButton.label.setFontScale(0.4f)
+        val embarkButton: TextButton = TextButton("Embark", buttonStyle)
+        embarkButton.color.a = 0f
+        embarkButton.label.setFontScale(0.4f)
 
         layoutTable.row().padTop(15f)
-        layoutTable.add(nextPageButton)
+        layoutTable.add(embarkButton)
 
-        nextPageButton.addListener(object: ChangeListener(){
+        embarkButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 chainTask = ChainTask({ layoutTable.color.a > 0 }, {
                     val value = GH.lerpValue(layoutTable.color.a, 1f, 0f, 1f)
@@ -250,8 +250,8 @@ class GameIntroGUI(val game: GameIntroScreen) {
             }))
         }
 
-        nextChain.setChain(ChainTask({ nextPageButton.color.a < 1 }, {
-            nextPageButton.color.a = GH.lerpValue(nextPageButton.color.a, 0f, 1f, 1f)
+        nextChain.setChain(ChainTask({ embarkButton.color.a < 1 }, {
+            embarkButton.color.a = GH.lerpValue(embarkButton.color.a, 0f, 1f, 1f)
         }))
 
         TextGame.stage.addActor(layoutTable)

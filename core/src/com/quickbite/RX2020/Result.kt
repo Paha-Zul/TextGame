@@ -16,6 +16,9 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
 
         private val hangTime = 3
 
+        val hasEventResults:Boolean
+            get() = eventResultMap.size > 0 || deathResultMap.size > 0
+
         fun clearResultLists(){
             eventResultMap = mutableMapOf()
             deathResultMap = mutableMapOf()

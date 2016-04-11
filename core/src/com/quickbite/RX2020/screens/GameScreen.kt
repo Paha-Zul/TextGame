@@ -96,7 +96,7 @@ class GameScreen(val game: Game): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        //gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(DataManager.rootEventMap["Event1"]!!); paused = true})
+//        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.rareRootEventMap["Event1"]!!); paused = true})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -115,6 +115,7 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun hide() {
+       SaveLoad.saveGame()
     }
 
     override fun resize(width: Int, height: Int) {
@@ -199,7 +200,7 @@ class GameScreen(val game: Game): Screen {
         GameStats.update(delta)
         commonEventTimer.update(delta)
         rareEventTimer.update(delta)
-        epicEventTimer.update(delta)
+//        epicEventTimer.update(delta)
 
         for(background in scrollingBackgroundList)
             background.update(delta)
@@ -269,81 +270,27 @@ class GameScreen(val game: Game): Screen {
     }
 
     override fun dispose() {
-        //throw UnsupportedOperationException()
+
     }
 
     fun timerFunc(eventType:String, timer:CustomTimer, min:Float, max:Float):()->Unit{
         var func: (()->Unit)? = null
         func = {
-            var currEvent = GameEventManager.currActiveEvent
-            if(currEvent == null) currEvent = GameEventManager.setNewRandomRoot(eventType);
+            //Get the current event or a new one if we aren't on an event.
+            var currEvent = GameEventManager.setNewRandomRoot(eventType);
             GameEventManager.currActiveEvent = currEvent;
 
-            val endEvent = {
-                resumeGame()
-                gui.closeEvent()
-                EventManager.callEvent("eventFinished")
-            }
+            Logger.log("GameScreen", "Starting event ${GameEventManager.currActiveEvent!!.name}")
 
-            gui.triggerEventGUI(currEvent, { choice ->
+            Result.clearResultLists()
 
-                System.out.println("currEvent: "+currEvent!!.name)
+            //Trigger the GUI UI and send a callback to it.
+            gui.triggerEventGUI(currEvent)
 
-                //If the list has a resulting action, call it!
-                val list = currEvent!!.resultingAction;
-                var done:Boolean = true
-
-                //We are about to perform some actions and generate results for the event.
-                if(list != null && list.size != 0) {
-                    //Call each event through the event manager.
-                    for (l in list.iterator()) {
-                        if (l.size > 0) {
-                            done = false
-                            EventManager.callEvent(l[0], l.slice(1.rangeTo(l.size-1)))
-                        }
-                    }
-                }
-
-                val showResults:Boolean = list != null && list.size != 0 && (currEvent!!.outcomes == null || currEvent!!.outcomes!!.size == 0) &&
-                        (Result.eventResultMap.size > 0 || Result.deathResultMap.size > 0)
-
-                if(showResults) {
-                    done = false
-                    //Display the event results to the player.
-                    gui.showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList(), {
-                        endEvent()
-                    })
-                }
-
-                //Get event related to the choice we selected.
-                currEvent = currEvent!!.selectChildEvent(choice)
-                //If the event is not null, restart the timer to make the next event display.
-                if(currEvent != null){
-                    timer.restart(0.00001f)
-                    if(done){
-                        resumeGame()
-                        gui.closeEvent()
-                    }
-
-                    GameEventManager.currActiveEvent = currEvent
-
-                //Otherwise if it is null, we need to pick a new root. We are done with the current event!
-                }else{
-                    if(done)
-                        endEvent()
-
-                    //Set the callback to call this function again while clearing the event result list.
-                    //This clears all event results as the new event begins.
-                    timer.callback = {func!!();Result.clearResultLists()}
-
-                    timer.restart(MathUtils.random(min, max).toFloat())
-                    GameEventManager.setNewRandomRoot(eventType)
-                    Logger.log("GameScreen", "Event ${GameEventManager.getCurrEvent(eventType)!!.name} is going to start.")
-                }
-
-            })
+            timer.reset(min, max)
         }
 
         return func
     }
+
 }

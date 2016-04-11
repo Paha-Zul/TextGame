@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
+import com.quickbite.rx2020.util.GH
 
 /**
  * Created by Paha on 2/5/2016.
@@ -55,7 +56,7 @@ class GameScreenGUI(val game : GameScreen) {
 
     /* Tab buttons */
     private lateinit var supplyButton: TextButton
-    private lateinit var groupButtonTab: TextButton
+    private lateinit var groupButton: TextButton
     private lateinit var campButton: TextButton
 
     /* Camp specific stuff */
@@ -128,7 +129,7 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        groupButtonTab.addListener(object: ClickListener(){
+        groupButton.addListener(object: ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
 //                rightTable.debugAll()
@@ -137,11 +138,12 @@ class GameScreenGUI(val game : GameScreen) {
                     buildGroupTable()
                     rightTable.add(groupTable)
                 }else if(ROVTable.parent == null){
-                    groupTable.remove()
+                    rightTable.clear()
+                    addGroupButton()
                     buildROVTable()
                     rightTable.add(ROVTable)
 
-                    //TODO This is freaking broken.
+                //TODO This is freaking broken.
                 }else{
                     ROVTable.remove()
                     groupTable.remove()
@@ -382,13 +384,20 @@ class GameScreenGUI(val game : GameScreen) {
         buttonStyle.fontColor = Color.WHITE
         buttonStyle.up = drawable
 
-        groupButtonTab = TextButton("Exomer751", buttonStyle)
-        groupButtonTab.label.setFontScale(buttonFontScale)
+        groupButton = TextButton("Exomer751", buttonStyle)
+        groupButton.label.setFontScale(buttonFontScale)
 
         rightTable.setFillParent(true)
         rightTable.top().right()
 
-        rightTable.add(groupButtonTab).right().top().size(130f, 40f)
+        addGroupButton()
+    }
+
+    /**
+     * We need this because apparently the tables are wacky and we have to readd the group button a lot.
+     */
+    private fun addGroupButton(){
+        rightTable.add(groupButton).right().top().size(130f, 40f)
         rightTable.row()
     }
 
@@ -511,7 +520,15 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Initially starts the event GUI
      */
-    fun triggerEventGUI(event: GameEventManager.EventJson, callbackTask : (choice:String)->Unit){
+    fun triggerEventGUI(event: GameEventManager.EventJson?){
+        if(event == null && Result.hasEventResults){
+            showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList(), {closeEvent()})
+            return
+        }else if(event == null){
+            closeEvent()
+            return
+        }
+
         game.pauseGame()
         EventInfo.eventTable.clear()
         campButton.isDisabled = true;
@@ -535,14 +552,15 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventContainer.add(EventInfo.eventTable).expand().fill()
         TextGame.stage.addActor(EventInfo.eventContainer)
 
+        GH.executeEventActions(event)
 
-        showEventPage(event, callbackTask, 0)
+        showEventPage(event, 0)
     }
 
     /**
      * Shows an individual event page
      */
-    private fun showEventPage(event: GameEventManager.EventJson, nextEventCallback: (choice:String)->Unit, pageNumber:Int){
+    private fun showEventPage(event: GameEventManager.EventJson, pageNumber:Int){
         //Clear the tables
         EventInfo.eventInnerTable.clear()
         EventInfo.eventChoicesTable.clear()
@@ -567,10 +585,12 @@ class GameScreenGUI(val game : GameScreen) {
             EventInfo.eventChoicesTable.add(button).height(50f)
             EventInfo.eventChoicesTable.row()
 
+            //Choose a choice buttons.
             button.addListener(object: ChangeListener(){
-                override fun changed(event: ChangeEvent?, actor: Actor?) {
+                override fun changed(evt: ChangeEvent?, actor: Actor?) {
                     //EventInfo.outerEventTable.remove()
-                    nextEventCallback(button.text.toString().substring(1, button.text.length - 1))
+                    val choiceText = button.text.toString().substring(1, button.text.length - 1)
+                    triggerEventGUI(GH.getEventFromChoice(event, choiceText))
                 }
             })
         }
@@ -613,7 +633,7 @@ class GameScreenGUI(val game : GameScreen) {
             closeButton.label.setFontScale(buttonFontScale)
             closeButton.addListener(object: ChangeListener(){
                 override fun changed(evt: ChangeEvent?, actor: Actor?) {
-                    nextEventCallback("") //This will basically end the event.
+                    closeEvent()
                 }
             })
 
@@ -624,20 +644,20 @@ class GameScreenGUI(val game : GameScreen) {
         nextPageButton.addListener(object: ChangeListener(){
             override fun changed(evt: ChangeEvent?, actor: Actor?) {
                 val hasOnlyOutcomes = (event.choices == null || (event.choices != null && event.choices!!.size == 0)) && (event.outcomes != null && event.outcomes!!.size > 0)
-                val hasActions = event.resultingAction != null && event.resultingAction!!.size > 0
 
                 //If we have another description, simply go to the next page.
                 if(event.description.size - 1 > pageNumber)
-                    showEventPage(event, nextEventCallback, pageNumber +1)
+                    showEventPage(event, pageNumber +1)
 
-                //If we have only outcomes or only actions, trigger the end of the event. This will probably result in something being gained or lost
-                else if(hasOnlyOutcomes || (!hasOnlyOutcomes && hasActions)){
-                    nextEventCallback("")
-
-                //Otherwise, we have a choice to make! Layout the choices!
-                }else{
+                //If we have choices, layout the choices.
+                else if(event.choices != null && event.choices!!.size > 0){
                     EventInfo.eventInnerTable.clear()
                     EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(60f)
+                }
+
+                //Otherwise, we only have outcomes or actions. Deal with it!
+                else if (hasOnlyOutcomes || Result.hasEventResults){
+                    triggerEventGUI(GH.getEventFromChoice(event, ""))
                 }
             }
         })
@@ -717,6 +737,8 @@ class GameScreenGUI(val game : GameScreen) {
     fun closeEvent(){
         campButton.isDisabled = false;
         EventInfo.eventContainer.remove()
+        SaveLoad.saveGame()
+        game.resumeGame()
     }
 
     fun buildCampTable(){
