@@ -661,7 +661,7 @@ class GameScreenGUI(val game : GameScreen) {
                 }
             })
 
-            EventInfo.eventInnerTable.add(closeButton).padBottom(60f).bottom().height(50f)
+            EventInfo.eventInnerTable.add(closeButton).padBottom(5f).bottom().height(50f)
         }
 
         //Kinda complicated listener for the next page button.
