@@ -13,6 +13,7 @@ object SupplyManager : IUpdateable {
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
     fun init(){
+        supplyMap.clear()
         var list = DataManager.getItemList()
         for(item in list){
             var randStart = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()

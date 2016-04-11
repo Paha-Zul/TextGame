@@ -57,6 +57,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
         continueButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 ChainTask.addTaskToList(continueGameFade())
+                GroupManager.init()
+                SupplyManager.init()
             }
         })
 

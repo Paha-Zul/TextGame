@@ -17,6 +17,7 @@ object GroupManager : IUpdateable {
         get() = list.size
 
     fun init(){
+        list.clear()
         list += Person(DataManager.pullRandomName())
         list += Person(DataManager.pullRandomName())
         list += Person(DataManager.pullRandomName())
