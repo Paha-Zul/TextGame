@@ -234,6 +234,7 @@ class GameScreen(val game: TextGame): Screen {
         GameStats.updateHourly(delta)
         SupplyManager.updateHourly(delta)
         GroupManager.updateHourly(delta)
+        ChainTask.updateHourly(delta)
 
         if(numHoursToAdvance > 0) numHoursToAdvance--
         timeTickEventList.forEach { evt -> evt.update()}
@@ -290,7 +291,7 @@ class GameScreen(val game: TextGame): Screen {
             game.screen = MainMenuScreen(game)
         })
 
-        ChainTask.addTaskToList(task)
+        ChainTask.addTaskToEveryFrameList(task)
     }
 
 

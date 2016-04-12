@@ -48,7 +48,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
         startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
                 TextGame.stage.clear()
-                ChainTask.addTaskToList(crazyFade())
+                ChainTask.addTaskToEveryFrameList(crazyFade())
                 GroupManager.init()
                 SupplyManager.init()
             }
@@ -56,7 +56,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
         continueButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                ChainTask.addTaskToList(continueGameFade())
+                ChainTask.addTaskToEveryFrameList(continueGameFade())
                 GroupManager.init()
                 SupplyManager.init()
             }
@@ -103,7 +103,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
                         TextGame.batch.draw(blackPixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
                         TextGame.batch.end()
                     })
-            ChainTask.addTaskToList(task)
+            ChainTask.addTaskToEveryFrameList(task)
         })
 
         return chainTask

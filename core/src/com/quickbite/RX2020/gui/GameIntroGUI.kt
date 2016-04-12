@@ -236,7 +236,7 @@ class GameIntroGUI(val game: GameIntroScreen) {
                             TextGame.batch.draw(blackPixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
                             TextGame.batch.end()
                         })
-                    ChainTask.addTaskToList(task)
+                    ChainTask.addTaskToEveryFrameList(task)
                 })
             }
         })

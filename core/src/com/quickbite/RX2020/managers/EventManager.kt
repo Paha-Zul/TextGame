@@ -100,8 +100,6 @@ object EventManager {
 
             val amt = MathUtils.random(min, max);
             person.addHealth(amt.toFloat())
-
-            Result.addResult(person.firstName, amt.toFloat(), gameScreen.currGameTime, "'s HP", gameScreen.gui)
         })
 
         EventManager.onEvent("addRndAmt", {args ->

@@ -7,19 +7,36 @@ import java.util.*
  * A fun little chain task class where a predicate and function is supplied. When the predicate is true, the chain task
  * will try to go to the next task. If null, nothing is called within update()
  */
-class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, var finish:(()->Unit)? = null) {
+class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, var finish:(()->Unit)? = null){
 
-    companion object{
-        private val masterTaskList:LinkedList<ChainTask> = LinkedList()
+    companion object : IUpdateable{
+        private val everyFrameTaskList:LinkedList<ChainTask> = LinkedList()
         private val newTaskList:LinkedList<ChainTask> = LinkedList() //Prevents concurrent modifications.
 
-        fun addTaskToList(task:ChainTask) = newTaskList.add(task)
+        private val hourlyTaskList:LinkedList<ChainTask> = LinkedList()
+        private val newHourlyTaskList:LinkedList<ChainTask> = LinkedList() //Prevents concurrent modifications.
 
-        fun updateTasks(delta:Float){
-            newTaskList.forEach { task -> masterTaskList.add(task) }
+        fun addTaskToEveryFrameList(task:ChainTask) = newTaskList.add(task)
+        fun addTaskToHourlyList(task:ChainTask) = newHourlyTaskList.add(task)
+
+        override fun update(delta:Float){
+            newTaskList.forEach { task -> everyFrameTaskList.add(task) }
             newTaskList.clear()
 
-            val iter = masterTaskList.iterator()
+            val iter = everyFrameTaskList.iterator()
+            while(iter.hasNext()){
+                val task = iter.next()
+                if(task.done)
+                    iter.remove()
+                else
+                    task.update()
+            }
+        }
+        override fun updateHourly(delta: Float) {
+            newHourlyTaskList.forEach { task -> hourlyTaskList.add(task) }
+            newHourlyTaskList.clear()
+
+            val iter = hourlyTaskList.iterator()
             while(iter.hasNext()){
                 val task = iter.next()
                 if(task.done)
@@ -29,7 +46,6 @@ class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, va
             }
         }
     }
-
 
     private var currChain:ChainTask? = this
     var chain:ChainTask? = null
@@ -69,5 +85,12 @@ class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, va
     fun setChain(chainTask:ChainTask):ChainTask{
         chain = chainTask
         return chain!!
+    }
+
+    /**
+     * Manually sets this chain as done. This is used to forcefully remove the task from any lists or stop execution.
+     */
+    fun setDone(){
+        currChain = null
     }
 }

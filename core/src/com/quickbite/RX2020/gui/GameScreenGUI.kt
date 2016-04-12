@@ -179,29 +179,12 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        activityButton.addListener(object: ChangeListener(){
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                game.numHoursToAdvance = activityHourSlider.value.toInt()
-                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
-                //If not null, get the action.
-                val actionList = game.searchActivity!!.action!! //Get the action list
-                game.searchFunc = Array(actionList.size, {i->null}) //Initialize an array to hold the events.
-
-                var i =0
-                for(params in actionList.iterator()) {
-                    //If not null, set up the search function
-                    game.searchFunc!![i] = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
-                    i++
-                }
-            }
-        })
-
         selectBox.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
                 val resultList = game.searchActivity!!.restrictions!!.filter {res -> SupplyManager.getSupply(res).amt <= 0 }
                 if(resultList.size > 0)
-                    disableActivityButton()
+                    disableActivityButtonError()
                 else
                     enableActivityButton()
             }
@@ -213,33 +196,65 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        var task: ChainTask? = null
-        task = ChainTask(
-                { activityHourSlider.value <= 0 || game.searchActivity == null },
-                {
-                    if (game.searchActivity != null) {
-                        val list = game.searchActivity!!.restrictions!!.filter { res -> SupplyManager.getSupply(res).amt <= 0 } //Filter out any restrictions that are less than 0
-                        //If our list is 0, that means all the restrictions passed. We are good to proceed.
-                        if (list.size == 0) {
-                            activityHourSlider.value = activityHourSlider.value - 1
-                            game.searchFunc?.forEach { func -> func?.invoke() }
+        activityButton.addListener(object: ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                game.numHoursToAdvance = activityHourSlider.value.toInt()
+                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
+                //If not null, get the action.
+                val actionList = game.searchActivity!!.action!! //Get the action list
+                game.searchFunc = Array(actionList.size, {i->null}) //Initialize an array to hold the events.
 
-                            //Otherwise, stop such.
-                        } else {
-                            game.searchActivity = null
-                            game.searchFunc = null
-                            disableActivityButton()
-                        }
-                    }
-                },
-                { game.searchActivity = null; game.searchFunc = null; game.numHoursToAdvance = 0;}
-        )
+                ChainTask.addTaskToHourlyList(sliderTask())
+                disableActivityButtonActive()
 
-        game.timeTickEventList += task
+                var i =0
+                for(params in actionList.iterator()) {
+                    //If not null, set up the search function
+                    game.searchFunc!![i] = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
+                    i++
+                }
+            }
+        })
     }
 
-    private fun disableActivityButton(){
+    private fun sliderTask():ChainTask{
+        var task:ChainTask? = null
+        task = ChainTask(
+                { activityHourSlider.value > 0 && game.searchActivity != null },
+                {
+                    val list = game.searchActivity!!.restrictions!!.filter { res -> SupplyManager.getSupply(res).amt <= 0 } //Filter out any restrictions that are less than 0
+                    //If our list is 0, that means all the restrictions passed. We are good to proceed.
+                    if (list.size == 0) {
+                        activityHourSlider.value = activityHourSlider.value - 1
+                        game.searchFunc?.forEach { func -> func?.invoke() }
+
+                    //Otherwise, stop such.
+                    } else {
+                        game.searchActivity = null
+                        game.searchFunc = null
+                        disableActivityButtonError()
+                        task!!.setDone()
+                    }
+
+                    if(activityHourSlider.value.toInt() == 0) {
+                        task!!.setDone()
+                        if(list.size == 0)
+                            enableActivityButton()
+                    }
+                },
+                { game.searchActivity = null; game.searchFunc = null; game.numHoursToAdvance = 0; task!!.setDone()}
+        )
+
+        return task
+    }
+
+    private fun disableActivityButtonError(){
         activityButton.label.color = Color.RED
+        activityButton.isDisabled = true
+    }
+
+    private fun disableActivityButtonActive(){
+        activityButton.label.color.a = 0.5f
         activityButton.isDisabled = true
     }
 
@@ -633,7 +648,7 @@ class GameScreenGUI(val game : GameScreen) {
         nextPageButton.label.setFontScale(0.15f)
 
         //Add the title and description label
-        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 5f, 0f, 10f)
+        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 15f, 0f, 15f)
         EventInfo.eventInnerTable.row().expandX().fillX()
 
         val hasAnotherPage = event.description.size - 1 > pageNumber

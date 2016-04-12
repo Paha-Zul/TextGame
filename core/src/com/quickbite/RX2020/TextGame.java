@@ -81,7 +81,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 			stage.act();
 			tick++;
 
-			ChainTask.Companion.updateTasks(Gdx.graphics.getDeltaTime());
+			ChainTask.Companion.update(Gdx.graphics.getDeltaTime());
 
 		}catch(Exception e){
 			e.printStackTrace();
