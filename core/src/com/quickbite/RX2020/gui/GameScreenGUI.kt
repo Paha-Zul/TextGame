@@ -147,12 +147,13 @@ class GameScreenGUI(val game : GameScreen) {
                     buildGroupTable()
                     rightTable.add(groupTable)
                 }else if(ROVTable.parent == null){
+                    medkitButton.remove()
                     rightTable.clear()
                     addGroupButton()
                     buildROVTable()
                     rightTable.add(ROVTable)
 
-                //TODO This is freaking broken. I guess I bypassed it by recreating the button everytime
+                //TODO This is freaking broken. I guess I bypassed it by recreating the button every time
                 }else{
                     ROVTable.remove()
                     groupTable.remove()
