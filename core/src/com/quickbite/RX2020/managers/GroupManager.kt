@@ -23,6 +23,8 @@ object GroupManager : IUpdateable {
         list += Person(DataManager.pullRandomName())
         list += Person(DataManager.pullRandomName())
         list += Person(DataManager.pullRandomName())
+
+        list[0].addInjury(Person.Injury.InjuryType.Regular)
     }
 
     override fun update(delta: Float) {

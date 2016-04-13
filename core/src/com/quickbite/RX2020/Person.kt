@@ -36,6 +36,9 @@ class Person(private val _firstName:String, private val _lastName:String) {
             value.forEach { injury -> addInjury(injury) }
         }
 
+    val hasInjury:Boolean
+        get() = injuries.size > 0
+
     constructor(name:Pair<String, String>):this(name.first, name.second)
 
     operator fun component1() = _firstName
@@ -72,6 +75,26 @@ class Person(private val _firstName:String, private val _lastName:String) {
             healthNormal += injury.hpLost
             healthInjury -= injury.hpLost
         }
+    }
+
+    fun removeWorstInjury(){
+        var worst:Injury? = null
+        injuryList.forEach { injury ->
+            if(worst == null || worst!!.type < injury.type)
+                worst = injury
+        }
+
+        removeInjury(worst!!)
+    }
+
+    fun removeLongestInjury(){
+        var longest:Injury? = null
+        injuryList.forEach { injury ->
+            if(longest == null || longest!!.hoursRemaining < injury.hoursRemaining)
+                longest = injury
+        }
+
+        removeInjury(longest!!)
     }
 
     /**

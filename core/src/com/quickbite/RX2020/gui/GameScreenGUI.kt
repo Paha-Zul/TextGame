@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -48,6 +49,7 @@ class GameScreenGUI(val game : GameScreen) {
     /* GUI elements for people */
     private val groupTable: Table = Table() //For the group
     private val supplyTable: Table = Table() //For the supplies
+    private lateinit var medkitButton:ImageButton
 
     private val ROVTable: Table = Table()
 
@@ -80,6 +82,8 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun init(){
+        medkitButton = ImageButton(TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java))))
+
         buildTravelScreenGUI()
         applyTravelTab(groupTable)
     }
@@ -148,7 +152,7 @@ class GameScreenGUI(val game : GameScreen) {
                     buildROVTable()
                     rightTable.add(ROVTable)
 
-                //TODO This is freaking broken.
+                //TODO This is freaking broken. I guess I bypassed it by recreating the button everytime
                 }else{
                     ROVTable.remove()
                     groupTable.remove()
@@ -215,6 +219,18 @@ class GameScreenGUI(val game : GameScreen) {
                 }
             }
         })
+
+        medkitButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                val person = medkitButton.userObject as Person
+                if(person.hasInjury){
+                    EventManager.callEvent("removeInjury", person.firstName, "worst")
+                    if(!person.hasInjury)
+                        medkitButton.remove()
+                }
+            }
+        })
+
     }
 
     private fun sliderTask():ChainTask{
@@ -440,8 +456,11 @@ class GameScreenGUI(val game : GameScreen) {
 
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person: Person in list.iterator()){
+            val pairTable = Table()
+
             val nameLabel = Label(person.fullName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
+            nameLabel.setAlignment(Align.right)
 
             val healthLabel: Label = Label("" + person.healthNormal, labelStyle)
             healthLabel.setFontScale(normalFontScale)
@@ -449,10 +468,26 @@ class GameScreenGUI(val game : GameScreen) {
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
-            groupTable.add(nameLabel).right()
-            groupTable.row()
-            groupTable.add(healthBar).right().height(15f).width(100f)
-            groupTable.row().spaceTop(5f)
+            pairTable.add(nameLabel).right().expandX().fillX()
+            pairTable.row().right()
+            pairTable.add(healthBar).right().height(15f).width(100f)
+
+            groupTable.add(pairTable).right().expandX().fillX()
+            groupTable.row().spaceTop(5f).right()
+
+            pairTable.addListener(object:ClickListener(){
+                override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                    super.clicked(event, x, y)
+                    medkitButton.remove()
+                    if(GroupManager.getPerson(person.firstName)!!.hasInjury) {
+                        val pos = pairTable.localToStageCoordinates(Vector2(0f, 0f)) //Get the stage coordinates
+                        medkitButton.setPosition(pos.x - 32f, pos.y) //Set the position
+                        medkitButton.setSize(32f, 32f) //Set the size
+                        medkitButton.userObject = person //Set the user data as the person for later use.
+                        TextGame.stage.addActor(medkitButton) //Add it to the stage.
+                    }
+                }
+            })
         }
     }
 

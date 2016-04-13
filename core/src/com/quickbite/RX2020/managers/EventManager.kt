@@ -102,6 +102,19 @@ object EventManager {
             person.addHealth(amt.toFloat())
         })
 
+        EventManager.onEvent("removeInjury", { args ->
+            val name = args[0] as String
+            val type = args[1] as String
+
+            val person = GroupManager.getPerson(name)!!;
+            when(type){
+                "worst" -> person.removeWorstInjury()
+                else -> person.removeLongestInjury()
+            }
+
+            EventManager.callEvent("addRndAmt", "-1", "-1", "medkits")
+        })
+
         EventManager.onEvent("addRndAmt", {args ->
             try{
                 val min:Float = (args[0] as String).toFloat() //The min amt
