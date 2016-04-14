@@ -1,6 +1,7 @@
 package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
@@ -47,7 +48,9 @@ class GameScreen(val game: TextGame): Screen {
 
     private val purgeRecentChangeTimer: CustomTimer = CustomTimer(3f)
 
-    private var paused = false
+    var paused = false
+        get
+        private set
 
     val gui: GameScreenGUI = GameScreenGUI(this)
 
@@ -96,7 +99,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-//        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.rareRootEventMap["Event1"]!!); paused = true})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.rareRootEventMap["NativeEncounter"]!!)})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -263,6 +266,7 @@ class GameScreen(val game: TextGame): Screen {
      */
     fun pauseGame(){
         this.paused = true
+        gui.pauseButton.isDisabled = true
     }
 
     /**
@@ -270,6 +274,7 @@ class GameScreen(val game: TextGame): Screen {
      */
     fun resumeGame(){
         this.paused = false;
+        gui.pauseButton.isDisabled = false
     }
 
     fun setGameOver(){

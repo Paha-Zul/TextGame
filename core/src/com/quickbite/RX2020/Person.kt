@@ -41,6 +41,11 @@ class Person(private val _firstName:String, private val _lastName:String) {
 
     constructor(name:Pair<String, String>):this(name.first, name.second)
 
+    constructor(name:Pair<String, String>, maxHealth:Float):this(name.first, name.second){
+        this.maxHealth = maxHealth
+        this.healthNormal = maxHealth
+    }
+
     operator fun component1() = _firstName
     operator fun component2() = _lastName
 

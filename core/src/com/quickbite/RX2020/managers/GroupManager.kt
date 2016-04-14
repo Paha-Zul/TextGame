@@ -3,6 +3,7 @@ package com.quickbite.rx2020.managers
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.IUpdateable
 import com.quickbite.rx2020.Person
+import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.util.Logger
 
 /**
@@ -18,11 +19,11 @@ object GroupManager : IUpdateable {
 
     fun init(){
         list.clear()
-        list += Person(DataManager.pullRandomName())
-        list += Person(DataManager.pullRandomName())
-        list += Person(DataManager.pullRandomName())
-        list += Person(DataManager.pullRandomName())
-        list += Person(DataManager.pullRandomName())
+        val health = if(TextGame.testMode) 1000000f else 100f
+        val range = MathUtils.random(0,4) + 4 //4 - 8
+
+        for(i in 0.rangeTo(range))
+            list += Person(DataManager.pullRandomName(), health)
 
         list[0].addInjury(Person.Injury.InjuryType.Regular)
     }

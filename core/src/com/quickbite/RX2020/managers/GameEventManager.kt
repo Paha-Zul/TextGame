@@ -62,6 +62,12 @@ object GameEventManager{
         }
     }
 
+    fun getEvent(eventName:String):EventJson{
+        val event = eventMap[eventName]
+        if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the normal event map. Is it accidentally marked as root? It may also simply not exist.")
+        return event!!
+    }
+
 
     class EventJson{
         var root:Boolean = false

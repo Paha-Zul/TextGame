@@ -28,6 +28,8 @@ object Tester {
 
         for(event in GameEventManager.rareRootEventMap.values)
             func(event)
+
+        System.out.println("Event Testing Done!")
     }
 
     private fun testEvent(event:GameEventManager.EventJson){
@@ -35,12 +37,11 @@ object Tester {
         //Go over all the outcomes individually
         if(event.outcomes!=null){
             event.outcomes!!.forEachIndexed { i, list -> list.forEachIndexed { j, outcomeName ->
-                val _evt = GameEventManager.eventMap[outcomeName]
-                System.out.println("Testing ${_evt!!.name}")
+                val _evt = GameEventManager.getEvent(outcomeName)
+                System.out.println("Testing ${_evt.name}")
                 testEvent(_evt)
             }}
         }
-
 
         //If we have actions, execute them.
         testActions(event)

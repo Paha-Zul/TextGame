@@ -6,7 +6,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "hurt", "1", "15", "false", "-1" ], [ "damageROV", "25", "55" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "hurt", "evt", "1", "15", "false", "-1" ], [ "damageROV", "25", "55" ] ]
 }, {
   "root" : false,
   "title" : "Avoid",
@@ -16,6 +16,204 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "cutMiles", "120", "360" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamChildhood",
+  "description" : [ "He’s running with some of his child hood friends. He feels so light, like he can barely stay on the ground. He closes his eyes and imagines the feeling of pressing away from the ground altogether and when he opens eyes he his flying gently above his now stopped friends. The feeling is amazing, it feels as if he has done something he has always knew he could. Closing his eyes again he flies even higher. He opens his eyes to see the dark inside of the ROV. He knows it was all just a dream, but the feeling of joy still lingers." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamPizza",
+  "description" : [ "He’s at Big John’s Pizzeria with all his friends. They always meet there after work on Friday and this Friday is no exception. He’s starving, but he doesn’t have to wait long, because the pizza just arrived. He grabs a plate and loads it with pizza. He tries to let it cool for a few minutes, but he’s hungry and can’t wait long. He grabs the biggest piece and takes a huge bite. It’s perfect, no, it’s better than perfect, it’s the best pizza he’s ever tasted. Still chewing he takes a sip of his ice cold root beer. It doesn’t take him long to make short work of the pizza. He leans back in his chair. Full and satisfied he closes his eyes. When he opens them again he’s nestled in his sleeping bag, morning sun peeking through the windows of the ROV. Even though it was just a dream, he still feels full and satisfied." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamCarCrash",
+  "description" : [ "He’s driving on the highway with his family. His parents tell him they’re so glad he’s back home and he couldn’t agree more. He glances out the window and watching the trees passing by. The weather couldn’t be better. He when he looks back at the road ahead the cars are unexpected stopped. Having plenty of time to stop he press the brake gently, but he isn’t slowing down. The cars are fast approaching. He mashing the brake hard, but the car just won’t stop. His mom screams as they slam into the parked cars. (Name) jumps awake, a slight tightness still lingering in his gut, and wipes the sweat from his forehead. " ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamFlood",
+  "description" : [ "He’s on a walk through his neighborhood. It’s raining and has been all day, but he was tired of being stuck inside so he decided to get some fresh air anyways. It wasn’t raining hard when he started his walk, but now it’s really coming down. He looks down at his feet; water is flowing steadily over his shoes. He’s really beginning to regret his choice to go on a walk. He looks down the road to see if he can discern a break in the rain ahead, but all he sees is more rain ahead, but then he spots an unusual hump in the road at the end of the street. He looks back to his feet and notices the water is now over his ankles. His stomach tightens as he looks to the end of the street again and finds the mass is much closer now. He turns to home and starts jogging. “It can’t be” he thinks to himself as he sloshes though the now knee deep water. His fears are confirmed when he glances over his shoulder to the end of the street and sees the wall of water bearing down on him. He turns to climb a tree, but it’s too late the wall of icy water slams his body. He jumps awake in his sleeping bag, looking around dazed and scared until he realizes it was all just a bad dream. He can’t stop thinking about how real it felt and it leaves him feeling drained all day long." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamFootball",
+  "description" : [ "He’s lined up on a football field. The play is snapped and he starts running. He blows past the first line of defense with ease, but one defender still sticks close. He looks back to see the ball arching his way and he accelerates, pulling ahead of the lone defender and catching the ball. His eyes turn towards the goal as he feels the defense closing in. Just as they think they have him he gives it all he’s got and blast away from them and into the touch down. The crowd roars as his teammates engulf him in celebration. He wakes up, still feeling the adrenalin from the night’s dream and ready to take on the day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamSister",
+  "description" : [ "He’s on the couch with his best friend’s sister, a movie playing in the background. She smiles and scoots closer to him. She likes him, always has, and deep down he kind of likes her too, but her brother was very clear about his disapproval of any such feelings. He puts his arm around her. He knows he shouldn’t but he does it anyways. She whispers his name and when he turns to look she kisses him. The door slams open to reveal a furious brother. He must have come home early. He snatches (Name) up by the shirt at gives him a hard slap. (Name) jumps awake, tense and sweaty. It was just a dream, but the feelings are real." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamTornado",
+  "description" : [ "He’s in the living room of his house looking out the window. It is pitch black outside and rain is pouring down in waves. (Name) can’t remember a time he has seen a storm this bad. He jumps as lightning strikes close, followed by a thunderous crack. The lights flicker, then go out, leaving (Name) standing in total darkness. He fumbles around in the dark, trying to make his way over to his flashlight. Suddenly the house begins to rumble. At first he thinks it’s just thunder, but it grows into something much louder. Something thumps hard against the house, followed by another loud bang, something that sounds like someone throwing handfuls of gravel against the house. The roar of the winds outside is deafening. Glass shatters as the windows explode outwards and (Name) feels himself being tumbled around and pulled towards the destroyed window frames. He grasps at anything he can, trying to stop the roaring twister from pulling him out of the house. He wakes up in his sleeping bag, hands clenched tightly around the edges. It all just a bad dream, but his heart is still racing." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamJet",
+  "description" : [ "He’s outside raking some leaves when he hears the low rumble of a jet cruising overhead. He looks around, trying to catch a glimpse of it but he can’t see it anywhere. As the sound grows so does his curiosity. It sounds different than what he normally hears flying around. Finally he spots some movement though the horizon of trees just to his back. As he turns to get a better look it emerges over the crest of the tree line. At first he thinks it’s strange that the jet is flying so low this far from the airport, but then he notices the awkward list of the plane’s body, he notices the terrible gasping sounds the engines are making, and he notices the trail of dark smoke following the smoldering tail of the plane. As he stares in disbelief the plane dips, seeming to grow larger and larger as it noses straight towards him. He turns to run, but as he starts to pump his legs it feels as though he’s running though molasses. He head spins as he strains just to move one foot in front of the other. He feels shadow of the plane covering him as he covers his eyes and braces for impact. He sits up and looks around. He’s in his sleeping bag in the ROV, it was all just a bad dream. He moves his legs around just to be sure they still work; they do. The dream leaves him feeling worn out all day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : true,
+  "title" : "Dream",
+  "name" : "Dream",
+  "description" : [ "%n is sound asleep in his sleeping bag. The steady drone of the ROV’s engines humming away and the quiet chatter of his crewmates seem but a memory to him, he’s dreaming…" ],
+  "choices" : [ "zZzZzZ" ],
+  "outcomes" : [ [ "DreamChildhood", "DreamWife", "DreamFootball", "DreamPizza", "DreamSchoolBully", "DreamSnow", "DreamGrocery", "DreamDinner", "DreamInterview", "DreamMedal", "DreamBridge", "DreamPub", "DreamSister", "DreamCarCrash", "DreamCollege", "DreamExomerCrash", "DreamTornado", "DreamFlood", "DreamJet", "DreamLostFriends" ] ],
+  "chances" : [ [ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamGrocery",
+  "description" : [ "He’s in the grocery store parking lot. He’s loading the last of his groceries into his car when he hears shouting. He closes his trunk and spots the arguing young couple composed of a presumably intoxicate male sitting in the doorway of his car and an attractive young female who seems reluctant to get in the car. The male is showering the female with insults, she turns to leave and he grabs her arm hard. (Name) starts across the parking lot towards them, quickly closing the distance. The male stands up aggressively shouting louder, she slaps him. Now enraged he pushes her hard to the ground just as (Name) reaches the couple. Without saying a word he blindsides the male with the hardest punch he has ever thrown and male drops like a ton of bricks. “Thanks” the female says from the ground, wiping away a stray tear. (Name) turns to her and extends his arm to help her up and with unexpected confidence says “Let’s, get out of here.” (Name) wakes up in the ROV. It was all just a dream, but nevertheless, he feels like a hero for the rest of the day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamLostFriends",
+  "description" : [ "He’s at his favorite bar with his longtime friends and crewmates. He buys them all a round of drinks. Their celebrating the latest news; they’ve all qualified for the elite Exomer751 Special Operations Exploration Team. They know they’ve earned it. Months of training weeded out the weak and cultivated the strong among them; all for a chance to make history as the first manned flight to land of the surface of Secturn. Cheering and laughter fades to the dark inside of the ROV. (Name) sits, thinking about the faces of those who didn’t survive the wreckage, the faces of his friends." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamPub",
+  "description" : [ "He’s sitting around the pub with some of the Exomer’s crew. They're laughing and swapping stories. He smiles to himself as he picks up the sandwich in his hand and takes a bite. He feels a sharp pain in the back of his mouth as he bites down and feels his tooth rolling around in his mouth. Others around the table ask him what’s wrong, but when he tries to answer another tooth tumbles free. He breathes in sharply and looks around. He’s in his sleeping bag in the ROV. It was all just a bad dream. He checks his teeth anyways and makes sure they are all there, they are." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamDinner",
+  "description" : [ "He’s sitting at the dinner table with his family and everyone’s there, even relatives he only sees once a year. The table is covered with all sorts of bowls and plates of delicious smelling food. He grabs a bowl of mashed potatoes and spoons a hearty pile next to his ham and steamed vegetables as he nods in response to his mom’s long story about her coworker’s latest drama. He strains to hear her over the family chatter; it’s noisy around the table, but the good kind of noisy, the kind of noisy that leads to after dinner naps. After dinner he helps collect stray plates and direct them to the sink and answers questions about what’s new in his life, exaggerating the details of his story each time he tells it. Once the dishes are put away he flops down on the couch and turns on the TV. The game is on, he doesn’t really care about the score, he only cares about napping and it doesn’t take long before he’s sound asleep. When he wakes up he’s in the ROV. The quiet talking amongst the crew is like a sampling of last night’s dream, it leaves him in a good mood all day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamBridge",
+  "description" : [ "He’s walking across a long thin wooden bridge, so long that he can’t even see the end. He glances down and there’s nothing below. He feels himself falling into the darkness and though he can’t see it he feels the bottom approaching. The moment he hits he jumps awake. He sits up in his sleeping bag and looks around, heart still racing and his back covered in sweat… it was just a dream." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamInterview",
+  "description" : [ "He’s sitting at a desk in a bright room. He looks around and sees people scurrying around, lights and microphones, and camera’s with small teleprompter screens beneath them. He hears someone clear their throat quietly and turns to see a sleek blond woman dressed in a sharp blue suit. She ask him to recount the events of his journey across the surface of Secturn and his eventual rescue. He glances down at his shirt for a second. He’s wearing a stiff dress shirt covered in a dark overcoat, numerous medals are pinned to the front of the jacket just above the pocket. He turns back to the reporter and begins to describe the events leading up to the crash. His voices slowly fades away until (Name) opens his eyes to see the inside of the ROV. It was only a dream, but the idea that one day that could become a reality leaves (Name) with a boost in confidence." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamCollege",
+  "description" : [ "He’s at school. He sleepily heads to the first class of the day. He picks up the pace as the hallways start to empty, he doesn’t want to be late. He reaches the door just as it starts to swing close. He walks in and looks for a seat, but then he notices the board is full of math problems and his first class is English. Some of the other students look at him standing awkwardly in the doorway and he doesn’t recognize them. He rushes out of the class and starts down the hallway, but he can’t remember where English classroom or was History his first class? He wakes up, brows furrowed in frustration. It was just a dream. He knows he finished school a long time ago, but it’s still upsetting." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamWife",
+  "description" : [ "He’s on the bed relaxing and watching some news on TV. The TV turns off as the door to the bathroom opens. He turns his head to protest but sees his wife, wearing that sexy outfit he loves so much, smiling playfully in the doorway. He wakes up, still smiling, to see it was all a dream. He’s sad he woke up so soon, but he feels good anyways." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamMedal",
+  "description" : [ "He’s standing on stage in front of a sea of people that stretch far into the distance. To his left is a man at a podium making a rousing speech about duty, honor, and sacrifice; to his right is the remainder of the Exomer751 crew members, all standing at attention. A man steps in front of him and swiftly pins a large medal to his jacket pocket, just beneath his already full collection of various pins. The man continues to the rest of the Exomer751 crew, methodically pining one after another until he reaches the end and, turning to face the crew, snaps into a stiff salute just as the man at the microphone is concluding his speech. The crowd erupts in cheering and whistling, photographers snap pictures after picture, and people wave patriotic banners. He wakes up tucked into his sleeping bag piled in the back of the ROV. He looks around at everything around him and feels proud to be a part of something so great!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamSnow",
+  "description" : [ "He’s standing outside of the ROV, scratching his chin, looking the previous night’s snow fall, and pondering what would be the best path to take, when something hits his back. He spins around to see (Name2) laughing and rolling another snowball. He jumps for cover and starts scooping up his own snowball for a return volley. He wakes up and looks around the ROV, most of the crew is still sleeping. He’s glad that, despite all that happened, they still can have fun." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamExomerCrash",
+  "description" : [ "He’s strapped into a chair in Exomer’s exploration vessel and its making its descent towards Secturn. The vessel starts to rattle, slightly at first then growing until the entire hull creaks and groans with each large tremor. A siren sounds, but it can barely be heard above the roar of the winds pulling at the ship’s exterior. Cracks appear on the windows as thick blue clouds race by outside and ship shakes violently. (Name) closes his eyes as he hears the sound of metal scraping on metal, when suddenly everything seems to stand still. He opens his eyes again just long enough to see the ground outside the window quickly approaching. He shuts his eyes again, hands gripping the chairs armrest so hard it hurts. He wakes up, breathing heavily and soaked in sweat. It was more than a dream to him, it was a memory and all the feelings of that moment are all too familiar…" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamSchoolBully",
+  "description" : [ "He’s at school, packing his things to head home. He’s tired and can’t wait to get home. The bell sounds and everyone starts shuffle out into the hallways. He heads to the bus loading zone and it doesn’t take him long to spot his bus, but he doesn’t make it far before he spots the resident school bully. (Name) hopes he can make it past him, but he knows that won’t happen. He’s right, the bully stops him almost immediately. One of his goons snatches his pack bag and starts dumping everything out. The bully is laughing, the other kids are laughing, but (Name)’s not laughing. He feels an anger deep within starting to build and as it does he remembers all the days this bully has tormented his life, all the times he just wanted to be left alone. The anger overtakes him, hot and burning, he feels it radiating off his body. Silence falls over the other kids as they feel it too, pulsing the ground beneath them. A sharp blast erupts from (Name) like a shockwave, knocking many of the students to the ground and send papers flying. (Name) closes his eyes as a feels the power he knew he always had enveloping his body. When he opens them again he’s lying in his sleeping bag in the ROV. Although it was just a dream he feels as if he could still conjure that power at any time. The feeling leaves him feeling empowered for the rest of the day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Fight",
+  "name" : "StuckInNatives",
+  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back…", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "hurt", "evt", "1", "15", "false", "-1" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
 }, {
   "root" : false,
   "title" : "Fight",
@@ -33,25 +231,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "10", "35", "false", "-1" ], [ "addRndAmt", "1", "25", "wealth" ] ]
-}, {
-  "root" : false,
-  "title" : "Fight",
-  "name" : "StuckInNatives",
-  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back…", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "hurt", "1", "15", "false", "-1" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
-}, {
-  "root" : false,
-  "title" : "Fire",
-  "name" : "FireLosePart",
-  "description" : [ "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
+  "resultingAction" : [ [ "hurt", "evt", "10", "35", "false", "-1" ], [ "addRndAmt", "1", "25", "wealth" ] ]
 }, {
   "root" : false,
   "title" : "Fire",
@@ -62,15 +242,6 @@
   "chances" : [ ],
   "resultingAction" : [ [ ] ]
 }, {
-  "root" : true,
-  "title" : "Fire",
-  "name" : "Fire",
-  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!"],
-  "choices" : [ ],
-  "outcomes" : [ [ "FireDamageROV", "FireLosePart", "FireNothing" ] ],
-  "chances" : [ [ 35, 35, 30 ] ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage" ] ]
-}, {
   "root" : false,
   "title" : "Fire",
   "name" : "FireDamageROV",
@@ -79,6 +250,24 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "damageROV", "1", "25", "100" ] ]
+}, {
+  "root" : false,
+  "title" : "Fire",
+  "name" : "FireLosePart",
+  "description" : [ "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
+}, {
+  "root" : true,
+  "title" : "Fire",
+  "name" : "Fire",
+  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!" ],
+  "choices" : [ ],
+  "outcomes" : [ [ "FireDamageROV", "FireLosePart", "FireNothing" ] ],
+  "chances" : [ [ 35, 35, 30 ] ],
+  "resultingAction" : [ [ "addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage" ] ]
 }, {
   "root" : true,
   "title" : "Herbal",
@@ -152,6 +341,15 @@
   "chances" : [ ],
   "resultingAction" : [ [ "addRndItem", "1", "1", "100", "track", "panel", "battery", "storage" ] ]
 }, {
+  "root" : true,
+  "title" : "Salvage",
+  "name" : "Salvage",
+  "description" : [ "Perched atop the ROV (Name) notices some downed trees alongside the path ahead…" ],
+  "choices" : [ "Investigate?", "Pass By" ],
+  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvagePass" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
   "root" : false,
   "title" : "Salvage",
   "name" : "SalvagePass",
@@ -179,15 +377,6 @@
   "chances" : [ ],
   "resultingAction" : [ ]
 }, {
-  "root" : true,
-  "title" : "Salvage",
-  "name" : "Salvage",
-  "description" : [ "Perched atop the ROV (Name) notices some downed trees alongside the path ahead…" ],
-  "choices" : [ "Investigate?", "Pass By" ],
-  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvagePass" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
-  "resultingAction" : [ ]
-}, {
   "root" : false,
   "title" : "Salvage",
   "name" : "SalvageInvestigate",
@@ -210,6 +399,15 @@
   "title" : "Trade",
   "name" : "TradeNatives",
   "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The natives grunt and grumble to each other until the larger native settles them. The group parts to reveal a pile of treasures of their own. Thankfully, it seems they are friendlier than they look and welcome the trade!" ],
+  "choices" : [ ],
+  "outcomes" : [ [ "TradeNatives2" ] ],
+  "chances" : [ [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Trade",
+  "name" : "TradeNatives2",
+  "description" : [ ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],

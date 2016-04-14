@@ -50,13 +50,15 @@ object EventManager {
             if(GameEventManager.currActiveEvent == null)
                 return@onEvent
 
-            var name = GameEventManager.currActiveEvent!!.randomName
-            val min = ((args[0]) as String).toInt()
-            val max = if(args.count() >= 2) ((args[1]) as String).toInt() else min
-            val perc = if(args.count() >= 3) ((args[2]) as String).toBoolean() else false
-            var numPeople = if(args.count() >= 4) ((args[3]) as String).toInt() else 1
+            var name = (args[0]) as String
+            val min = ((args[1]) as String).toInt()
+            val max = if(args.count() >= 3) ((args[2]) as String).toInt() else min
+            val perc = if(args.count() >= 4) ((args[3]) as String).toBoolean() else false
+            var numPeople = if(args.count() >= 5) ((args[4]) as String).toInt() else 1
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
+
+            if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomName
 
             var randomPerPerson = if(args.count() >= 5) ((args[4]) as String).toBoolean() else false
 
@@ -93,13 +95,14 @@ object EventManager {
         })
 
         EventManager.onEvent("heal", { args ->
-            val min = ((args[0]) as String).toInt()
-            val max = ((args[1]) as String).toInt()
+            var name = (args[0]) as String
+            val min = ((args[1]) as String).toInt()
+            val max = ((args[2]) as String).toInt()
 
-            val person = GroupManager.getPerson(GameEventManager.currActiveEvent!!.randomName)!!;
+            val person = if(name.equals("evt")) GroupManager.getPerson(GameEventManager.currActiveEvent!!.randomName)!! else GroupManager.getPerson(name)
 
             val amt = MathUtils.random(min, max);
-            person.addHealth(amt.toFloat())
+            person!!.addHealth(amt.toFloat())
         })
 
         EventManager.onEvent("removeInjury", { args ->

@@ -68,7 +68,8 @@ class GameIntroGUI(val game: GameIntroScreen) {
                 layoutTable.color.a = value
                 TextGame.backgroundColor.r = value; TextGame.backgroundColor.g = value; TextGame.backgroundColor.b = value
             },{
-                TextGame.stage.clear(); game.done = true;
+//                TextGame.stage.clear();
+                game.done = true;
                 TextGame.backgroundColor.a = 0f
                 TextGame.batch.color = Color(0f,0f,0f,0f)
                 val blackPixel = TextGame.smallGuiAtlas.findRegion("pixelBlack")
@@ -164,6 +165,8 @@ class GameIntroGUI(val game: GameIntroScreen) {
                     delay += 0.15f
                 }
             }
+
+            if(delay == 0f) delay = 1f
 
             layoutTable.add(descLabel).center().fillX().expandX().top().pad(0f, 10f, 0f, 10f)
             layoutTable.row()

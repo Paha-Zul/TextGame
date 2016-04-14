@@ -73,7 +73,9 @@ class GameScreenGUI(val game : GameScreen) {
 
     private lateinit var selectBox: SelectBox<Label>
 
-    private lateinit var pauseButton: ImageButton
+    lateinit var pauseButton: ImageButton
+        get
+        private set
 
     private lateinit var distProgressBar: ProgressBar
 
@@ -83,6 +85,7 @@ class GameScreenGUI(val game : GameScreen) {
 
     fun init(){
         medkitButton = ImageButton(TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java))))
+        medkitButton.style.imageDisabled = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
 
         buildTravelScreenGUI()
         applyTravelTab(groupTable)
@@ -118,12 +121,12 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun addListeners(){
-        pauseButton.addListener(object: ChangeListener(){
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                when{
-                    pauseButton.isChecked -> game.pauseGame()
-                    else -> game.resumeGame()
-                }
+        pauseButton.addListener(object: ClickListener(){
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                if(game.paused) game.resumeGame()
+                else game.pauseGame()
+
+                super.clicked(event, x, y)
             }
         })
 
@@ -328,13 +331,10 @@ class GameScreenGUI(val game : GameScreen) {
 
         val pauseButtonStyle = ImageButton.ImageButtonStyle()
         var drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("play"))
-        pauseButtonStyle.imageChecked = drawable
-        pauseButtonStyle.imageCheckedOver = drawable
+        pauseButtonStyle.imageDisabled = drawable
 
         drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pause"))
         pauseButtonStyle.imageUp =  drawable
-        pauseButtonStyle.imageOver =  drawable
-        pauseButtonStyle.imageDown =  drawable
 
         settingsButton = ImageButton(TextureRegionDrawable(TextureRegion(TextGame.manager.get("gear", Texture::class.java))))
         settingsButton.setSize(35f, 35f)
@@ -344,7 +344,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         pauseButton = ImageButton(pauseButtonStyle)
         pauseButton.setSize(40f, 40f)
-        pauseButton.setPosition(TextGame.viewport.screenWidth/1.4f, TextGame.viewport.screenHeight - pauseButton.height)
+        pauseButton.setPosition(TextGame.viewport.worldWidth/1.4f, TextGame.viewport.worldHeight - pauseButton.height)
 
         campButton = TextButton("Camp", textButtonStyle)
         campButton.setSize(100f, 40f)
@@ -485,6 +485,8 @@ class GameScreenGUI(val game : GameScreen) {
                         medkitButton.setPosition(pos.x - 32f, pos.y) //Set the position
                         medkitButton.setSize(32f, 32f) //Set the size
                         medkitButton.userObject = person //Set the user data as the person for later use.
+                        if(SupplyManager.getSupply("medkits").amt <= 0) medkitButton.isDisabled = true
+                        else medkitButton.isDisabled = false
                         TextGame.stage.addActor(medkitButton) //Add it to the stage.
                     }
                 }
@@ -582,18 +584,7 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Initially starts the event GUI
      */
-    fun triggerEventGUI(event: GameEventManager.EventJson?){
-        if(event!=null)
-            GH.executeEventActions(event)
-
-        if((event == null || !event.hasDescriptions) && Result.hasEventResults){
-            showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList(), {closeEvent()})
-            return
-        }else if(event == null || !event.hasDescriptions){
-            closeEvent()
-            return
-        }
-
+    fun triggerEventGUI(event: GameEventManager.EventJson){
         game.pauseGame()
         EventInfo.eventTable.clear()
         campButton.isDisabled = true;
@@ -610,12 +601,27 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.titleLabel!!.setFontScale(eventTitleFontScale)
 //        EventInfo.titleLabel!!.setWrap(true)
 
-        EventInfo.eventTable.add(EventInfo.titleLabel).padTop(5f).height(35f)
+        EventInfo.eventTable.add(EventInfo.titleLabel).padTop(5f).height(40f)
         EventInfo.eventTable.row()
         EventInfo.eventTable.add(EventInfo.eventInnerTable).expand().fill()
 
         EventInfo.eventContainer.add(EventInfo.eventTable).expand().fill()
         TextGame.stage.addActor(EventInfo.eventContainer)
+
+        handleEvent(event)
+    }
+
+    private fun handleEvent(event:GameEventManager.EventJson?){
+        if(event!=null)
+            GH.executeEventActions(event)
+
+        if((event == null || !event.hasDescriptions) && Result.hasEventResults){
+            showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList(), {closeEvent()})
+            return
+        }else if(event == null || !event.hasDescriptions){
+            closeEvent()
+            return
+        }
 
         showEventPage(event, 0)
     }
@@ -658,7 +664,7 @@ class GameScreenGUI(val game : GameScreen) {
                 override fun changed(evt: ChangeEvent?, actor: Actor?) {
                     //EventInfo.outerEventTable.remove()
                     val choiceText = button.text.toString().substring(1, button.text.length - 1)
-                    triggerEventGUI(GH.getEventFromChoice(event, choiceText))
+                    handleEvent(GH.getEventFromChoice(event, choiceText))
                 }
             })
         }
@@ -668,7 +674,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         //Make the description label
         val descLabel = Label(desc, labelStyle)
-        descLabel.setAlignment(Align.top)
+        descLabel.setAlignment(Align.center)
         descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)
 
@@ -684,8 +690,8 @@ class GameScreenGUI(val game : GameScreen) {
         nextPageButton.label.setFontScale(0.15f)
 
         //Add the title and description label
-        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 15f, 0f, 15f)
-        EventInfo.eventInnerTable.row().expandX().fillX()
+        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 15f, 0f, 15f).center()
+        EventInfo.eventInnerTable.row()
 
         val hasAnotherPage = event.description.size - 1 > pageNumber
         val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions
@@ -729,13 +735,13 @@ class GameScreenGUI(val game : GameScreen) {
 
                     //If we only have one choice, trigger the event GUI again.
                     }else{
-                        triggerEventGUI(GH.getEventFromChoice(event, ""))
+                        handleEvent(GH.getEventFromChoice(event, ""))
                     }
                 }
 
                 //Otherwise, we only have outcomes or actions. Deal with it!
                 else if (hasOnlyOutcomes || Result.hasEventResults){
-                    triggerEventGUI(GH.getEventFromChoice(event, ""))
+                    handleEvent(GH.getEventFromChoice(event, ""))
                 }
             }
         })
@@ -929,6 +935,7 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun buildTradeWindow(){
+        tradeWindowTable.clear()
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow2", Texture::class.java)))
         tradeWindowTable.setSize(450f, 400f)
 
@@ -1200,12 +1207,18 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Opens the trade window. buildTradeWindow() needs to be called before.
      */
-    fun openTradeWindow() = TextGame.stage.addActor(tradeWindowTable)
+    fun openTradeWindow() {
+        TextGame.stage.addActor(tradeWindowTable)
+        game.pauseGame()
+    }
 
     /**
      * Closes the trade window.
      */
-    fun closeTradeWindow() = tradeWindowTable.remove()
+    fun closeTradeWindow() {
+        tradeWindowTable.remove()
+        game.resumeGame()
+    }
 
     /**
      * Opens the slider for a particular trade item.
