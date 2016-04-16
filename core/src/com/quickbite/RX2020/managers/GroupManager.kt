@@ -22,7 +22,7 @@ object GroupManager : IUpdateable {
         val health = if(TextGame.testMode) 1000000f else 100f
         val range = MathUtils.random(0,4) + 4 //4 - 8
 
-        for(i in 0.rangeTo(range))
+        for(i in 0.rangeTo(range-1))
             list += Person(DataManager.pullRandomName(), health)
 
         list[0].addInjury(Person.Injury.InjuryType.Regular)

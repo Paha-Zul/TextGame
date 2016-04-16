@@ -1,6 +1,8 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.rx2020.Person
+import com.quickbite.rx2020.shuffle
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
@@ -24,16 +26,14 @@ object GameEventManager{
     fun getRandomRoot(type:String):EventJson{
         var map = getMap(type)
         val event = map!!.values.toTypedArray()[MathUtils.random(map.size-1)]
-        val person = GroupManager.getRandomPerson()!!;
-        event.randomName = person.firstName
+        event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         return event;
     }
 
     fun setNewRandomRoot(type:String):EventJson{
         var map = getMap(type)
         val event = map!!.values.toTypedArray()[MathUtils.random(map.size-1)]
-        val person = GroupManager.getRandomPerson()!!;
-        event.randomName = person.firstName
+        event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
         when(type){
@@ -62,9 +62,22 @@ object GameEventManager{
         }
     }
 
-    fun getEvent(eventName:String):EventJson{
-        val event = eventMap[eventName]
-        if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the normal event map. Is it accidentally marked as root? It may also simply not exist.")
+    /**
+     * Gets an event. If the type parameter is not supplied, gets the event from the non root event map.
+     * @param eventName The name of the event to get
+     * @param type The type of event. If left out, gets an event from the non root event map
+     * @return The event retrieved from the event map.
+     */
+    fun getEvent(eventName:String, type:String = ""):EventJson{
+        var event:EventJson?
+        if(type.isEmpty()) {
+            event = eventMap[eventName]
+            if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the normal event map. Is it accidentally marked as root? It may also simply not exist.")
+        } else{
+            event = getMap(type)!![eventName]
+            if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
+            event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
+        }
         return event!!
     }
 
@@ -79,7 +92,8 @@ object GameEventManager{
         var chances:Array<IntArray>? = null //The chances of each outcome happening
         var resultingAction:Array<Array<String>>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
 
-        var randomName:String = ""
+        //Each time a root event is retrieved to start and event, this should be randomed to use for future events.
+        var randomPersonList:List<Person> = listOf()
 
         val hasChoices:Boolean
             get() = choices != null && choices!!.size > 0
@@ -120,7 +134,7 @@ object GameEventManager{
                 val outcomeText = outcomes!![choiceIndex][outcomeIndex]
                 val outcomeEvent = eventMap[outcomeText]
                 if(outcomeEvent == null) Logger.log("DataManager", "Apparently event $name for choice ($choice) with outcome $outcomeText doesn't have an event that matches it. Make sure it is named right and exists.", Logger.LogLevel.Warning)
-                outcomeEvent!!.randomName = this.randomName
+                outcomeEvent!!.randomPersonList = this.randomPersonList
                 return outcomeEvent
             }
 

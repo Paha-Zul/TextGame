@@ -58,7 +58,7 @@ object EventManager {
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
-            if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomName
+            if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
 
             var randomPerPerson = if(args.count() >= 5) ((args[4]) as String).toBoolean() else false
 
@@ -99,7 +99,7 @@ object EventManager {
             val min = ((args[1]) as String).toInt()
             val max = ((args[2]) as String).toInt()
 
-            val person = if(name.equals("evt")) GroupManager.getPerson(GameEventManager.currActiveEvent!!.randomName)!! else GroupManager.getPerson(name)
+            val person = if(name.equals("evt")) GroupManager.getPerson(GameEventManager.currActiveEvent!!.randomPersonList[0].firstName)!! else GroupManager.getPerson(name)
 
             val amt = MathUtils.random(min, max);
             person!!.addHealth(amt.toFloat())

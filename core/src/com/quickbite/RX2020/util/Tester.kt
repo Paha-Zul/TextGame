@@ -3,7 +3,6 @@ package com.quickbite.rx2020.util
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GameEventManager
-import com.quickbite.rx2020.managers.GroupManager
 
 /**
  * Created by Paha on 2/6/2016.
@@ -23,11 +22,11 @@ object Tester {
             System.out.println("---------------------")
         }
 
-        for(event in GameEventManager.commonRootEventMap.values)
-            func(event)
+        for(eventName in GameEventManager.commonRootEventMap.keys)
+            func(GameEventManager.getEvent(eventName, "common"))
 
-        for(event in GameEventManager.rareRootEventMap.values)
-            func(event)
+        for(eventName in GameEventManager.rareRootEventMap.keys)
+            func(GameEventManager.getEvent(eventName, "rare"))
 
         System.out.println("Event Testing Done!")
     }
@@ -38,6 +37,7 @@ object Tester {
         if(event.outcomes!=null){
             event.outcomes!!.forEachIndexed { i, list -> list.forEachIndexed { j, outcomeName ->
                 val _evt = GameEventManager.getEvent(outcomeName)
+                _evt.randomPersonList = event.randomPersonList
                 System.out.println("Testing ${_evt.name}")
                 testEvent(_evt)
             }}
@@ -48,7 +48,6 @@ object Tester {
     }
 
     private fun testActions(event:GameEventManager.EventJson){
-        event.randomName = GroupManager.getRandomPerson()!!.firstName
         GameEventManager.currActiveEvent = event
         //Execute any actions
         val list = event.resultingAction;

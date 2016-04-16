@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
@@ -49,7 +48,6 @@ class GameScreenGUI(val game : GameScreen) {
     /* GUI elements for people */
     private val groupTable: Table = Table() //For the group
     private val supplyTable: Table = Table() //For the supplies
-    private lateinit var medkitButton:ImageButton
 
     private val ROVTable: Table = Table()
 
@@ -84,9 +82,6 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun init(){
-        medkitButton = ImageButton(TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java))))
-        medkitButton.style.imageDisabled = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
-
         buildTravelScreenGUI()
         applyTravelTab(groupTable)
     }
@@ -150,7 +145,6 @@ class GameScreenGUI(val game : GameScreen) {
                     buildGroupTable()
                     rightTable.add(groupTable)
                 }else if(ROVTable.parent == null){
-                    medkitButton.remove()
                     rightTable.clear()
                     addGroupButton()
                     buildROVTable()
@@ -223,18 +217,6 @@ class GameScreenGUI(val game : GameScreen) {
                 }
             }
         })
-
-        medkitButton.addListener(object:ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                val person = medkitButton.userObject as Person
-                if(person.hasInjury){
-                    EventManager.callEvent("removeInjury", person.firstName, "worst")
-                    if(!person.hasInjury)
-                        medkitButton.remove()
-                }
-            }
-        })
-
     }
 
     private fun sliderTask():ChainTask{
@@ -454,6 +436,11 @@ class GameScreenGUI(val game : GameScreen) {
         groupTable.padRight(10f)
 
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
+        imageButtonStyle.up = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java)))
+        imageButtonStyle.disabled = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
+
+        val hasMedkits = SupplyManager.getSupply("medkits").amt > 0
 
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person: Person in list.iterator()){
@@ -466,28 +453,25 @@ class GameScreenGUI(val game : GameScreen) {
             val healthLabel: Label = Label("" + person.healthNormal, labelStyle)
             healthLabel.setFontScale(normalFontScale)
 
+            val medkitButton = ImageButton(imageButtonStyle)
+            medkitButton.isDisabled = !hasMedkits || !person.hasInjury
+
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
-            pairTable.add(nameLabel).right().expandX().fillX()
+            pairTable.add(nameLabel).right().expandX().fillX().colspan(2)
             pairTable.row().right()
+            pairTable.add(medkitButton).size(16f).spaceRight(10f)
             pairTable.add(healthBar).right().height(15f).width(100f)
 
             groupTable.add(pairTable).right().expandX().fillX()
             groupTable.row().spaceTop(5f).right()
 
-            pairTable.addListener(object:ClickListener(){
-                override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                    super.clicked(event, x, y)
-                    medkitButton.remove()
-                    if(GroupManager.getPerson(person.firstName)!!.hasInjury) {
-                        val pos = pairTable.localToStageCoordinates(Vector2(0f, 0f)) //Get the stage coordinates
-                        medkitButton.setPosition(pos.x - 32f, pos.y) //Set the position
-                        medkitButton.setSize(32f, 32f) //Set the size
-                        medkitButton.userObject = person //Set the user data as the person for later use.
-                        if(SupplyManager.getSupply("medkits").amt <= 0) medkitButton.isDisabled = true
-                        else medkitButton.isDisabled = false
-                        TextGame.stage.addActor(medkitButton) //Add it to the stage.
+            medkitButton.addListener(object:ChangeListener(){
+                override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                    if(person.hasInjury){
+                        EventManager.callEvent("removeInjury", person.firstName, "worst")
+                        buildGroupTable()
                     }
                 }
             })
@@ -632,6 +616,7 @@ class GameScreenGUI(val game : GameScreen) {
     private fun showEventPage(event: GameEventManager.EventJson, pageNumber:Int){
         //Clear the tables
         EventInfo.eventInnerTable.clear()
+        EventInfo.eventInnerTable.debugAll()
         EventInfo.eventChoicesTable.clear()
 
         val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
@@ -670,7 +655,7 @@ class GameScreenGUI(val game : GameScreen) {
         }
 
         //Fix the description
-        val desc = event.description[pageNumber].replace("%n", event.randomName)
+        val desc = event.description[pageNumber].replace("%n", event.randomPersonList[0].firstName).replace("%n2", event.randomPersonList[1].firstName)
 
         //Make the description label
         val descLabel = Label(desc, labelStyle)
@@ -678,19 +663,17 @@ class GameScreenGUI(val game : GameScreen) {
         descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)
 
-        val cont = Container<Label>()
-        cont.actor = descLabel
-
         //Put it into a scrollpane
         val scrollPane = ScrollPane(descLabel, scrollPaneStyle)
         scrollPane.setFadeScrollBars(false)
+        scrollPane.debugAll()
 
         //Make the next page button
         val nextPageButton: TextButton = TextButton("", nextPageButtonStyle)
         nextPageButton.label.setFontScale(0.15f)
 
         //Add the title and description label
-        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 15f, 0f, 15f).center()
+        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 50f, 0f, 50f).center()
         EventInfo.eventInnerTable.row()
 
         val hasAnotherPage = event.description.size - 1 > pageNumber
