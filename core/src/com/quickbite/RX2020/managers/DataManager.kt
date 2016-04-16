@@ -108,6 +108,7 @@ object DataManager{
         var worth:Array<Int>? = null
         var perMember:Boolean = false
         var randStartAmt:Array<Int>? = null
+        var affectedByHealth:Boolean = false
     }
 
     class SearchActivityJSON(){

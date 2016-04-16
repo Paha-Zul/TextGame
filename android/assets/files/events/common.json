@@ -128,7 +128,7 @@
   "root" : true,
   "title" : "Battery Trouble",
   "name" : "BatteryTrouble",
-  "description" : [ "While recharging the batteries %n noticed that the one of the batteries isn’t operating at full capacity and after watching its performance over the last few hours he feels he has discovered the root of the problem.", "After a few minutes of tinkering, he is able to restore the batter to full capacity, but is unable to recover the lost power." ],
+  "description" : [ "While recharging the batteries %n noticed that the one of the batteries isn’t operating at full capacity and after watching its performance over the last few hours he feels he has discovered the root of the problem.", "After a few minutes of tinkering, he is able to restore the battery to full capacity, but is unable to recover the lost power." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],

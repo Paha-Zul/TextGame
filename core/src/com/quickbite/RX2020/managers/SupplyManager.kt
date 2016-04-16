@@ -17,13 +17,13 @@ object SupplyManager : IUpdateable {
         var list = DataManager.getItemList()
         for(item in list){
             var randStart = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()
-            if(item.perMember) randStart = randStart*GroupManager.numPeopleAlive
+            if(item.perMember) randStart *= GroupManager.numPeopleAlive
             val maxAmount = if(item.perMember) item.max*GroupManager.numPeopleAlive else item.max
 
             if(!TextGame.testMode)
-                addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount)
+                addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount, item.affectedByHealth)
             else
-                addNewSupply(item.name, item.abbrName, item.displayName, 10000000f, 10000000)
+                addNewSupply(item.name, item.abbrName, item.displayName, 10000000f, 10000000, item.affectedByHealth)
 
         }
 
@@ -31,21 +31,29 @@ object SupplyManager : IUpdateable {
         supplyMap["energy"]?.consumePerDay = 3.3f
     }
 
-    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int):Supply{
-        val supply = Supply(name, abbrName, displayName, amt, maxAmount)
+    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int, affectByHealth:Boolean):Supply{
+        val supply = Supply(name, abbrName, displayName, amt, maxAmount, 100f, 100f, affectByHealth)
         supplyMap.put(name, supply)
         return supply
     }
 
     fun addToSupply(name:String, amt:Float):Supply{
-        val supply = supplyMap[name]
-        if(supply == null) Logger.log("SupplyManager", "Trying to add to supply $name which doesn't exist.", Logger.LogLevel.Warning)
-        supply!!.amt += amt
-        if(supply!!.amt < 0) supply.amt = 0f
-        else if(supply.amt >= supply.maxAmount) supply.amt = supply.maxAmount.toFloat()
+        var _amt = amt //Let's make the passed in val mutable
+        val supply = supplyMap[name] //Get the supply.
 
-        EventManager.callEvent("supplyChanged", supply, amt)
-        return supply
+        //Log it if the supply is null
+        if(supply == null) Logger.log("SupplyManager", "Trying to add to supply $name which doesn't exist.", Logger.LogLevel.Warning)
+        else {
+            _amt *= (supply.currHealth / 100f)
+            //TODO Maybe check if the supply's affectedByHealth field is true?
+            supply.amt += _amt //Usually health for any supply will be 100/100, but for parts that degrade it will not?
+            if (supply.amt < 0) supply.amt = 0f
+            else if (supply.amt >= supply.maxAmount) supply.amt = supply.maxAmount.toFloat()
+
+            EventManager.callEvent("supplyChanged", supply, _amt)
+        }
+
+        return supply!!
     }
 
     fun setSupply(name:String, amt:Float):Supply{
@@ -76,7 +84,7 @@ object SupplyManager : IUpdateable {
 
     fun clearSupplies() = supplyMap.clear()
 
-    class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f){
+    class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f, val affectedByHealth:Boolean){
         var consumePerDay:Float = 0f
 
         operator fun component1() = displayName

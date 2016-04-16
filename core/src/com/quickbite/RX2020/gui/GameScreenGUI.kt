@@ -461,7 +461,7 @@ class GameScreenGUI(val game : GameScreen) {
 
             pairTable.add(nameLabel).right().expandX().fillX().colspan(2)
             pairTable.row().right()
-            pairTable.add(medkitButton).size(16f).spaceRight(10f)
+            pairTable.add(medkitButton).size(16f).spaceRight(10f).right()
             pairTable.add(healthBar).right().height(15f).width(100f)
 
             groupTable.add(pairTable).right().expandX().fillX()
