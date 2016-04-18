@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Json
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.GameStats
+import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
 import com.quickbite.rx2020.screens.GameIntroScreen
 import com.quickbite.rx2020.util.GH
@@ -144,8 +145,18 @@ class GameIntroGUI(val game: GameIntroScreen) {
             }
 
             var delay = 0f
+            var counter = 0
 
             if(intro.showSupplies){
+                val crewMembers = Label("Surviving Crew Members: ${GroupManager.numPeopleAlive}", labelStyle)
+                crewMembers.setFontScale(0.2f)
+                crewMembers.color.a = 0f
+
+                crewMembers.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+                supplyTable.add(crewMembers).colspan(2)
+                supplyTable.row()
+                counter++
+
                 SupplyManager.getSupplyList().forEachIndexed { i, supply ->
                     val nameLabel = Label(supply.displayName, labelStyle)
                     nameLabel.setFontScale(0.2f)
@@ -155,14 +166,19 @@ class GameIntroGUI(val game: GameIntroScreen) {
                     amtLabel.setFontScale(0.2f)
                     amtLabel.color.a = 0f
 
+                    if(supply.name.equals("panel") || supply.name.equals("track") || supply.name.equals("battery") || supply.name.equals("storage")){
+                        nameLabel.setText("Spare " + nameLabel.text)
+                    }
+
                     supplyTable.add(nameLabel)
                     supplyTable.add(amtLabel)
                     supplyTable.row()
 
-                    nameLabel.addAction(Actions.sequence(Actions.delay(i*0.1f), Actions.fadeIn(0.8f)))
-                    amtLabel.addAction(Actions.sequence(Actions.delay(i*0.1f), Actions.fadeIn(0.8f)))
+                    nameLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+                    amtLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
 
                     delay += 0.15f
+                    counter++
                 }
             }
 

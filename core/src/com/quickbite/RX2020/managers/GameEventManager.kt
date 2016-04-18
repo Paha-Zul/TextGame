@@ -81,6 +81,12 @@ object GameEventManager{
         return event!!
     }
 
+    fun getAndSetEvent(eventName:String, type:String = ""):EventJson{
+        var event = getEvent(eventName, type)
+        currActiveEvent = event
+        return event
+    }
+
 
     class EventJson{
         var root:Boolean = false

@@ -20,6 +20,7 @@ object ROVManager {
 
     fun addHealthROV(amt:Float){
         ROVHealth += amt
-        //TODO Future breakdown code here.
+        if(ROVHealth >= ROVMaxHealth)
+            ROVHealth = ROVMaxHealth
     }
 }

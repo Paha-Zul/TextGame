@@ -2,6 +2,8 @@ package com.quickbite.rx2020.util
 
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GameEventManager
+import com.quickbite.rx2020.managers.ROVManager
+import com.quickbite.rx2020.managers.SupplyManager
 
 /**
  * Created by Paha on 4/10/2016.
@@ -42,4 +44,32 @@ object GH {
     fun getEventFromChoice(currEvent:GameEventManager.EventJson, choiceText:String):GameEventManager.EventJson?{
         return currEvent.selectChildEvent(choiceText)
     }
+
+    fun parseAndCheckRestrictions(restrictionList:Array<Array<String>>):Boolean{
+        var passed = true
+        restrictionList.forEach { params ->
+            var name:String = params[0]
+            var operation:String = params[1]
+            var amount:Int = params[2].toInt()
+
+            var amtToCheck = 0
+            if(name.equals("ROV"))
+                amtToCheck = ROVManager.ROVHealth.toInt()
+            else
+                amtToCheck = SupplyManager.getSupply(name).amt.toInt()
+
+            if(operation.equals("<")){
+                passed = amtToCheck < amount
+            }else if(operation.equals("<=")){
+                passed =  amtToCheck <= amount
+            }else if(operation.equals(">")){
+                passed =  amtToCheck > amount
+            }else{
+                passed =  amtToCheck >= amount
+            }
+        }
+
+        return passed
+    }
+
 }

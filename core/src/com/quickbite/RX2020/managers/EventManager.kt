@@ -46,7 +46,7 @@ object EventManager {
         //TODO Need a 'wait' event.
 
         //We are hurting a person/people
-        EventManager.onEvent("hurt", { args ->
+        EventManager.onEvent("addHealth", { args ->
             if(GameEventManager.currActiveEvent == null)
                 return@onEvent
 
@@ -60,21 +60,19 @@ object EventManager {
 
             if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
 
-            var randomPerPerson = if(args.count() >= 5) ((args[4]) as String).toBoolean() else false
+            var randomPerPerson = if(args.count() >= 6) ((args[5]) as String).toBoolean() else false
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
-                var dmg = MathUtils.random(min, max)
+                var dmg = MathUtils.random(Math.abs(min), Math.abs(max))
+                if(min < 0) dmg = -dmg
                 val list = GroupManager.getPeopleList()
                 list.forEach { person ->
-                    if(randomPerPerson) dmg = MathUtils.random(min, max)
-                    var res = 0
+                    if(randomPerPerson) dmg = MathUtils.random(Math.abs(min), Math.abs(max))
                     if (perc)
-                        res = person.addPercentHealth(-(dmg.toFloat())).toInt()
+                        person.addPercentHealth(-(dmg.toFloat())).toInt()
                     else
-                        res = person.addHealth(-(dmg.toFloat())).toInt()
-
-                    Result.addResult(person.firstName, res.toFloat(), gameScreen.currGameTime, "'s HP", gameScreen.gui)
+                        person.addHealth(-(dmg.toFloat())).toInt()
                 }
 
                 //If we are doing it to multiple people...
@@ -83,26 +81,14 @@ object EventManager {
 
                 //For only one person...
             }else{
-                var amt = MathUtils.random(min, max)
+                var amt = MathUtils.random(Math.abs(min), Math.abs(max))
+                if(min < 0) amt = -amt
                 val person = GroupManager.getPerson(name)!!
                 if(perc)
-                    amt = person.addPercentHealth(-(amt.toFloat())).toInt()
+                    person.addPercentHealth(-(amt.toFloat())).toInt()
                 else
-                    amt = person.addHealth(-(amt.toFloat())).toInt()
-
-                Result.addResult(person.firstName, amt.toFloat(), gameScreen.currGameTime, "'s HP", gameScreen.gui)
+                    person.addHealth(-(amt.toFloat())).toInt()
             }
-        })
-
-        EventManager.onEvent("heal", { args ->
-            var name = (args[0]) as String
-            val min = ((args[1]) as String).toInt()
-            val max = ((args[2]) as String).toInt()
-
-            val person = if(name.equals("evt")) GroupManager.getPerson(GameEventManager.currActiveEvent!!.randomPersonList[0].firstName)!! else GroupManager.getPerson(name)
-
-            val amt = MathUtils.random(min, max);
-            person!!.addHealth(amt.toFloat())
         })
 
         EventManager.onEvent("removeInjury", { args ->
@@ -111,11 +97,9 @@ object EventManager {
 
             val person = GroupManager.getPerson(name)!!;
             when(type){
-                "worst" -> person.removeWorstInjury()
-                else -> person.removeLongestInjury()
+                "worst" -> person.removeWorstDisability()
+                else -> person.removeLongestDisability()
             }
-
-            EventManager.callEvent("addRndAmt", "-1", "-1", "medkits")
         })
 
         EventManager.onEvent("addRndAmt", {args ->
@@ -134,6 +118,8 @@ object EventManager {
 
                     SupplyManager.addToSupply(supplyName, num.toFloat())
                 }
+
+                gameScreen.gui.buildSupplyTable()
             }catch(e:NumberFormatException){
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndAmt has some wrong parameters, make sure they are in the order: min/max/supplyName/perPerson/chance")
@@ -154,6 +140,8 @@ object EventManager {
                     if (min < 0 || max < 0) num = -num
                     SupplyManager.addToSupply(randomSupply, num.toFloat())
                 }
+
+                gameScreen.gui.buildSupplyTable()
             }catch(e:NumberFormatException){
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndItem has some wrong parameters, make sure they are in the order: min/max/chance/supplyNames(args)")
@@ -263,6 +251,7 @@ object EventManager {
 
         EventManager.onEvent("eventFinished", { args ->
             SaveLoad.saveGame(true)
+            GameEventManager.currActiveEvent = null
         })
     }
 }

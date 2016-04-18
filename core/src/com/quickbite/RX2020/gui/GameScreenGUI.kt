@@ -102,10 +102,11 @@ class GameScreenGUI(val game : GameScreen) {
         totalDaysLabel.setText("Day "+ GameStats.TimeInfo.totalDaysTraveled)
 
         distanceLabel.setText("" + GameStats.TravelInfo.totalDistToGo+" Miles")
-        distProgressBar.setValue(GameStats.TravelInfo.totalDistTraveled.toFloat())
+        distProgressBar.value = GameStats.TravelInfo.totalDistTraveled.toFloat()
 
         updateSuppliesGUI()
         buildRecentChangeTable()
+        buildGroupTable()
     }
 
     private fun updateSuppliesGUI(){
@@ -139,7 +140,6 @@ class GameScreenGUI(val game : GameScreen) {
         groupButton.addListener(object: ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
-//                rightTable.debugAll()
 
                 if(ROVTable.parent == null && groupTable.parent == null) {
                     buildGroupTable()
@@ -184,8 +184,8 @@ class GameScreenGUI(val game : GameScreen) {
         selectBox.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
-                val resultList = game.searchActivity!!.restrictions!!.filter {res -> SupplyManager.getSupply(res).amt <= 0 }
-                if(resultList.size > 0)
+                val passed = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
+                if(!passed)
                     disableActivityButtonError()
                 else
                     enableActivityButton()
@@ -224,9 +224,9 @@ class GameScreenGUI(val game : GameScreen) {
         task = ChainTask(
                 { activityHourSlider.value > 0 && game.searchActivity != null },
                 {
-                    val list = game.searchActivity!!.restrictions!!.filter { res -> SupplyManager.getSupply(res).amt <= 0 } //Filter out any restrictions that are less than 0
+                    val passed = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
                     //If our list is 0, that means all the restrictions passed. We are good to proceed.
-                    if (list.size == 0) {
+                    if (passed) {
                         activityHourSlider.value = activityHourSlider.value - 1
                         game.searchFunc?.forEach { func -> func?.invoke() }
 
@@ -234,13 +234,14 @@ class GameScreenGUI(val game : GameScreen) {
                     } else {
                         game.searchActivity = null
                         game.searchFunc = null
+                        game.numHoursToAdvance = 0
                         disableActivityButtonError()
                         task!!.setDone()
                     }
 
                     if(activityHourSlider.value.toInt() == 0) {
                         task!!.setDone()
-                        if(list.size == 0)
+                        if(passed)
                             enableActivityButton()
                     }
                 },
@@ -333,7 +334,6 @@ class GameScreenGUI(val game : GameScreen) {
         campButton.setOrigin(Align.center)
         campButton.setPosition(TextGame.viewport.worldWidth/2f - campButton.width/2f, 0f)
         campButton.label.setFontScale(buttonFontScale)
-
 
         buildCenterInfoTable()
         buildLeftTable()
@@ -440,7 +440,7 @@ class GameScreenGUI(val game : GameScreen) {
         imageButtonStyle.up = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java)))
         imageButtonStyle.disabled = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
 
-        val hasMedkits = SupplyManager.getSupply("medkits").amt > 0
+        val hasMedkits = SupplyManager.getSupply("medkits").amt.toInt() > 0
 
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person: Person in list.iterator()){
@@ -454,14 +454,14 @@ class GameScreenGUI(val game : GameScreen) {
             healthLabel.setFontScale(normalFontScale)
 
             val medkitButton = ImageButton(imageButtonStyle)
-            medkitButton.isDisabled = !hasMedkits || !person.hasInjury
+            medkitButton.isDisabled = !hasMedkits || (!person.hasInjury && person.healthNormal >= person.maxHealth)
 
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
             pairTable.add(nameLabel).right().expandX().fillX().colspan(2)
             pairTable.row().right()
-            pairTable.add(medkitButton).size(16f).spaceRight(10f).right()
+            pairTable.add(medkitButton).size(16f).spaceRight(10f).right().expandX().fillX()
             pairTable.add(healthBar).right().height(15f).width(100f)
 
             groupTable.add(pairTable).right().expandX().fillX()
@@ -469,8 +469,10 @@ class GameScreenGUI(val game : GameScreen) {
 
             medkitButton.addListener(object:ChangeListener(){
                 override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    if(person.hasInjury){
+                    if(person.hasInjury || person.healthNormal < person.maxHealth){
                         EventManager.callEvent("removeInjury", person.firstName, "worst")
+                        EventManager.callEvent("addHealth", person.firstName, "100")
+                        EventManager.callEvent("addRndAmt", "-1", "-1", "medkits")
                         buildGroupTable()
                     }
                 }
@@ -569,6 +571,8 @@ class GameScreenGUI(val game : GameScreen) {
      * Initially starts the event GUI
      */
     fun triggerEventGUI(event: GameEventManager.EventJson){
+        Result.clearResultLists()
+
         game.pauseGame()
         EventInfo.eventTable.clear()
         campButton.isDisabled = true;
@@ -616,7 +620,6 @@ class GameScreenGUI(val game : GameScreen) {
     private fun showEventPage(event: GameEventManager.EventJson, pageNumber:Int){
         //Clear the tables
         EventInfo.eventInnerTable.clear()
-        EventInfo.eventInnerTable.debugAll()
         EventInfo.eventChoicesTable.clear()
 
         val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
@@ -655,7 +658,7 @@ class GameScreenGUI(val game : GameScreen) {
         }
 
         //Fix the description
-        val desc = event.description[pageNumber].replace("%n", event.randomPersonList[0].firstName).replace("%n2", event.randomPersonList[1].firstName)
+        val desc = event.description[pageNumber].replace("%n2", event.randomPersonList[1].firstName).replace("%n", event.randomPersonList[0].firstName)
 
         //Make the description label
         val descLabel = Label(desc, labelStyle)
@@ -663,42 +666,47 @@ class GameScreenGUI(val game : GameScreen) {
         descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)
 
+        //This is to add some extra padding to the label. Without this, the text gets cut off a bit
+        //by the scrollpane.
+        val container = Container<Label>(descLabel)
+        container.pad(5f,5f,5f,5f)
+        container.fillX().fillY()
+
         //Put it into a scrollpane
-        val scrollPane = ScrollPane(descLabel, scrollPaneStyle)
+        val scrollPane = ScrollPane(container, scrollPaneStyle)
         scrollPane.setFadeScrollBars(false)
-        scrollPane.debugAll()
 
         //Make the next page button
         val nextPageButton: TextButton = TextButton("", nextPageButtonStyle)
         nextPageButton.label.setFontScale(0.15f)
 
         //Add the title and description label
-        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 50f, 0f, 50f).center()
+        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 10f, 0f, 10f).center()
         EventInfo.eventInnerTable.row()
 
         val hasAnotherPage = event.description.size - 1 > pageNumber
-        val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions
+        val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions || Result.hasEventResults
+        var toNext = hasAnotherSomething || event.hasChoices && event.choices!!.size == 1
 
-        //If we have another page, add a next page button.
-        if(hasAnotherSomething || event.hasChoices && event.choices!!.size == 1) {
-            EventInfo.eventInnerTable.add(nextPageButton).size(50f).padBottom(5f).bottom()
-            if(event.choices!!.size == 1 && !hasAnotherPage)
-                nextPageButton.label.setText(event.choices!![0])
-            else
-                nextPageButton.style.up = drawable
+        val setNextPageButton = {
+            nextPageButton.isDisabled = false
+            nextPageButton.setText("")
 
-        //Otherwise, add a close button.
-        }else{
-            val closeButton: TextButton = TextButton("- Close -", textButtonStyle)
-            closeButton.label.setFontScale(buttonFontScale)
-            closeButton.addListener(object: ChangeListener(){
-                override fun changed(evt: ChangeEvent?, actor: Actor?) {
-                    closeEvent()
-                }
-            })
+            //If we have another page, add a next page button.
+            if (toNext) {
+                if (event.choices!!.size == 1 && !hasAnotherPage)
+                    nextPageButton.label.setText(event.choices!![0])
+                else
+                    nextPageButton.style.up = drawable
 
-            EventInfo.eventInnerTable.add(closeButton).padBottom(5f).bottom().height(50f)
+                //Otherwise, add a close button.
+            } else {
+                nextPageButton.setText("- Close -")
+            }
         }
+
+        setNextPageButton()
+        EventInfo.eventInnerTable.add(nextPageButton).size(32f).padBottom(5f).bottom()
 
         //Kinda complicated listener for the next page button.
         nextPageButton.addListener(object: ChangeListener(){
@@ -725,16 +733,38 @@ class GameScreenGUI(val game : GameScreen) {
                 //Otherwise, we only have outcomes or actions. Deal with it!
                 else if (hasOnlyOutcomes || Result.hasEventResults){
                     handleEvent(GH.getEventFromChoice(event, ""))
+                }else{
+                    handleEvent(null) //End the event.
                 }
             }
         })
+
+        EventInfo.eventInnerTable.invalidateHierarchy()
+        EventInfo.eventInnerTable.act(0.016f)
+        EventInfo.eventInnerTable.validate()
+
+        scrollPane.invalidateHierarchy()
+        scrollPane.act(0.016f)
+        scrollPane.validate()
+
+        if(!scrollPane.isBottomEdge) {
+            nextPageButton.isDisabled = true
+            nextPageButton.style.up = null
+            nextPageButton.setText("Scroll Down")
+        }
+
+        scrollPane.addListener {
+            if(scrollPane.isBottomEdge)
+                setNextPageButton()
+            false
+        }
+
     }
 
     /**
      * Shows the event results
      */
     fun showEventResults(list: List<Result>, deathList: List<Result>, onDoneCallback:()->Unit){
-        EventInfo.eventResultsTable.clear()
         EventInfo.eventInnerTable.clear()
 
         /* Styles */
@@ -742,11 +772,18 @@ class GameScreenGUI(val game : GameScreen) {
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
+        //Set some styles
+        val scrollPaneStyle = ScrollPane.ScrollPaneStyle()
+        scrollPaneStyle.vScrollKnob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollKnob"))
+        scrollPaneStyle.vScroll = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollBar"))
+
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         //Close button
         val closeButton: TextButton = TextButton("- Close -", textButtonStyle)
         closeButton.label.setFontScale(buttonFontScale)
+
+        val resultsTable = Table()
 
         //Display the results of the event.
         for(item in list){
@@ -762,9 +799,9 @@ class GameScreenGUI(val game : GameScreen) {
             nameLabel.setFontScale(normalFontScale)
             amtLabel.setFontScale(normalFontScale)
 
-            EventInfo.eventResultsTable.add(amtLabel).padRight(10f)
-            EventInfo.eventResultsTable.add(nameLabel)
-            EventInfo.eventResultsTable.row()
+            resultsTable.add(amtLabel).padRight(10f)
+            resultsTable.add(nameLabel)
+            resultsTable.row()
         }
 
         for(item in deathList){
@@ -780,13 +817,20 @@ class GameScreenGUI(val game : GameScreen) {
             nameLabel.setFontScale(normalFontScale)
             amtLabel.setFontScale(normalFontScale)
 
-            EventInfo.eventResultsTable.add(amtLabel).padRight(10f)
-            EventInfo.eventResultsTable.add(nameLabel)
-            EventInfo.eventResultsTable.row()
+            resultsTable.add(amtLabel).padRight(10f)
+            resultsTable.add(nameLabel)
+            resultsTable.row()
         }
 
+        val container = Container<Table>(resultsTable)
+        container.padTop(10f)
+
+        //Put it into a scrollpane
+        val scrollPane = ScrollPane(container, scrollPaneStyle)
+        scrollPane.setFadeScrollBars(false)
+
         //Arrange it in the table.
-        EventInfo.eventInnerTable.add(EventInfo.eventResultsTable).expand().fill()
+        EventInfo.eventInnerTable.add(scrollPane).expand().fill()
         EventInfo.eventInnerTable.row()
         EventInfo.eventInnerTable.add(closeButton).bottom().height(50f)
 
@@ -796,6 +840,26 @@ class GameScreenGUI(val game : GameScreen) {
                 onDoneCallback()
             }
         })
+
+        EventInfo.eventInnerTable.validate()
+        EventInfo.eventInnerTable.act(0.016f)
+
+        scrollPane.validate()
+        scrollPane.act(0.016f)
+
+        if(!scrollPane.isBottomEdge) {
+            closeButton.isDisabled = true
+            closeButton.style.up = null
+            closeButton.setText("Scroll Down")
+        }
+
+        scrollPane.addListener {
+            if(scrollPane.isBottomEdge) {
+                closeButton.isDisabled = false
+                closeButton.setText("- Close -")
+            }
+            false
+        }
     }
 
     /**
@@ -866,7 +930,6 @@ class GameScreenGUI(val game : GameScreen) {
         innerTable.add(activityButton).width(85f).height(37.5f).bottom().fill().expand().padBottom(20f)
 
         innerTable.top()
-//        innerTable.debugAll()
         campTable.add(innerTable).top()
     }
 
@@ -1118,8 +1181,8 @@ class GameScreenGUI(val game : GameScreen) {
                 tradeAmt = newAmt
 
                 //Set the exomer and other item amount label.
-                exomerItemAmountLabel.setText(exItem.currAmt.toInt().toString())
-                nativeItemAmountLabel.setText(otherItem.currAmt.toInt().toString())
+                exomerItemAmountLabel.setText(exItem.amt.toInt().toString())
+                nativeItemAmountLabel.setText(otherItem.amt.toInt().toString())
 
                 //If amt is positive, make it green. Negative, make it red. 0, make it white.
                 when {
@@ -1155,8 +1218,9 @@ class GameScreenGUI(val game : GameScreen) {
                 val theirOffer = otherOfferAmtLabel.text.toString().toInt()
                 if(yourOffer >= theirOffer){
                     for(item in exomerList)
-                        SupplyManager.setSupply(item.name, item.amt.toFloat())
+                        SupplyManager.setSupply(item.name, item.currAmt.toFloat())
 
+                    //TODO Supplies don't update?
                     updateSuppliesGUI()
                     closeTradeWindow()
                 }
@@ -1200,7 +1264,7 @@ class GameScreenGUI(val game : GameScreen) {
      */
     fun closeTradeWindow() {
         tradeWindowTable.remove()
-        game.resumeGame()
+        //TODO For now took out resumeGame()
     }
 
     /**
@@ -1272,18 +1336,11 @@ class GameScreenGUI(val game : GameScreen) {
 
         tradeSliderWindow.add(buttonTable).colspan(3).spaceBottom(10f)
 
-//        tradeSlider.addListener(object:ClickListener(){
-//            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-//                currLabel.setText(tradeSlider.value.toInt().toString())
-//                callback(tradeSlider.value.toInt())
-//                super.clicked(event, x, y)
-//            }
-//        })
-
         tradeSlider.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 currLabel.setText(tradeSlider.value.toInt().toString())
                 callback(tradeSlider.value.toInt())
+                exItem.currAmt = exItem.amt + tradeSlider.value.toInt()
             }
         })
 
@@ -1321,7 +1378,6 @@ class GameScreenGUI(val game : GameScreen) {
         val list = Result.recentResultMap.values.toList()
         recentChangeTable.clear()
         recentChangeTable.remove()
-//        recentChangeTable.debugAll()
 
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -1420,7 +1476,6 @@ class GameScreenGUI(val game : GameScreen) {
         val eventInnerTable: Table = Table()
         val eventChoicesTable: Table = Table()
         val eventContainer: Table = Table()
-        val eventResultsTable: Table = Table()
         var titleLabel: Label? = null
     }
 

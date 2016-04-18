@@ -116,7 +116,7 @@ object DataManager{
         var description:String = "def"
         var buttonTitle:String = "fixme"
         var action:Array<Array<String>>? = null
-        var restrictions:Array<String>? = null
+        var restrictions:Array<Array<String>>? = null
 
         companion object{
             /**

@@ -1,6 +1,7 @@
 package com.quickbite.rx2020
 
 import com.quickbite.rx2020.gui.GameScreenGUI
+import com.quickbite.rx2020.managers.GameEventManager
 
 /**
  * Created by Paha on 4/5/2016.
@@ -28,9 +29,12 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
             var result = eventResultMap.getOrPut(name, {Result(name, 0f, desc)})
             result.amt += amt
 
-            result = recentResultMap.getOrPut(name, {Result(name, 0f, desc)})
-            result.amt += amt
-            result.timeLastUpdated = currTime
+            //TODO A little bit of a hack until I figure out where to better put the values.
+            if(GameEventManager.currActiveEvent == null) {
+                result = recentResultMap.getOrPut(name, { Result(name, 0f, desc) })
+                result.amt += amt
+                result.timeLastUpdated = currTime
+            }
 
             gui.buildRecentChangeTable()
         }
@@ -38,7 +42,10 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
         fun addDeath(person:Person){
             deathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
 
-            recentDeathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
+            //TODO A little bit of a hack until I figure out where to better put the values.
+            if(GameEventManager.currActiveEvent == null) {
+                recentDeathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
+            }
         }
 
         fun purgeRecentResults(currTime: Double){

@@ -28,7 +28,7 @@ object SaveLoad{
         save.currMiles = GameStats.TravelInfo.totalDistTraveled
         save.maxTripMileage = GameStats.TravelInfo.totalDistOfGame
 
-        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal+person.healthInjury, person.injuryList))}
+        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal+person.healthInjury, person.disabilityList))}
 
         SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
 
@@ -67,7 +67,7 @@ object SaveLoad{
             var names = jsonPerson.name.split(" ")
             val person = Person(names[0], names[1]) //Make a new person to add to the group.
             person.addHealth(jsonPerson.health - person.maxHealth) //We need to set the health through a bit of roundabout.
-            person.injuryList = jsonPerson.injuries
+            person.disabilityList = jsonPerson.disabilities
             GroupManager.addPerson(person)
         }
 
@@ -92,7 +92,7 @@ object SaveLoad{
         var supplyList:MutableList<SupplyPOJO> = mutableListOf()
     }
 
-    private class PersonPOJO(var name:String, var health:Float, var injuries:List<Person.Injury>){
+    private class PersonPOJO(var name:String, var health:Float, var disabilities:List<Person.Disability>){
         constructor():this("", 0f, listOf())
     }
 

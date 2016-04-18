@@ -99,7 +99,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.rareRootEventMap["NativeEncounter"]!!)})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Crystal", "common"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -126,7 +126,7 @@ class GameScreen(val game: TextGame): Screen {
     }
 
     override fun pause() {
-
+        SaveLoad.saveGame(true)
     }
 
     override fun resume() {
@@ -312,8 +312,6 @@ class GameScreen(val game: TextGame): Screen {
             GameEventManager.currActiveEvent = currEvent;
 
             Logger.log("GameScreen", "Starting event ${GameEventManager.currActiveEvent!!.name}")
-
-            Result.clearResultLists()
 
             //Trigger the GUI UI and send a callback to it.
             gui.triggerEventGUI(currEvent)

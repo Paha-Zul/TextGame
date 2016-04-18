@@ -6,7 +6,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ], [ "hurt", "evt", "10", "20", "true" ] ]
+  "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ], [ "addHealth", "evt", "-10", "-20", "true" ] ]
 }, {
   "root" : false,
   "title" : "A Hole?",
@@ -15,7 +15,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ], [ "hurt", "evt", "10", "20" ] ]
+  "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ], [ "addHealth", "evt", "-10", "-20" ] ]
 }, {
   "root" : false,
   "title" : "A Hole?",
@@ -60,12 +60,12 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "10", "20" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-10", "-20" ] ]
 }, {
   "root" : false,
   "title" : "A Hole?",
   "name" : "ReachInside",
-  "description" : [ "%n crawls over to the opening of the hole and reaches in…" ],
+  "description" : [ "%n crawls over to the opening of the hole and reaches in..." ],
   "choices" : [ ],
   "outcomes" : [ [ "ReachEmpty", "ReachFood", "ReachFoodHurt", "ReachFoodHurtPerc" ] ],
   "chances" : [ [ 25, 25, 25, 25 ] ],
@@ -74,7 +74,7 @@
   "root" : false,
   "title" : "A Hole?",
   "name" : "LookInside",
-  "description" : [ "%n crawls over to the opening and looks inside…" ],
+  "description" : [ "%n crawls over to the opening and looks inside..." ],
   "choices" : [ ],
   "outcomes" : [ [ "EmptyBurrow", "FoodBurrow", "CreatureHurtBurrow", "CreatureHurtFoodBurrow" ] ],
   "chances" : [ [ 25, 25, 25, 25 ] ],
@@ -128,7 +128,7 @@
   "root" : true,
   "title" : "Battery Trouble",
   "name" : "BatteryTrouble",
-  "description" : [ "While recharging the batteries %n noticed that the one of the batteries isn’t operating at full capacity and after watching its performance over the last few hours he feels he has discovered the root of the problem.", "After a few minutes of tinkering, he is able to restore the battery to full capacity, but is unable to recover the lost power." ],
+  "description" : [ "While recharging the batteries, %n noticed that the one of the batteries isn't operating at full capacity, and after watching its performance over the last few hours, he feels he has discovered the root of the problem.", "After a few minutes of tinkering, he is able to restore the battery to full capacity, but is unable to recover the lost power." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -146,7 +146,7 @@
   "root" : false,
   "title" : "Beetle Mania",
   "name" : "BeetleGood",
-  "description" : [ "They engage the bugs with their side arms and it doesn’t take long before the ground is littered with bug remains and it eventually the beetle uprising is quelled. The crew scoops up what crystal they or the beetles unearthed and return to the ROV." ],
+  "description" : [ "They engage the bugs with their side arms and it doesn't take long before the ground is littered with bug remains and eventually the beetle uprising is quelled. The crew scoops up what crystal they or the beetles unearthed and return to the ROV." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -155,7 +155,7 @@
   "root" : false,
   "title" : "Beetle Mania",
   "name" : "BeetleBad",
-  "description" : [ "They engage the bugs with their side arms and it doesn’t take long before the ground is littered with bug remains, but the bugs keep coming. Not wanted to waste anymore ammo, the crew makes a tactical retreat back to the ROV. " ],
+  "description" : [ "They engage the bugs with their side arms and it doesn't take long before the ground is littered with bug remains, but the bugs keep coming. Not wanted to waste anymore ammo, the crew makes a tactical retreat back to the ROV. " ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -164,7 +164,7 @@
   "root" : true,
   "title" : "Berries",
   "name" : "Berry",
-  "description" : [ "While searching for food %n uncovers a thicket of unusual dark red berries. Their plump, juicy, and look very tasty, but looks can be deceiving..." ],
+  "description" : [ "While searching for food, %n uncovers a thicket of unusual dark red berries. They're plump, juicy, and look very tasty, but looks can be deceiving..." ],
   "choices" : [ ],
   "outcomes" : [ [ "BerryBad", "BerryGood" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -173,7 +173,7 @@
   "root" : false,
   "title" : "Berries",
   "name" : "BerryEat",
-  "description" : [ "He pops one of the berries into his mouth…" ],
+  "description" : [ "He pops one of the berries into his mouth..." ],
   "choices" : [ ],
   "outcomes" : [ [ "BerryGood", "BerryBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -186,7 +186,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Berries",
@@ -195,7 +195,7 @@
   "choices" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Box Cutter",
@@ -204,16 +204,16 @@
   "choices" : [ "Ouch" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "15" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-15" ] ]
 }, {
   "root" : true,
   "title" : "Carver",
   "name" : "Carver",
-  "description" : [ "While carving a wooden figurine %n’s knife slips and he cuts his hand.", "Although it bleeds a lot, it isn’t too deep; a tightly wrapped bandage and a few days rest should be all it needs." ],
+  "description" : [ "While carving a wooden figurine %n's knife slips and he cuts his hand.", "Although it bleeds a lot, it isn't too deep; a tightly wrapped bandage and a few day's rest should be all it needs." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Cat Rock",
@@ -222,7 +222,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Cat's Eye",
@@ -231,12 +231,12 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Chips",
   "name" : "Chips",
-  "description" : [ "The group spots a small crater just up the road and decide to check for space junk and in it they find a small piece of space debris. Most of it is just too damaged to be of any use, but the team is able to extract a tiny chip from the part’s circuitry. Hoping to gain some insight into its function the crew tries to plug it into the ROV’s computer.", "This cause the computer to blue screen immediately and forces the crew to spend the next few hours tinkering to repair the damage." ],
+  "description" : [ "The group spots a small crater just up the road and decides to check for space junk, and in it they find a small piece of space debris. Most of it is just too damaged to be of any use, but the team is able to extract a tiny chip from the part's circuitry. Hoping to gain some insight into its function, the crew tries to plug it into the ROV's computer.", "This causes the computer to blue screen immediately and forces the crew to spend the next few hours tinkering to repair the damage." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -245,7 +245,7 @@
   "root" : true,
   "title" : "Cleaner",
   "name" : "Cleaner",
-  "description" : [ "%n notices the ROV has really taken a beating lately and is starting to show its age. He decides it’s time to give it a good cleaning", "So the crew spends the afternoon patching holes, smoothing dents, and cleaning dirt out of cracks." ],
+  "description" : [ "%n notices the ROV has really taken a beating lately and is starting to show its age. He decides it's time to give it a good cleaning", "So the crew spends the afternoon patching holes, smoothing dents, and cleaning dirt out of cracks." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -294,7 +294,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Crystal",
@@ -303,12 +303,12 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Crystal",
   "name" : "Crystal",
-  "description" : [ "%n is sorting through the group’s ammunition crystals, when he comes something unusual.", "One of the crystals is abnormally warm compared to the rest…" ],
+  "description" : [ "%n is sorting through the group's ammunition crystals, when he comes something unusual.", "One of the crystals is abnormally warm compared to the rest..." ],
   "choices" : [ ],
   "outcomes" : [ [ "CrystalGood", "CrystalBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -326,7 +326,7 @@
   "root" : true,
   "title" : "Do You Hear That?",
   "name" : "BrokenROV",
-  "description" : [ "The ROV makes noises that it shouldn't…" ],
+  "description" : [ "The ROV makes noises that it shouldn't..." ],
   "choices" : [ "That's not good" ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -375,7 +375,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -497,7 +497,7 @@
   "root" : false,
   "title" : "Fishing",
   "name" : "TryCatchFish",
-  "description" : [ "He looks around for something useful to help him catch some fish. His eyes scan the ground around him for anything useful. A few dead branches lay long the stream's edge and some loose vine dangles from the trees…" ],
+  "description" : [ "He looks around for something useful to help him catch some fish. His eyes scan the ground around him for anything useful. A few dead branches lay long the stream's edge and some loose vine dangles from the trees..." ],
   "choices" : [ "Craft Fishing Pole", "Craft Net", "Craft Spear" ],
   "outcomes" : [ [ "CraftPole" ], [ "CraftNet" ], [ "CraftSpear" ] ],
   "chances" : [ [ 100 ], [ 100 ], [ 100 ] ],
@@ -555,7 +555,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -659,7 +659,7 @@
   "root" : false,
   "title" : "Fishing",
   "name" : "LostFish",
-  "description" : [ "Within a few minutes he feels a strong tug and he quickly pulls the pole back, but the line comes back with no bait, no fish, and no hook…" ],
+  "description" : [ "Within a few minutes he feels a strong tug and he quickly pulls the pole back, but the line comes back with no bait, no fish, and no hook..." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -731,7 +731,7 @@
   "root" : true,
   "title" : "Fluted",
   "name" : "Flute",
-  "description" : [ "%n is putting the finishing touches on a simple flute he has been making.", "He’s carved it out of a hard branch he found lying around. He makes his last cut and gives the flute a blow…" ],
+  "description" : [ "%n is putting the finishing touches on a simple flute he has been making.", "He's carved it out of a hard branch he found lying around. He makes his last cut and gives the flute a blow..." ],
   "choices" : [ ],
   "outcomes" : [ [ "FluteGood", "FluteBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -740,11 +740,11 @@
   "root" : false,
   "title" : "Fluted",
   "name" : "FluteBad",
-  "description" : [ "Loose chips of wood fly out into his eyes. In his haste to try the flute he forgot to blow it out first. He can’t decide what’s worse, his hurting eyes or his damaged ego." ],
+  "description" : [ "Loose chips of wood fly out into his eyes. In his haste to try the flute he forgot to blow it out first. He can't decide what's worse, his addHealthing eyes or his damaged ego." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Fluted",
@@ -753,43 +753,34 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Footloose",
   "name" : "Footloose",
-  "description" : [ "While digging through piles of rocks in search of ammunition crystals a huge rock rolls over %n’s foot.", "It makes a gross crunching noise, but somehow nothing is broken." ],
+  "description" : [ "While digging through piles of rocks in search of ammunition crystals a huge rock rolls over %n's foot.", "It makes a gross crunching noise, but somehow nothing is broken." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Fresh Mountain Air",
   "name" : "FreshAir",
-  "description" : [ "%n spends a couple hours searching for any signs of space junk, hoping to find some spare parts.", "(100%) And while he doesn’t turn up anything of value, the weather was really nice and he enjoyed the fresh air and serene landscape." ],
+  "description" : [ "%n spends a couple hours searching for any signs of space junk, hoping to find some spare parts.", "And while he doesn't turn up anything of value, the weather was really nice and he enjoyed the fresh air and serene landscape." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
-}, {
-  "root" : false,
-  "title" : "Fruity",
-  "name" : "FruityBad",
-  "description" : [ "…unfortunately also showering him in angry stinging wasp-like creatures. He feels them fall onto his arms and down his back of his shirt. He screams, dropping the fruit and runs, wafting his clothes and swatting the air around him! By the time he reaches the ROV he's lost the swarm and most of his clothes." ],
-  "choices" : [ ],
-  "outcomes" : [ [ ] ],
-  "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
-}, {
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+},{
   "root" : true,
   "title" : "Fruity",
   "name" : "Fruity",
-  "description" : [ "While out searching for food %n spots a piece of fruit hanging high up on a tree. He jumps up and manages to snag it with his fingertips. It snaps free showering him with leaves and twigs…" ],
+  "description" : [ "While out searching for food, %n spots a piece of fruit hanging high up on a tree. He jumps up and manages to snag it with his fingertips. It snaps free, showering him with leaves and twigs...", "...unfortunately also showering him in angry stinging wasp-like creatures. He feels them fall onto his arms and down the back of his shirt. He screams, dropping the fruit, and runs, wafting his clothes and swatting the air around him! By the time he reaches the ROV he's lost the swarm and most of his clothes." ],
   "choices" : [ ],
-  "outcomes" : [ [ "FruityBad" ] ],
-  "chances" : [ [ 100 ] ],
-  "resultingAction" : [ ]
+  "outcomes" : [],
+  "chances" : [],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ]  ]
 }, {
   "root" : true,
   "title" : "Fruity!",
@@ -839,7 +830,7 @@
   "root" : true,
   "title" : "Handyman",
   "name" : "Handy",
-  "description" : [ "%n finds himself with some spare time so he decides to put it to good use.", "(100%) He checks and tightens loose screws around the ROV and latches open hatches. He knows you can never be too safe." ],
+  "description" : [ "%n finds himself with some spare time, so he decides to put it to good use." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -866,7 +857,7 @@
   "root" : false,
   "title" : "How'd That Get There?",
   "name" : "RockShardBad",
-  "description" : [ "…beads of sweat crop up on his forehead and he stops and repositions his hands. Taking a deep breath he pulls hard. There’s a loud crack and %n tumbles to the ground. The crew moans and laughs as they see the rock shard has snapped right at the edge of the plate, without enough exposed rock to get a grip on. The removal will have to wait until later." ],
+  "description" : [ "...beads of sweat crop up on his forehead and he stops and repositions his hands. Taking a deep breath, he pulls hard. There's a loud crack and %n tumbles to the ground. The crew moans and laughs as they see the rock shard has snapped right at the edge of the plate, without enough exposed rock to get a grip on. The removal will have to wait until later." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -875,7 +866,7 @@
   "root" : false,
   "title" : "How'd That Get There?",
   "name" : "RockShardGood",
-  "description" : [ "…beads of sweat crop up on his forehead and he stops and repositions his hands. Taking a deep breath he pulls hard. The rock spear snaps loose and %n tumbles to the ground, shard in hand. Laughing and cheering the crew pulls him to his feet!" ],
+  "description" : [ "...beads of sweat crop up on his forehead and he stops and repositions his hands. Taking a deep breath, he pulls hard. The rock spear snaps loose and %n tumbles to the ground, shard in hand. Laughing and cheering, the crew pulls him to his feet!" ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -884,7 +875,8 @@
   "root" : true,
   "title" : "How'd That Get There?",
   "name" : "RockShard",
-  "description" : [ "A large shard of rock has somehow become lodged like a thorn between one of the large armor panels coating the outside of the ROV. The crew all takes turns trying to pry it loose but won’t budge.", "%n steps, up telling everyone to stand aside, exaggeratedly flexing like a strongman and boasting about his feats of strengths. He grabs on tight and starts prying…" ],
+  "description" : [ "A large shard of rock has somehow become lodged like a thorn between one of the large armor panels coating the outside of the ROV. The crew all takes turns trying to pry it loose but it won't budge.",
+    "%n steps up telling everyone to stand aside, exaggeratedly flexing like a strongman and boasting about his feats of strength. He grabs on tight and starts prying..." ],
   "choices" : [ ],
   "outcomes" : [ [ "RockShardGood", "RockShardBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -902,7 +894,7 @@
   "root" : true,
   "title" : "Junk Sorter",
   "name" : "JunkSorter",
-  "description" : [ "%n sorts through some piles of space junk the group has collected.", "He’s trying to clean and test the parts to see if they will be any good, because just because you find space debris doesn’t mean it’s going to be useable after all the grime is cleaned off." ],
+  "description" : [ "%n sorts through some piles of space junk the group has collected.", "He's trying to clean and test the parts to see if they will be any good, because just because you find space debris doesn't mean it's going to be useable after all the grime is cleaned off." ],
   "choices" : [ ],
   "outcomes" : [ [ "JunkSorterGood", "JunkSorterBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -929,7 +921,7 @@
   "root" : false,
   "title" : "Knock-Knock",
   "name" : "KnockGood",
-  "description" : [ "It seems that did the trick, all the noise is gone and it’s running better ever!" ],
+  "description" : [ "It seems that did the trick, all the noise is gone and it's running better ever!" ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -938,7 +930,7 @@
   "root" : false,
   "title" : "Knock-Knock",
   "name" : "KnockBad",
-  "description" : [ "At first it’s nice and quiet, but then the knocking starts again, this time louder than before!" ],
+  "description" : [ "At first it's nice and quiet, but then the knocking starts again, this time louder than before!" ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -947,7 +939,7 @@
   "root" : true,
   "title" : "Knock-Knock",
   "name" : "Knock",
-  "description" : [ "The crew notices the ROV has been making a strange knocking sound and running poorly the last few days so they pull over to check things out. %n opens the engine hatches and peers around, but doesn’t see anything obviously wrong.", "He spends the next few hours taking things apart, cleaning things down, and reassembling them back where they belong. %n cranks up the ROV and it hums to life. The rest of the crew hops aboard and they pull back onto the trail." ],
+  "description" : [ "The crew notices the ROV has been making a strange knocking sound and running poorly the last few days so they pull over to check things out. %n opens the engine hatches and peers around, but doesn't see anything obviously wrong.", "He spends the next few hours taking things apart, cleaning things down, and reassembling them back where they belong. %n cranks up the ROV and it hums to life. The rest of the crew hops aboard and they pull back onto the trail." ],
   "choices" : [ ],
   "outcomes" : [ [ "KnockGood", "KnockBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -965,16 +957,17 @@
   "root" : true,
   "title" : "Log-in",
   "name" : "Moss",
-  "description" : [ "While out looking for new medical plants %n slips on a slimy log and falls on his elbow pretty hard.", "It just so happens that a patch of little mushrooms were growing under that log; mushrooms that work great as a poultice for bumps and bruises." ],
+  "description" : [ "While out looking for new medical plants %n slips on a slimy log and falls on his elbow pretty hard.",
+    "It just so happens that a patch of little mushrooms were growing under that log, mushrooms that work great as a poultice for bumps and bruises." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Maintenance",
   "name" : "Maintenance",
-  "description" : [ "While performing routine maintenance on the ROV %n notices some of the external armor plating is starting to wear really thin in places.", "He does his best to patch them up, but with limited time and limited supplies it’s just not enough." ],
+  "description" : [ "While performing routine maintenance on the ROV %n notices some of the external armor plating is starting to wear really thin in places.", "He does his best to patch them up, but with limited time and limited supplies it's just not enough." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -992,16 +985,16 @@
   "root" : false,
   "title" : "Mixology",
   "name" : "MixologyGood",
-  "description" : [ "It doesn’t have much taste, which is good for an herbal remedy, and he feels much livelier." ],
+  "description" : [ "It doesn't have much taste, which is good for an herbal remedy, and he feels much livelier." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Mixology",
   "name" : "Mixology",
-  "description" : [ "%n has been busy combining different herbs in an attempt to create a new tonic to stock some empty medical kits.", "He’s just about finished, all that’s left to do is try it out." ],
+  "description" : [ "%n has been busy combining different herbs in an attempt to create a new tonic to stock some empty medical kits.", "He's just about finished; all that's left to do is try it out." ],
   "choices" : [ ],
   "outcomes" : [ [ "MixologyGood", "MixologyBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -1010,11 +1003,11 @@
   "root" : false,
   "title" : "Mixology",
   "name" : "MixologyBad",
-  "description" : [ "It smells bad, taste bad, and he feels bad. Getting mixtures right is tricky business." ],
+  "description" : [ "It smells bad, tastes bad, and he feels bad. Getting mixtures right is tricky business." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "More Ammo",
@@ -1032,12 +1025,12 @@
   "choices" : [ "It was very refreshing!" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
-  "title" : "Neckless",
-  "name" : "Neckless",
-  "description" : [ "%n was wearing a neckless made of rocks and string, but now he can’t find it.", "The string must have gotten snagged on something and broke off. That’s the trouble with homemade vine string." ],
+  "title" : "Necklace",
+  "name" : "Necklace",
+  "description" : [ "%n was wearing a necklace made of rocks and string, but now he can't find it.", "The string must have gotten snagged on something and broke off. That's the trouble with homemade vine string." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1046,7 +1039,7 @@
   "root" : false,
   "title" : "Oops",
   "name" : "Oops",
-  "description" : [ "%n accidentally crushed a small trinket while moving supplies around…" ],
+  "description" : [ "%n accidentally crushed a small trinket while moving supplies around..." ],
   "choices" : [ "Disappointing" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ 0, 0 ] ],
@@ -1055,7 +1048,7 @@
   "root" : true,
   "title" : "Powerful",
   "name" : "PowerDrain",
-  "description" : [ "%n notices some of the ROV’s more luxury applications aren’t currently being used but are still draining the batteries power. ", "So he reroutes the power away from the wasted applications and diverts the energy back into the battery, providing the batteries with a temporary boost of energy." ],
+  "description" : [ "Name) notices some of the ROV's more luxury applications aren't currently being used but are still draining the batteries' power.", "So he reroutes the power away from the wasted applications and diverts the energy back into the battery, providing the batteries with a temporary boost of energy." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1064,11 +1057,11 @@
   "root" : true,
   "title" : "Precautions",
   "name" : "Precaution",
-  "description" : [ "While working on the batteries the crew often needs to shut off any ROV subsystems. This time work required the temperature regulator subsystem to be shut down as a precaution to prevent accidental damage occurring to the batteries or the subsystem during the repairs.", "Secturn is a frigid planet and even with extra blankets the cold leaves everyone feeling downtrodden." ],
+  "description" : [ "While working on the batteries, the crew often needs to shut off any ROV subsystems. This time work required the temperature regulator subsystem to be shut down as a precaution to prevent accidental damage occurring to the batteries or the subsystem during the repairs.", "Secturn is a frigid planet and even with extra blankets the cold leaves everyone feeling downtrodden." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Really!?",
@@ -1104,7 +1097,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Refreshing Berries",
@@ -1113,7 +1106,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Reroute",
@@ -1154,7 +1147,7 @@
   "root" : true,
   "title" : "Reworking",
   "name" : "Reworking",
-  "description" : [ "%n has some ideas about how to increase the batteries’ efficiency.", "After some reworking he thinks he’s got it all working…" ],
+  "description" : [ "%n has some ideas about how to increase the batteries' efficiency.", "After some reworking he thinks he's got it all working..." ],
   "choices" : [ ],
   "outcomes" : [ [ "ReworkingGood", "ReworkingBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -1163,7 +1156,7 @@
   "root" : false,
   "title" : "Reworking",
   "name" : "ReworkingGood",
-  "description" : [ "It seems he was right, the batteries are working better than ever!" ],
+  "description" : [ "It seems he was right; the batteries are working better than ever!" ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1176,12 +1169,13 @@
   "choices" : [ "Ouch" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "15" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-15" ] ]
 }, {
   "root" : true,
   "title" : "Rock Collector",
   "name" : "Collector",
-  "description" : [ "While out on a walk, %n collect a few interesting rocks he comes across. He then arranges them in a simple pattern and laces them to some cordage to make a neckless.", "He puts the neckless on. Not only is it a nice souvenir, but it might be useful for trade value." ],
+  "description" : [ "While out on a walk, %n collects a few interesting rocks he comes across. He then arranges them in a simple pattern and laces them to some cordage to make a necklace.",
+    "He puts the necklace on. Not only is it a nice souvenir, but it might be useful for trade value." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1190,7 +1184,7 @@
   "root" : true,
   "title" : "Sappy",
   "name" : "Sap",
-  "description" : [ "While searching for food %n notices a thick oozy sap dripping from some of the trees. He touches the tip of his finger to the sap…" ],
+  "description" : [ "While searching for food %n notices a thick oozy sap dripping from some of the trees. He touches the tip of his finger to the sap..." ],
   "choices" : [ ],
   "outcomes" : [ [ "SapGood" ] ],
   "chances" : [ [ 100 ] ],
@@ -1203,30 +1197,30 @@
   "choices" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Shindig",
   "name" : "Shindig",
-  "description" : [ "While out searching for space trash, %n slips climbing down a rocky ridge and cuts his shin.", "It bleeds a lot, but after a few tightly wrapped bandages he gets things under control; nevertheless, he’s forced to return to the ROV empty handed." ],
+  "description" : [ "While out searching for space trash, %n slips climbing down a rocky ridge and cuts his shin.", "It bleeds a lot, but after a few tightly wrapped bandages he gets things under control; nevertheless, he's forced to return to the ROV empty handed." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Shoo!",
   "name" : "FlyHurt",
-  "description" : [ "The bite leaves his neck feeling pretty sore and takes quite some time for the itching to go away." ],
+  "description" : [ "The bite leaves his neck feeling pretty sore and it takes quite some time for the itching to go away." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Shoo!",
   "name" : "Fly",
-  "description" : [ "While %n is resting and having a snack something buzzes around him. It’s a little fly, he shoos it away, but it comes back. He shoos it again, but once again it buzzes back and lands on the back of his neck. He swats it, this time killing it. A few minutes he finds himself scratching that same spot.", "He feels little welt on his neck. The persist fly managed to bite him before dying, he hadn’t even noticed." ],
+  "description" : [ "While %n is resting and having a snack, something buzzes around him. It's a little fly; he shoos it away, but it comes back. He shoos it again, but once again it buzzes back and lands on the back of his neck. He swats it, this time killing it. A few minutes later he finds himself scratching that same spot.", "He feels a little welt on his neck. The persistent fly managed to bite him before dying; he hadn't even noticed." ],
   "choices" : [ ],
   "outcomes" : [ [ "FlyHurt", "FlyHeal" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -1239,7 +1233,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Slip Slide",
@@ -1248,7 +1242,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Slipper",
@@ -1266,7 +1260,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
 }, {
   "root" : true,
   "title" : "Solar Power!",
@@ -1278,13 +1272,13 @@
   "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
 }, {
   "root" : true,
-  "title" : "Split Pee",
-  "name" : "SplitPee",
-  "description" : [ "The ROV comes to a stop because %n needs to pee and can’t hold it anymore. He hops out of the ROV and rushes off, but quickly trips on a thick root and falls.", "Fortunately he didn’t pee his pants, but unfortunately he split his toe nail painfully." ],
+  "title" : "Split Pea",
+  "name" : "SplitPea",
+  "description" : [ "The ROV comes to a stop because %n needs to pee and can't hold it anymore. He hops out of the ROV and rushes off, but quickly trips on a thick root and falls.", "Fortunately he didn't pee his pants, but unfortunately he split his toe nail painfully." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Spooked",
@@ -1296,9 +1290,9 @@
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ] ]
 }, {
   "root" : true,
-  "title" : "Text",
-  "name" : "Text",
-  "description" : [ "%n, tired from the night before, runs some test on the batteries", "He accidentally touches something he shouldn’t and sparks fly!" ],
+  "title" : "Test",
+  "name" : "Test",
+  "description" : [ "%n, tired from the night before, runs some test on the batteries", "He accidentally touches something he shouldn't and sparks fly!" ],
   "choices" : [ ],
   "outcomes" : [ [ "TextGood", "TextBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -1311,7 +1305,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Text",
@@ -1320,7 +1314,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "This Goes... Here?",
@@ -1338,7 +1332,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Tinkering",
@@ -1374,7 +1368,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Traps",
@@ -1398,7 +1392,7 @@
   "title" : "Trashy",
   "name" : "FoundTrash",
   "description" : [ "The crew stumbles upon a pile of space trash." ],
-  "choices" : [ "One man's trash…" ],
+  "choices" : [ "One man's trash..." ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
@@ -1415,11 +1409,11 @@
   "root" : true,
   "title" : "Watch the Road",
   "name" : "Bump",
-  "description" : [ "The ROV hits an unexpected dip in the road, it was pretty jarring." ],
+  "description" : [ "The ROV hits an unexpected dip in the road; it was pretty jarring." ],
   "choices" : [ "Whoa!" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
 }, {
   "root" : false,
   "title" : "Well...",
@@ -1455,12 +1449,12 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "What's that?",
   "name" : "Bug",
-  "description" : [ "%n is sound asleep in this sleeping bag in the back of the ROV, dreaming home when the thought of something crawling on him interrupts his pleasant dreams. He jumps awake, but doesn’t feel anything. Assuming he was just dreaming he considers going back to sleep, but then he feels it again… ", "He decides to bite the bullet and yanks back the flap on his sleeping bag!" ],
+  "description" : [ "%n is sound asleep in this sleeping bag in the back of the ROV, dreaming home when the thought of something crawling on him interrupts his pleasant dreams. He jumps awake, but doesn't feel anything. Assuming he was just dreaming he considers going back to sleep, but then he feels it again... ", "He decides to bite the bullet and yanks back the flap on his sleeping bag!" ],
   "choices" : [ ],
   "outcomes" : [ [ "BugNothing", "BugHurt" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -1469,16 +1463,16 @@
   "root" : false,
   "title" : "What's That?",
   "name" : "CreatureBag",
-  "description" : [ "%n cautiously approaches the bag. He peels back the opening and peers inside…", "Something darts out at him. Startled he falls back and for a brief moment is entangled with the small creature that called the bag home. The creature burst free and scampers into the shrubs. Scratched, bruised, and embarrassed, %n sulks back to the group. " ],
+  "description" : [ "%n cautiously approaches the bag. He peels back the opening and peers inside...", "Something darts out at him. Startled he falls back and for a brief moment is entangled with the small creature that called the bag home. The creature burst free and scampers into the shrubs. Scratched, bruised, and embarrassed, %n sulks back to the group. " ],
   "choices" : [ "Whoa!" ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "hurt", "evt", "15" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "15" ] ]
 }, {
   "root" : false,
   "title" : "What's That?",
   "name" : "FoundStuff",
-  "description" : [ "%n cautiously approaches the bag. He peels back the opening and peers inside…", "It seems the pouch is filled with a few supplies. Not wanting to find out who left them the group hurries on. " ],
+  "description" : [ "%n cautiously approaches the bag. He peels back the opening and peers inside...", "It seems the pouch is filled with a few supplies. Not wanting to find out who left them the group hurries on. " ],
   "choices" : [ "Works for Me" ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1487,7 +1481,7 @@
   "root" : false,
   "title" : "What's That?",
   "name" : "EmptyBag",
-  "description" : [ "%n cautiously approaches the bag. He peels back the opening and peers inside…", "Just dust and dirt, whatever was inside the bag is long gone." ],
+  "description" : [ "%n cautiously approaches the bag. He peels back the opening and peers inside...", "Just dust and dirt, whatever was inside the bag is long gone." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1496,7 +1490,7 @@
   "root" : true,
   "title" : "What's That?",
   "name" : "FoundObject",
-  "description" : [ "The group spots a small dark object nestled in some tall grass. Upon closer inspection it seems to be a small brownish sack…" ],
+  "description" : [ "The group spots a small dark object nestled in some tall grass. Upon closer inspection it seems to be a small brownish sack..." ],
   "choices" : [ "Leave it", "Open it" ],
   "outcomes" : [ [ "PassBag" ], [ "FoundStuff", "EmptyBag", "CreatureBag" ] ],
   "chances" : [ [ 100 ], [ 45, 45, 10 ] ],
@@ -1523,7 +1517,7 @@
   "root" : true,
   "title" : "Wooden Figurine",
   "name" : "Figurine",
-  "description" : [ "%n was carving a little wooden figurine out of a chunk of wood he picked up earlier, but now he can’t find it anywhere.", "He checks where he last remembers having it, he digs though piles of supplies, and he looks under tables, but it’s nowhere to be found." ],
+  "description" : [ "He checks where he last remembers having it. He digs though piles of supplies, and he looks under tables, but it's nowhere to be found.", "He checks where he last remembers having it, he digs though piles of supplies, and he looks under tables, but it's nowhere to be found." ],
   "choices" : [ ],
   "outcomes" : [ [ "FigurineGood", "FigurineBad" ] ],
   "chances" : [ [ 50, 50 ] ],
@@ -1532,9 +1526,9 @@
   "root" : true,
   "title" : "Woozy",
   "name" : "Woozy",
-  "description" : [ "%n is feeling a little lightheaded. He decides to take a quick break and get some rest. He sits down and has a snack and sips on some water…", "…and a few minutes rest he is feeling much better and ready to get back on his feet." ],
+  "description" : [ "%n is feeling a little lightheaded. He decides to take a quick break and get some rest. He sits down and has a snack and sips on some water...", "...and a few minutes rest he is feeling much better and ready to get back on his feet." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "heal", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 } ]

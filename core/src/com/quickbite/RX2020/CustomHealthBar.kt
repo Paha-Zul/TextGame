@@ -39,17 +39,18 @@ class CustomHealthBar(val person: Person?, val background: TextureRegionDrawable
 
     override fun draw(batch: Batch?, parentAlpha: Float) {
 
-        //If we are displaying the healthbar based on a person....
+        //If we are displaying the health bar based on a person....
         if(batch != null && person != null){
             val missingHealth = width*((person.maxHealth.toFloat() - (person.healthInjury.toFloat()+person.healthNormal.toFloat()))/person.maxHealth.toFloat())
             val color = batch.color
+            val healthColor = if(person.hasSickness) Color.YELLOW else Color.GREEN
 
             var injuryHealthBar = width*(person.healthInjury.toFloat()/person.maxHealth.toFloat())
             batch.color = Color.RED
             whitePixel.draw(batch, x + missingHealth, y, injuryHealthBar, height) //Go from the right to the left to posX
 
             var normalHealthBar = width*(person.healthNormal.toFloat()/person.maxHealth.toFloat())
-            batch.color = Color.GREEN
+            batch.color = healthColor
             whitePixel.draw(batch, x + missingHealth + injuryHealthBar, y, normalHealthBar, height)
 
             batch.color = color

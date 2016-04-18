@@ -27,17 +27,23 @@ class Person(private val _firstName:String, private val _lastName:String) {
         get
         private set
 
+    var numInjury = 0
+    var numSickness = 0
 
-    private var injuries:MutableList<Injury> = mutableListOf()
-    var injuryList:List<Injury>
-        get() = injuries.toList()
+
+    private var disabilities:MutableList<Disability> = mutableListOf()
+    var disabilityList:List<Disability>
+        get() = disabilities.toList()
         set(value){
-            injuries.clear()
-            value.forEach { injury -> addInjury(injury) }
+            disabilities.clear()
+            value.forEach { injury -> addDisability(injury) }
         }
 
     val hasInjury:Boolean
-        get() = injuries.size > 0
+        get() = numInjury > 0
+
+    val hasSickness:Boolean
+        get() = numSickness > 0
 
     constructor(name:Pair<String, String>):this(name.first, name.second)
 
@@ -67,77 +73,103 @@ class Person(private val _firstName:String, private val _lastName:String) {
         return addHealth(amt)
     }
 
-    fun addInjury(type: Injury.InjuryType){
-        val injury = Injury(type)
-        injuries.add(injury)
-        healthNormal -= injury.hpLost
-        healthInjury += injury.hpLost
-    }
+    fun addDisability(level: Disability.DisabilityLevel, type:Disability.DisabilityType){
+        val disability = Disability(level, type)
+        disabilities.add(disability)
+        val isInjury = disability.type == Disability.DisabilityType.Injury
 
-    fun removeInjury(injury: Injury){
-        val removed = injuries.remove(injury)
-        if(removed) {
-            healthNormal += injury.hpLost
-            healthInjury -= injury.hpLost
+        //Only shift health if it's an injury
+        if(isInjury) {
+            healthNormal -= disability.hpLost
+            healthInjury += disability.hpLost
+        }
+
+        //Increment the right counter
+        when(isInjury){
+            true -> numInjury++
+            else -> numSickness++
         }
     }
 
-    fun removeWorstInjury(){
-        var worst:Injury? = null
-        injuryList.forEach { injury ->
+    fun removeDisability(disability: Disability){
+        val removed = disabilities.remove(disability)
+        val isInjury = disability.type == Disability.DisabilityType.Injury
+        //Only shift health if it's an injury
+        if(removed && isInjury) {
+            healthNormal += disability.hpLost
+            healthInjury -= disability.hpLost
+        }
+
+        //Decrement the right counter
+        when(isInjury){
+            true -> numInjury--
+            else -> numSickness--
+        }
+    }
+
+    fun removeWorstDisability(){
+        var worst: Disability? = null
+        disabilityList.forEach { injury ->
             if(worst == null || worst!!.type < injury.type)
                 worst = injury
         }
 
-        removeInjury(worst!!)
+        if(worst!=null)
+            removeDisability(worst!!)
     }
 
-    fun removeLongestInjury(){
-        var longest:Injury? = null
-        injuryList.forEach { injury ->
+    fun removeLongestDisability(){
+        var longest: Disability? = null
+        disabilityList.forEach { injury ->
             if(longest == null || longest!!.hoursRemaining < injury.hoursRemaining)
                 longest = injury
         }
 
-        removeInjury(longest!!)
+        if(longest!=null)
+            removeDisability(longest!!)
     }
 
     /**
      * Used for loading in injuries from a save mostly.
      */
-    private fun addInjury(injury:Injury){
-        injuries.add(injury)
-        healthNormal -= injury.hpLost
-        healthInjury += injury.hpLost
+    private fun addDisability(disability: Disability){
+        disabilities.add(disability)
+        val isInjury = disability.type == Disability.DisabilityType.Injury
+
+        if(isInjury) {
+            healthNormal -= disability.hpLost
+            healthInjury += disability.hpLost
+        }
+
+        when(isInjury){
+            true -> numInjury++
+            else -> numSickness++
+        }
     }
 
-    class Injury(var type:InjuryType):IUpdateable{
+    class Disability(var level: DisabilityLevel, var type:DisabilityType):IUpdateable{
+        enum class DisabilityType{Injury, Sickness}
+        enum class DisabilityLevel {Minor, Regular, Major, Trauma}
         val done:Boolean
             get() = hoursRemaining <= 0
 
         //Need this empty constructor for loading/saving to json files.
-        private constructor():this(InjuryType.Minor)
-
-        enum class InjuryType{
-            Minor, Regular, Major, Trauma
-        }
+        private constructor():this(DisabilityLevel.Minor, DisabilityType.Injury)
 
         var hoursRemaining = 0
         var hpLost = 0
+        var hpLostPerHour = 0f
 
         init{
-            when(type){
-                InjuryType.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25)}
-                InjuryType.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50)}
-                InjuryType.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75)}
-                InjuryType.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100)}
+            when(level){
+                DisabilityLevel.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25); hpLostPerHour = 0.12f}
+                DisabilityLevel.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50); hpLostPerHour = 0.14f}
+                DisabilityLevel.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75); hpLostPerHour = 0.19f}
+                DisabilityLevel.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100); hpLostPerHour = 0.29f}
             }
         }
 
-        override fun update(delta: Float) {
-
-        }
-
+        override fun update(delta: Float) {}
         override fun updateHourly(delta: Float) {
             this.hoursRemaining--
         }
