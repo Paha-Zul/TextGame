@@ -24,14 +24,6 @@ object GroupManager : IUpdateable {
 
         for(i in 0.rangeTo(range-1))
             list += Person(DataManager.pullRandomName(), health)
-
-        list[0].addHealth(-99f)
-        list[0].addDisability(Person.Disability.DisabilityLevel.Trauma, Person.Disability.DisabilityType.Sickness)
-        list[1].addHealth(-99f)
-        list[1].addDisability(Person.Disability.DisabilityLevel.Trauma, Person.Disability.DisabilityType.Sickness)
-
-        list[2].addHealth(-98f)
-        list[2].addDisability(Person.Disability.DisabilityLevel.Trauma, Person.Disability.DisabilityType.Sickness)
     }
 
     override fun update(delta: Float) {
