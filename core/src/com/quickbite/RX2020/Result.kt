@@ -1,7 +1,6 @@
 package com.quickbite.rx2020
 
 import com.quickbite.rx2020.gui.GameScreenGUI
-import com.quickbite.rx2020.managers.GameEventManager
 
 /**
  * Created by Paha on 4/5/2016.
@@ -9,67 +8,102 @@ import com.quickbite.rx2020.managers.GameEventManager
 class Result(val name:String, var amt:Float, val desc:String = "", var timeLastUpdated:Double = 0.0) {
 
     companion object{
-        var eventResultMap:MutableMap<String, Result> = mutableMapOf()
-        var deathResultMap:MutableMap<String, Result> = mutableMapOf()
+        var eventChangeMap:MutableMap<String, Result> = mutableMapOf()
+            get
+            private set
 
-        var recentResultMap:MutableMap<String, Result> = mutableMapOf()
-        var recentDeathResultMap:MutableMap<String, Result> = mutableMapOf()
+        var recentChangeMap:MutableMap<String, Result> = mutableMapOf()
+            get
+            private set
+
+        var eventDeathMap:MutableMap<String, Result> = mutableMapOf()
+            get
+            private set
+
+        var recentDeathMap:MutableMap<String, Result> = mutableMapOf()
+            get
+            private set
 
         private val hangTime = 3
 
         val hasEventResults:Boolean
-            get() = eventResultMap.size > 0 || deathResultMap.size > 0
+            get() = eventChangeMap.size > 0 || eventDeathMap.size > 0
 
         fun clearResultLists(){
-            eventResultMap = mutableMapOf()
-            deathResultMap = mutableMapOf()
+            eventChangeMap = mutableMapOf()
+            eventDeathMap = mutableMapOf()
         }
 
-        fun addResult(name: String, amt: Float, currTime: Double, desc: String = "", gui: GameScreenGUI){
-            var result = eventResultMap.getOrPut(name, {Result(name, 0f, desc)})
+        /**
+         * Adds a recent change
+         * @param name The name to use for the map key. Usually display name for supply, first name for people.
+         * @param amt The amount the change was. For instance, someone losing 50 health is -50, gaining 50 energy is simply 50.
+         * @param currTime The time the change happened (which is the current time.) This will be used to update the recent supply and health changes.
+         * @param gui The GameScreenGUI to update if needed on change.
+         * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
+         */
+        fun addRecentChange(name: String, amt: Float, currTime: Double, desc: String = "", gui: GameScreenGUI, isEventRelated:Boolean){
+            var result = eventChangeMap.getOrPut(name, {Result(name, 0f, desc)})
             result.amt += amt
 
             //TODO A little bit of a hack until I figure out where to better put the values.
-            if(GameEventManager.currActiveEvent == null) {
-                result = recentResultMap.getOrPut(name, { Result(name, 0f, desc) })
+            if(isEventRelated) {
+                result = recentChangeMap.getOrPut(name, { Result(name, 0f, desc) })
                 result.amt += amt
                 result.timeLastUpdated = currTime
             }
-
-            gui.buildRecentChangeTable()
         }
 
-        fun addDeath(person:Person){
-            deathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
+        /**
+         * Adds a recent death.
+         * @param person The person to add. First name for map key, full name for displaying.
+         * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
+         */
+        fun addRecentDeath(person:Person, isEventRelated: Boolean){
+            recentDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
 
-            //TODO A little bit of a hack until I figure out where to better put the values.
-            if(GameEventManager.currActiveEvent == null) {
-                recentDeathResultMap.put(person.firstName, Result(person.fullName, 0f, " died"))
-            }
+            if(isEventRelated)
+                eventDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
         }
 
+        /**
+         * Adds a recent death.
+         * @param firstName The first name of the person that died. This is for putting in the map.
+         * @param fullName The full name of the person that died. This is for displaying
+         * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
+         */
+        fun addRecentDeath(firstName:String, fullName:String, isEventRelated: Boolean){
+            recentDeathMap.put(firstName, Result(fullName, 0f, " died"))
+
+            if(isEventRelated)
+                eventDeathMap.put(firstName, Result(fullName, 0f, " died"))
+        }
+
+        /**
+         * Clears all recent (non-event) results.
+         */
         fun purgeRecentResults(currTime: Double){
-            var list:List<Result> = recentResultMap.values.toList()
-            var changed = false
+            var list:List<Result> = recentChangeMap.values.toList()
 
             for(result in list){
                 if(result.timeLastUpdated + hangTime <= currTime) {
-                    recentResultMap.remove(result.name)
-                    changed = true
+                    recentChangeMap.remove(result.name)
                 }
             }
-
-            list = recentDeathResultMap.values.toList()
-
-            for(result in list){
-                if(result.timeLastUpdated + hangTime <= currTime) {
-                    recentResultMap.remove(result.name)
-                    changed = true
-                }
-            }
-
-            if(changed)
-                GameScreenGUI.instance.buildRecentChangeTable()
         }
+
+        fun purgeRecentDeaths(){
+            recentDeathMap.clear()
+        }
+
+        /**
+         * Clears all recent deaths
+         */
+        fun purgeEventResults(){
+            recentChangeMap.clear()
+            eventDeathMap.clear()
+        }
+
+
     }
 }

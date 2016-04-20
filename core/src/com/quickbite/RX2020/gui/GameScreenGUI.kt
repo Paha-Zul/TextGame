@@ -33,8 +33,6 @@ class GameScreenGUI(val game : GameScreen) {
     private val leftTable: Table = Table()
     private val rightTable: Table = Table()
 
-    private val recentChangeTable: Table = Table()
-
     private lateinit var timeLabel: Label
 
     /* GUI elements for trade */
@@ -105,7 +103,6 @@ class GameScreenGUI(val game : GameScreen) {
         distProgressBar.value = GameStats.TravelInfo.totalDistTraveled.toFloat()
 
         updateSuppliesGUI()
-        buildRecentChangeTable()
         buildGroupTable()
     }
 
@@ -456,12 +453,24 @@ class GameScreenGUI(val game : GameScreen) {
             val medkitButton = ImageButton(imageButtonStyle)
             medkitButton.isDisabled = !hasMedkits || (!person.hasInjury && person.healthNormal >= person.maxHealth)
 
+            val recentChangeLabel = Label("", labelStyle)
+            recentChangeLabel.setFontScale(normalFontScale)
+            recentChangeLabel.setAlignment(Align.right)
+
+            val change = Result.recentChangeMap[person.firstName]
+            if(change != null){
+                recentChangeLabel.setText(change.amt.toInt().toString())
+                if(change.amt > 0) recentChangeLabel.color = Color.GREEN
+                else if(change.amt < 0) recentChangeLabel.color = Color.RED
+            }
+
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
-            pairTable.add(nameLabel).right().expandX().fillX().colspan(2)
+            pairTable.add(nameLabel).right().expandX().fillX().colspan(3)
             pairTable.row().right()
-            pairTable.add(medkitButton).size(16f).spaceRight(10f).right().expandX().fillX()
+            pairTable.add(recentChangeLabel).right().spaceRight(5f).expandX().fillX()
+            pairTable.add(medkitButton).size(16f).spaceRight(10f).right()
             pairTable.add(healthBar).right().height(15f).width(100f)
 
             groupTable.add(pairTable).right().expandX().fillX()
@@ -536,9 +545,6 @@ class GameScreenGUI(val game : GameScreen) {
         val title = Label("Supplies", labelStyle)
         title.setFontScale(titleFontScale)
 
-        //supplyTable.add(title).left()
-        //supplyTable.row()
-
         val innerTable = Table()
         val list = SupplyManager.getSupplyList()
         for(i in list.indices){
@@ -551,10 +557,22 @@ class GameScreenGUI(val game : GameScreen) {
             amtLabel.setFontScale(normalFontScale)
             amtLabel.setAlignment(Align.left)
 
+            val changeLabel = Label("", labelStyle)
+            changeLabel.setFontScale(normalFontScale)
+            changeLabel.setAlignment(Align.left)
+
+            val supply = Result.recentChangeMap[list[i].displayName]
+            if(supply!=null){
+                changeLabel.setText(supply.amt.toInt().toString())
+                if(supply.amt > 0) changeLabel.color = Color.GREEN
+                else if(supply.amt < 0) changeLabel.color = Color.RED
+            }
+
             supplyAmountList += amtLabel
 
             innerTable.add(nameLabel).left().padRight(5f)
             innerTable.add(amtLabel).left().width(40f)
+            innerTable.add(changeLabel).left()
 
             //rowTable.left()
 
@@ -604,7 +622,7 @@ class GameScreenGUI(val game : GameScreen) {
             GH.executeEventActions(event)
 
         if((event == null || !event.hasDescriptions) && Result.hasEventResults){
-            showEventResults(Result.eventResultMap.values.toList(), Result.deathResultMap.values.toList(), {closeEvent()})
+            showEventResults(Result.eventChangeMap.values.toList(), Result.eventDeathMap.values.toList(), {closeEvent()})
             return
         }else if(event == null || !event.hasDescriptions){
             closeEvent()
@@ -1373,43 +1391,6 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun closeTradeSlider() = tradeSliderWindow.remove()
-
-    fun buildRecentChangeTable(){
-        val list = Result.recentResultMap.values.toList()
-        recentChangeTable.clear()
-        recentChangeTable.remove()
-
-        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-
-        for(result in list){
-            if(result.amt < 1 && result.amt > -1)
-                continue
-
-            val nameLabel = Label(result.name, labelStyle)
-            nameLabel.setFontScale(0.15f)
-
-            val amtLabel = Label(result.amt.toInt().toString(), labelStyle)
-            amtLabel.setFontScale(0.15f)
-            if(result.amt < 0) amtLabel.color = Color.RED
-            if(result.amt > 0) amtLabel.color = Color.GREEN
-
-            recentChangeTable.add(amtLabel).spaceRight(10f)
-            recentChangeTable.add(nameLabel)
-            recentChangeTable.row()
-        }
-
-        val deathList = Result.recentDeathResultMap.values.toList()
-        for(result in deathList){
-            val nameLabel = Label("${result.name} has died", labelStyle)
-            nameLabel.setFontScale(0.15f)
-
-            recentChangeTable.add(nameLabel).colspan(2)
-            recentChangeTable.row()
-        }
-
-        recentChangeTable.setPosition(75f, TextGame.viewport.worldHeight/2f - recentChangeTable.height/2f)
-        TextGame.stage.addActor(recentChangeTable)
-    }
 
     fun openSettings(){
         game.pauseGame()

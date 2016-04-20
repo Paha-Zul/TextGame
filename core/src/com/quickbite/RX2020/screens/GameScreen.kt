@@ -24,6 +24,7 @@ class GameScreen(val game: TextGame): Screen {
     enum class State{
         TRAVELING, CAMP
     }
+
     var state = State.TRAVELING
 
     val timeTickEventList: LinkedList<ChainTask> = LinkedList()
@@ -52,9 +53,6 @@ class GameScreen(val game: TextGame): Screen {
         get
         private set
 
-    val gui: GameScreenGUI = GameScreenGUI(this)
-
-    var currGameTime:Double = 0.0
 
     private val gameInput: GameScreenInput = GameScreenInput()
 
@@ -64,7 +62,13 @@ class GameScreen(val game: TextGame): Screen {
     var numHoursToAdvance:Int = 0
     var speedToAdvance:Float = 0.1f
 
+    companion object{
+        var currGameTime:Double = 0.0
+        lateinit var gui: GameScreenGUI
+    }
+
     init{
+        gui = GameScreenGUI(this)
         GameStats.init(this)
 
         gui.init()
@@ -99,7 +103,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Crystal", "common"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("RefreshBerry", "common"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -238,6 +242,9 @@ class GameScreen(val game: TextGame): Screen {
         SupplyManager.updateHourly(delta)
         GroupManager.updateHourly(delta)
         ChainTask.updateHourly(delta)
+
+        if(Result.recentDeathMap.size > 0)
+            gui.triggerEventGUI(GameEventManager.getEvent("Death", "special"))
 
         if(numHoursToAdvance > 0) numHoursToAdvance--
         timeTickEventList.forEach { evt -> evt.update()}

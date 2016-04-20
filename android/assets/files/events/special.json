@@ -1,0 +1,12 @@
+[
+  {
+    "root" : true,
+    "title" : "Death",
+    "name" : "Death",
+    "description" : [],
+    "choices" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [ ["showDeaths"]]
+  }
+]

@@ -20,19 +20,20 @@ object GameEventManager{
     val commonRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     val rareRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     val epicRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    val specialEvebtMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     fun getRandomRoot(type:String):EventJson{
         var map = getMap(type)
-        val event = map!!.values.toTypedArray()[MathUtils.random(map.size-1)]
+        val event = map.values.toTypedArray()[MathUtils.random(map.size-1)]
         event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         return event;
     }
 
     fun setNewRandomRoot(type:String):EventJson{
         var map = getMap(type)
-        val event = map!!.values.toTypedArray()[MathUtils.random(map.size-1)]
+        val event = map.values.toTypedArray()[MathUtils.random(map.size-1)]
         event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
@@ -54,11 +55,13 @@ object GameEventManager{
         return event
     }
 
-    fun getMap(type:String):HashMap<String, EventJson>?{
+    fun getMap(type:String):HashMap<String, EventJson>{
         when(type){
             "common" -> return commonRootEventMap
             "rare" -> return rareRootEventMap
-            else -> return epicRootEventMap
+            "special" -> return specialEvebtMap
+            "epic" -> return epicRootEventMap
+            else -> return eventMap
         }
     }
 
@@ -69,16 +72,10 @@ object GameEventManager{
      * @return The event retrieved from the event map.
      */
     fun getEvent(eventName:String, type:String = ""):EventJson{
-        var event:EventJson?
-        if(type.isEmpty()) {
-            event = eventMap[eventName]
-            if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the normal event map. Is it accidentally marked as root? It may also simply not exist.")
-        } else{
-            event = getMap(type)!![eventName]
-            if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
-            event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
-        }
-        return event!!
+        var event:EventJson? = getMap(type)[eventName]
+        if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
+        event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
+        return event
     }
 
     fun getAndSetEvent(eventName:String, type:String = ""):EventJson{
@@ -171,6 +168,9 @@ object GameEventManager{
 
             if((outcomes!!.size == 1 && (outcomes!![0].size == 0 || outcomes!![0][0].isEmpty())))
                 return -1;
+
+            if(chances!!.size != outcomes!!.size)
+                Logger.log("GameEventManager", "The number of outcomes don't match the number of chances. This could be a problem.")
 
             //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
             for(i in chances!![choiceIndex].indices){

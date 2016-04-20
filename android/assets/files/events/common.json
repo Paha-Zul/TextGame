@@ -1087,7 +1087,7 @@
   "description" : [ "While out looking for space debris, %n decides to sit down for a rest.", "He spots a patch of small berries growing from between some nearby rocks. He knows they are safe to eat, so he picks a few and tosses them into his mouth." ],
   "choices" : [ ],
   "outcomes" : [ [ "RefreshBerryGood", "RefreshBerryBad" ] ],
-  "chances" : [ [ 50, 0, 50 ] ],
+  "chances" : [ [ 50, 50 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,

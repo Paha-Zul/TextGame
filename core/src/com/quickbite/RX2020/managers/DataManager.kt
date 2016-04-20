@@ -38,6 +38,8 @@ object DataManager{
                     rootMap = GameEventManager.commonRootEventMap
                 else if(file.name().equals("epic.json"))
                     rootMap = GameEventManager.epicRootEventMap
+                else if(file.name().equals("special.json"))
+                    rootMap = GameEventManager.specialEvebtMap
 
                 events.forEach { event ->
                     if (event.root) rootMap!!.put(event.name, event)

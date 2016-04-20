@@ -64,15 +64,15 @@ object EventManager {
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
-                var dmg = MathUtils.random(Math.abs(min), Math.abs(max))
-                if(min < 0) dmg = -dmg
+                var amt = MathUtils.random(Math.abs(min), Math.abs(max))
+                if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
                 val list = GroupManager.getPeopleList()
                 list.forEach { person ->
-                    if(randomPerPerson) dmg = MathUtils.random(Math.abs(min), Math.abs(max))
+                    if(randomPerPerson) amt = MathUtils.random(Math.abs(min), Math.abs(max))
                     if (perc)
-                        person.addPercentHealth(-(dmg.toFloat())).toInt()
+                        person.addPercentHealth(amt.toFloat()).toInt()
                     else
-                        person.addHealth(-(dmg.toFloat())).toInt()
+                        person.addHealth(amt.toFloat()).toInt()
                 }
 
                 //If we are doing it to multiple people...
@@ -82,12 +82,12 @@ object EventManager {
                 //For only one person...
             }else{
                 var amt = MathUtils.random(Math.abs(min), Math.abs(max))
-                if(min < 0) amt = -amt
+                if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
                 val person = GroupManager.getPerson(name)!!
                 if(perc)
-                    person.addPercentHealth(-(amt.toFloat())).toInt()
+                    person.addPercentHealth(amt.toFloat()).toInt()
                 else
-                    person.addHealth(-(amt.toFloat())).toInt()
+                    person.addHealth(amt.toFloat()).toInt()
             }
         })
 
@@ -119,7 +119,7 @@ object EventManager {
                     SupplyManager.addToSupply(supplyName, num.toFloat())
                 }
 
-                gameScreen.gui.buildSupplyTable()
+                GameScreen.gui.buildSupplyTable()
             }catch(e:NumberFormatException){
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndAmt has some wrong parameters, make sure they are in the order: min/max/supplyName/perPerson/chance")
@@ -141,7 +141,7 @@ object EventManager {
                     SupplyManager.addToSupply(randomSupply, num.toFloat())
                 }
 
-                gameScreen.gui.buildSupplyTable()
+                GameScreen.gui.buildSupplyTable()
             }catch(e:NumberFormatException){
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndItem has some wrong parameters, make sure they are in the order: min/max/chance/supplyNames(args)")
@@ -157,7 +157,6 @@ object EventManager {
             if(chance >= rnd) {
                 GroupManager.getPeopleList().forEach { person ->
                     person.addHealth(amt)
-                    Result.addResult(person.firstName, amt.toFloat(), gameScreen.currGameTime, "'s HP", gameScreen.gui)
                 }
             }
         })
@@ -172,7 +171,7 @@ object EventManager {
                 val amt = -MathUtils.random(min, max)
                 ROVManager.addHealthROV(amt)
 
-                Result.addResult("ROV", amt.toFloat(), gameScreen.currGameTime, "'s HP", gameScreen.gui)
+
             }
         })
 
@@ -185,8 +184,6 @@ object EventManager {
                 val amt = MathUtils.random(min, max)
 
                 ROVManager.addHealthROV(amt)
-
-                Result.addResult("ROV", amt.toFloat(), gameScreen.currGameTime, "'s HP", gameScreen.gui)
             }
         })
 
@@ -199,7 +196,7 @@ object EventManager {
 
             GameStats.TravelInfo.totalDistTraveled += amt
 
-            Result.addResult("miles", -amt.toFloat(), gameScreen.currGameTime, gui = gameScreen.gui)
+            Result.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, gui = GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
         })
 
         EventManager.onEvent("wait", {args ->
@@ -210,20 +207,20 @@ object EventManager {
 
             GameStats.TimeInfo.totalTimeCounter += amt
 
-            Result.addResult("hours waited", amt.toFloat(), gameScreen.currGameTime, gui = gameScreen.gui)
+            Result.addRecentChange("hours waited", amt.toFloat(), GameScreen.currGameTime, gui = GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
         })
 
         EventManager.onEvent("openTrade", {args ->
-            gameScreen.gui.buildTradeWindow()
-            gameScreen.gui.openTradeWindow()
+            GameScreen.gui.buildTradeWindow()
+            GameScreen.gui.openTradeWindow()
         })
 
         EventManager.onEvent("death", { args ->
             val person = args[0] as Person
 
-            gameScreen.gui.buildGroupTable()
+            GameScreen.gui.buildGroupTable()
 
-            Result.addDeath(person)
+            Result.addRecentDeath(person, GameEventManager.currActiveEvent != null)
 
             if(GroupManager.numPeopleAlive == 0) //OH MY GAWD GAME OVER!!
                 gameScreen.setGameOver()
@@ -233,16 +230,16 @@ object EventManager {
             val person = args[0] as Person
             val amt = args[1] as Float
 
-            gameScreen.gui.buildGroupTable()
+            GameScreen.gui.buildGroupTable()
 
-            Result.addResult(person.firstName, amt, gameScreen.currGameTime, "'s HP", gameScreen.gui)
+            Result.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameScreen.gui, GameEventManager.currActiveEvent != null)
         })
 
         EventManager.onEvent("supplyChanged", { args ->
             val supply = args[0] as SupplyManager.Supply
             val amt = args[1] as Float
 
-            Result.addResult(supply.displayName, amt, gameScreen.currGameTime, "", gameScreen.gui)
+            Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameScreen.gui, GameEventManager.currActiveEvent != null)
         })
 
         EventManager.onEvent("eventStarted", { args ->
@@ -252,6 +249,15 @@ object EventManager {
         EventManager.onEvent("eventFinished", { args ->
             SaveLoad.saveGame(true)
             GameEventManager.currActiveEvent = null
+            Result.purgeEventResults()
+        })
+
+        //Takes the recent deaths and puts them into the event deaths for displaying.
+        EventManager.onEvent("showDeaths", {args->
+            for(result in Result.recentDeathMap)
+                Result.addRecentDeath(result.key, result.value.name, true)
+
+            Result.purgeRecentDeaths()
         })
     }
 }
