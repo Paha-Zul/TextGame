@@ -8,7 +8,12 @@ import com.quickbite.rx2020.managers.GameEventManager
  * Created by Paha on 2/6/2016.
  */
 object Tester {
+    val eventMap:MutableMap<String, GameEventManager.EventJson> = hashMapOf()
+
     fun testEvents(numTests:Int){
+        eventMap.putAll(GameEventManager.getMap("common"))
+        eventMap.putAll(GameEventManager.getMap("rare"))
+
         System.out.println("---------------------")
 
         //TODO This needs to be more thorough and check every choice and outcome (FREAKING BAD)
@@ -29,13 +34,16 @@ object Tester {
             func(GameEventManager.getEvent(eventName, "rare"))
 
         System.out.println("Event Testing Done!")
+
+        assert(eventMap.isEmpty())
     }
 
     private fun testEvent(event:GameEventManager.EventJson){
-
+        eventMap.remove(event.name)
         //Go over all the outcomes individually
         if(event.outcomes!=null){
             event.outcomes!!.forEachIndexed { i, list -> list.forEachIndexed { j, outcomeName ->
+                eventMap.remove(outcomeName)
                 val _evt = GameEventManager.getEvent(outcomeName)
                 _evt.randomPersonList = event.randomPersonList
                 System.out.println("Testing ${_evt.name}")
