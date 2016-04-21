@@ -54,7 +54,7 @@ object GH {
 
             var amtToCheck = 0
             if(name.equals("ROV"))
-                amtToCheck = ROVManager.ROVHealth.toInt()
+                amtToCheck = ROVManager.ROVPartMap["ROV"]!!.currHealth.toInt()
             else
                 amtToCheck = SupplyManager.getSupply(name).amt.toInt()
 

@@ -119,7 +119,7 @@ object EventManager {
                     SupplyManager.addToSupply(supplyName, num.toFloat())
                 }
 
-                GameScreen.gui.buildSupplyTable()
+                GameScreen.gui.updateSuppliesGUI()
             }catch(e:NumberFormatException){
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndAmt has some wrong parameters, make sure they are in the order: min/max/supplyName/perPerson/chance")
@@ -141,7 +141,7 @@ object EventManager {
                     SupplyManager.addToSupply(randomSupply, num.toFloat())
                 }
 
-                GameScreen.gui.buildSupplyTable()
+                GameScreen.gui.updateSuppliesGUI()
             }catch(e:NumberFormatException){
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndItem has some wrong parameters, make sure they are in the order: min/max/chance/supplyNames(args)")

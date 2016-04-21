@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.scenes.scene2d.ui.Widget
 import com.badlogic.gdx.scenes.scene2d.utils.Disableable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
-import com.quickbite.rx2020.managers.ROVManager
 import com.quickbite.rx2020.managers.SupplyManager
 
 /**
@@ -20,10 +19,6 @@ class CustomHealthBar(val person: Person?, val background: TextureRegionDrawable
 
     constructor(supply: SupplyManager.Supply, background: TextureRegionDrawable, whitePixel: TextureRegionDrawable):this(null, background, whitePixel){
         this.supply = supply
-    }
-
-    constructor(background: TextureRegionDrawable, whitePixel: TextureRegionDrawable):this(null, background, whitePixel){
-
     }
 
     constructor(currAmt:Float, maxAmt:Float, background: TextureRegionDrawable, whitePixel: TextureRegionDrawable):this(null, background, whitePixel){
@@ -67,19 +62,7 @@ class CustomHealthBar(val person: Person?, val background: TextureRegionDrawable
             batch.color = color
 
             background.draw(batch, x, y, width, height) //Draw the bar background last.
-        }else if(batch != null){
-            val missingHealth = width*(ROVManager.ROVMaxHealth.toFloat() - ROVManager.ROVHealth.toFloat())/ROVManager.ROVMaxHealth.toFloat()
-            val color = batch.color
-
-            var healthBar = width*(ROVManager.ROVHealth.toFloat()/ROVManager.ROVMaxHealth.toFloat())
-            batch.color = Color.GREEN
-            whitePixel.draw(batch, x + missingHealth, y, healthBar, height) //Go from the right to the left to posX
-
-            batch.color = color
-
-            background.draw(batch, x, y, width, height) //Draw the bar background last.
         }
-        //        super.draw(batch, parentAlpha)
     }
 
     override fun setDisabled(p0: Boolean) {

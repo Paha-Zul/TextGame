@@ -43,12 +43,12 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
          * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
          */
         fun addRecentChange(name: String, amt: Float, currTime: Double, desc: String = "", gui: GameScreenGUI, isEventRelated:Boolean){
-            var result = eventChangeMap.getOrPut(name, {Result(name, 0f, desc)})
-            result.amt += amt
-
             //TODO A little bit of a hack until I figure out where to better put the values.
             if(isEventRelated) {
-                result = recentChangeMap.getOrPut(name, { Result(name, 0f, desc) })
+                val result = eventChangeMap.getOrPut(name, { Result(name, 0f, desc) })
+                result.amt += amt
+            }else{
+                val result = recentChangeMap.getOrPut(name, {Result(name, 0f, desc)})
                 result.amt += amt
                 result.timeLastUpdated = currTime
             }
@@ -60,10 +60,11 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
          * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
          */
         fun addRecentDeath(person:Person, isEventRelated: Boolean){
-            recentDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
 
             if(isEventRelated)
                 eventDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
+            else
+                recentDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
         }
 
         /**

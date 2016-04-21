@@ -56,6 +56,7 @@ class GameScreenGUI(val game : GameScreen) {
     /* Gui elements for events */
 
     private val supplyAmountList:MutableList<Label> = arrayListOf()
+    private val supplyChangeList:MutableList<Label> = arrayListOf()
 
     /* Tab buttons */
     private lateinit var supplyButton: TextButton
@@ -104,12 +105,23 @@ class GameScreenGUI(val game : GameScreen) {
 
         updateSuppliesGUI()
         buildGroupTable()
+        if(ROVTable.parent != null) buildROVTable()
     }
 
-    private fun updateSuppliesGUI(){
+    fun updateSuppliesGUI(){
         val list = SupplyManager.getSupplyList()
         for(i in list.indices){
             supplyAmountList[i].setText( list[i].amt.toInt().toString())
+
+            //Update the change list
+            supplyChangeList[i].setText("")
+            val supplyChanged = Result.recentChangeMap[list[i].displayName]
+            if(supplyChanged != null) {
+                supplyChangeList[i].setText(supplyChanged.amt.toInt().toString())
+                if(supplyChanged.amt > 0)  supplyChangeList[i].color = Color.GREEN
+                else if(supplyChanged.amt < 0)  supplyChangeList[i].color = Color.RED
+                else  supplyChangeList[i].color = Color.WHITE
+            }
         }
     }
 
@@ -506,25 +518,29 @@ class GameScreenGUI(val game : GameScreen) {
         val ROVNameLabel = Label("ROV", labelStyle)
         ROVNameLabel.setFontScale(normalFontScale)
 
-        val ROVbar: CustomHealthBar = CustomHealthBar(bg, pixel)
-
-        ROVTable.add(ROVNameLabel).right()
-        ROVTable.row()
-        ROVTable.add(ROVbar).right().height(15f).width(100f)
-        ROVTable.row().spaceTop(5f)
-
-        val list = ROVManager.ROVPartList
-        for(supply: SupplyManager.Supply in list.iterator()){
+        val list = ROVManager.ROVPartMap
+        for(supply in list.values){
             val nameLabel = Label(supply.displayName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
 
             val healthLabel: Label = Label("" + supply.currHealth, labelStyle)
             healthLabel.setFontScale(normalFontScale)
 
+            val changeLabel: Label = Label("", labelStyle)
+            changeLabel.setFontScale(normalFontScale)
+
+            val result = Result.recentChangeMap["${supply.name} health"]
+            if(result != null){
+                changeLabel.setText(result.amt.toInt().toString())
+                if(result.amt > 0) changeLabel.color = Color.GREEN
+                else if(result.amt < 0) changeLabel.color = Color.RED
+            }
+
             val healthBar: CustomHealthBar = CustomHealthBar(supply, bg, pixel)
 
-            ROVTable.add(nameLabel).right()
+            ROVTable.add(nameLabel).right().colspan(2)
             ROVTable.row()
+            ROVTable.add(changeLabel).right()
             ROVTable.add(healthBar).right().height(15f).width(100f)
             ROVTable.row().spaceTop(5f)
         }
@@ -536,6 +552,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildSupplyTable(){
         supplyTable.clear()
         supplyAmountList.clear()
+        supplyChangeList.clear()
 
         supplyTable.padLeft(10f)
         supplyTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
@@ -569,6 +586,7 @@ class GameScreenGUI(val game : GameScreen) {
             }
 
             supplyAmountList += amtLabel
+            supplyChangeList += changeLabel
 
             innerTable.add(nameLabel).left().padRight(5f)
             innerTable.add(amtLabel).left().width(40f)

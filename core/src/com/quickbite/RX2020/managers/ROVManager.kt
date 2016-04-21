@@ -1,32 +1,39 @@
 package com.quickbite.rx2020.managers
 
 import com.quickbite.rx2020.Result
+import com.quickbite.rx2020.clamp
 import com.quickbite.rx2020.screens.GameScreen
+import java.util.*
 
 /**
  * Created by Paha on 3/25/2016.
  */
 object ROVManager {
-    var ROVMaxHealth = 100f
-        get
-        private set
-
-    var ROVHealth = 100f
-
-    val ROVPartList:List<SupplyManager.Supply> = listOf(SupplyManager.getSupply("battery"), SupplyManager.getSupply("track"), SupplyManager.getSupply("panel"), SupplyManager.getSupply("storage"))
+    val ROVPartMap:LinkedHashMap<String, SupplyManager.Supply> = linkedMapOf(Pair("ROV", SupplyManager.Supply("ROV", "ROV", "ROV", 1f, 1, 100f, 100f, true)),
+            Pair("battery", SupplyManager.getSupply("battery")), Pair("track", SupplyManager.getSupply("track")), Pair("panel", SupplyManager.getSupply("panel")), Pair("storage", SupplyManager.getSupply("storage")))
 
     private var chargeAmountPerHour = 8.3f
     private var drivingSpeed = 10f
 
-    fun getPowerTick() = chargeAmountPerHour*(SupplyManager.getSupply("battery").currHealth/100f)
-    fun getMovementSpeed() = drivingSpeed*(SupplyManager.getSupply("track").currHealth/100f)
-    fun getPowerStorage() = drivingSpeed*(SupplyManager.getSupply("battery").currHealth/100f)
-    fun getStorageAmount() = drivingSpeed*(SupplyManager.getSupply("storage").currHealth/100f)
+    fun getPowerTick() = chargeAmountPerHour*(ROVPartMap["battery"]!!.currHealth/100f)
+    fun getMovementSpeed() = drivingSpeed*(ROVPartMap["track"]!!.currHealth/100f)
+    fun getPowerStorage() = drivingSpeed*(ROVPartMap["battery"]!!.currHealth/100f)
+    fun getStorageAmount() = drivingSpeed*(ROVPartMap["storage"]!!.currHealth/100f)
+
+    fun addHealthToPart(name:String, amt:Float){
+        val part = ROVPartMap[name]
+        if(part != null) {
+            part.currHealth += amt
+            part.currHealth.clamp(0f, part.maxHealth)
+        }
+
+        Result.addRecentChange("${part!!.name} health", amt.toFloat(), GameScreen.currGameTime, "", GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+    }
 
     fun addHealthROV(amt:Float){
-        ROVHealth += amt
-        if(ROVHealth >= ROVMaxHealth)
-            ROVHealth = ROVMaxHealth
+        val ROV = ROVPartMap["ROV"]!!
+        ROV.currHealth += amt
+        ROV.currHealth = ROV.currHealth.clamp(0f,  ROV.maxHealth)
 
         Result.addRecentChange("ROV", amt.toFloat(), GameScreen.currGameTime, "'s HP", GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
     }
