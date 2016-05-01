@@ -17,8 +17,7 @@ object DataManager{
 
     private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
 
-    private val randomFirstNameList:MutableList<String> = arrayListOf()
-    private val randomLastNameList:MutableList<String> = arrayListOf()
+    private lateinit var names:NamesJson
 
     val json: Json = Json()
 
@@ -64,14 +63,10 @@ object DataManager{
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load items.")
     }
 
-    fun loadRandomNames(firstNameFile:FileHandle, lastNameFile:FileHandle){
+    fun loadRandomNames(nameFileHandle:FileHandle){
         val startTime:Long = TimeUtils.millis()
 
-        var reader:BufferedReader = BufferedReader(firstNameFile.reader());
-        reader.forEachLine {line ->  randomFirstNameList += line }
-
-        reader = BufferedReader(lastNameFile.reader());
-        reader.forEachLine {line ->  randomLastNameList += line }
+        this.names = json.fromJson(NamesJson::class.java, nameFileHandle)
 
         val time:Long = TimeUtils.millis() - startTime
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
@@ -84,16 +79,17 @@ object DataManager{
         }
     }
 
-    fun pullRandomName():Pair<String, String>{
-        var index = MathUtils.random(0, randomFirstNameList.size - 1)
-        val firstName = randomFirstNameList[index]
-        randomFirstNameList.removeAt(index)
+    fun pullRandomName():Triple<String, String, Boolean>{
+        var firstName = ""
+        var male = MathUtils.random(0, 100) > 50
+        if(male)
+            firstName = names.maleFirstNames[MathUtils.random(0, names.maleFirstNames.size-1)]
+        else
+            firstName = names.femaleFirstNames[MathUtils.random(0, names.femaleFirstNames.size-1)]
 
-        index = MathUtils.random(0, randomFirstNameList.size - 1)
-        val lastName = randomLastNameList[index]
-        randomLastNameList.removeAt(index)
+        val lastName = names.lastNames[MathUtils.random(0, names.lastNames.size - 1)]
 
-        return Pair(firstName, lastName)
+        return Triple(firstName, lastName, male)
     }
 
     fun getSearchActiviesList() = searchActivities.values.toList()
@@ -128,5 +124,11 @@ object DataManager{
              */
             fun getSearchActivity(name:String): SearchActivityJSON? = searchActivities[name]
         }
+    }
+
+    class NamesJson(){
+        lateinit var femaleFirstNames:Array<String>
+        lateinit var maleFirstNames:Array<String>
+        lateinit var lastNames:Array<String>
     }
 }

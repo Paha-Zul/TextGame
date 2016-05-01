@@ -19,11 +19,13 @@ object GroupManager : IUpdateable {
 
     fun init(){
         list.clear()
-        val health = if(TextGame.testMode) 1000000f else 100f
+        val maxHealth = if(TextGame.testMode) 1000000f else 100f
         val range = MathUtils.random(0,4) + 4 //4 - 8
 
-        for(i in 0.rangeTo(range-1))
-            list += Person(DataManager.pullRandomName(), health)
+        for(i in 0.rangeTo(range-1)) {
+            val triple = DataManager.pullRandomName()
+            list += Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third)
+        }
     }
 
     override fun update(delta: Float) {

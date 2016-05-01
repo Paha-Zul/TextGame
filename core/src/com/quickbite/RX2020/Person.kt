@@ -7,7 +7,7 @@ import com.quickbite.rx2020.managers.GroupManager
 /**
  * Created by Paha on 2/8/2016.
  */
-class Person(private val _firstName:String, private val _lastName:String) {
+class Person(private val _firstName:String, private val _lastName:String, val male:Boolean) {
     var firstName:String = ""
         get() = _firstName
     var lastName:String = ""
@@ -45,11 +45,16 @@ class Person(private val _firstName:String, private val _lastName:String) {
     val hasSickness:Boolean
         get() = numSickness > 0
 
-    constructor(name:Pair<String, String>):this(name.first, name.second)
+    constructor(name:Pair<String, String>, male:Boolean):this(name.first, name.second, male)
 
-    constructor(name:Pair<String, String>, maxHealth:Float):this(name.first, name.second){
+    constructor(firstName:String, lastName:String, currHealth:Float, maxHealth:Float, male:Boolean):this(firstName, lastName, male){
         this.maxHealth = maxHealth
-        this.healthNormal = maxHealth
+        this.healthNormal = currHealth
+    }
+
+    constructor(name:Pair<String, String>, currHealth:Float, maxHealth:Float, male:Boolean):this(name.first, name.second, male){
+        this.maxHealth = maxHealth
+        this.healthNormal = currHealth
     }
 
     operator fun component1() = _firstName

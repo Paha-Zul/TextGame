@@ -47,9 +47,6 @@ object EventManager {
 
         //We are hurting a person/people
         EventManager.onEvent("addHealth", { args ->
-            if(GameEventManager.currActiveEvent == null)
-                return@onEvent
-
             var name = (args[0]) as String
             val min = ((args[1]) as String).toInt()
             val max = if(args.count() >= 3) ((args[2]) as String).toInt() else min

@@ -20,7 +20,7 @@
     "replace": true
   },
   {
-    "desc": ["Supplies:"],
+    "desc": ["Remaining:"],
     "showSupplies": true,
     "action": "Embark"
   }

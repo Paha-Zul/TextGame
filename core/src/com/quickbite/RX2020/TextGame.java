@@ -64,6 +64,13 @@ public class TextGame extends com.badlogic.gdx.Game {
 			}
 		}));
 
+		String test = "He was cool. If he was cool. His was cool. If his was cool.";
+		test = test.replaceAll("\\b(He)", "She");
+		test = test.replaceAll("\\b(he)", "she");
+		test = test.replaceAll("\\b(his)", "her");
+		test = test.replaceAll("\\b(His)", "Her");
+		System.out.println(test);
+
 		int cores = Runtime.getRuntime().availableProcessors();
 		if(cores < 1) cores = 1;
 		threadPool = Executors.newFixedThreadPool(cores);

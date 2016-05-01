@@ -148,13 +148,26 @@ class GameIntroGUI(val game: GameIntroScreen) {
             var counter = 0
 
             if(intro.showSupplies){
-                val crewMembers = Label("Surviving Crew Members: ${GroupManager.numPeopleAlive}", labelStyle)
-                crewMembers.setFontScale(0.2f)
-                crewMembers.color.a = 0f
+                val supplyGroup = Table()
+                val partGroup = Table()
+                val survivorGroup = Table()
 
-                crewMembers.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
-                supplyTable.add(crewMembers).colspan(2)
-                supplyTable.row()
+                var currTable = supplyGroup
+
+//                crewMembers.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+//                supplyTable.add(crewMembers).colspan(2)
+//                supplyTable.row()
+//                counter++
+
+                var titleLabel = Label("Supplies", labelStyle)
+                titleLabel.setFontScale(0.25f)
+                titleLabel.color.a = 0f
+
+                currTable.add(titleLabel).colspan(2)
+                currTable.row()
+
+                titleLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+                delay += 0.15f
                 counter++
 
                 SupplyManager.getSupplyList().forEachIndexed { i, supply ->
@@ -166,13 +179,29 @@ class GameIntroGUI(val game: GameIntroScreen) {
                     amtLabel.setFontScale(0.2f)
                     amtLabel.color.a = 0f
 
+                    if(supply.name.equals("panel")) {
+                        titleLabel = Label("Spare ROV Parts", labelStyle)
+                        titleLabel.setFontScale(0.25f)
+                        titleLabel.color.a = 0f
+
+                        supplyTable.add(currTable).space(0f, 10f, 0f, 10f).top()
+
+                        currTable = partGroup
+                        currTable.add(titleLabel).colspan(2)
+                        currTable.row()
+
+                        titleLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+                        delay += 0.15f
+                        counter++
+                    }
+
                     if(supply.name.equals("panel") || supply.name.equals("track") || supply.name.equals("battery") || supply.name.equals("storage")){
                         nameLabel.setText("Spare " + nameLabel.text)
                     }
 
-                    supplyTable.add(nameLabel)
-                    supplyTable.add(amtLabel)
-                    supplyTable.row()
+                    currTable.add(nameLabel)
+                    currTable.add(amtLabel)
+                    currTable.row()
 
                     nameLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
                     amtLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
@@ -180,6 +209,35 @@ class GameIntroGUI(val game: GameIntroScreen) {
                     delay += 0.15f
                     counter++
                 }
+
+                supplyTable.add(currTable).space(0f, 10f, 0f, 10f).top()
+                currTable = survivorGroup
+
+                titleLabel = Label("Survivors", labelStyle)
+                titleLabel.setFontScale(0.25f)
+                titleLabel.color.a = 0f
+
+                currTable.add(titleLabel)
+                currTable.row()
+
+                titleLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+                delay += 0.15f
+                counter++
+
+                for(person in GroupManager.getPeopleList()){
+                    val nameLabel = Label(person.fullName, labelStyle)
+                    nameLabel.setFontScale(0.2f)
+                    nameLabel.color.a = 0f
+
+                    currTable.add(nameLabel)
+                    currTable.row()
+
+                    nameLabel.addAction(Actions.sequence(Actions.delay(counter*0.1f), Actions.fadeIn(0.8f)))
+                    delay += 0.15f
+                    counter++
+                }
+
+                supplyTable.add(currTable).space(0f, 10f, 0f, 10f).top()
             }
 
             if(delay == 0f) delay = 1f

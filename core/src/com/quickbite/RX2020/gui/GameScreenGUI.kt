@@ -471,9 +471,15 @@ class GameScreenGUI(val game : GameScreen) {
 
             val change = Result.recentChangeMap[person.firstName]
             if(change != null){
-                recentChangeLabel.setText(change.amt.toInt().toString())
-                if(change.amt > 0) recentChangeLabel.color = Color.GREEN
-                else if(change.amt < 0) recentChangeLabel.color = Color.RED
+                var modifier = ""
+                if(change.amt > 0) {
+                    recentChangeLabel.color = Color.GREEN
+                    modifier = "+"
+                }else if(change.amt < 0) {
+                    recentChangeLabel.color = Color.RED
+                    modifier = "-"
+                }
+                recentChangeLabel.setText("$modifier${change.amt.toInt().toString()}")
             }
 
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
@@ -510,8 +516,11 @@ class GameScreenGUI(val game : GameScreen) {
         ROVTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         ROVTable.padRight(10f)
 
-        val bg = TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar")))
-        val pixel = TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite")))
+        val medkit = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java)))
+        val medkitDis = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
+
+        val bg = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("bar"))
+        val pixel = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixelWhite"))
 
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -526,21 +535,33 @@ class GameScreenGUI(val game : GameScreen) {
             val healthLabel: Label = Label("" + supply.currHealth, labelStyle)
             healthLabel.setFontScale(normalFontScale)
 
+            val repairButton = ImageButton(medkit)
+            repairButton.style.imageDisabled = medkitDis
+            if(supply.amt <= 0 || supply.currHealth >= supply.maxHealth)
+                repairButton.isDisabled = true
+
             val changeLabel: Label = Label("", labelStyle)
             changeLabel.setFontScale(normalFontScale)
 
             val result = Result.recentChangeMap["${supply.name} health"]
             if(result != null){
-                changeLabel.setText(result.amt.toInt().toString())
-                if(result.amt > 0) changeLabel.color = Color.GREEN
-                else if(result.amt < 0) changeLabel.color = Color.RED
+                var modifier = ""
+                if(result.amt > 0) {
+                    changeLabel.color = Color.GREEN
+                    modifier = "+"
+                }else if(result.amt < 0) {
+                    changeLabel.color = Color.RED
+                    modifier = "-"
+                }
+                changeLabel.setText("$modifier${result.amt.toInt().toString()}")
             }
 
             val healthBar: CustomHealthBar = CustomHealthBar(supply, bg, pixel)
 
-            ROVTable.add(nameLabel).right().colspan(2)
+            ROVTable.add(nameLabel).right().colspan(3)
             ROVTable.row()
             ROVTable.add(changeLabel).right()
+            ROVTable.add(repairButton).spaceRight(10f).size(16f).right()
             ROVTable.add(healthBar).right().height(15f).width(100f)
             ROVTable.row().spaceTop(5f)
         }
@@ -693,11 +714,8 @@ class GameScreenGUI(val game : GameScreen) {
             })
         }
 
-        //Fix the description
-        val desc = event.description[pageNumber].replace("%n2", event.randomPersonList[1].firstName).replace("%n", event.randomPersonList[0].firstName)
-
         //Make the description label
-        val descLabel = Label(desc, labelStyle)
+        val descLabel = Label(event.modifiedDescription[pageNumber], labelStyle)
         descLabel.setAlignment(Align.center)
         descLabel.setFontScale(normalFontScale)
         descLabel.setWrap(true)

@@ -3,6 +3,7 @@ package com.quickbite.rx2020.managers
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.shuffle
+import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
@@ -32,8 +33,7 @@ object GameEventManager{
     }
 
     fun setNewRandomRoot(type:String):EventJson{
-        var map = getMap(type)
-        val event = map.values.toTypedArray()[MathUtils.random(map.size-1)]
+        val event = getEvent("", type)
         event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
@@ -67,14 +67,16 @@ object GameEventManager{
 
     /**
      * Gets an event. If the type parameter is not supplied, gets the event from the non root event map.
-     * @param eventName The name of the event to get
+     * @param eventName The name of the event to get. If "" (empty), will return a random event from the map.
      * @param type The type of event. If left out, gets an event from the non root event map
      * @return The event retrieved from the event map.
      */
-    fun getEvent(eventName:String, type:String = ""):EventJson{
-        var event:EventJson? = getMap(type)[eventName]
+    fun getEvent(eventName:String="", type:String = ""):EventJson{
+        val map = getMap(type)
+        var event:EventJson? = if(!eventName.isEmpty()) map[eventName] else map.values.toList()[MathUtils.random(0, map.size-1)]
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
         event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
+        GH.replaceEventDescription(event) //TODO Watch this. May need to thread it.
         return event
     }
 
@@ -90,6 +92,7 @@ object GameEventManager{
         lateinit var name:String
         lateinit var title:String
         lateinit var description:Array<String>
+        lateinit var modifiedDescription:Array<String>
         var choices:Array<String>? = null // The choices, like 'yes' or 'no' || 'Kill him', 'Let him go', 'Have him join you'
         var outcomes:Array<Array<String>>? = null //The possible outcomes for each choice, ie: 'He died', 'He killed you first!'
         var chances:Array<IntArray>? = null //The chances of each outcome happening
@@ -135,9 +138,8 @@ object GameEventManager{
                 }
 
                 val outcomeText = outcomes!![choiceIndex][outcomeIndex]
-                val outcomeEvent = eventMap[outcomeText]
-                if(outcomeEvent == null) Logger.log("DataManager", "Apparently event $name for choice ($choice) with outcome $outcomeText doesn't have an event that matches it. Make sure it is named right and exists.", Logger.LogLevel.Warning)
-                outcomeEvent!!.randomPersonList = this.randomPersonList
+                val outcomeEvent = getEvent(outcomeText)
+                outcomeEvent.randomPersonList = this.randomPersonList
                 return outcomeEvent
             }
 
