@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
 import com.quickbite.rx2020.util.Logger
-import java.io.BufferedReader
 import java.util.*
 
 /**
@@ -18,6 +17,9 @@ object DataManager{
     private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
 
     private lateinit var names:NamesJson
+    lateinit var end:EndJSON
+        get
+        private set
 
     val json: Json = Json()
 
@@ -79,6 +81,10 @@ object DataManager{
         }
     }
 
+    fun loadEnd(file:FileHandle){
+        this.end = json.fromJson(EndJSON::class.java, file)
+    }
+
     fun pullRandomName():Triple<String, String, Boolean>{
         var firstName = ""
         var male = MathUtils.random(0, 100) > 50
@@ -130,5 +136,9 @@ object DataManager{
         lateinit var femaleFirstNames:Array<String>
         lateinit var maleFirstNames:Array<String>
         lateinit var lastNames:Array<String>
+    }
+
+    class EndJSON(){
+        lateinit var desc:Array<String>
     }
 }

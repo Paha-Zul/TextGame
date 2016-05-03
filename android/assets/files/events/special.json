@@ -8,5 +8,25 @@
     "outcomes" : [ ],
     "chances" : [ ],
     "resultingAction" : [ ["showDeaths"]]
+  },
+  {
+    "root" : true,
+    "title" : "End of the Line",
+    "name" : "EndWin",
+    "description" : ["The weathered ROV creaks to a stop in front of a large clearing. The weary crew opens the ROV's hatches and glances outward. Before them lies the tattered remains of huge parachutes and the worn but intact hulls of the enormous cargo crates, guided from outer space to this very spot months before Exomer751's arrival. They've made it... RX-2020."],
+    "choices" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [["gameOver", "true"]]
+  },
+  {
+    "root" : true,
+    "title" : "End of the Line",
+    "name" : "EndLose",
+    "description" : ["You have lost..."],
+    "choices" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [["gameOver", "false"]]
   }
 ]

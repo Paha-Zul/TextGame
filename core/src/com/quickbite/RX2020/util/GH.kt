@@ -1,9 +1,6 @@
 package com.quickbite.rx2020.util
 
-import com.quickbite.rx2020.managers.EventManager
-import com.quickbite.rx2020.managers.GameEventManager
-import com.quickbite.rx2020.managers.ROVManager
-import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.managers.*
 
 /**
  * Created by Paha on 4/10/2016.
@@ -146,4 +143,19 @@ object GH {
         event.modifiedDescription = newDesc.toTypedArray()
     }
 
+    fun checkCantTravel():Boolean{
+        val energy = ROVManager.ROVPartMap["energy"]!!
+        val tracks = ROVManager.ROVPartMap["track"]!!
+        val panels = ROVManager.ROVPartMap["panel"]!!
+
+        return energy.amt.toInt() == 0 && tracks.currHealth <= 0 && energy.amt.toInt() == 0
+        && panels.currHealth <= 0 && panels.amt.toInt() == 0
+    }
+
+    fun checkGameOverConditions():Boolean{
+        val storage = ROVManager.ROVPartMap["storage"]!!
+        val ammo = SupplyManager.getSupply("ammo")
+
+        return (checkCantTravel() && ammo.amt.toInt() == 0) || storage.amt.toInt() == 0 || GroupManager.numPeopleAlive == 0
+    }
 }
