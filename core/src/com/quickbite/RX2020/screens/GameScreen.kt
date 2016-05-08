@@ -22,7 +22,7 @@ import java.util.*
  */
 class GameScreen(val game: TextGame): Screen {
     enum class State{
-        TRAVELING, CAMP
+        TRAVELING, CAMP, GAMEOVER
     }
 
     var state = State.TRAVELING
@@ -103,7 +103,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("RefreshBerry", "common"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)

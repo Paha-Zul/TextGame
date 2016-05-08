@@ -845,9 +845,13 @@ class GameScreenGUI(val game : GameScreen) {
             var amtLabel: Label?
             amtLabel = Label("", labelStyle)
             if(item.amt != 0f) {
-                amtLabel.setText(item.amt.toInt().toString())
-                if (item.amt < 0) amtLabel.color = Color.RED
-                else amtLabel.color = Color.GREEN
+                if (item.amt < 0) {
+                    amtLabel.setText("${item.amt.toInt()}")
+                    amtLabel.color = Color.RED
+                }else {
+                    amtLabel.setText("+${item.amt.toInt()}")
+                    amtLabel.color = Color.GREEN
+                }
             }
 
             nameLabel.setFontScale(normalFontScale)

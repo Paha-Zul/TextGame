@@ -1,11 +1,11 @@
 package com.quickbite.rx2020.managers
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.Person
-import com.quickbite.rx2020.Result
-import com.quickbite.rx2020.SaveLoad
-import com.quickbite.rx2020.clamp
+import com.quickbite.rx2020.*
+import com.quickbite.rx2020.screens.GameOverScreen
 import com.quickbite.rx2020.screens.GameScreen
+import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
@@ -86,6 +86,34 @@ object EventManager {
                 else
                     person.addHealth(amt.toFloat()).toInt()
             }
+        })
+
+        EventManager.onEvent("addInjury", {args ->
+            val name = args[0] as String
+            val type = args[1] as String
+            val level = args[2] as String
+
+            var person:Person
+            if(name == "rand") person = GroupManager.getRandomPerson()!!
+            else if(name == "evt") person = GameEventManager.currActiveEvent!!.randomPersonList[0]
+            else person = GroupManager.getPerson(name)!!
+
+            var disType:Person.Disability.DisabilityType
+            var disLevel:Person.Disability.DisabilityLevel
+
+            when(type){
+                "sickness" -> disType = Person.Disability.DisabilityType.Sickness
+                else -> disType = Person.Disability.DisabilityType.Injury
+            }
+
+            when(level){
+                "minor" -> disLevel = Person.Disability.DisabilityLevel.Minor
+                "regular" -> disLevel = Person.Disability.DisabilityLevel.Regular
+                "major" -> disLevel = Person.Disability.DisabilityLevel.Major
+                else -> disLevel = Person.Disability.DisabilityLevel.Trauma
+            }
+
+            person.addDisability(disLevel, disType)
         })
 
         EventManager.onEvent("removeInjury", { args ->
@@ -244,7 +272,7 @@ object EventManager {
         })
 
         EventManager.onEvent("eventFinished", { args ->
-            SaveLoad.saveGame(true)
+            if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(true)
             GameEventManager.currActiveEvent = null
             Result.purgeEventResults()
         })
@@ -255,6 +283,39 @@ object EventManager {
                 Result.addRecentDeath(result.key, result.value.name, true)
 
             Result.purgeRecentDeaths()
+        })
+
+        //Called when the game is over. Shows the game over screen.
+        EventManager.onEvent("gameOver", {args ->
+            val win = (args[0] as String).toBoolean()
+            gameScreen.pauseGame()
+            gameScreen.state = GameScreen.State.GAMEOVER
+
+            //Lets fade the screen out to white and load the game over screen.
+            var opacity = 0f
+            val overlay = TextGame.smallGuiAtlas.findRegion("pixelWhite")
+            val task = ChainTask({opacity < 1f}, {
+                gameScreen.pauseGame()
+                opacity = GH.lerpValue(opacity, 0f, 1f, 1f) //Lerp opacity
+                TextGame.batch.begin() //Begin the batch
+                val color = TextGame.batch.color //Set the color
+                TextGame.batch.color = Color(1f, 1f, 1f, opacity) //Make a new color
+                TextGame.batch.draw(overlay, -TextGame.viewport.screenWidth.toFloat()/2, -TextGame.viewport.screenHeight.toFloat()/2, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat()) //Draw
+                TextGame.batch.color = color //Reset color
+                TextGame.batch.end() //End batch
+            }, {
+                TextGame.batch.begin() //Begin the batch
+                val color = TextGame.batch.color //Set the color
+                TextGame.batch.color = Color(1f, 1f, 1f, 1f) //Make a new color
+                TextGame.batch.draw(overlay, -TextGame.viewport.screenWidth.toFloat()/2, -TextGame.viewport.screenHeight.toFloat()/2, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat()) //Draw
+                TextGame.batch.color = color //Reset color
+                TextGame.batch.end() //End batch
+
+                //Load the game over screen.
+                gameScreen.game.screen = GameOverScreen(gameScreen.game)
+            })
+
+            ChainTask.addTaskToEveryFrameList(task)
         })
     }
 }

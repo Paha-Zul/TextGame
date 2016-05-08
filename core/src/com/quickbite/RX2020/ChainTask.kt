@@ -19,6 +19,9 @@ class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, va
         fun addTaskToEveryFrameList(task:ChainTask) = newTaskList.add(task)
         fun addTaskToHourlyList(task:ChainTask) = newHourlyTaskList.add(task)
 
+        /**
+         * Updates from the main TextGame screen. Can be used in any part of the game.
+         */
         override fun update(delta:Float){
             newTaskList.forEach { task -> everyFrameTaskList.add(task) }
             newTaskList.clear()
@@ -32,6 +35,10 @@ class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, va
                     task.update()
             }
         }
+
+        /**
+         * Only updated during the GameScreen. Used for hourly ticks.
+         */
         override fun updateHourly(delta: Float) {
             newHourlyTaskList.forEach { task -> hourlyTaskList.add(task) }
             newHourlyTaskList.clear()

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
@@ -75,9 +76,13 @@ class MainMenuScreen(val game: TextGame) : Screen {
         mainTable.add(titleTable).fill().expand()
         mainTable.row()
         mainTable.add(buttonTable).fill().expand()
-        mainTable.setFillParent(true)
 
+        mainTable.color.a = 0f
+        mainTable.setFillParent(true)
         TextGame.stage.addActor(mainTable)
+
+        //I like to fade almost everything
+        mainTable.addAction(Actions.fadeIn(1f))
     }
 
     fun continueGameFade():ChainTask{
@@ -94,6 +99,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
             TextGame.backgroundColor.a = 0f
             TextGame.batch.color = Color(0f,0f,0f,0f)
             val blackPixel = TextGame.smallGuiAtlas.findRegion("pixelBlack")
+
+            //Overlays a solid black rectangle and fades it out
             val task = ChainTask({TextGame.backgroundColor.r < 1},
                     {
                         TextGame.batch.begin()

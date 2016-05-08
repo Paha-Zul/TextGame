@@ -19,9 +19,9 @@
 }, {
   "name" : "recharge",
   "buttonTitle" : "Recharge Batteries",
-  "action" : [ [ "addRndAmt", "1", "25", "energy", "false", "25" ], [ "addRndItem", "-1", "-25", "25", "wealth", "edibles", "parts", "ammo" ] ],
-  "description" : "Energy: 25% chance to gain (1-25) Per Hour\nOther: 25% Chance to lose (1-25) Per Hour\n",
-  "restrictions" : [["energy", "<", "200"]  ]
+  "action" : [ [ "addRndAmt", "1", "25", "energy", "false", "25" ], [ "addRndAmt", "-1", "-25", "edibles", "false", "25"] ],
+  "description" : "Energy: 25% chance to gain (1-25) Per Hour\nEdibles: 25% Chance to lose (1-25) Per Hour\n",
+  "restrictions" : [["energy", "<", "200"], ["edibles", ">", "0"] ]
 }, {
   "name" : "searchParts",
   "buttonTitle" : "Search For Parts",

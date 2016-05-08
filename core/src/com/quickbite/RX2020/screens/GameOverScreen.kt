@@ -1,16 +1,18 @@
 package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Screen
+import com.quickbite.rx2020.SaveLoad
+import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.gui.GameOverGUI
 
 /**
  * Created by Paha on 5/3/2016.
  */
-class GameOverScreen : Screen {
+class GameOverScreen(val game:TextGame) : Screen {
     lateinit var gameOverGUI:GameOverGUI;
 
     override fun show() {
-        gameOverGUI = GameOverGUI()
+        gameOverGUI = GameOverGUI(game)
         gameOverGUI.gameOver()
     }
 
@@ -27,7 +29,7 @@ class GameOverScreen : Screen {
     }
 
     override fun render(p0: Float) {
-
+        TextGame.stage.draw()
     }
 
     override fun resume() {
