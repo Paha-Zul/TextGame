@@ -139,6 +139,7 @@ object DataManager{
     }
 
     class EndJSON(){
-        lateinit var desc:Array<String>
+        lateinit var win:Array<String>
+        lateinit var lose:Array<String>
     }
 }

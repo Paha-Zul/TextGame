@@ -25,31 +25,34 @@ import com.quickbite.rx2020.util.GH
  * Created by Paha on 5/3/2016.
  */
 class GameOverGUI(val game:TextGame) {
-    var page = 1
     var mainTable: Table = Table()
     lateinit var nextButton: ImageButton
     //25 - 75 random weeks
+
+    //Figure out some time stuff.
+    val hours = GameStats.TimeInfo.totalTimeCounter.toInt()
+    val totalMonths =( hours/(24*30)).toInt()
+    val totalDays = ((hours/24) - totalMonths*(24*30)).toInt()
+    val totalHours =  (hours - (totalDays*24) - totalMonths*(24*30)).toInt()
 
     fun gameOver(){
         TextGame.stage.clear()
 
         nextButton = ImageButton(TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButton")))
 
+        var page = 0
         nextButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 page++
-                when(page){
-                    2 -> page2()
-                    3 -> page3()
-                    else -> backToMainMenu()
-                }
+                if(displayPage(page))
+                    backToMainMenu()
             }
         })
 
         mainTable.setFillParent(true)
         TextGame.stage.addActor(mainTable)
 
-        page1()
+        displayPage(page)
     }
 
     fun page1(){
@@ -62,7 +65,7 @@ class GameOverGUI(val game:TextGame) {
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
 
         //Replace lots of stuff.
-        var titleDesc = DataManager.end.desc[0]
+        var titleDesc = DataManager.end.win[0]
         titleDesc = titleDesc.replace("%o", 10.toString()).replace("%a", GroupManager.numPeopleAlive.toString()).replace("%r", GameStats.TravelInfo.totalDistOfGame.toString()).
                 replace("%m", totalMonths.toString()).replace("%d", totalDays.toString()).replace("%h", totalHours.toString())
 
@@ -86,7 +89,7 @@ class GameOverGUI(val game:TextGame) {
         mainTable.clear()
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
 
-        val bodyLabel = Label(DataManager.end.desc[1], labelStyle)
+        val bodyLabel = Label(DataManager.end.win[1], labelStyle)
         bodyLabel.setFontScale(0.2f)
         bodyLabel.color.a = 0f
         bodyLabel.setWrap(true)
@@ -106,7 +109,7 @@ class GameOverGUI(val game:TextGame) {
         mainTable.clear()
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
 
-        var finalDesc = DataManager.end.desc[2]
+        var finalDesc = DataManager.end.win[2]
         finalDesc = finalDesc.replace("%w", MathUtils.random(25, 75).toString())
 
         val finalLabel = Label(finalDesc, labelStyle)
@@ -123,6 +126,39 @@ class GameOverGUI(val game:TextGame) {
 
         finalLabel.addAction(Actions.fadeIn(0.5f))
         nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
+    }
+
+    fun displayPage(page:Int):Boolean{
+        if((!GameStats.win && page >= DataManager.end.lose.size) || (GameStats.win && page >= DataManager.end.win.size))
+            return true
+
+        mainTable.clear()
+
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+
+        //Replace lots of stuff.
+        var modifiedDesc = if(GameStats.win) DataManager.end.win[page] else DataManager.end.lose[page]
+        modifiedDesc = modifiedDesc.replace("%o", 10.toString()).replace("%a", GroupManager.numPeopleAlive.toString()).replace("%r", GameStats.TravelInfo.totalDistOfGame.toString()).
+                replace("%m", totalMonths.toString()).replace("%d", totalDays.toString()).replace("%h", totalHours.toString()).replace("%i", GameStats.loseReason).replace("%w", MathUtils.random(25, 75).toString())
+
+        //Make the description label
+        val descLabel = Label(modifiedDesc, labelStyle)
+        descLabel.setFontScale(0.2f)
+        descLabel.color.a = 0f
+        descLabel.setWrap(true)
+        descLabel.setAlignment(Align.center)
+
+        //Add the label and the button.
+        mainTable.add(descLabel).fill().expand().pad(0f, 30f, 0f, 30f)
+        mainTable.row()
+        mainTable.add(nextButton).size(64f)
+
+        nextButton.color.a = 0f
+
+        descLabel.addAction(Actions.fadeIn(0.5f))
+        nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
+
+        return false
     }
 
     fun backToMainMenu(){

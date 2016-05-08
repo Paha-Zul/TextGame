@@ -1,5 +1,8 @@
 {
-  "desc": ["%o of the original 27 members of Exomer751 survived the crash, and only %a survived the %r mile long journey to RX-2020. In all it took them %m months, %d days, and %h hours.",
+  "win": ["%o of the original 27 members of Exomer751 survived the crash, and only %a survived the %r mile long journey to RX-2020. In all it took them %m months, %d days, and %h hours.",
     "Within hours of their arrival to RX-2020, contact was made with their home world. They were shocked to hear of the group's survival. After losing contact with the exploration vessel, they assumed the worst and began the lengthy process of assembling a rescue mission. Despite its noble cause, the mission was met with much resistance. Many claimed the cost would be too great and the risk would just be too high to justify endangering the lives of another.",
-    "It would be another %w weeks until the Exomer crew was rescued."]
+    "It would be another %w weeks until the Exomer crew was rescued."],
+  "lose": ["%o of the original 27 members of Exomer751 survived the crash, and none survived the %r mile long journey to RX-2020. In all they lasted %m months, %d days, and %h hours.",
+    "Due to the loss of %i, the crew was not able to finish the journey to RX-2020.",
+    "The crew was %r miles away from reaching RX-2020 where they would have called for help and survived off of the emergency supplies."]
 }

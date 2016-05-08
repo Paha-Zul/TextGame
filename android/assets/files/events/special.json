@@ -35,6 +35,17 @@
     "name" : "EndLose",
     "description" : ["You have lost..."],
     "choices" : [ ],
+    "outcomes" : [["EndLose2"] ],
+    "chances" : [[100] ],
+    "resultingAction" : []
+  }
+,
+  {
+    "root" : false,
+    "title" : "End of the Line",
+    "name" : "EndLose2",
+    "description" : [],
+    "choices" : [ ],
     "outcomes" : [ ],
     "chances" : [ ],
     "resultingAction" : [["gameOver", "false"]]

@@ -127,6 +127,7 @@ object EventManager {
             }
         })
 
+        //Adds a random amount of an item.
         EventManager.onEvent("addRndAmt", {args ->
             try{
                 val min:Float = (args[0] as String).toFloat() //The min amt
@@ -151,6 +152,7 @@ object EventManager {
             }
         })
 
+        //Adds a random item to the supply.
         EventManager.onEvent("addRndItem", {args ->
             try {
                 val min: Float = (args[0] as String).toFloat()
@@ -173,6 +175,7 @@ object EventManager {
             }
         })
 
+        //A chance to rest. Heals the group memebers.
         EventManager.onEvent("rest", {args ->
             val amt = (args[0] as String).toFloat()
             val chance = if(args.size >= 2) (args[0] as String).toFloat() else 100f
@@ -288,6 +291,8 @@ object EventManager {
         //Called when the game is over. Shows the game over screen.
         EventManager.onEvent("gameOver", {args ->
             val win = (args[0] as String).toBoolean()
+
+            GameStats.win = win
             gameScreen.pauseGame()
             gameScreen.state = GameScreen.State.GAMEOVER
 

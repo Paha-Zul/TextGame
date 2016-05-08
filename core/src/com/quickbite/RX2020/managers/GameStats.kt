@@ -10,6 +10,8 @@ import com.quickbite.rx2020.screens.GameScreen
  */
 object GameStats : IUpdateable {
     lateinit var game: GameScreen
+    var win:Boolean = false
+    var loseReason:String = "?"
 
     fun init(gameScreen: GameScreen){
         game = gameScreen

@@ -272,7 +272,7 @@
   "root" : false,
   "title" : "Natives!",
   "name" : "NativesFight",
-  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The large native roars and knocks %n to the ground and unsheathes his1 weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process." ],
+  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The large native roars and knocks %n to the ground and unsheathes his weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],

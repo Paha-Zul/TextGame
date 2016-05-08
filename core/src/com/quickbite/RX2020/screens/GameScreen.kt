@@ -103,7 +103,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
