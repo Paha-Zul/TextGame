@@ -33,7 +33,7 @@ object GameEventManager{
     }
 
     fun setNewRandomRoot(type:String):EventJson{
-        val event = getEvent("", type)
+        val event = getAndSetEvent("", type)
         event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
@@ -71,21 +71,21 @@ object GameEventManager{
      * @param type The type of event. If left out, gets an event from the non root event map
      * @return The event retrieved from the event map.
      */
-    fun getEvent(eventName:String="", type:String = ""):EventJson{
+    fun getEvent(eventName:String="", type:String = "", randomizePeople:Boolean = false, randomizedPeopleList:List<Person>? = null):EventJson{
         val map = getMap(type)
         var event:EventJson? = if(!eventName.isEmpty()) map[eventName] else map.values.toList()[MathUtils.random(0, map.size-1)]
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
-        event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
-        GH.replaceEventDescription(event) //TODO Watch this. May need to thread it.
+        if(randomizePeople) event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
+        else if(randomizedPeopleList != null) event!!.randomPersonList = randomizedPeopleList
+        GH.replaceEventDescription(event!!) //TODO Watch this. May need to thread it.
         return event
     }
 
     fun getAndSetEvent(eventName:String, type:String = ""):EventJson{
-        var event = getEvent(eventName, type)
+        var event = getEvent(eventName, type, true)
         currActiveEvent = event
         return event
     }
-
 
     class EventJson{
         var root:Boolean = false
@@ -94,8 +94,9 @@ object GameEventManager{
         lateinit var description:Array<String>
         lateinit var modifiedDescription:Array<String>
         var choices:Array<String>? = null // The choices, like 'yes' or 'no' || 'Kill him', 'Let him go', 'Have him join you'
+        var restrictions:Array<String>? = null //The restrictions on the choices.
         var outcomes:Array<Array<String>>? = null //The possible outcomes for each choice, ie: 'He died', 'He killed you first!'
-        var chances:Array<IntArray>? = null //The chances of each outcome happening
+        var chances:Array<FloatArray>? = null //The chances of each outcome happening
         var resultingAction:Array<Array<String>>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
 
         //Each time a root event is retrieved to start and event, this should be randomed to use for future events.
@@ -138,8 +139,7 @@ object GameEventManager{
                 }
 
                 val outcomeText = outcomes!![choiceIndex][outcomeIndex]
-                val outcomeEvent = getEvent(outcomeText)
-                outcomeEvent.randomPersonList = this.randomPersonList
+                val outcomeEvent = getEvent(outcomeText, "", false, this.randomPersonList)
                 return outcomeEvent
             }
 
@@ -165,7 +165,7 @@ object GameEventManager{
          * Gets the outcome index.
          */
         private fun getOutcome(choiceIndex:Int, chance:Int):Int{
-            var counter:Int = 0
+            var counter:Float = 0f
             var outcomeIndex = -1
 
             if((outcomes!!.size == 1 && (outcomes!![0].size == 0 || outcomes!![0][0].isEmpty())))

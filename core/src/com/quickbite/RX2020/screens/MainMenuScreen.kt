@@ -12,8 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.GH
 
 /**
@@ -83,6 +85,10 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
         //I like to fade almost everything
         mainTable.addAction(Actions.fadeIn(1f))
+
+        FunGameStats.reset()
+        GroupManager.reset()
+        EventManager.reset()
     }
 
     fun continueGameFade():ChainTask{

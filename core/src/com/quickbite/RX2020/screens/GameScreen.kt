@@ -103,7 +103,9 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Slipper", "common"))})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Hunting", "rare"))})
+        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -238,18 +240,26 @@ class GameScreen(val game: TextGame): Screen {
      * @param delta Time between frames.
      */
     fun onHourTick(delta:Float){
-        GameStats.updateHourly(delta)
-        SupplyManager.updateHourly(delta)
-        GroupManager.updateHourly(delta)
-        ChainTask.updateHourly(delta)
+        //TODO Need to implement when you can't travel and need to camp.
 
-        if(Result.recentDeathMap.size > 0)
-            gui.triggerEventGUI(GameEventManager.getEvent("Death", "special"))
+        if(GH.checkGameOverConditions())
+            gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))
+        else if(GameStats.TravelInfo.totalDistToGo <= 0)
+            gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))
+        else {
+            GameStats.updateHourly(delta)
+            SupplyManager.updateHourly(delta)
+            GroupManager.updateHourly(delta)
+            ChainTask.updateHourly(delta)
 
-        if(numHoursToAdvance > 0) numHoursToAdvance--
-        timeTickEventList.forEach { evt -> evt.update()}
+            if (Result.recentDeathMap.size > 0)
+                gui.triggerEventGUI(GameEventManager.getEvent("Death", "special"))
 
-        gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
+            if (numHoursToAdvance > 0) numHoursToAdvance--
+            timeTickEventList.forEach { evt -> evt.update() }
+
+            gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
+        }
     }
 
     /**

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.TimeUtils
 import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.Logger
 
 /**
@@ -21,18 +22,7 @@ object SaveLoad{
         json.setIgnoreUnknownFields(false)
         json.setUsePrototypes(true)
 
-        val startTime = TimeUtils.nanoTime()
-        val save = SaveGamePOJO()
-
-        save.currTime = GameStats.TimeInfo.totalTimeCounter
-        save.currMiles = GameStats.TravelInfo.totalDistTraveled
-        save.maxTripMileage = GameStats.TravelInfo.totalDistOfGame
-
-        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal+person.healthInjury, person.disabilityList, person.male))}
-
-        SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
-
-        Logger.log("SaveLoad", "Gather game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
+        val save = gatherGameState()
 
         if(threaded)
             TextGame.threadPool.submit {
@@ -47,6 +37,25 @@ object SaveLoad{
             file.writeString(json.toJson(save), false)
             Logger.log("SaveLoad", "Saved game (non-threaded) in ${(TimeUtils.nanoTime() - start)/1000000000.0} seconds")
         }
+    }
+
+    private fun gatherGameState():SaveGamePOJO{
+        val startTime = TimeUtils.nanoTime()
+
+        val save = SaveGamePOJO()
+
+        save.currTime = GameStats.TimeInfo.totalTimeCounter
+        save.currMiles = GameStats.TravelInfo.totalDistTraveled
+        save.maxTripMileage = GameStats.TravelInfo.totalDistOfGame
+
+        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal+person.healthInjury, person.disabilityList, person.male))}
+        SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
+        FunGameStats.statsMap.toList().forEach { stat -> save.funStatList.add(arrayOf(stat.first, stat.second)) }
+        FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
+
+        Logger.log("SaveLoad", "Gathered game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
+
+        return save
     }
 
     fun loadGame(){
@@ -77,6 +86,14 @@ object SaveLoad{
             _supply.currHealth = supply.currHealth
         }
 
+        save.funStatList.forEach { stat ->
+            FunGameStats.addFunStat(stat[0], stat[1])
+        }
+
+        save.funStatUniqueList.forEach { stat ->
+            FunGameStats.addFunStat(stat[0], stat[1], true)
+        }
+
         Logger.log("SaveLoad", "Loaded game in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
     }
 
@@ -90,6 +107,8 @@ object SaveLoad{
         var maxTripMileage:Int = 0
         var personList:MutableList<PersonPOJO> = mutableListOf()
         var supplyList:MutableList<SupplyPOJO> = mutableListOf()
+        var funStatList:MutableList<Array<String>> = mutableListOf()
+        var funStatUniqueList:MutableList<Array<String>> = mutableListOf()
     }
 
     private class PersonPOJO(var name:String, var health:Float, var disabilities:List<Person.Disability>, var male:Boolean){

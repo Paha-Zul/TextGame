@@ -1,5 +1,65 @@
 [ {
   "root" : false,
+  "title" : "A Lone Native",
+  "name" : "LoneNativeEnergy",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "energy" ], [ "addRndAmt", "-25", "-50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "A Lone Native",
+  "name" : "LoneNativeMed",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ], [ "addRndAmt", "-25", "-50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "A Lone Native",
+  "name" : "LoneNativeParts",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "parts" ], [ "addRndAmt", "-25", "-50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "A Lone Native",
+  "name" : "LoneNativeAmmo",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "ammo" ], [ "addRndAmt", "-25", "-50", "wealth" ] ]
+}, {
+  "root" : true,
+  "title" : "A Lone Native",
+  "name" : "LoneNative",
+  "description" : [ "A lone native riding on the back of a hairy ox-like creature approaches the group. He stops, his tiny eyes peering out from behind a long nose, assessing the unfamiliar creatures that make up the group. Puzzled at first, he looks around, until he spies some of the group’s handmade tools and trinkets. He turns on his hairy beast and opens one of the leathery pouches draped across its back. The pouch is full of all sorts of things. It seems the rider wants to make a trade…" ],
+  "choices" : [ "Trade Wealth for Energy", "Trade Wealth for Edibles", "Trade Wealth for Parts", "Trade Wealth for Ammo", "Trade Wealth for Med-kit", "Don't Trade" ],
+  "restrictions" : [ "wealth >= 25", "wealth >= 25", "wealth >= 25", "wealth >= 25", "wealth >= 25", "" ],
+  "outcomes" : [ [ "LoneNativeEnergy" ], [ "LoneNativeEdibles" ], [ "LoneNativeParts" ], [ "LoneNativeAmmo" ], [ "LoneNativeMed" ], [ ] ],
+  "chances" : [ [ 100 ], [ 100 ], [ 100 ], [ 100 ], [ 100 ], [ ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "A Lone Native",
+  "name" : "LoneNativeEdibles",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ], [ "addRndAmt", "-25", "-50", "wealth" ] ]
+}, {
+  "root" : false,
   "title" : "Avoid",
   "name" : "NativeAvoidSuccess",
   "description" : [ "The group decides to play it safe. %n turns the ROV leftward down the path less taken. Rocky terrain slows down the group's progress but eventually they reunite with their previous course, safely avoiding the natives' roadblock." ],
@@ -18,40 +78,197 @@
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "damageROV", "25", "55" ] ]
 }, {
   "root" : false,
-  "title" : "Dream",
-  "name" : "DreamChildhood",
-  "description" : [ "He1's running with some of his1 child hood friends. He1 feels so light, like he1 can barely stay on the ground. He1 closes his1 eyes and imagines the feeling of pressing away from the ground altogether and when he1 opens eyes he1 his1 flying gently above his1 now stopped friends. The feeling is amazing, it feels as if he1 has done something he1 has always knew he1 could. Closing his1 eyes again he1 flies even higher. He1 opens his1 eyes to see the dark inside of the ROV. He1 knows it was all just a dream, but the feeling of joy still lingers." ],
+  "title" : "Break in!",
+  "name" : "BreakInChaseNormal",
+  "description" : [ "The bag toting natives enter the tree line and the crew follows after. Once inside the trees, more natives appear and descending on the crew, jumping on their backs and legs, biting and throwing rocks. (Name1) spots one of the bag toting imps and dives for him. He1 snags imp by the leg and pulls him off the bag and flings him into the trees. As he1 scoops up the bag more imps pile on him1, but (Name2) pulls them off of him1 and helps (Name1) to (his1) feet. The group retreats to the safety of the ROV.", "As the crew burst back through the trees the group spots more imps snatching food from open storage container, but they are too slow. The group kicks them away and they scurry off empty handed. Somehow the group managed to recover all of their stolen food and still return in time to stop the rest from being snatched." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
 }, {
   "root" : false,
-  "title" : "Dream",
-  "name" : "DreamPizza",
-  "description" : [ "He1's at Big John's Pizzeria with all his1 friends. They always meet there after work on Friday and this Friday is no exception. He1's starving, but he1 doesn't have to wait long, because the pizza just arrived. He1 grabs a plate and loads it with pizza. He1 tries to let it cool for a few minutes, but he1's hungry and can't wait long. He1 grabs the biggest piece and takes a huge bite. It's perfect, no, it's better than perfect, it's the best pizza he1's ever tasted. Still chewing he1 takes a sip of his1 ice cold root beer. It doesn't take him1 long to make short work of the pizza. He1 leans back in his1 chair. Full and satisfied he1 closes his1 eyes. When he1 opens them again he1's nestled in his1 sleeping bag, morning sun peeking through the windows of the ROV. Even though it was just a dream, he1 still feels full and satisfied." ],
+  "title" : "Break in!",
+  "name" : "BreakInChaseTerrible",
+  "description" : [ "The crew runs after them as they reach the tree line. The crew enters the woods after them, but are besieged by more natives. They’re small and fast. Some are running around and throwing rocks, others are jumping onto the crew and clawing and biting them. (Name1) spots the bagged natives ahead and gives chase. A large rock hits him1 in the temple and he1 falls to the ground and is swarmed by imps. He1 kicks free and retreats to the safety of the crew.", "As suddenly as they appeared, the group of impish natives disappear, leaving the crew battered and bruised. They return to the ROV to find the remaining food in the broken storage container has been stolen as well." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "edibles" ], [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
 }, {
   "root" : false,
-  "title" : "Dream",
-  "name" : "DreamCarCrash",
-  "description" : [ "He1's driving on the highway with his1 family. His1 parents tell him1 they're so glad he1's back home and he1 couldn't agree more. He1 glances out the window and watching the trees passing by. The weather couldn't be better. He1 when he1 looks back at the road ahead the cars are unexpectedly stopped. Having plenty of time to stop he1 press the brake gently, but he1 isn't slowing down. The cars are fast approaching. He1 mashing the brake hard, but the car just won't stop. His1 mom screams as they slam into the parked cars. %n jumps awake, a slight tightness still lingering in his1 gut, and wipes the sweat from his1 forehead. " ],
+  "title" : "Break in!",
+  "name" : "BreakInChaseBad",
+  "description" : [ "The crew runs after them, catching them just as the reach the tree line. (Name1) tackles the impish natives to the ground and try to snatch the bags from their tiny hands, but they won’t let go. More imps surround the group, throwing rocks and jumping on the crew and clawing at them. A brawl breaks out between the two groups. (Name1) wrestles the bag free from the hands of the pinned natives, but as he1 turns, more imps jump on (his1) back, scratching and biting him1. He1 shakes them free and the group retreats towards the ROV, kicking and flinging natives left and right.", "As the crew burst back through the tree, the last of the natives scuttle away. Cut and bruised the crew returns to the ROV to find the remaining food has been stolen from the broken storage container." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ], [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
 }, {
   "root" : false,
-  "title" : "Dream",
-  "name" : "DreamFlood",
-  "description" : [ "He1's on a walk through his1 neighborhood. It's raining and has been all day, but he1 was tired of being stuck inside so he1 decided to get some fresh air anyways. It wasn't raining hard when he1 started his1 walk, but now it's really coming down. He1 looks down at his1 feet; water is flowing steadily over his1 shoes. He1's really beginning to regret his1 choice to go on a walk. He1 looks down the road to see if he1 can discern a break in the rain ahead, but all he1 sees is more rain ahead, but then he1 spots an unusual hump in the road at the end of the street. He1 looks back to his1 feet and notices the water is now over his1 ankles. His1 stomach tightens as he1 looks to the end of the street again and finds the mass is much closer now. He1 turns to home and starts jogging. “It can't be” he1 thinks to himself as he1 sloshes though the now knee deep water. His1 fears are confirmed when he1 glances over his1 shoulder to the end of the street and sees the wall of water bearing down on him1. He1 turns to climb a tree, but it's too late the wall of icy water slams his1 body. He1 jumps awake in his1 sleeping bag, looking around dazed and scared until he1 realizes it was all just a bad dream. He1 can't stop thinking about how real it felt and it leaves him1 feeling drained all day long." ],
+  "title" : "Break in!",
+  "name" : "BreakInDefendBad",
+  "description" : [ "As the bag toting natives reach the tree line, more impish natives come pouring out, making a dash for the open food container. Some jump on the crew and claw at them, while other hurl rocks. The crew fights back, but the imps are quick and grab handfuls of food from the open container and run off. (Name1) dives on the container and slams the door shut. Little hands claw at him1 and hit him1 with rocks, but he1 hangs on.", "The crew comes to (his1) aid, kicking and punching as many of the imps as they can, until the tiny horde finally scurries back into the tree. The crew collects any stray food they find laying around, returning it to the storage, and securing the door with a makeshift lock." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ], [ "addRndAmt", "-1", "-25", "edibles" ] ]
+}, {
+  "root" : true,
+  "title" : "Break in!",
+  "name" : "BreakIn",
+  "description" : [ "The group stops the ROV for a quick break while they discuss what the best route to take is. They are listing the pros and cons of each path when they hear a loud bang on the outside of the ROV. (Name1) opens the top hatch and sticks (his1) head out.", "He looks over the edge of the ROV and spots a group of imp like natives scooping food out of the external food storage and into big brown sacks! The crew jumps up, grabs their gear, and burst out of the ROV just as the impish natives start scurrying towards the woods with their sacks of food!" ],
+  "choices" : [ "Chase after the natives and try to recover the stolen food?", "Stay and defend the remaining food?" ],
+  "outcomes" : [ [ "BreakInChaseTerrible", "BreakInChaseBad", "BreakInChaseNormal" ], [ "BreakInDefendTerrible", "BreakInDefendBad", "BreakInDefendNormal" ] ],
+  "chances" : [ [ 35, 35, 30 ], [ 35, 35, 30 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Break in!",
+  "name" : "BreakInDefendTerrible",
+  "description" : [ "More natives pour out from the tree line and surround the crew. They’re small but fast, grabbing handfuls of food and darting off. Impish natives cling to the crew members and pelt them with rocks. One of the imps grabs a large handful of food and (Name1) tackles him to the ground. As he1 tries to wrestle the food from the tiny hands of the imp, a large rock slams into (his1) ribs. The imp squirms free as (Name1) winces in pain.", "The natives disperse as quickly as they came, the impish natives made off with nearly every scrap of food in the open container, and left the crew beaten and bruised." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ], [ "addRndAmt", "-25", "-50", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Break in!",
+  "name" : "BreakInDefendNormal",
+  "description" : [ "As the bag toting natives reach the tree line, more impish natives emerge and make a dash for the open food container. The crew slams the door shut just as the wave of imps reach the storage. The native claw at the broken lock and bite at the crew’s fingers and arms. For a moment it looks as though they might pry it open, but (Name1) leans into the door with all (his1) might, while the rest of the crew kick and punch away the swarming natives.", "Finally the imps retreat back into the tree line, but (Name2) is nowhere to be found. Suddenly, (he2) emerges from the tree line, brown food bags in hand. Somehow (he2) managed to recover the stolen food while the crew guarded remaining stash. The crew throws it in the storage and secures the door with a makeshift lock." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock2Okay",
+  "description" : [ "Eventually the group rejoins to and dumps all of their loot in a small pile on the floor and, while it’s not much, they are glad to return home with something. They repack their bags and begins their climb to the cold surface above." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock1Equal",
+  "description" : [ "(Name1) pans (his1) flashing around the room, stopping it on a pile of rocks stacked next to a large stone pillar. He1 starts towards them, but stops, when he1 sees them moving ever so slightly. Puzzlement turns to horror when (Name1) realizes the pile of rocks is actually a mass of giant roach like creatures. He1 screams as the roach pile scatters in all directions. The group runs for the door, as more giant roaches scurry down the walls and across the floor.", "The crew waste no time climbing the rocky pathway to the surface, shooting anything that moves along the way. Finally, they emerge, disgusted but uninured, onto the grassy plains above." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : true,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock",
+  "description" : [ "While out searching for supplies, (Name1) discovers the small rocky mouth of a cave, nestled in the tall grasses at the base of a craggy rock embankment.  He1 reports (his1) findings to the crew and, after much deliberation, they decide to descend into cave in search of crystal fragments, which are used as ammunition for their weapons.", "Equipped with rifle and flashlight, the crew stuffs through the narrow opening and begins their downward journey. A meager rock shelf spirals into the darkness ahead. The group is forced to travel single file down the slender pathway until, at last, the passage widens into a rock-strewn basin.", "The crew spreads out, searching for any hidden crystal fragments that may be buried under the piles of loose rocks strew across the floor or embedded into the arching stone walls of the cavern itself." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "CragRock1", "CragRock2" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock1Good",
+  "description" : [ "After a few minutes of searching the group reunites to share their finds. Altogether they are able to scrape together a few more handfuls of various sized crystals. Satisfied with the fruitful results of their journey, the group packs their bags and returns to the surface." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock2Worse",
+  "description" : [ "The group is searching around the rocky basin when they become aware of a distant rumble. The sound, so quiet at first that the group dismisses it as imagination, suddenly grows louder. Geysers of gravel erupt for the cavern’s floor as large mole-like creatures come bursting out of the rocky ground around the crew.", "Dodging falling rocks and gnashing teeth, the crew sprints up the narrow passageway heading safety of the smaller chamber. Reaching the mouth of the smaller room, the team turns back, firing into the narrow passage, cutting down the initial wave of charging moles. The team retreats as more giant moles pour into the small basin. They climb the thin rock ledge and emerge, unscathed, onto the cold ground and tall grass above." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock1Okay",
+  "description" : [ "After a thoroughly searching the caves lower chamber, all the group uncovers is rocks, dirt, and the occasional nasty bug. Not finding the riches they hoped for, they return to the surface." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock1",
+  "description" : [ "They manage to scrape together a small pile of crystals and are about to head home when they find another small passageway winding further into the darkness below. Initially the group considers returning to the ROV with what they already have, but the temptation of a greater reward and the curiosity of the unknown drives the team deeper into the bowels of the cavern.", "Following the passageway leads them to another open chamber, this one bigger than the last, and once again the group fans out in search of their crystal prey." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "CragRock1Great", "CragRock1Good", "CragRock1Okay", "CragRock1Equal", "CragRock1Bad" ] ],
+  "chances" : [ [ 20, 20, 20, 20, 20 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock2",
+  "description" : [ "While the search fails to turn up any crystals, they do discover a second small pathway that descends even further into the belly of the cavern. Disappointed by the lack of crystals thus far, the group decides to risk going further into the unknown.\nFollowing this new passage eventually leads to yet another open chamber, this one larger than the last. Once again the group fans out in search of crystals." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "CragRock2Good", "CragRock2Okay", "CragRock2Nothing", "CragRock2Bad", "CragRock2Worse" ] ],
+  "chances" : [ [ 20, 20, 20, 20, 20 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock1Bad",
+  "description" : [ "While searching through the piles of rocks scattered around the caves floor, the group becomes aware of the occasional faint rustle of noise from somewhere in the dark, but unable to locate the noise, continue their search.", "(Name1) overturns a large bolder, causing dust to waft into (his1) face. He1 sneezes and, as he1 does, a loud rustle echoes out from above. The group turns their flashlights to the roof of the cave and, too their horror, reveal hundreds of huge bat-like creatures with beady red eyes peering back. The creatures explode from the roof as the group screams and runs for the door.", "The batting of leathery wings and supersonic screeching engulfs the retreating crew, the bright blast of their rifles illuminating the trail ahead as they cut a path, through the swarm, to the mouth of the cave. They dive through the narrow exit and into the tall grass outside as the last of the bat creatures pour out overhead." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "-25", "-50", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock1Great",
+  "description" : [ "The quiet crunch of shoes on rock is startlingly interrupted by ruckus shouts. Lights whirl in their direction to reveal (Name1), arms raised over head, holding a colossal hunk of greenish crystal! The rest of the crew congratulates him1 on (his1) find. He1 stuffs the crystal into (his1) pack and the group heads for home." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "25", "50", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock2Nothing",
+  "description" : [ "After searching the entire lower chamber, the crew is, once again, unable to uncover any crystals. Disappointed at their misfortune, the crew returns to the ROV empty handed." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock2Bad",
+  "description" : [ "The group is searching around the rocky basin when they become aware of a distant rumble. The sound, so quiet at first that the group dismisses it as imagination, suddenly grows louder. Geysers of gravel erupt for the cavern’s floor as large mole-like creatures come bursting out of the rocky ground around the crew.", "The crew retreats to the upper chamber, leaping over mounds of rocks and moles. As they emerge, (Name1) turns back and shoots into the stalactites towers over the mouth of the tunnel, breaking them loose. They smash to the cave floor, crushing many of the moles underneath and blocking the narrow passage. Knowing the stalactite barrier won’t last long, the crew retreats to the surface and the safety of the ROV and, although they didn’t find the crystals they hoped for, their glad to be alive." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Crag Rock Cave",
+  "name" : "CragRock2Good",
+  "description" : [ "After searching under every rock, behind every stalagmite, and inside every crack, the crew regroups to share their findings and, much to their surprise, they all return with handfuls of crystal fragments! They pack their bags and begin their long ascent to the surface pleased with their decision to explore deeper into the cave." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "ammo" ] ]
 }, {
   "root" : false,
   "title" : "Dream",
@@ -61,33 +278,6 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
-  "name" : "DreamSister",
-  "description" : [ "He1's on the couch with his1 best friend's sister, a movie playing in the background. She smiles and scoots closer to him1. She likes him1, always has, and deep down he1 kind of likes her too, but her brother was very clear about his1 disapproval of any such feelings. He1 puts his1 arm around her. He1 knows he1 shouldn't but he1 does it anyways. She whispers his1 name and when he1 turns to look she kisses him1. The door slams open to reveal a furious brother. He1 must have come home early. He1 snatches %n up by the shirt at gives him1 a hard slap. %n jumps awake, tense and sweaty. It was just a dream, but the feelings are real." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
-  "name" : "DreamTornado",
-  "description" : [ "He1's in the living room of his1 house looking out the window. It is pitch black outside and rain is pouring down in waves. %n can't remember a time he1 has seen a storm this bad. He1 jumps as lightning strikes close, followed by a thunderous crack. The lights flicker, then go out, leaving %n standing in total darkness. He1 fumbles around in the dark, trying to make his1 way over to his1 flashlight. Suddenly the house begins to rumble. At first he1 thinks it's just thunder, but it grows into something much louder. Something thumps hard against the house, followed by another loud bang, something that sounds like someone throwing handfuls of gravel against the house. The roar of the winds outside is deafening. Glass shatters as the windows explode outwards and %n feels himself being tumbled around and pulled towards the destroyed window frames. He1 grasps at anything he1 can, trying to stop the roaring twister from pulling him1 out of the house. He1 wakes up in his1 sleeping bag, hands clenched tightly around the edges. It all just a bad dream, but his1 heart is still racing." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
-  "name" : "DreamJet",
-  "description" : [ "He1's outside raking some leaves when he1 hears the low rumble of a jet cruising overhead. He1 looks around, trying to catch a glimpse of it but he1 can't see it anywhere. As the sound grows so does his1 curiosity. It sounds different than what he1 normally hears flying around. Finally he1 spots some movement though the horizon of trees just to his1 back. As he1 turns to get a better look it emerges over the crest of the tree line. At first he1 thinks it's strange that the jet is flying so low this far from the airport, but then he1 notices the awkward list of the plane's body, he1 notices the terrible gasping sounds the engines are making, and he1 notices the trail of dark smoke following the smoldering tail of the plane. As he1 stares in disbelief the plane dips, seeming to grow larger and larger as it noses straight towards him1. He1 turns to run, but as he1 starts to pump his1 legs it feels as though he1's running though molasses. He1 head spins as he1 strains just to move one foot in front of the other. He1 feels shadow of the plane covering him1 as he1 covers his1 eyes and braces for impact. He1 sits up and looks around. He1's in his1 sleeping bag in the ROV, it was all just a bad dream. He1 moves his1 legs around just to be sure they still work; they do. The dream leaves him1 feeling worn out all day." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Dream",
@@ -100,24 +290,6 @@
 }, {
   "root" : false,
   "title" : "Dream",
-  "name" : "DreamGrocery",
-  "description" : [ "He1's in the grocery store parking lot. He1's loading the last of his1 groceries into his1 car when he1 hears shouting. He1 closes his1 trunk and spots the arguing young couple composed of a presumably intoxicated male sitting in the doorway of his1 car and an attractive young female who seems reluctant to get in the car. The male is showering the female with insults, she turns to leave and he grabs her arm hard. %n starts across the parking lot towards them, quickly closing the distance. The male stands up aggressively shouting louder, she slaps him. Now enraged he pushes her hard to the ground just as %n reaches the couple. Without saying a word he1 blindsides the male with the hardest punch he1 has ever thrown and male drops like a ton of bricks. “Thanks” the female says from the ground, wiping away a stray tear. %n turns to her and extends his1 arm to help her up and with unexpected confidence says “Let's, get out of here.” %n wakes up in the ROV. It was all just a dream, but nevertheless, he1 feels like a hero for the rest of the day." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
-  "name" : "DreamLostFriends",
-  "description" : [ "He1's at his1 favorite bar with his1 longtime friends and crewmates. He1 buys them all a round of drinks. Their celebrating the latest news; they've all qualified for the elite Exomer751 Special Operations Exploration Team. They know they've earned it. Months of training weeded out the weak and cultivated the strong among them; all for a chance to make history as the first manned flight to land of the surface of Secturn. Cheering and laughter fades to the dark inside of the ROV. %n sits, thinking about the faces of those who didn't survive the wreckage, the faces of his1 friends." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
   "name" : "DreamPub",
   "description" : [ "He1's sitting around the pub with some of the Exomer's crew. They're laughing and swapping stories. He1 smiles to himself as he1 picks up the sandwich in his1 hand and takes a bite. He1 feels a sharp pain in the back of his1 mouth as he1 bites down and feels his1 tooth rolling around in his1 mouth. Others around the table ask him1 what's wrong, but when he1 tries to answer another tooth tumbles free. He1 breathes in sharply and looks around. He1's in his1 sleeping bag in the ROV. It was all just a bad dream. He1 checks his1 teeth anyways and makes sure they are all there, they are." ],
   "choices" : [ ],
@@ -127,17 +299,8 @@
 }, {
   "root" : false,
   "title" : "Dream",
-  "name" : "DreamDinner",
-  "description" : [ "He1's sitting at the dinner table with his1 family and everyone's there, even relatives he1 only sees once a year. The table is covered with all sorts of bowls and plates of delicious smelling food. He1 grabs a bowl of mashed potatoes and spoons a hearty pile next to his1 ham and steamed vegetables as he1 nods in response to his1 mom's long story about her coworker's latest drama. He1 strains to hear her over the family chatter; it's noisy around the table, but the good kind of noisy, the kind of noisy that leads to after dinner naps. After dinner he1 helps collect stray plates and direct them to the sink and answers questions about what's new in his1 life, exaggerating the details of his1 story each time he1 tells it. Once the dishes are put away he1 flops down on the couch and turns on the TV. The game is on, he1 doesn't really care about the score, he1 only cares about napping and it doesn't take long before he1's sound asleep. When he1 wakes up he1's in the ROV. The quiet talking amongst the crew is like a sampling of last night's dream, it leaves him1 in a good mood all day." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
-  "name" : "DreamBridge",
-  "description" : [ "He1's walking across a long thin wooden bridge, so long that he1 can't even see the end. He1 glances down and there's nothing below. He1 feels himself falling into the darkness and though he1 can't see it he1 feels the bottom approaching. The moment he1 hits he1 jumps awake. He1 sits up in his1 sleeping bag and looks around, heart still racing and his1 back covered in sweat... it was just a dream." ],
+  "name" : "DreamExomerCrash",
+  "description" : [ "He1's strapped into a chair in Exomer's exploration vessel and its making its descent towards Secturn. The vessel starts to rattle, slightly at first then growing until the entire hull creaks and groans with each large tremor. A siren sounds, but it can barely be heard above the roar of the winds pulling at the ship's exterior. Cracks appear on the windows as thick blue clouds race by outside and ship shakes violently. %n closes his1 eyes as he1 hears the sound of metal scraping on metal, when suddenly everything seems to stand still. He1 opens his1 eyes again just long enough to see the ground outside the window quickly approaching. He1 shuts his1 eyes again, hands gripping the chairs armrest so hard it hurts. He1 wakes up, breathing heavily and soaked in sweat. It was more than a dream to him1, it was a memory and all the feelings of that moment are all too familiar..." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -154,15 +317,6 @@
 }, {
   "root" : false,
   "title" : "Dream",
-  "name" : "DreamCollege",
-  "description" : [ "He1's at school. He1 sleepily heads to the first class of the day. He1 picks up the pace as the hallways start to empty, he1 doesn't want to be late. He1 reaches the door just as it starts to swing close. He1 walks in and looks for a seat, but then he1 notices the board is full of math problems and his1 first class is English. Some of the other students look at him1 standing awkwardly in the doorway and he1 doesn't recognize them. He1 rushes out of the class and starts down the hallway, but he1 can't remember where English classroom or was History his1 first class? He1 wakes up, brows furrowed in frustration. It was just a dream. He1 knows he1 finished school a long time ago, but it's still upsetting." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
   "name" : "DreamWife",
   "description" : [ "He1's on the bed relaxing and watching some news on TV. The TV turns off as the door to the bathroom opens. He1 turns his1 head to protest but sees his1 wife, wearing that sexy outfit he1 loves so much, smiling playfully in the doorway. He1 wakes up, still smiling, to see it was all a dream. He1's sad he1 woke up so soon, but he1 feels good anyways." ],
   "choices" : [ ],
@@ -172,8 +326,116 @@
 }, {
   "root" : false,
   "title" : "Dream",
+  "name" : "DreamChildhood",
+  "description" : [ "He1’s running with some of (his1) child hood friends. He1 feels so light, like he1 can barely stay on the ground. He1 closes (his1) eyes and imagines the feeling of pressing away from the ground altogether and when he1 opens eyes he1 is flying gently above (his1) now stopped friends. The feeling is amazing, it feels as if he1 has done something he1 has always knew he1 could. Closing (his1) eyes again he1 flies even higher. He1 opens (his1) eyes to see the dark inside of the ROV. He1 knows it was all just a dream, but the feeling of joy still lingers." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamCarCrash",
+  "description" : [ "He1's driving on the highway with his1 family. His1 parents tell him1 they're so glad he1's back home and he1 couldn't agree more. He1 glances out the window and watching the trees passing by. The weather couldn't be better. He1 when he1 looks back at the road ahead the cars are unexpectedly stopped. Having plenty of time to stop he1 press the brake gently, but he1 isn't slowing down. The cars are fast approaching. He1 mashing the brake hard, but the car just won't stop. His1 mom screams as they slam into the parked cars. %n jumps awake, a slight tightness still lingering in his1 gut, and wipes the sweat from his1 forehead. " ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamSister",
+  "description" : [ "He1’s on the couch with (his1) best friend’s sister, a movie playing in the background. She smiles and scoots closer to him1. She likes him1, always has, and deep down he1 kind of likes her too, but her brother was very clear about his disapproval of any such feelings. He1 puts (his1) arm around her. He1 knows he1 shouldn’t but he1 does it anyways. She whispers (his1) name and when he1 turns to look she kisses him1. The door slams open to reveal a furious brother. He must have come home early. He snatches (Name1) up by the shirt at gives him1 a hard slap. (Name1) jumps awake, tense and sweaty. It was just a dream, but the feelings are real." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamJet",
+  "description" : [ "He1's outside raking some leaves when he1 hears the low rumble of a jet cruising overhead. He1 looks around, trying to catch a glimpse of it but he1 can't see it anywhere. As the sound grows so does his1 curiosity. It sounds different than what he1 normally hears flying around. Finally he1 spots some movement though the horizon of trees just to his1 back. As he1 turns to get a better look it emerges over the crest of the tree line. At first he1 thinks it's strange that the jet is flying so low this far from the airport, but then he1 notices the awkward list of the plane's body, he1 notices the terrible gasping sounds the engines are making, and he1 notices the trail of dark smoke following the smoldering tail of the plane. As he1 stares in disbelief the plane dips, seeming to grow larger and larger as it noses straight towards him1. He1 turns to run, but as he1 starts to pump his1 legs it feels as though he1's running though molasses. He1 head spins as he1 strains just to move one foot in front of the other. He1 feels shadow of the plane covering him1 as he1 covers his1 eyes and braces for impact. He1 sits up and looks around. He1's in his1 sleeping bag in the ROV, it was all just a bad dream. He1 moves his1 legs around just to be sure they still work; they do. The dream leaves him1 feeling worn out all day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamBridge",
+  "description" : [ "He1's walking across a long thin wooden bridge, so long that he1 can't even see the end. He1 glances down and there's nothing below. He1 feels himself falling into the darkness and though he1 can't see it he1 feels the bottom approaching. The moment he1 hits he1 jumps awake. He1 sits up in his1 sleeping bag and looks around, heart still racing and his1 back covered in sweat... it was just a dream." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamCollege",
+  "description" : [ "He1's at school. He1 sleepily heads to the first class of the day. He1 picks up the pace as the hallways start to empty, he1 doesn't want to be late. He1 reaches the door just as it starts to swing close. He1 walks in and looks for a seat, but then he1 notices the board is full of math problems and his1 first class is English. Some of the other students look at him1 standing awkwardly in the doorway and he1 doesn't recognize them. He1 rushes out of the class and starts down the hallway, but he1 can't remember where English classroom or was History his1 first class? He1 wakes up, brows furrowed in frustration. It was just a dream. He1 knows he1 finished school a long time ago, but it's still upsetting." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
   "name" : "DreamMedal",
-  "description" : [ "He1's standing on stage in front of a sea of people that stretch far into the distance. To his1 left is a man at a podium making a rousing speech about duty, honor, and sacrifice; to his1 right is the remainder of the Exomer751 crew members, all standing at attention. A man steps in front of him1 and swiftly pins a large medal to his1 jacket pocket, just beneath his1 already full collection of various pins. The man continues to the rest of the Exomer751 crew, methodically pining one after another until he1 reaches the end and, turning to face the crew, snaps into a stiff salute just as the man at the microphone is concluding his1 speech. The crowd erupts in cheering and whistling, photographers snap pictures after picture, and people wave patriotic banners. He1 wakes up tucked into his1 sleeping bag piled in the back of the ROV. He1 looks around at everything around him1 and feels proud to be a part of something so great!" ],
+  "description" : [ "He1’s standing on stage in front of a sea of people that stretch far into the distance. To (his1) left is a man at a podium making a rousing speech about duty, honor, and sacrifice; to (his1) right is the remainder of the Exomer751 crew members, all standing at attention. A man steps in front of him1 and swiftly pins a large medal to (his1) jacket pocket, just beneath (his1) already full collection of various pins. The man continues to the rest of the Exomer751 crew, methodically pining one after another until he reaches the end and, turning to face the crew, snaps into a stiff salute just as the man at the microphone is concluding his speech. The crowd erupts in cheering and whistling, photographers snap pictures after picture, and people wave patriotic banners. He1 wakes up tucked into (his1) sleeping bag piled in the back of the ROV. He1 looks around at everything around him1 and feels proud to be a part of something so great!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamPizza",
+  "description" : [ "He1's at Big John's Pizzeria with all his1 friends. They always meet there after work on Friday and this Friday is no exception. He1's starving, but he1 doesn't have to wait long, because the pizza just arrived. He1 grabs a plate and loads it with pizza. He1 tries to let it cool for a few minutes, but he1's hungry and can't wait long. He1 grabs the biggest piece and takes a huge bite. It's perfect, no, it's better than perfect, it's the best pizza he1's ever tasted. Still chewing he1 takes a sip of his1 ice cold root beer. It doesn't take him1 long to make short work of the pizza. He1 leans back in his1 chair. Full and satisfied he1 closes his1 eyes. When he1 opens them again he1's nestled in his1 sleeping bag, morning sun peeking through the windows of the ROV. Even though it was just a dream, he1 still feels full and satisfied." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamFlood",
+  "description" : [ "He1's on a walk through his1 neighborhood. It's raining and has been all day, but he1 was tired of being stuck inside so he1 decided to get some fresh air anyways. It wasn't raining hard when he1 started his1 walk, but now it's really coming down. He1 looks down at his1 feet; water is flowing steadily over his1 shoes. He1's really beginning to regret his1 choice to go on a walk. He1 looks down the road to see if he1 can discern a break in the rain ahead, but all he1 sees is more rain ahead, but then he1 spots an unusual hump in the road at the end of the street. He1 looks back to his1 feet and notices the water is now over his1 ankles. His1 stomach tightens as he1 looks to the end of the street again and finds the mass is much closer now. He1 turns to home and starts jogging. “It can't be” he1 thinks to himself as he1 sloshes though the now knee deep water. His1 fears are confirmed when he1 glances over his1 shoulder to the end of the street and sees the wall of water bearing down on him1. He1 turns to climb a tree, but it's too late the wall of icy water slams his1 body. He1 jumps awake in his1 sleeping bag, looking around dazed and scared until he1 realizes it was all just a bad dream. He1 can't stop thinking about how real it felt and it leaves him1 feeling drained all day long." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamTornado",
+  "description" : [ "He1's in the living room of his1 house looking out the window. It is pitch black outside and rain is pouring down in waves. %n can't remember a time he1 has seen a storm this bad. He1 jumps as lightning strikes close, followed by a thunderous crack. The lights flicker, then go out, leaving %n standing in total darkness. He1 fumbles around in the dark, trying to make his1 way over to his1 flashlight. Suddenly the house begins to rumble. At first he1 thinks it's just thunder, but it grows into something much louder. Something thumps hard against the house, followed by another loud bang, something that sounds like someone throwing handfuls of gravel against the house. The roar of the winds outside is deafening. Glass shatters as the windows explode outwards and %n feels himself being tumbled around and pulled towards the destroyed window frames. He1 grasps at anything he1 can, trying to stop the roaring twister from pulling him1 out of the house. He1 wakes up in his1 sleeping bag, hands clenched tightly around the edges. It all just a bad dream, but his1 heart is still racing." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamGrocery",
+  "description" : [ "He1’s in the grocery store parking lot. He1’s loading the last of (his1) groceries into (his1) car when he1 hears shouting. He1 closes (his1) trunk and spots the arguing young couple composed of a presumably intoxicate male sitting in the doorway of his car and an attractive young female who seems reluctant to get in the car. The male is showering the female with insults, she turns to leave and he grabs her arm hard. (Name1) starts across the parking lot towards them, quickly closing the distance. The male stands up aggressively shouting louder, she slaps him. Now enraged he pushes her hard to the ground just as (Name1) reaches the couple. Without saying a word he1 blindsides the male with the hardest punch he1 has ever thrown and male drops like a ton of bricks. “Thanks” the female says from the ground, wiping away a stray tear. (Name1) turns to her and extends (his1) arm to help her up and with unexpected confidence says “Let’s, get out of here.” (Name1) wakes up in the ROV. It was all just a dream, but nevertheless, he feels like a hero for the rest of the day." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamLostFriends",
+  "description" : [ "He1's at his1 favorite bar with his1 longtime friends and crewmates. He1 buys them all a round of drinks. Their celebrating the latest news; they've all qualified for the elite Exomer751 Special Operations Exploration Team. They know they've earned it. Months of training weeded out the weak and cultivated the strong among them; all for a chance to make history as the first manned flight to land of the surface of Secturn. Cheering and laughter fades to the dark inside of the ROV. %n sits, thinking about the faces of those who didn't survive the wreckage, the faces of his1 friends." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Dream",
+  "name" : "DreamDinner",
+  "description" : [ "He1's sitting at the dinner table with his1 family and everyone's there, even relatives he1 only sees once a year. The table is covered with all sorts of bowls and plates of delicious smelling food. He1 grabs a bowl of mashed potatoes and spoons a hearty pile next to his1 ham and steamed vegetables as he1 nods in response to his1 mom's long story about her coworker's latest drama. He1 strains to hear her over the family chatter; it's noisy around the table, but the good kind of noisy, the kind of noisy that leads to after dinner naps. After dinner he1 helps collect stray plates and direct them to the sink and answers questions about what's new in his1 life, exaggerating the details of his1 story each time he1 tells it. Once the dishes are put away he1 flops down on the couch and turns on the TV. The game is on, he1 doesn't really care about the score, he1 only cares about napping and it doesn't take long before he1's sound asleep. When he1 wakes up he1's in the ROV. The quiet talking amongst the crew is like a sampling of last night's dream, it leaves him1 in a good mood all day." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -190,21 +452,111 @@
 }, {
   "root" : false,
   "title" : "Dream",
-  "name" : "DreamExomerCrash",
-  "description" : [ "He1's strapped into a chair in Exomer's exploration vessel and its making its descent towards Secturn. The vessel starts to rattle, slightly at first then growing until the entire hull creaks and groans with each large tremor. A siren sounds, but it can barely be heard above the roar of the winds pulling at the ship's exterior. Cracks appear on the windows as thick blue clouds race by outside and ship shakes violently. %n closes his1 eyes as he1 hears the sound of metal scraping on metal, when suddenly everything seems to stand still. He1 opens his1 eyes again just long enough to see the ground outside the window quickly approaching. He1 shuts his1 eyes again, hands gripping the chairs armrest so hard it hurts. He1 wakes up, breathing heavily and soaked in sweat. It was more than a dream to him1, it was a memory and all the feelings of that moment are all too familiar..." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
-}, {
-  "root" : false,
-  "title" : "Dream",
   "name" : "DreamSchoolBully",
-  "description" : [ "He1's at school, packing his1 things to head home. He1's tired and can't wait to get home. The bell sounds and everyone starts shuffle out into the hallways. He1 heads to the bus loading zone and it doesn't take him1 long to spot his1 bus, but he1 doesn't make it far before he1 spots the resident school bully. %n hopes he1 can make it past him1, but he1 knows that won't happen. He1's right, the bully stops him1 almost immediately. One of his1 goons snatches his1 pack bag and starts dumping everything out. The bully is laughing, the other kids are laughing, but %n's not laughing. He1 feels an anger deep within starting to build and as it does he1 remembers all the days this bully has tormented his1 life, all the times he1 just wanted to be left alone. The anger overtakes him1, hot and burning, he1 feels it radiating off his1 body. Silence falls over the other kids as they feel it too, pulsing the ground beneath them. A sharp blast erupts from %n like a shockwave, knocking many of the students to the ground and send papers flying. %n closes his1 eyes as a feels the power he1 knew he1 always had enveloping his1 body. When he1 opens them again he1's lying in his1 sleeping bag in the ROV. Although it was just a dream he1 feels as if he1 could still conjure that power at any time. The feeling leaves him1 feeling empowered for the rest of the day." ],
+  "description" : [ "He1’s at school, packing (his1) things to head home. He1’s tried and can’t wait to get home. The bell sounds and everyone starts shuffle out into the hallways. He1 heads to the bus loading zone and it doesn’t take him1 long to spot (his1) bus, but he1 doesn’t make it far before he1 spots the resident school bully. (Name1) hopes he1 can make it past him, but he1 knows that won’t happen. He1’s right, the bully stops him1 almost immediately. One of his goons snatches (his1) pack bag and starts dumping everything out. The bully is laughing, the other kids are laughing, but (Name1)’s not laughing. He1 feels an anger deep within starting to build and as it does he1 remembers all the days this bully has tormented (his1) life, all the times he1 just wanted to be left alone. The anger overtakes him1, hot and burning, he1 feels it radiating off (his1) body. Silence falls over the other kids as they feel it too, pulsing the ground beneath them. A sharp blast erupts from (Name1) like a shockwave, knocking many of the students to the ground and send papers flying. (Name1) closes (his1) eyes as a feels the power he1 knew he1 always had enveloping (his1) body. When he1 opens them again he1’s lying in (his1) sleeping bag in the ROV. Although it was just a dream he1 feels as if he1 could still conjure that power at any time. The feeling leaves him1 feeling empowered for the rest of the day." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentRiskyNothing",
+  "description" : [ "After a few hours of work, (Name1) fires up the ROV’s energy subsystems again. Fortunately, no sparks fly, but the ROV’s displays show no gain the to the solar panel’s output." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentRisky",
+  "description" : [ "(Name1) has always been a bit of a risk taker. He1 shuts down the ROV’s energy subsystems and, hoping for the best, begins working on the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "ExperimentRiskyGood", "ExperimentRiskyBad", "ExperimentRiskyNothing" ] ],
+  "chances" : [ [ 40, 40, 20 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentSafeGood",
+  "description" : [ "After a few hours of work, (Name1) restarts the ROV’s subsystem and it hums to life. He1 checks the control panel’s displays and notices a small increase to the solar panel’s output. Job well done!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentRiskyBad",
+  "description" : [ "After a few hours of work, (Name1) fires up the ROV’s energy subsystems again. Alarms sound and a horrible noise comes from the ROV’s console. (Name1) shuts things down again and begins the process of undoing (his1) mistakes." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "damageROV", "25", "50" ] ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentRiskyGood",
+  "description" : [ "After a few hours of work, (Name1) fires up the ROV’s energy subsystems again. Success, the ROV’s displays show an increase in the solar panel’s output!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentSafe",
+  "description" : [ "Deciding to play it safe, (Name1) shuts down the ROV’s energy subsystems and begins the operation." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "ExperimentSafeNothing", "ExperimentSafeGood", "ExperimentSafeBad" ] ],
+  "chances" : [ [ 40, 40, 20 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Energy Experiment",
+  "name" : "Experiment",
+  "description" : [ "(Name1) suggest a risky experiment to attempt to temporarily boost the solar panel’s energy output. He1 can take a risky approach, which will yield a higher reward if successful, but also has a higher chance of damaging the ROV or he1 can take a safer approach, which will yield a lower reward, but also has a lower chance of damaging the ROV." ],
+  "choices" : [ "Risky", "Safe" ],
+  "outcomes" : [ [ "ExperimentRisky" ], [ "ExperimentSafe" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentSafeNothing",
+  "description" : [ "After a few hours of work, (Name1) restarts the ROV’s subsystems and checks the control panel, but the displays show no increase to the solar panel’s output." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Energy Experiment",
+  "name" : "ExperimentSafeBad",
+  "description" : [ "After a few hours of work, (Name1) restarts the ROV’s subsystem. There’s a loud bang and the power shuts off. Clearly things didn’t go as planned." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "Fire",
+  "name" : "FireDamageROV",
+  "description" : [ "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "damageROV", "1", "25", "100" ] ]
+}, {
+  "root" : true,
+  "title" : "Fire",
+  "name" : "Fire",
+  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!" ],
+  "choices" : [ ],
+  "outcomes" : [ [ "FireDamageROV", "FireLosePart", "FireNothing" ] ],
+  "chances" : [ [ 35, 35, 30 ] ],
+  "resultingAction" : [ [ "addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage" ] ]
 }, {
   "root" : false,
   "title" : "Fire",
@@ -217,15 +569,6 @@
 }, {
   "root" : false,
   "title" : "Fire",
-  "name" : "FireDamageROV",
-  "description" : [ "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "1", "25", "100" ] ]
-}, {
-  "root" : false,
-  "title" : "Fire",
   "name" : "FireLosePart",
   "description" : [ "After a few frantic moments the fire is under control, but not before ravaging the ROV's vital components." ],
   "choices" : [ ],
@@ -234,13 +577,13 @@
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
 }, {
   "root" : true,
-  "title" : "Fire",
-  "name" : "Fire",
-  "description" : [ "%n smells burning plastic and spots dark smoke rising from the rear of the ROV. The crew scrambles to put it out!" ],
+  "title" : "Herb Box",
+  "name" : "HerbBox",
+  "description" : [ "While checking the medical storage, (Name1) notices an unusually strong odor coming from a box containing base ingredients used for making medicine.", "He1 opens the box to find that a potent vial of distilled roots has leaked all over some of the other dried herbs, rendering them unusable and he1 is forced to throw them out." ],
   "choices" : [ ],
-  "outcomes" : [ [ "FireDamageROV", "FireLosePart", "FireNothing" ] ],
-  "chances" : [ [ 35, 35, 30 ] ],
-  "resultingAction" : [ [ "addRndItem", "-1", "-1", "100", "panel", "track", "battery", "storage" ] ]
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ] ]
 }, {
   "root" : true,
   "title" : "Herbal",
@@ -252,13 +595,130 @@
   "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
 }, {
   "root" : false,
-  "title" : "Natives!",
-  "name" : "NativesStuckIn",
-  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back...", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
+  "title" : "Hunting Expedition",
+  "name" : "Hunting5",
+  "description" : [ "(Name1) winds (his1) way down the rocky mountain side, checking the bushes and shrubs along the way for berries; sadly most are empty or unripe.", "It doesn’t take long before he1 reaches the edge of the large clearing. He1 spends a few minutes scanning the tall grass, hoping find some unsuspecting animal making its way across the field, but sees none. Deciding not to waste any more time, he1 starts across the grassy field towards the adjacent tree line. He1’s about halfway across the field with he1’s startled by the sudden eruption of flapping and squawks as a small flock of birds burst from the grass ahead and take flight. Quick to react, he1 readies (his1) rifle and fires and the rapidly rising flock.", "Two or three of the small, plump birds flop to the ground and are swallowed up by the tall grass. (Name1) rushes over to where they fell and manages to recover all of (his1) little quarry. He1 stuffs the birds into (his1) pouch and heads for home, the thought of fire roasted wings spurring him1 onwards." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addRndAmt", "-1", "-25", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting6",
+  "description" : [ "(Name1) spends the first few minutes of (his1) descent slowing working (his1) way down the gradually sloping mountainside, but the journey quickly becomes steeper and steeper, until he1 finds him1self backpedaling so hard, he1’s nearly sitting down. Looking around he1 spots a much shallower path off to (his1) left, but as he1 turns towards it, he1 slips on the loose rocks underfoot. He1 falls hard on (his1) chest, grasping wildly, trying to regain control as he1 tumbles down the mountain side and rolls into the thick bushes below.", "He1 staggers to (his1) feet, (his1) whole body aching, and looking around, notices he1’s rolled all the way down to the clearing he1 saw from the ROV. Picking up (his1) gear and spitting out a mouthful of dirt he1 heads into the clearing in search of food.", "It doesn’t take long before he1 spots a lone tree, its large branches laden down with bright and fragrant fruit. He1 fills (his1) pack with as much fruit as he1 can carry and begins (his1) long journey home." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ], [ "addRndAmt", "-1", "-25", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting3",
+  "description" : [ "He1 makes (his1) way down the mountainside, carefully checking the bushes and shrubs for any sign of edibles, but finds none. It doesn’t take long for him1 to reach the edge of the large clearing. He1 crouches in the dense underbrush and sweeps (his1) eyes across the field, hoping to spot some sort of animal. Something slams (his1) head, causing a burst of light, followed by a fading red pulsing. As he1 regains is vision, he1’s on (his1) back looking up at bulky native, club reared back for the killing blow. He1 rolls to the side as the club thuds the dirt next to (his1) pounding head. The native cranks back the club for another strike, but (Name1) catches him off guard with a kick to the chest and follows up with a second harder kick that sends the big native crashing to the ground. (Name1) scrambles and grabs a large rock in both hands. The native, now standing above him1, grabs him1 by the backpack and yanks hard.", "In one swift move, (Name1) slips out of the straps while spinning around and sweeping the large rock across the natives jaw. He recoils and (Name1) drives (his1) shoulder hard into the stumbling native’s chest and drives him to the ground. Now firmly on top of the native, (Name1) brings the rock down hard with both hands, smashing it against the natives face, then he1 smashes the natives face a second time, and then a third, until he1’s sure he1’s killed him.", "He1 stumbles across the clearing and crawls up the steep mountain side in a daze. The crew spots him1 passed out in some bushes alongside the roadside, cover in sweat and blood. He1’s exhausted but alive." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting4",
+  "description" : [ "He1 backpedals (his1) way down the steep mountain, checking all over for anything edible. As he1 nears the clearing he1 spots a patch of berry bushes. He1’s familiar with the sweet black berries and knows they’re safe to eat. He1 picks all the berries he1 can find and stuffs them into (his1) food pouch.", "From there, he1 heads into the clearing and searches around for anything tasty. He1 spend quite some time picking through bushes and shrubs for anything good, but he1 doesn’t find anything. So he1 starts (his1) long journey uphill towards the ROV.", "After a few minutes of traveling hears the faint trickle of water and follows the sound to a tiny cold stream winding through some nearby rocks. Ice cold water is always a welcome sight for any traveler. He1 fills as many containers as he1 can and heads home. ", "The crew finds him1 sitting alongside the road sipping on a bottle of ice cold spring water and snacking on juicy berries!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addRndAmt", "1", "25", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting1",
+  "description" : [ "Over the next few hours he1 winds (his1) way down the mountainside, reaching the clearing without much trouble, but he1 doesn’t spot anything of value along the way. After a few minutes of searching he1 comes across a small pond teaming with life and decides to spend the day fishing.", "He1 catches quite a few fish. He1 cleans the fish, wraps the fish meat in some cloth, and sticks them in (his1) pack and begins the long hike up the mountain. He1 reaches the ROV just as the sun begins to set, calves burning from the climb and pack full of fish! Overall he1 considers it an enjoyable and productive journey." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting2",
+  "description" : [ "He1 descends the mountainside, searching anything good along the way, but finds nothing. It doesn’t take long before he1 reaches the bottom and emerges from the trees into the clearing. His1 eyes scan the clearing, looking for signs of life. He1 sees something moving off to (his1) left about 100 yards. He1 crouches and cranes (his1) neck to get a better look. Natives, hunters from the look of their garbs. He1 doesn’t know if they saw him1 or if they’re friendly, but he1 can’t risk being caught alone. His1 only hope is to cross the clearing and retreat uphill to the ROV.", "He1 starts across the clearing, hunched in an awkward crouched run, weaving from shrub to shrub in and attempt to avoid detection. He1’s about a fourth of the way though the clearing when the first arrow hits, missing him1 by inches. He1 looks up to see four or five natives sprinting in (his1) direction, now about 75 yards away. He1 sprints, now at full speed, firing (his1) rifle as he1 runs. He1 sees one of the natives fall as he1 dives behind a large rock.", "He1 pops up and fires the last of (his1) 25 round magazine at the natives. He1 sees another native fall as he unleashes his last arrow. (Name1) feels the arrow brush past (his1) face, as he1 ducks back behind the rock and exchanges (his1) magazine. He1 fires a few more shots as he1 darts from (his1) rock and sprints for the trees with the remaining natives close behind.", "They’re fast, but he1’s faster. He1 unleashes some more shots towards the natives as he1 passes into the dense trees ahead. He1 scrambles up the mountainside ahead and after a few tense minutes he1’s fairly sure he1’s lost the natives. Not wanting to take any chances he1 hurries back to the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting9",
+  "description" : [ "(Name1) zigzags (his1) way down the rocky mountain side towards the clearing, checking every bush and shrub for fruit or animal burrows along the way. Despite (his1) thorough searching, progress is fast and he1 reaches the clearing much sooner than expected. He1 scans the field for signs of potential quarry, but the tall grass makes it impossible to see anything, save a few big rocks.", "As (Name1) enters the grass he1’s slammed to the ground by a large, catlike creature. He1 unholsters (his1) sidearm and unloads into the big cat’s chest, just as its powerful jaws close in for the kill. It recoils and disappears into the sea of tall grass as quickly as it appeared, leaving (Name1), shocked and bloodied, laying on (his1) back. He1 jumps to (his1) feet, grabbing (his1) pack, and runs. He1 runs through the clearing and into the trees, checking constantly, fearful of the cats return. Plowing (his1) way uphill, he1 doesn’t stop running until he1 reaches the ROV. As the ROV comes to a stop he1 collapses against its metal siding, gasping for breath, soaked in sweat and fear, and thankful to be alive." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting7",
+  "description" : [ "Climbing over rocks, checking shrubs for berries, and searching tall grass for hidden burrows; it doesn’t take him1 long to reach the grass clearing he1 spotted from above. He1 tromps through the tall grass, disappointed in (his1) lack of success thus far. As he1 kicks though a large clump of grass a small furry creature darts out with a crash. He1 unleashes a stream of bullets at the fleeing creature, but they miss. The creature scurries from bush to bush, but (Name1) follows close behind, until he1 finally brings it down with a few well-placed shots.", "He1 jogs over to the creature. It really doesn’t look like anything he1 recognizes from home, but it has plenty of meat and he1 bets it will taste pretty good grilled over an open flame. He1 scoops the creature into (his1) belt pouch and begins the long journey home." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting8",
+  "description" : [ "As he1 makes (his1) way down the mountainside, (Name1) gets the discomforting feeling of being watched. He1 climbs onto a large bolder and looks around. At first he1 sees nothing, but then he1 spots the hunched outline of a four-legged animal peering out at him1 from behind a patch of dense underbrush. He1 shouts and throws a rock at it. It retreats into the brush.", "Unable to locate the creature again, (Name1) continues towards the distant grassy clearing ahead. He1 picks up (his1) pace, anxious to reach the clearing before the creature returns, but as he1 nears the clearing he1 hears the quiet snap of branches behind him1 and turns to find the creature, closer than before, watching him1 from the tall grass.", "He1 ready (his1) rifle and shoots into the tall grass. The creature vanishes into the sea of grass around the clearing. (Name1) turns and sprints off into the clearing, looking back he1 doesn’t see the creature following, so he1 stops to catch (his1) breath. He1 looks around the large clearing. It’s mostly grass with the occasional rock jutting out from beneath the pastel horizon. ", "After searching around the field for any signs of food and finding none, (Name1) decides to head back to the ROV. The journey back is uphill and progress is slow, nevertheless, (Name1) takes (his1) time checking underneath every rock and around every shrub, in hopes of finding some grub to make the strenuous journey worthwhile.", "After about an hour or so, he1 stops to catch (his1) breath and to have a sip of water. As he1 sits down on a flat rock and sets down (his1) pack, the creature returns, lunging at him1 as he1 dives off the rock. It lunges at him1 again as he1 rolls to a stop, but he1’s quick with (his1) sidearm and fires at the beast. It lets out a low groan as it withdraws into the brush. (Name1) runs, scooping up (his1) back as he1 passes it and doesn’t look back. He1 keeps running until he1 emerges unto the familiar tracks of the ROV and rejoins the crew." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting11",
+  "description" : [ "(Name1) descends the rocky mountainside, checking for berries and other such edibles along the way, until he1 finally reaches the edge of the clearing he1 spotted from above. He1 stops and scans the open patch for any signs of life. It doesn’t take long before he1 spots a smallish boar-like creature rooting through the patches of shrub grass that dot the field. He1 readies (his1) rifle and starts slowing creeping closer to the unsuspecting boarling.", "He1 craws closer and closer until he1’s nearly right on top of it. Taking aim he1 squeezes off a single round. It hits the creature squarely in its side, leaving a long gash down its side. As (Name1) takes aim for a second shot, the boar unexpectedly turns and charges right at him1. He1 fires a second shot at the creature, but it keeps coming. He1 dives as the boar painfully plows into (his1) legs, sending both awkwardly rolling. As the mad boar charges for a second pass, (Name1) calmly recovers (his1) rifle and shoots. The boar squeals and tumbles to a stop.", "After tending to (his1) battered legs, (Name1) picks up (his1) pack, bags (his1) kill, and heads back to the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting10",
+  "description" : [ "(Name1) zigzags (his1) way down the rocky mountain side towards the clearing, checking every bush and shrub for fruit or animal burrows along the way and by the time he1’s reached the clearing he1’s collected a pouch full of mixed berries and other such edibles. As he1 reaches the clearing he1 looks around and spies a lone tree poking up from the sea of tall grasses that blanket the glade. Furthermore, he1 spots a large nest composed of a variety of different sized twigs perched atop the uppermost branches.", "After watching the nest for quite some time and seeing no mother bird in sight, (Name1) makes (his1) way through the sea of grass leading to the lone tree. The tree is short and stout, with many wide branches drooping down, making it easy for (Name1) to climb up. He1 reaches the nest in no time and peers inside.", "Nestled inside the nest is four grapefruit sized eggs. Imagining all sorts of delicious egg dishes, (Name1) reaches for them, but as (his1) fingers near the egg he1 hears an eagle-like shriek. He1 tries to quickly snatch at the eggs, but momma bird is too quick. She swoops, knocking (Name1) from the tree with her huge beak and razor sharp talons.", "(Name1) clambers to (his1) feet and runs for the trees, as momma bird dives again and again. Upon reaching the safety of the trees, (Name1) checks him1self for injuries and, to (his1) surprise, it’s just a few scraps and bumps, even the previously picked berries somehow remained unsquished during t(his1) adventure. Deciding he1 has had enough fun for one day, (Name1) repacks (his1) bags and heads to the rendezvous point." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ], [ "addRndAmt", "1", "25", "edibles" ] ]
+}, {
+  "root" : false,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting12",
+  "description" : [ "(Name1) spends most of morning working (his1) way down the steep mountainside, sifting through the underbrush in search for berries or signs of animal activity. Unfortunately finding nothing by the time he1’s reaches the edge of the clearing. He1 watching, hoping to see some passing animal, but after a while he1 gives up and enters the clearing to forage for berries.", "He1 searches through dozens of bushes, but doesn’t find any fruit. Frustrated, he1 sits down for a quick drink and, as he1 does, he1 feels a sharp pinch on (his1) leg. He1 reactively swats it and when he1 looks to see what it was, he1 finds the mashed body of a thorny insect.", "He1 takes a sip of water and itches (his1) leg. He1 can feel a welt quickly forming. He1 caps (his1) waterskin and starts (his1) journey home. (Name1) slowly makes (his1) way through the dense trees and up the piles of crumbly rock and dry underbrush that blankets the steep hillside. About an hour into (his1) ascent, he1 starts to feel unusually tired and stops to catch (his1) breath. His1 fatigue turns unto dizziness and, as he1 tries to steady him1self on the large trunk of a nearby tree, he1 slips on a patch of loose rocks and collapses.", "He1 awakens some time later, face down in the pile of rocks, with the worst headache he1’s had in years. He1 looks upwards, the sun is nearly set and he1 doesn’t want to be trapped lone in the dark forest of an unknown planet. He1 stumbles to (his1) feet and shakily makes (his1) way towards the rendezvous point.", "After what feels like hours he1 wanders out of the trees to find the ROV and the worried crew awaiting (his1) return. " ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ], [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : true,
+  "title" : "Hunting Expedition",
+  "name" : "Hunting",
+  "description" : [ "(Name1) embarks on a lengthy hunting expedition. The goal is to descend the mountainside on foot, into the open valley below and search for edibles, then ascend out of the valley and reconnect with the ROV on the adjacent peak." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "Hunting1", "Hunting2", "Hunting3", "Hunting4", "Hunting5", "Hunting6", "Hunting7", "Hunting8", "Hunting9", "Hunting10", "Hunting11", "Hunting12" ] ],
+  "chances" : [ [ 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Moss",
+  "name" : "Moss",
+  "description" : [ "While out searching for anything with medicinal properties, %n comes across some dark green moss clinging to some rocks. It looks promising so he1 brings it back to the ROV to run some test.", "After performing a few simple test he1 discovers the moss can be brewed into a foul tasting tea that helps to relieve a plethora of stomach ailments." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
 }, {
   "root" : false,
   "title" : "Natives!",
@@ -271,21 +731,21 @@
 }, {
   "root" : false,
   "title" : "Natives!",
-  "name" : "NativesFight",
-  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The large native roars and knocks %n to the ground and unsheathes his weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-10", "-35", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "wealth" ] ]
-}, {
-  "root" : false,
-  "title" : "Natives!",
   "name" : "NativesTrade2",
   "description" : [ "Good Trade" ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "openTrade" ] ]
+}, {
+  "root" : false,
+  "title" : "Natives!",
+  "name" : "NativesFight",
+  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The large native roars and knocks (Name1) to the ground and unsheathes his weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-10", "-35", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addInjury", "evt", "injury", "regular" ] ]
 }, {
   "root" : true,
   "title" : "Natives!",
@@ -304,6 +764,15 @@
   "outcomes" : [ [ "NativesTrade2" ] ],
   "chances" : [ [ 100 ] ],
   "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Natives!",
+  "name" : "NativesStuckIn",
+  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back...", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
 }, {
   "root" : true,
   "title" : "Poultice Test",
@@ -332,13 +801,103 @@
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
 }, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttemptSafeNothing",
+  "description" : [ "The crew works on the leak for many hours until, not only, is the leak stopped, but the crew is also able to restore all of the power lost during the lengthy fix!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttemptRiskyBad",
+  "description" : [ "After hours of work, the leak is stopped, but the crew is unable to restore any of the lost energy!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "energy" ] ]
+}, {
   "root" : true,
-  "title" : "Reworking",
-  "name" : "Reworking",
-  "description" : [ "%n attempts to wire a subsystem into an existing ROV part..." ],
-  "choices" : [ "Worth the Risk?" ],
-  "outcomes" : [ [ "ReworkingSuccess", "ReworkingFailure" ] ],
+  "title" : "Power Leak",
+  "name" : "PowerLeak",
+  "description" : [ "While checking the ROV’s subsystems on the control console, (Name1) notices the energy subsystem is leaking energy at an alarming rate!" ],
+  "choices" : [ "Attempt to fix the leak!", "Ignore the leak and hope for the best!" ],
+  "outcomes" : [ [ "PowerLeakAttempt" ], [ "PowerLeakIgnore" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakIgnoreTerrible",
+  "description" : [ "After many hours the leak comes to an end. A great deal of power was lost to the unattended leak and the crew questions their decision to ignore the problem." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttempt",
+  "description" : [ "The crew decides to try and fix the leak. They have two options: A risky fix with a higher chance of success, but greater loss of energy if failed or a safe fix with a lower chance of success, but a lower loss of energy if failed." ],
+  "choices" : [ "Risky Fix", "Safe Fix" ],
+  "outcomes" : [ [ "PowerLeakAttemptRisky" ], [ "PowerLeakAttemptSafe" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttemptSafe",
+  "description" : [ "The crew decides to take the slow and steady approach to fixing the leak." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "PowerLeakAttemptSafeNothing", "PowerLeakAttemptSafeBad" ] ],
+  "chances" : [ [ 40 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakIgnoreBad",
+  "description" : [ "It’s not long before the leak comes to an end. The crew was lucky to only lose a small amount of energy." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakIgnore",
+  "description" : [ "Ignore the leak and hope for the best!" ],
+  "choices" : [ ],
+  "outcomes" : [ [ "PowerLeakIgnoreTerrible", "PowerLeakIgnoreBad" ] ],
   "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttemptSafeBad",
+  "description" : [ "The crew works on the leak for many hours until the leak is finally contained. Fortunately, the crew is able to restore most of the energy lost during the lengthy fix!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttemptRisky",
+  "description" : [ "The crew decides to try to take drastic measures to put an end to the energy leak." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "PowerLeakAttemptRiskyNothing", "PowerLeakAttemptRiskyBad" ] ],
+  "chances" : [ [ 60, 40 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Leak",
+  "name" : "PowerLeakAttemptRiskyNothing",
+  "description" : [ "Their bold choice pays off! The leak is stopped and the lost energy is restored!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -360,21 +919,12 @@
   "resultingAction" : [ [ "addRndItem", "1", "1", "100", "track", "panel", "battery", "storage" ] ]
 }, {
   "root" : true,
-  "title" : "Salvage",
-  "name" : "Salvage",
-  "description" : [ "Perched atop the ROV, %n notices some downed trees alongside the path ahead..." ],
-  "choices" : [ "Investigate?", "Pass By" ],
-  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvagePass" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Salvage",
-  "name" : "SalvagePass",
-  "description" : [ "The crew decides to press onward. There isn't time to make stop right now" ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
+  "title" : "Reworking",
+  "name" : "Reworking",
+  "description" : [ "%n attempts to wire a subsystem into an existing ROV part..." ],
+  "choices" : [ "Worth the Risk?" ],
+  "outcomes" : [ [ "ReworkingSuccess", "ReworkingFailure" ] ],
+  "chances" : [ [ 50, 50 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -388,8 +938,8 @@
 }, {
   "root" : false,
   "title" : "Salvage",
-  "name" : "SalvageTurnBack",
-  "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
+  "name" : "SalvagePass",
+  "description" : [ "The crew decides to press onward. There isn't time to make stop right now" ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -405,6 +955,114 @@
   "resultingAction" : [ ]
 }, {
   "root" : true,
+  "title" : "Salvage",
+  "name" : "Salvage",
+  "description" : [ "Perched atop the ROV, %n notices some downed trees alongside the path ahead..." ],
+  "choices" : [ "Investigate?", "Pass By" ],
+  "outcomes" : [ [ "SalvageInvestigate" ], [ "SalvagePass" ] ],
+  "chances" : [ [ 100 ], [ 100 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Salvage",
+  "name" : "SalvageTurnBack",
+  "description" : [ "Deciding to play it safe the Exomer crew starts the ROV and presses on." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley2Okay",
+  "description" : [ "They emerge into the clearing of broken trees to find the tattered remains of an empty lifeboat pod, ejected from their own vessel during its terrible crash. The lifeboat is so damaged that it’s unlike anyone would have survived the cash, but when they pry open its crumbled door nobody is inside. They search the area around the wreck for a body or signs of a struggle, but finding none. Assuming the pod was empty on impact, they strip the pod of any valuables, pack their bags, and head home." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley2Good",
+  "description" : [ "They emerge in the clearing of broken trees to find, much to their surprise, an empty lifeboat pod, ejected from their own vessel during its terrible crash. The crew scours the surrounding area for clues as who was inside or where they may have went, but, finding none, they return to the wreckage, strip it of its valuables, pack their bags, and return home." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley1Okay",
+  "description" : [ "They arrive at the clearing to find the husk of a fallen space probe, picked clean by the natives. All the remains of the crash is some useless scraps of charred metal and the stripped remains of a large solar panel. " ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley1",
+  "description" : [ "As they near the crash site, (Name1) spots a lump of metal, half buried, in some bushes. He1 scoops it up and dust it off. He1 can’t tell what the object is, but he1 know he1 can extract some valuable parts from it, so he1 sticks it in (his1) backpack and rejoins the group." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ShipwreckValley1Great", "ShipwreckValley1Good", "ShipwreckValley1Okay" ] ],
+  "chances" : [ [ 0, 0, 0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley2",
+  "description" : [ "As they near the crash site, the group fans out, hoping to recover any smaller pieces of the wreckage that may have been flung off upon impact." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ShipwreckValley2Good", "ShipwreckValley2Okay", "ShipwreckValley2Nothing" ] ],
+  "chances" : [ [ 0, 0, 0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley2Nothing",
+  "description" : [ "They emerge in the clearing to find, much to their disappointment, that the damage they saw from above was caused by a large bolder falling from the nearby mountain edge and not from space junk, as they had hoped." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley",
+  "description" : [ "While traveling along a steep mountain path, the crew spots broken trees in the valley below. Hoping to find some fallen space debris for salvage, they disembark and head to the crash site on foot." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ShipwreckValley1", "ShipwreckValley2" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley1Great",
+  "description" : [ "They arrive at the clearing to find crumbled body of a fallen space probe, untouched by the natives that so frequently travel these woods. The crew descends upon the wreckage like vultures, collecting anything they deem useful for repairing the ROV and maintaining its parts." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ], [ "addRndAmt", "25", "50", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Shipwreck Valley",
+  "name" : "ShipwreckValley1Good",
+  "description" : [ "They arrive at the clearing to find the dirt covered body of a fallen space probe. The crew descends upon the wreckage like a pack of hungry wolves, but they quickly discover that the natives have ready picked through the wreckage. Nevertheless, the crew manages to scrape together a nice pile of parts from the leftovers the natives left behind." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ], [ "addRndAmt", "1", "25", "parts" ] ]
+}, {
+  "root" : true,
   "title" : "Still Nice...",
   "name" : "RootExtract",
   "description" : [ "While running further test on an extract derived from the root of a recently collected flower %n discovers potentially harmful side effects from its consumption.", "Not willing to take the risk, he1 is forced to dump out the extract." ],
@@ -412,4 +1070,262 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Taste Test",
+  "name" : "TasteGood",
+  "description" : [ "He1 combines some ingredients and takes a sip. It taste great and is really refreshing. He1 makes a few more batches for later use." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "2", "medkits" ] ]
+}, {
+  "root" : true,
+  "title" : "Taste Test",
+  "name" : "Taste",
+  "description" : [ "While out scavenging for supplies, (Name1) comes across a patch of scraggly shrubs with small purple berries on this. He1 collects a few and brings them back to the ROV try and discover their purpose.", "After experimenting with the berries he1 theorizes that consuming the berry raw will result in sickness, but if you combine it with a few simple herbs it can be brewed into a drink that helps cut down recovery time, although finding the right amounts of each ingredient comes down to trial and error." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "TasteGood", "TasteBad" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Taste Test",
+  "name" : "TasteBad",
+  "description" : [ "He1 combines some ingredients and takes a sip. It taste terrible and after a few minutes he1’s not feeling well. Luckily he1 has something to remedy (his1) sickness in the medical storage." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit2Worse",
+  "description" : [ "He1 rolls to the right, avoiding the tip of the spear by mere inches, and drives (his1) shoulder hard into the belly of the scrawny native. The blow sends the native tumbling into its own pit. Clutching (his1) injured arm and not wanting to risk a biased fight, (Name1) decides to make a run for the distant tree line. Just as he1 reaches the safety of the trees the natives spear pierces (his1) thigh. Screaming out in pain, he1 falls to one knee, and looking back he1 sees the native pulling itself out of the pit. Turning (his1) attention back to the spear, he1 grabs the spear’s shaft with both hands and, gritting (his1) teeth, pulls it free. Finding the strength to stand once again he1 turns to the rapidly approaching native and hurls the spear with all (his1) might.", "It plunges deep into the native’s stomach. The native collapses, writhing in pain, to the ground. (Name1) stumbles into the shelter of the forest and, once he1 can’t hear the moans of the wounded native, flops to the ground and roots though (his1) pack until he1 finds (his1) med-kit. He1 tears open the pack and recovers a leafy poultice and some wrappings. He1 stuffs the leafy poultice into (his1) open wounds to slow the bleeding and wraps them tightly in the remaining bandages. He1 then grabs the remains of an old tree branch to use as a temporary crutch and begins (his1) painful journey back to the ROV. " ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-2", "-2", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit1Bad",
+  "description" : [ "The native’s spear gouges (Name1)’s side. He1 recoils in pain as the native sweeps the spear around for a second strike, but he1 dodges and tackles the native to the ground. Punching the native repeatedly in the face, he1 wrestles for control of the spear. The native hits back, knocking (Name1) off and regaining control of the spear. (Name1) scrambles to (his1) feet as the native lunges at him1 again.", "He1 dodges the native once again and kicks the native, using its own momentum against it, into the open pit. (Name1) runs, clutching (his1) wounded side, until he1 returns to the safety of the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-1", "medkits" ] ]
+}, {
+  "root" : true,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit",
+  "description" : [ "While out searching for supplies (Name1) snaps through a layer of thin wooden sticks and into a deep pit." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "TrapperPit1", "TrapperPit2" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit1Nothing",
+  "description" : [ "He1 narrowly sides steps the native’s spear thrust and tackles the native to the ground. They wrestle for control of the spear, with each exchanging their fair amount of blows to each other’s head and chest in the process. Finally (Name1) over powers the scrawny native, snatching the spear from its hand and, delivering a hard kick to its chest, sends it rolling into its own pit. ", "He1 hurls the spear fiercely down into the pit and runs off, not even looking to see if the spear hit the native." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit1",
+  "description" : [ "He1 lands on a stack of old bones that are piled in the bottom of the small pit. Bewildered, he1 stands up, brushes him1self off, and looks around. The pit is slightly taller than he1 is and clearly handmade, most likely used as a hunting trap by the natives. He1’s got to get out of there.", "He1 jumps up, clawing at the edge at the edge of the pit only to fall back down. Again he1 jumps up, this time sinking (his1) fingers into the dirt edge of the pit and, using (his1) legs to kick off the sides of the pit, wriggles up and out of the grimy pit and onto the cool ground above. He1 lays there for a few minutes, catching (his1) breath. As he1 climbs to (his1) feet he1 hears a loud animalistic shout and turns to see a scrawny native with a spear barreling towards him1." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "TrapperPit1Nothing", "TrapperPit1Bad" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit2",
+  "description" : [ "He1 lands on a stack of old bones that are piled in the bottom of the small pit. Shards of sharp bone slash into (his1) arm as he1 tries to brace (his1) fall and warm blood starts to run down (his1) arm as he1 roots through (his1) bag in search of (his1) med-kit. Finding it, he1 begins tightly wrapping (his1) arm in a tattered bandage as he1 looks around (his1) surroundings. He1’s in a pit, slightly taller than he1 is. It seems to be hand dug, most likely by the natives, to be used as a hunting trap. Having no intentions on staying there, he1 slings (his1) pack over (his1) shoulder and stands up.", "He1 jumps up and grabs the edge of the dirt pit, but (his1) injured arm fails him1 and he1 quickly falls back down. Again he1 leaps onto the pit’s edge. Fresh blood darkens (his1) bandaged arm as he1 claws upwards, but he1 doesn’t let go. Leveraging (his1) feet against the sides of the pit, he1 pulls free of the dank pit and flops onto the cool ground above. He1 lays there for a few minutes, catching (his1) breath. As he1 climbs to (his1) feet he1 hears a loud animalistic shout and turns to see a scrawny native with a spear barreling towards him1." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "TrapperPit2Bad", "TrapperPit2Worse" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Trapper Pit",
+  "name" : "TrapperPit2Bad",
+  "description" : [ "He1 ducks under the spear and tackles the native to the ground. The spear goes flying from its hand and (Name1) dives for it, but the native pulls him1 back. He1 kicks free from the natives grasp and grabs the spear. Rolling to (his1) feet, he1 hurls the spear at the native. The spear strikes the native, knocking it into the pit. (Name1) runs off, the wailing cries of the natives echoing out behind him1." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-1", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Treasure Trader",
+  "name" : "TreasureTraderEnergy",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "energy" ], [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Treasure Trader",
+  "name" : "TreasureTraderAmmo",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "ammo" ], [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : true,
+  "title" : "Treasure Trader",
+  "name" : "TreasureTrader",
+  "description" : [ "A rotund native blocks the path ahead of the ROV. He’s short, but very round, with a large, toothy grin stretching across his cheerful goblin-like face. It seems as though every part of his body is laden down with different sized bags and pouches, all full of glimmering trinkets and other such oddities. After some deliberation, the crew determines the chubby goblin wants to trade some of his treasures for some of the group’s supplies and he doesn’t seem particular about which supplies he gets." ],
+  "choices" : [ "Trade Energy for Wealth", "Trade Edibles for Wealth", "Trade Parts for Wealth", "Trade Ammo for Wealth", "Trade Med-kits for Wealth", "Don’t Trade" ],
+  "restrictions" : [ "energy >= 25", "edibles >= 25", "parts >= 25", "ammo >= 25", "medkits >= 2", "" ],
+  "outcomes" : [ [ "TreasureTraderEnergy" ], [ "TreasureTraderEdibles" ], [ "TreasureTraderParts" ], [ "TreasureTraderAmmo" ], [ "TreasureTraderMed" ], [ ] ],
+  "chances" : [ [ 100 ], [ 100 ], [ 100 ], [ 100 ], [ 100 ], [ ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Treasure Trader",
+  "name" : "TreasureTraderEdibles",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "edibles" ], [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Treasure Trader",
+  "name" : "TreasureTraderParts",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "parts" ], [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Treasure Trader",
+  "name" : "TreasureTraderMed",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ], [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Watering Hole",
+  "name" : "WateringHoleGreat",
+  "description" : [ "After follow the tracks for what feel like hours, the crew spots the body of something that looks like a hairy elk in a clearing a few yards ahead of them. (Name1) takes aim, but the creature spots them and takes off running towards a dense patch of trees. It’s surprising fast for its size. The crew fires at it, but most of their shots miss. (Name1), still carefully aiming, shoots and brings the hairy elk skidding to a stop, just before it reaches the tree line. The crew congratulates him1 on a job well done. The hairy elk provides the crew with plenty of good meat and a nice set of antlers for trade." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ], [ "addRndAmt", "25", "50", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Watering Hole",
+  "name" : "WateringHoleGreatEqual",
+  "description" : [ "The crew follows the tracks for quite some time, until they end at a rocky clearing. The crew searches for any sign of the creature, but finding none they turn to back to the ROV. As they turn a large bear like creature burst out from behind some rocks and charges straight for the crew. The crew opens fire and the bear creature roars and lunges at (Name1). (Name1) dives out of the way and the crew blast the creature some more. (Name1) scrambles to (his1) feet as the creature charges again, but the beast falls short, brought down in a hail of gunfire. Miraculously no one was hurt and the beast provides the crew with more than enough meat for one meal and a thick and valuable pelt for trade!" ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ], [ "addRndAmt", "25", "50", "wealth" ], [ "addRndAmt", "-25", "-50", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Watering Hole",
+  "name" : "WateringHoleGood",
+  "description" : [ "The tracks lead the crew to a muddy patch of dirt where a warthog like creature is rooting around. The crew creeps up to it and shoot it. The creature squeals and charges towards the crew! They fire some more shots into it and it slides to a stop. Its meaty body provides the crew with more than enough food and they save the tusk to carve into something to use for trade." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : true,
+  "title" : "Watering Hole",
+  "name" : "WateringHole",
+  "description" : [ "The crew comes across a large clearing with a large pond in the center and decide to stop the ROV for a short break. Everyone disembarks and stretches their tired joints. ", "While walking around the edge of the pond (Name1) spots some fresh tracks leading away from the water. Not wanting to waste the chance to find something good to eat, the crew stocks up heads out." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "WateringHoleOkay", "WateringHoleGood", "WateringHoleGreat", "WateringHoleGreatEqual" ] ],
+  "chances" : [ [ 25, 25, 25, 25 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Watering Hole",
+  "name" : "WateringHoleOkay",
+  "description" : [ "It doesn’t take long before they find something that looks like a rabbit crunching through some dry grass. They try to sneak up on it, but it hears them and runs into a patch of dense brush. (Name1) shoots into it and after a few minutes of searching they discover the slain creature in the underbrush. It’s a little sad, but it will make a good meal for the crew and its fur can be traded to the natives for more supplies." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies1MoreMed",
+  "description" : [ "As he1’s nearing the ROV he1 spots a familiar lump at the base of a large evergreen tree. It’s a patch of rudontis mushrooms. A mushroom that when boiled in water creates a healing broth with a great taste. He1 packs (his1) pack with a dozen of the little mushrooms and heads home, satisfied that the trip wasn’t a total waste." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "1", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies2MoreMed",
+  "description" : [ "As he1 nears the ROV, he1 spots a yungi plant, an airplant whose thin leaves can be ground into a pain reliving paste, peached high up on the branches of a nearby tree. He1 sets (his1) pack down and climbs high up into the trees broad branches. He1 scoots out on the end of a long branch beneath the plant and reaches as far as he1 can, but the plant is just out of reach. He1 starts bouncing on the long branch, hoping the moment will propel him1 closer to the out of reach plant.", "The tree branch groans as it flexes down, then back up, then down harder, and finally springs him1 up with enough momentum to snag the plant and tear it loose from its barky home. He1 climbs back down to (his1) pack, sticks the plant in, and then heads back to the ROV, please with the bountiful rewards of the day’s journey." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "2", "2", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies1LessMed",
+  "description" : [ "During (his1) return journey, he1 slips on the mossy trunk of a fallen tree and crashes into a bushel of fireleaf ferns. A fern whose gets its namesake from the burning rash it causes when it comes in contact with exposed skin. While the pain isn’t immediately noticeable, by the time (Name1) returns to the ROV, (his1) entire body feels as though it’s engulfed in flames. He1 tears into the medical supplies and lathers (his1) body from head to toe in a cooling cream and it seems to help." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "-1", "-1", "medkits" ] ]
+}, {
+  "root" : false,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies1",
+  "description" : [ "An afternoon walk brings him1 to the water’s edge. He1 searches around the bushy banks of the pond, but it’s clear there isn’t any lilies to be found. Disappointed, he1 heads back to the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "Waterlilies1MoreMed", "Waterlilies1LessMed" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies2",
+  "description" : [ "An afternoon walk brings in to the water’s edge. He1 immediately spots the flowers of the waterlilies dotting the ponds surface. He1 scoops out as many as he1 can reach and piles them in (his1) pack. Satisfied with (his1) work, he1 heads back towards the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "Waterlilies2MoreMed", "Waterlilies2NoMed" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies",
+  "description" : [ "(Name1) spots a small pond in the distance and decides to embark on a journey to the water’s edge in hopes of finding some waterlilies, whose tubers, pads, and flowers are used in numerous herbal remedies." ],
+  "choices" : [ ],
+  "outcomes" : [ [ "Waterlilies1", "Waterlilies2" ] ],
+  "chances" : [ [ 50, 50 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Waterlilies!",
+  "name" : "Waterlilies2NoMed",
+  "description" : [ "As he1 nears the ROV, he1 spots a yungi plant, an airplant whose thin leaves can be ground into a pain reliving paste, peached high up on the branches of a nearby tree. He1 sets (his1) pack down and climbs high up into the trees broad branches. He1 scoots out on the end of a long branch beneath the plant and reaches as far as he1 can, but the plant is just out of reach. He1 starts bouncing on the long branch, hoping the moment will propel him1 closer to the out of reach plant.", "The tree branch groans as it flexes down, then back up, then down harder, and finally springs him1 up with enough momentum to snag the plant and tear it loose from its barky home, but the plant slips though (his1) fingertips. As he1 drops down again, the branch shatters with a loud snap, sending him1 crashing down to the forest floor below. He1 lands hard on (his1) back, groaning and gasping for air. He1 rolls into a ball on (his1) side, reduced to lying in this fetal position until the pain subsides. Eventually he1 struggles to (his1) feet, grabs (his1) pack, and stumbles back to the ROV." ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "1", "medkits" ], [ "addRndAmt", "-1", "-1", "medkits" ] ]
 } ]

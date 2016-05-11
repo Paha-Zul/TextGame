@@ -696,20 +696,33 @@ class GameScreenGUI(val game : GameScreen) {
         nextPageButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         nextPageButtonStyle.fontColor = Color.WHITE
 
-        //Make the buttons for the choices (if any)
-        for(choice in event.choices!!.iterator()){
-            val button = TextButton("($choice)", textButtonStyle)
+        //Make a button for each choice.
+        for(i in 0.rangeTo(event.choices!!.size-1)){
+            val choice = event.choices!![i]
+
+            //Need a style specifically for each button since we may be changing colors.
+            val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+            buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+            buttonStyle.fontColor = Color.WHITE
+
+            val modifiedText = GH.replaceChoiceForEvent(choice, event)
+            val button = TextButton("($modifiedText)", buttonStyle)
             button.pad(0f, 10f, 0f, 10f)
             button.label.setFontScale(buttonFontScale)
-            EventInfo.eventChoicesTable.add(button).height(50f)
+            EventInfo.eventChoicesTable.add(button).height(40f)
             EventInfo.eventChoicesTable.row()
+
+            //If we don't pass the restrictions, disable this button
+            if(event.restrictions != null && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
+                button.isDisabled = true
+                button.style.fontColor = Color.GRAY
+            }
 
             //Choose a choice buttons.
             button.addListener(object: ChangeListener(){
                 override fun changed(evt: ChangeEvent?, actor: Actor?) {
                     //EventInfo.outerEventTable.remove()
-                    val choiceText = button.text.toString().substring(1, button.text.length - 1)
-                    handleEvent(GH.getEventFromChoice(event, choiceText))
+                    handleEvent(GH.getEventFromChoice(event, choice))
                 }
             })
         }
@@ -793,6 +806,14 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
+        EventInfo.eventTable.invalidateHierarchy()
+        EventInfo.eventTable.act(0.016f)
+        EventInfo.eventTable.validate()
+
+        EventInfo.eventContainer.invalidateHierarchy()
+        EventInfo.eventContainer.act(0.016f)
+        EventInfo.eventContainer.validate()
+
         EventInfo.eventInnerTable.invalidateHierarchy()
         EventInfo.eventInnerTable.act(0.016f)
         EventInfo.eventInnerTable.validate()
@@ -800,6 +821,8 @@ class GameScreenGUI(val game : GameScreen) {
         scrollPane.invalidateHierarchy()
         scrollPane.act(0.016f)
         scrollPane.validate()
+
+        TextGame.stage.act(0.016f)
 
         if(!scrollPane.isBottomEdge) {
             nextPageButton.isDisabled = true

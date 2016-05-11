@@ -19,6 +19,7 @@ import com.quickbite.rx2020.managers.DataManager
 import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.screens.MainMenuScreen
+import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.GH
 
 /**
@@ -28,6 +29,9 @@ class GameOverGUI(val game:TextGame) {
     var mainTable: Table = Table()
     lateinit var nextButton: ImageButton
     //25 - 75 random weeks
+
+    var rowCounter = 0
+    var toMenu = false
 
     //Figure out some time stuff.
     val hours = GameStats.TimeInfo.totalTimeCounter.toInt()
@@ -44,8 +48,13 @@ class GameOverGUI(val game:TextGame) {
         nextButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 page++
-                if(displayPage(page))
-                    backToMainMenu()
+                if(displayPage(page)) {
+                    if(!toMenu) {
+                        displayFunStats()
+                        toMenu = true
+                    }else
+                        backToMainMenu()
+                }
             }
         })
 
@@ -53,79 +62,6 @@ class GameOverGUI(val game:TextGame) {
         TextGame.stage.addActor(mainTable)
 
         displayPage(page)
-    }
-
-    fun page1(){
-        //Figure out some time stuff.
-        val hours = GameStats.TimeInfo.totalTimeCounter.toInt()
-        val totalMonths =( hours/(24*30)).toInt()
-        val totalDays = ((hours/24) - totalMonths*(24*30)).toInt()
-        val totalHours =  (hours - (totalDays*24) - totalMonths*(24*30)).toInt()
-
-        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
-
-        //Replace lots of stuff.
-        var titleDesc = DataManager.end.win[0]
-        titleDesc = titleDesc.replace("%o", 10.toString()).replace("%a", GroupManager.numPeopleAlive.toString()).replace("%r", GameStats.TravelInfo.totalDistOfGame.toString()).
-                replace("%m", totalMonths.toString()).replace("%d", totalDays.toString()).replace("%h", totalHours.toString())
-
-        val titleLabel = Label(titleDesc, labelStyle)
-        titleLabel.setFontScale(0.2f)
-        titleLabel.color.a = 0f
-        titleLabel.setWrap(true)
-        titleLabel.setAlignment(Align.center)
-
-        mainTable.add(titleLabel).fill().expand().pad(0f, 30f, 0f, 30f)
-        mainTable.row()
-        mainTable.add(nextButton).size(64f)
-
-        nextButton.color.a = 0f
-
-        titleLabel.addAction(Actions.fadeIn(0.5f))
-        nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
-    }
-
-    fun page2(){
-        mainTable.clear()
-        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
-
-        val bodyLabel = Label(DataManager.end.win[1], labelStyle)
-        bodyLabel.setFontScale(0.2f)
-        bodyLabel.color.a = 0f
-        bodyLabel.setWrap(true)
-        bodyLabel.setAlignment(Align.center)
-
-        mainTable.add(bodyLabel).fill().expand().pad(0f, 30f, 0f, 30f)
-        mainTable.row()
-        mainTable.add(nextButton).size(64f)
-
-        nextButton.color.a = 0f
-
-        bodyLabel.addAction(Actions.fadeIn(0.5f))
-        nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
-    }
-
-    fun page3(){
-        mainTable.clear()
-        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
-
-        var finalDesc = DataManager.end.win[2]
-        finalDesc = finalDesc.replace("%w", MathUtils.random(25, 75).toString())
-
-        val finalLabel = Label(finalDesc, labelStyle)
-        finalLabel.setFontScale(0.2f)
-        finalLabel.color.a = 0f
-        finalLabel.setWrap(true)
-        finalLabel.setAlignment(Align.center)
-
-        mainTable.add(finalLabel).fill().expand().pad(0f, 30f, 0f, 30f)
-        mainTable.row()
-        mainTable.add(nextButton).size(64f)
-
-        nextButton.color.a = 0f
-
-        finalLabel.addAction(Actions.fadeIn(0.5f))
-        nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
     }
 
     fun displayPage(page:Int):Boolean{
@@ -140,6 +76,7 @@ class GameOverGUI(val game:TextGame) {
         var modifiedDesc = if(GameStats.win) DataManager.end.win[page] else DataManager.end.lose[page]
         modifiedDesc = modifiedDesc.replace("%o", 10.toString()).replace("%a", GroupManager.numPeopleAlive.toString()).replace("%r", GameStats.TravelInfo.totalDistOfGame.toString()).
                 replace("%m", totalMonths.toString()).replace("%d", totalDays.toString()).replace("%h", totalHours.toString()).replace("%i", GameStats.loseReason).replace("%w", MathUtils.random(25, 75).toString())
+        .replace("%e", GameStats.TravelInfo.totalDistToGo.toString())
 
         //Make the description label
         val descLabel = Label(modifiedDesc, labelStyle)
@@ -159,6 +96,91 @@ class GameOverGUI(val game:TextGame) {
         nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
 
         return false
+    }
+
+    fun displayFunStats(){
+        mainTable.clear()
+        var counter = 0
+
+        val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
+
+        val descLabel = Label("Fun Stats", labelStyle)
+        descLabel.setFontScale(0.4f)
+        descLabel.color.a = 0f
+
+        descLabel.addAction(Actions.sequence(Actions.delay(0.2f*counter), Actions.fadeIn(0.4f)))
+        counter++
+
+        mainTable.add(descLabel)
+        mainTable.row()
+
+        val uniqueStats = FunGameStats.uniqueStatsList
+        val otherStats = FunGameStats.statsMap.toList()
+        val innerTable = Table()
+        var statTable = Table()
+
+        val perSide:Int = (uniqueStats.size + otherStats.size)/2
+
+        otherStats.forEach { stat ->
+            val label = Label("${stat.first}: ", labelStyle)
+            label.setFontScale(0.15f)
+            label.color.a = 0f
+            label.setAlignment(Align.left)
+
+            val valueLabel = Label("${stat.second}", labelStyle)
+            valueLabel.setFontScale(0.15f)
+            valueLabel.color.a = 0f
+
+            statTable = addToTable(statTable, innerTable, perSide, label, valueLabel)
+            label.addAction(Actions.sequence(Actions.delay(0.2f*counter), Actions.fadeIn(0.4f)))
+            valueLabel.addAction(Actions.sequence(Actions.delay(0.2f*counter), Actions.fadeIn(0.4f)))
+
+            rowCounter++
+            counter++
+        }
+
+        uniqueStats.forEach { stat ->
+            val label = Label("${stat.desc}: ", labelStyle)
+            label.setFontScale(0.15f)
+            label.color.a = 0f
+
+            val valueLabel = Label("${stat.value}", labelStyle)
+            valueLabel.setFontScale(0.15f)
+            valueLabel.color.a = 0f
+
+            statTable = addToTable(statTable, innerTable, perSide, label, valueLabel)
+            label.addAction(Actions.sequence(Actions.delay(0.2f*counter), Actions.fadeIn(0.4f)))
+            valueLabel.addAction(Actions.sequence(Actions.delay(0.2f*counter), Actions.fadeIn(0.4f)))
+
+            rowCounter++
+            counter++
+        }
+
+        innerTable.add(statTable) //Add the final table.
+
+        mainTable.add(innerTable).fill().expand()
+        mainTable.row()
+        mainTable.add(nextButton).size(64f)
+
+        nextButton.color.a = 0f
+
+        descLabel.addAction(Actions.fadeIn(0.5f))
+        nextButton.addAction(Actions.sequence(Actions.delay(0.5f), Actions.fadeIn(0.5f)))
+    }
+
+    fun addToTable(statTable:Table, innerTable:Table, perSide:Int, label1:Label, label2:Label):Table{
+        var statTable = statTable
+        if(rowCounter >= perSide) {
+            innerTable.add(statTable).space(0f, 50f, 0f, 50f)
+            statTable = Table()
+            rowCounter = 0
+        }
+
+        statTable.add(label1).fillX().expandX()
+        statTable.add(label2).fillX().expandX()
+        statTable.row()
+
+        return statTable
     }
 
     fun backToMainMenu(){

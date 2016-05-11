@@ -4,13 +4,14 @@ import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.IUpdateable
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.util.Logger
 
 /**
  * Created by Paha on 2/8/2016.
  */
-object GroupManager : IUpdateable {
-    private val list:MutableList<Person> = arrayListOf()
+object GroupManager : IUpdateable, IResetable {
+    private var list:MutableList<Person> = arrayListOf()
 
     private val emptyFoodHealthDrain = -0.3f
 
@@ -24,7 +25,7 @@ object GroupManager : IUpdateable {
 
         for(i in 0.rangeTo(range-1)) {
             val triple = DataManager.pullRandomName()
-            list += Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third)
+            list.add(Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third))
         }
     }
 
@@ -53,7 +54,6 @@ object GroupManager : IUpdateable {
             if(outOfFood)
                 person.addHealth(emptyFoodHealthDrain)
         }
-
     }
 
     fun getPeopleList():Array<Person> = list.toTypedArray()
@@ -74,14 +74,18 @@ object GroupManager : IUpdateable {
     fun clearPeople() = list.clear()
 
     fun addPerson(person:Person) {
-        list += person
+        list.add(person)
     }
 
     fun killPerson(name:String){
         val person = getPerson(name)
         if(person!=null) {
-            list -= person
+            list.remove(person)
             EventManager.callEvent("death", person)
         }
+    }
+
+    override fun reset() {
+        list = mutableListOf()
     }
 }

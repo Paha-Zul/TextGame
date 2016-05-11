@@ -1,17 +1,19 @@
 package com.quickbite.rx2020.util
 
+import com.quickbite.rx2020.interfaces.IResetable
+
 /**
  * Created by Paha on 5/3/2016.
  */
-object FunGameStats {
-    val statsMap:MutableMap<String, String> = hashMapOf()
-    val statsList:MutableList<FunStat> = mutableListOf()
+object FunGameStats : IResetable{
+    var statsMap:MutableMap<String, String> = hashMapOf()
+    var uniqueStatsList:MutableList<FunStat> = mutableListOf()
 
     fun addFunStat(desc:String, value:String, unique:Boolean = false){
         if(unique)
-            statsList.add(FunStat(desc, value))
+            uniqueStatsList.add(FunStat(desc, value))
         else {
-            var stat = statsMap.getOrPut(desc, { value })
+            var stat = statsMap.getOrPut(desc, { "0" })
             stat = (stat.toInt() + value.toInt()).toString()
             statsMap.put(desc, stat)
         }
@@ -19,5 +21,10 @@ object FunGameStats {
 
     class FunStat(val desc:String, var value:String){
 
+    }
+
+    override fun reset() {
+        statsMap = mutableMapOf()
+        uniqueStatsList = mutableListOf()
     }
 }

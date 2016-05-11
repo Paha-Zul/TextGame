@@ -68,12 +68,12 @@ object SupplyManager : IUpdateable {
 
     override fun updateHourly(delta:Float){
         var supply = supplyMap["edibles"]!!
-        var amt = supply.amt- ((supply.consumePerDay*GroupManager.numPeopleAlive)/24f)
-        supply.amt = if (amt >= 0) amt else 0f
+        var amt = -(supply.consumePerDay*GroupManager.numPeopleAlive)/24f
+        EventManager.callEvent("addRndAmt", amt.toString(), amt.toString(), "edibles")
 
         supply = supplyMap["energy"]!!
-        amt = supply.amt - ((supply.consumePerDay)/24f)
-        supply.amt = if (amt >= 0) amt else 0f
+        amt = -(supply.consumePerDay)/24f
+        EventManager.callEvent("addRndAmt", amt.toString(), amt.toString(), "energy")
     }
 
     fun getSupplyList():Array<Supply>{

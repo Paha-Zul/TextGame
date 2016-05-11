@@ -240,7 +240,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
 }, {
   "root" : true,
   "title" : "Cleaner",
@@ -1048,7 +1048,7 @@
   "root" : true,
   "title" : "Powerful",
   "name" : "PowerDrain",
-  "description" : [ "Name) notices some of the ROV's more luxury applications aren't currently being used but are still draining the batteries' power.", "So he1 reroutes the power away from the wasted applications and diverts the energy back into the battery, providing the batteries with a temporary boost of energy." ],
+  "description" : [ "%n notices some of the ROV's more luxury applications aren't currently being used but are still draining the batteries' power.", "So he1 reroutes the power away from the wasted applications and diverts the energy back into the battery, providing the batteries with a temporary boost of energy." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1061,7 +1061,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "100", "-1"] ]
 }, {
   "root" : true,
   "title" : "Really!?",
@@ -1368,7 +1368,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25", "100", "-1"] ]
 }, {
   "root" : false,
   "title" : "Traps",

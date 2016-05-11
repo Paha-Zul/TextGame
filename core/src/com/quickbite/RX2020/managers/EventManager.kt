@@ -3,8 +3,10 @@ package com.quickbite.rx2020.managers
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.*
+import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.screens.GameOverScreen
 import com.quickbite.rx2020.screens.GameScreen
+import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import java.util.*
@@ -12,8 +14,8 @@ import java.util.*
 /**
  * Created by Paha on 2/8/2016.
  */
-object EventManager {
-    private val eventMap: HashMap<String, (args: List<Any>) -> Unit> = hashMapOf()
+object EventManager : IResetable{
+    private var eventMap: HashMap<String, (args: List<Any>) -> Unit> = hashMapOf()
 
     fun init(gameScreen:GameScreen){
         makeEvents(gameScreen)
@@ -52,12 +54,12 @@ object EventManager {
             val max = if(args.count() >= 3) ((args[2]) as String).toInt() else min
             val perc = if(args.count() >= 4) ((args[3]) as String).toBoolean() else false
             var numPeople = if(args.count() >= 5) ((args[4]) as String).toInt() else 1
+            var randomPerPerson = if(args.count() >= 6) ((args[5]) as String).toBoolean() else false
+
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
             if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
-
-            var randomPerPerson = if(args.count() >= 6) ((args[5]) as String).toBoolean() else false
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
@@ -66,17 +68,20 @@ object EventManager {
                 val list = GroupManager.getPeopleList()
                 list.forEach { person ->
                     if(randomPerPerson) amt = MathUtils.random(Math.abs(min), Math.abs(max))
+                    if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
                     if (perc)
                         person.addPercentHealth(amt.toFloat()).toInt()
                     else
                         person.addHealth(amt.toFloat()).toInt()
+
+                    FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
                 }
 
                 //If we are doing it to multiple people...
             }else if(numPeople > 1){
                 //TODO no use for it yet...
 
-                //For only one person...
+            //For only one person...
             }else{
                 var amt = MathUtils.random(Math.abs(min), Math.abs(max))
                 if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
@@ -85,6 +90,8 @@ object EventManager {
                     person.addPercentHealth(amt.toFloat()).toInt()
                 else
                     person.addHealth(amt.toFloat()).toInt()
+
+                FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
             }
         })
 
@@ -114,8 +121,10 @@ object EventManager {
             }
 
             person.addDisability(disLevel, disType)
+            FunGameStats.addFunStat("Injuries Applied: ", "1")
         })
 
+        //Called to remove and injury from a person.
         EventManager.onEvent("removeInjury", { args ->
             val name = args[0] as String
             val type = args[1] as String
@@ -125,6 +134,8 @@ object EventManager {
                 "worst" -> person.removeWorstDisability()
                 else -> person.removeLongestDisability()
             }
+
+            FunGameStats.addFunStat("Injuries Removed: ", "1")
         })
 
         //Adds a random amount of an item.
@@ -143,6 +154,7 @@ object EventManager {
                     if(perPerson) num *= GroupManager.numPeopleAlive
 
                     SupplyManager.addToSupply(supplyName, num.toFloat())
+                    FunGameStats.addFunStat("$supplyName", num.toInt().toString())
                 }
 
                 GameScreen.gui.updateSuppliesGUI()
@@ -166,6 +178,8 @@ object EventManager {
 
                     if (min < 0 || max < 0) num = -num
                     SupplyManager.addToSupply(randomSupply, num.toFloat())
+
+                    FunGameStats.addFunStat("$randomSupply", num.toInt().toString())
                 }
 
                 GameScreen.gui.updateSuppliesGUI()
@@ -185,10 +199,12 @@ object EventManager {
             if(chance >= rnd) {
                 GroupManager.getPeopleList().forEach { person ->
                     person.addHealth(amt)
+                    FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
                 }
             }
         })
 
+        //Called to damage the ROV
         EventManager.onEvent("damageROV", {args ->
             val min = (args[0] as String).toFloat()
             val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
@@ -199,10 +215,11 @@ object EventManager {
                 val amt = -MathUtils.random(min, max)
                 ROVManager.addHealthROV(amt)
 
-
+                FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
             }
         })
 
+        //Called to repair the ROV
         EventManager.onEvent("repairROV", {args ->
             val min = (args[0] as String).toFloat()
             val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
@@ -212,9 +229,11 @@ object EventManager {
                 val amt = MathUtils.random(min, max)
 
                 ROVManager.addHealthROV(amt)
+                FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
             }
         })
 
+        //Called when miles should be cut or added
         EventManager.onEvent("cutMiles", {args ->
             val min = (args[0] as String).toInt()
             val max = if(args.count() >= 2) (args[1] as String).toInt() else min
@@ -225,8 +244,10 @@ object EventManager {
             GameStats.TravelInfo.totalDistTraveled += amt
 
             Result.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, gui = GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+            FunGameStats.addFunStat("Total Miles Net", amt.toInt().toString())
         })
 
+        //Called when the game should 'wait' or progress some amount of time.
         EventManager.onEvent("wait", {args ->
             val min = (args[0] as String).toInt()
             val max = if(args.count() >= 2) (args[1] as String).toInt() else min
@@ -236,24 +257,26 @@ object EventManager {
             GameStats.TimeInfo.totalTimeCounter += amt
 
             Result.addRecentChange("hours waited", amt.toFloat(), GameScreen.currGameTime, gui = GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+            FunGameStats.addFunStat("Hours Waited", amt.toInt().toString())
         })
 
+        //Called when the trade window should be opened.
         EventManager.onEvent("openTrade", {args ->
             GameScreen.gui.buildTradeWindow()
             GameScreen.gui.openTradeWindow()
         })
 
+        //Called when a person dies.
         EventManager.onEvent("death", { args ->
             val person = args[0] as Person
 
             GameScreen.gui.buildGroupTable()
 
             Result.addRecentDeath(person, GameEventManager.currActiveEvent != null)
-
-            if(GroupManager.numPeopleAlive == 0) //OH MY GAWD GAME OVER!!
-                gameScreen.setGameOver()
+            FunGameStats.addFunStat(person.fullName, "died", true)
         })
 
+        //Called when a person's health changed.
         EventManager.onEvent("healthChanged", {args ->
             val person = args[0] as Person
             val amt = args[1] as Float
@@ -263,6 +286,7 @@ object EventManager {
             Result.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameScreen.gui, GameEventManager.currActiveEvent != null)
         })
 
+        //Called when a supply from the SupplyManager has changed. This is called from SupplyManager usually.
         EventManager.onEvent("supplyChanged", { args ->
             val supply = args[0] as SupplyManager.Supply
             val amt = args[1] as Float
@@ -270,12 +294,14 @@ object EventManager {
             Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameScreen.gui, GameEventManager.currActiveEvent != null)
         })
 
+        //Called when an event starts.
         EventManager.onEvent("eventStarted", { args ->
             //TODO Implementation?
         })
 
+        //Called when an event finishes.
         EventManager.onEvent("eventFinished", { args ->
-            if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(true)
+            if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false)
             GameEventManager.currActiveEvent = null
             Result.purgeEventResults()
         })
@@ -322,5 +348,9 @@ object EventManager {
 
             ChainTask.addTaskToEveryFrameList(task)
         })
+    }
+
+    override fun reset() {
+        eventMap = hashMapOf()
     }
 }

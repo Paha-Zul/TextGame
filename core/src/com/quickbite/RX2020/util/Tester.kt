@@ -36,6 +36,15 @@ object Tester {
         System.out.println("Event Testing Done!")
 
         assert(eventMap.isEmpty())
+
+        if(!eventMap.isEmpty()) {
+            Logger.log("Tester", "Event map is not empty. This means that something was not linked up. Map:")
+
+            val list = eventMap.toList()
+            list.forEach {evt ->
+                Logger.log("Tester - evts", evt.first)
+            }
+        }
     }
 
     private fun testEvent(event:GameEventManager.EventJson){

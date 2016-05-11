@@ -1,5 +1,5 @@
 [
-  {"name": "energy", "abbrName": "Energy", "displayName":"Energy", "max":100, "worth": [1, 10], "randStartAmt": [1, 100]},
+  {"name": "energy", "abbrName": "Energy", "displayName":"Energy", "max":200, "worth": [1, 10], "randStartAmt": [1, 100]},
   {"name": "edibles", "abbrName": "Edibles","displayName":"Edibles", "max":250, "perMember": true, "worth": [1, 10], "randStartAmt": [75, 225]},
   {"name": "parts", "abbrName": "Parts","displayName":"Parts", "max":250, "worth": [1, 10], "randStartAmt": [50, 150]},
   {"name": "medkits", "abbrName": "Med-kits", "displayName":"Med-kits", "max":10, "worth": [1, 10], "randStartAmt": [0, 5]},

@@ -61,7 +61,7 @@ class Person(private val _firstName:String, private val _lastName:String, val ma
     operator fun component2() = _lastName
 
     fun addHealth(amt:Float):Float{
-        healthNormal +=amt
+        healthNormal += amt
         if(healthNormal >= maxHealth - healthInjury)
             healthNormal = maxHealth - healthInjury
         if(healthNormal <= 0)
