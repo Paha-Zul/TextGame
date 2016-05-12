@@ -67,8 +67,10 @@ object EventManager : IResetable{
                 if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
                 val list = GroupManager.getPeopleList()
                 list.forEach { person ->
-                    if(randomPerPerson) amt = MathUtils.random(Math.abs(min), Math.abs(max))
-                    if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
+                    if(randomPerPerson) {
+                        amt = MathUtils.random(Math.abs(min), Math.abs(max))
+                        if (min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
+                    }
                     if (perc)
                         person.addPercentHealth(amt.toFloat()).toInt()
                     else
@@ -95,7 +97,7 @@ object EventManager : IResetable{
             }
         })
 
-        EventManager.onEvent("addInjury", {args ->
+        EventManager.onEvent("addAilment", {args ->
             val name = args[0] as String
             val type = args[1] as String
             val level = args[2] as String
@@ -121,11 +123,11 @@ object EventManager : IResetable{
             }
 
             person.addDisability(disLevel, disType)
-            FunGameStats.addFunStat("Injuries Applied: ", "1")
+            FunGameStats.addFunStat("Ailments Inflicted: ", "1")
         })
 
         //Called to remove and injury from a person.
-        EventManager.onEvent("removeInjury", { args ->
+        EventManager.onEvent("removeAilment", { args ->
             val name = args[0] as String
             val type = args[1] as String
 
@@ -135,7 +137,7 @@ object EventManager : IResetable{
                 else -> person.removeLongestDisability()
             }
 
-            FunGameStats.addFunStat("Injuries Removed: ", "1")
+            FunGameStats.addFunStat("Ailments Cured: ", "1")
         })
 
         //Adds a random amount of an item.
@@ -273,7 +275,7 @@ object EventManager : IResetable{
             GameScreen.gui.buildGroupTable()
 
             Result.addRecentDeath(person, GameEventManager.currActiveEvent != null)
-            FunGameStats.addFunStat(person.fullName, "died", true)
+            FunGameStats.addFunStat(person.fullName, "dead", true)
         })
 
         //Called when a person's health changed.
@@ -317,6 +319,9 @@ object EventManager : IResetable{
         //Called when the game is over. Shows the game over screen.
         EventManager.onEvent("gameOver", {args ->
             val win = (args[0] as String).toBoolean()
+
+            for(person in GroupManager.getPeopleList())
+                FunGameStats.addFunStat(person.fullName, "alive", true)
 
             GameStats.win = win
             gameScreen.pauseGame()

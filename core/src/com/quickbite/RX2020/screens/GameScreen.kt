@@ -81,21 +81,41 @@ class GameScreen(val game: TextGame): Screen {
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        val sc1: ScrollingBackground = ScrollingBackground(null, 3f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc2: ScrollingBackground = ScrollingBackground(null, 3f, 800f, -TextGame.camera.viewportHeight / 2f)
+        //The foreground.
+        val sc1: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("ForegroundTreeLayer", Texture::class.java)), 3f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc2: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("ForegroundTreeLayer", Texture::class.java)), 3f, 800f, -TextGame.camera.viewportHeight / 2f)
         sc1.following = sc2
         sc2.following = sc1
+        sc1.resetCallback = {if(MathUtils.random(1, 100) < 75) sc1.invisible = true else sc1.invisible = false}
+        sc2.resetCallback = {if(MathUtils.random(1, 100) < 75) sc2.invisible = true else sc2.invisible = false}
+        sc1.invisible = true
+        sc2.invisible = true
 
-        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
+        //The back-mid ground? We actually want this on top of our midground (ground) cause they are trees
+        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
         sc3.following = sc4
         sc4.following = sc3
+        sc3.resetCallback = {if(MathUtils.random(1, 100) < 75) sc3.invisible = true else sc3.invisible = false}
+        sc4.resetCallback = {if(MathUtils.random(1, 100) < 75) sc4.invisible = true else sc4.invisible = false}
+        sc3.invisible = true
+        sc4.invisible = true
 
-        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -TextGame.camera.viewportHeight / 2f)
+        //The midground.
+        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
         sc5.following = sc6
         sc6.following = sc5
 
+        //The background.
+        val sc7: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -TextGame.camera.viewportHeight / 2f)
+        val sc8: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -TextGame.camera.viewportHeight / 2f)
+        sc7.following = sc8
+        sc8.following = sc7
+
+        //Add these in reverse for drawing order.
+        scrollingBackgroundList.add(sc8)
+        scrollingBackgroundList.add(sc7)
         scrollingBackgroundList.add(sc6)
         scrollingBackgroundList.add(sc5)
         scrollingBackgroundList.add(sc4)
@@ -103,7 +123,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Slipper", "common"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Figurine", "common"))})
         gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Hunting", "rare"))})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
 
@@ -186,7 +206,7 @@ class GameScreen(val game: TextGame): Screen {
 
             //To draw the ROV in the right area, we have to draw when i == 3 (after both the midgrounds). This lets it be
             //under the foreground but above the midground.
-            if(i == 3){
+            if(i == 5){
                 val shaking = if(state == State.TRAVELING) (GameStats.TimeInfo.totalTimeCounter%0.5f).toFloat()*2f else 0f
                 batch.draw(ROV, -ROV.width/2f, -TextGame.camera.viewportHeight/3f + shaking)
             }

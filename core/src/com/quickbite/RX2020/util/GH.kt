@@ -118,13 +118,16 @@ object GH {
         val tokens = text.split(" ") //Split by spaces
         val newTokens:MutableList<String> = mutableListOf()
 
+        val pronounPattern = Pattern.compile("((H|h)(is|im|e)[0-9])");
+        val numberPattern = Pattern.compile("([0-9])");
+
         //For each token....
         for(token in tokens){
             var newToken = token
 
             //If the token matches this pattern, let's send it to the gender changes!
             if(token.matches("(\\S*\\(?(H|h)(is|im|e)[0-9]\\(?\\S*)".toRegex()))
-                newToken = changeGender(token, event)
+                newToken = changeGender(token, event, pronounPattern, numberPattern)
 
             //If it matches a name, replace it.
             if(token.matches("((%n[0-9]?\\S*)|(\\(?(N|n)ame[0-9]\\)?))".toRegex()))
@@ -138,20 +141,18 @@ object GH {
         return newTokens.joinToString(" ")
     }
 
-    fun changeGender(token:String, event:GameEventManager.EventJson):String{
+    fun changeGender(token:String, event:GameEventManager.EventJson, pronounePattern:Pattern, numberPattern:Pattern):String{
         var _token = ""
 
         //First, find the he/him/his [0-9] token.
-        var pattern = Pattern.compile("((H|h)(is|im|e)[0-9])");
-        var matcher = pattern.matcher(token);
+        var matcher = pronounePattern.matcher(token);
         if(matcher.find()){
             _token = matcher.group(1)
         }
 
         var number:Int = 0
 
-        pattern = Pattern.compile("([0-9])");
-        matcher = pattern.matcher(_token);
+        matcher = numberPattern.matcher(_token);
         if(matcher.find()){
             number = matcher.group(1).toInt()
         }
@@ -167,7 +168,7 @@ object GH {
             if(male) pronoun = "he"
             else pronoun = "she"
         }else if(_token.matches("((H|h)im[0-9])".toRegex())){
-            if(male) pronoun = "im"
+            if(male) pronoun = "him"
             else pronoun = "her"
         }
 
@@ -215,7 +216,9 @@ object GH {
         val storage = ROVManager.ROVPartMap["storage"]!!
         val ammo = SupplyManager.getSupply("ammo")
 
-        return (checkCantTravel() && ammo.amt.toInt() == 0) || (storage.currHealth <= 0 && storage.amt.toInt() == 0) || GroupManager.numPeopleAlive == 0 ||
+        val lost = (checkCantTravel() && ammo.amt.toInt() == 0) || (storage.currHealth <= 0 && storage.amt.toInt() == 0) || GroupManager.numPeopleAlive == 0 ||
                 (SupplyManager.getSupply("energy").amt <= 0 && SupplyManager.getSupply("edibles").amt <= 0)
+
+        return lost
     }
 }

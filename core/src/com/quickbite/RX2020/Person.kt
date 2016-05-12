@@ -96,7 +96,7 @@ class Person(private val _firstName:String, private val _lastName:String, val ma
         }
     }
 
-    fun removeDisability(disability: Disability){
+    fun removeDisability(disability: Disability):Boolean{
         val removed = disabilities.remove(disability)
         val isInjury = disability.type == Disability.DisabilityType.Injury
         //Only shift health if it's an injury
@@ -110,28 +110,38 @@ class Person(private val _firstName:String, private val _lastName:String, val ma
             true -> numInjury--
             else -> numSickness--
         }
+
+        return removed
     }
 
-    fun removeWorstDisability(){
+    fun removeWorstDisability():Boolean{
         var worst: Disability? = null
+        var removed = false
+
         disabilityList.forEach { injury ->
             if(worst == null || worst!!.type < injury.type)
                 worst = injury
         }
 
         if(worst!=null)
-            removeDisability(worst!!)
+            removed = removeDisability(worst!!)
+
+        return removed
     }
 
-    fun removeLongestDisability(){
+    fun removeLongestDisability():Boolean{
         var longest: Disability? = null
+        var removed = false
+
         disabilityList.forEach { injury ->
             if(longest == null || longest!!.hoursRemaining < injury.hoursRemaining)
                 longest = injury
         }
 
         if(longest!=null)
-            removeDisability(longest!!)
+            removed = removeDisability(longest!!)
+
+        return removed
     }
 
     /**
