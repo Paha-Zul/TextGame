@@ -25,7 +25,7 @@ object GroupManager : IUpdateable, IResetable {
 
         for(i in 0.rangeTo(range-1)) {
             val triple = DataManager.pullRandomName()
-            list.add(Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third))
+            list.add(Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third, 0))
         }
     }
 

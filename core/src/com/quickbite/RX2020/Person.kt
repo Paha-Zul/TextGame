@@ -7,13 +7,15 @@ import com.quickbite.rx2020.managers.GroupManager
 /**
  * Created by Paha on 2/8/2016.
  */
-class Person(private val _firstName:String, private val _lastName:String, val male:Boolean) {
+class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:Long) {
     var firstName:String = ""
-        get() = _firstName
+        get
     var lastName:String = ""
-        get() = _lastName
+        get
     var fullName:String = ""
-        get() = "$_firstName $_lastName"
+        get() = "$firstName $lastName"
+    var timeAdded:Long = 0
+        get
 
     var healthNormal:Float = 100f
         get
@@ -30,6 +32,11 @@ class Person(private val _firstName:String, private val _lastName:String, val ma
     var numInjury = 0
     var numSickness = 0
 
+    init{
+        firstName = _firstName
+        lastName = _lastName
+        timeAdded = _timeAdded
+    }
 
     private var disabilities:MutableList<Disability> = mutableListOf()
     var disabilityList:List<Disability>
@@ -45,20 +52,20 @@ class Person(private val _firstName:String, private val _lastName:String, val ma
     val hasSickness:Boolean
         get() = numSickness > 0
 
-    constructor(name:Pair<String, String>, male:Boolean):this(name.first, name.second, male)
+    constructor(name:Pair<String, String>, male:Boolean, _timeAdded: Long):this(name.first, name.second, male, _timeAdded)
 
-    constructor(firstName:String, lastName:String, currHealth:Float, maxHealth:Float, male:Boolean):this(firstName, lastName, male){
+    constructor(firstName:String, lastName:String, currHealth:Float, maxHealth:Float, male:Boolean, _timeAdded: Long):this(firstName, lastName, male, _timeAdded){
         this.maxHealth = maxHealth
         this.healthNormal = currHealth
     }
 
-    constructor(name:Pair<String, String>, currHealth:Float, maxHealth:Float, male:Boolean):this(name.first, name.second, male){
+    constructor(name:Pair<String, String>, currHealth:Float, maxHealth:Float, male:Boolean, _timeAdded: Long):this(name.first, name.second, male, _timeAdded){
         this.maxHealth = maxHealth
         this.healthNormal = currHealth
     }
 
-    operator fun component1() = _firstName
-    operator fun component2() = _lastName
+    operator fun component1() = firstName
+    operator fun component2() = lastName
 
     fun addHealth(amt:Float):Float{
         healthNormal += amt

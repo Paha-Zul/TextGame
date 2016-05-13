@@ -92,8 +92,8 @@ class GameScreen(val game: TextGame): Screen {
         sc2.invisible = true
 
         //The back-mid ground? We actually want this on top of our midground (ground) cause they are trees
-        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
+        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2.6f)
+        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2.6f)
         sc3.following = sc4
         sc4.following = sc3
         sc3.resetCallback = {if(MathUtils.random(1, 100) < 75) sc3.invisible = true else sc3.invisible = false}
@@ -123,9 +123,10 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Figurine", "common"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Hunting", "rare"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "rare"))})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Fishing", "common"))})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
+        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Slipper", "common"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
@@ -303,7 +304,6 @@ class GameScreen(val game: TextGame): Screen {
      */
     fun pauseGame(){
         this.paused = true
-        gui.pauseButton.isDisabled = true
     }
 
     /**
@@ -311,7 +311,6 @@ class GameScreen(val game: TextGame): Screen {
      */
     fun resumeGame(){
         this.paused = false;
-        gui.pauseButton.isDisabled = false
     }
 
     fun setGameOver(){

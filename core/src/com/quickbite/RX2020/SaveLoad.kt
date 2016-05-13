@@ -48,7 +48,7 @@ object SaveLoad{
         save.currMiles = GameStats.TravelInfo.totalDistTraveled
         save.maxTripMileage = GameStats.TravelInfo.totalDistOfGame
 
-        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal+person.healthInjury, person.disabilityList, person.male))}
+        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal+person.healthInjury, person.disabilityList, person.male, person.timeAdded))}
         SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
         FunGameStats.statsMap.toList().forEach { stat -> save.funStatList.add(arrayOf(stat.first, stat.second)) }
         FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
@@ -74,7 +74,7 @@ object SaveLoad{
         GroupManager.clearPeople()
         save.personList.forEach { jsonPerson ->
             var names = jsonPerson.name.split(" ")
-            val person = Person(names[0], names[1], jsonPerson.male) //Make a new person to add to the group.
+            val person = Person(names[0], names[1], jsonPerson.male, jsonPerson.gameTimeAdded) //Make a new person to add to the group.
             person.addHealth(jsonPerson.health - person.maxHealth) //We need to set the health through a bit of roundabout.
             person.disabilityList = jsonPerson.disabilities
             GroupManager.addPerson(person)
@@ -111,8 +111,8 @@ object SaveLoad{
         var funStatUniqueList:MutableList<Array<String>> = mutableListOf()
     }
 
-    private class PersonPOJO(var name:String, var health:Float, var disabilities:List<Person.Disability>, var male:Boolean){
-        constructor():this("", 0f, listOf(), false)
+    private class PersonPOJO(var name:String, var health:Float, var disabilities:List<Person.Disability>, var male:Boolean, val gameTimeAdded:Long){
+        constructor():this("", 0f, listOf(), false, 0)
     }
 
     private class SupplyPOJO(var name:String, var currAmount:Float, var currHealth:Float){

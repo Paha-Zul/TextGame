@@ -70,10 +70,6 @@ class GameScreenGUI(val game : GameScreen) {
 
     private lateinit var selectBox: SelectBox<Label>
 
-    lateinit var pauseButton: ImageButton
-        get
-        private set
-
     private lateinit var distProgressBar: ProgressBar
 
     init{
@@ -126,15 +122,6 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     fun addListeners(){
-        pauseButton.addListener(object: ClickListener(){
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                if(game.paused) game.resumeGame()
-                else game.pauseGame()
-
-                super.clicked(event, x, y)
-            }
-        })
-
         supplyButton.addListener(object: ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
@@ -283,7 +270,6 @@ class GameScreenGUI(val game : GameScreen) {
         TextGame.stage.addActor(centerInfoTable)
         TextGame.stage.addActor(leftTable)
         TextGame.stage.addActor(rightTable)
-        TextGame.stage.addActor(pauseButton)
         TextGame.stage.addActor(campButton)
         TextGame.stage.addActor(settingsButton)
     }
@@ -299,7 +285,6 @@ class GameScreenGUI(val game : GameScreen) {
         TextGame.stage.addActor(centerInfoTable)
         TextGame.stage.addActor(leftTable)
         TextGame.stage.addActor(rightTable)
-        TextGame.stage.addActor(pauseButton)
         TextGame.stage.addActor(campButton)
 
         //campTable.bottom().left()
@@ -312,9 +297,6 @@ class GameScreenGUI(val game : GameScreen) {
         val barStyle: ProgressBar.ProgressBarStyle = ProgressBar.ProgressBarStyle()
         barStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("bar"))
         barStyle.knobBefore = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixel"))
-
-//        val settingsButtonStyle = ImageButton.ImageButtonStyle()
-//        settingsButtonStyle.imageUp = TextureRegionDrawable(TextureRegion(TextGame.manager.get("gear", Texture::class.java)))
 
         val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -330,13 +312,9 @@ class GameScreenGUI(val game : GameScreen) {
 
         settingsButton = ImageButton(TextureRegionDrawable(TextureRegion(TextGame.manager.get("gear", Texture::class.java))))
         settingsButton.setSize(35f, 35f)
-        settingsButton.setPosition(TextGame.viewport.worldWidth - 45f, 10f)
+        settingsButton.setPosition(5f, 5f)
 
         distProgressBar = ProgressBar(0f, GameStats.TravelInfo.totalDistOfGame.toFloat(), 20f, false, barStyle)
-
-        pauseButton = ImageButton(pauseButtonStyle)
-        pauseButton.setSize(40f, 40f)
-        pauseButton.setPosition(TextGame.viewport.worldWidth/1.4f, TextGame.viewport.worldHeight - pauseButton.height)
 
         campButton = TextButton("Camp", textButtonStyle)
         campButton.setSize(100f, 40f)
@@ -448,8 +426,8 @@ class GameScreenGUI(val game : GameScreen) {
         val healthLabelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2Small", BitmapFont::class.java), Color.FOREST)
 
         val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
-        imageButtonStyle.up = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java)))
-        imageButtonStyle.disabled = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
+        imageButtonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("medkit"))
+        imageButtonStyle.disabled = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("medkitDisabled"))
 
         val hasMedkits = SupplyManager.getSupply("medkits").amt.toInt() > 0
 
@@ -480,24 +458,14 @@ class GameScreenGUI(val game : GameScreen) {
                 recentChangeLabel.setText("$modifier${change.amt.toInt().toString()}")
             }
 
-            val stack = Stack()
-
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
-
-            stack.add(healthBar)
-
-            val healthLabel = Label("${(person.healthNormal + person.healthInjury).toInt()}/${(person.maxHealth.toInt())}", healthLabelStyle)
-            healthLabel.setFontScale(0.3f)
-            healthLabel.setAlignment(Align.center)
-
-            stack.add(healthLabel)
 
             pairTable.add(nameLabel).right().expandX().fillX().colspan(3)
             pairTable.row().right()
             pairTable.add(recentChangeLabel).right().spaceRight(5f).expandX().fillX()
             pairTable.add(medkitButton).size(16f).spaceRight(10f).right()
-            pairTable.add(stack).right().height(15f).width(100f)
+            pairTable.add(healthBar).right().height(15f).width(100f)
 
             groupTable.add(pairTable).right().expandX().fillX()
             groupTable.row().spaceTop(5f).right()
@@ -524,8 +492,8 @@ class GameScreenGUI(val game : GameScreen) {
         ROVTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
         ROVTable.padRight(10f)
 
-        val medkit = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkit", Texture::class.java)))
-        val medkitDis = TextureRegionDrawable(TextureRegion(TextGame.manager.get("medkitDisabled", Texture::class.java)))
+        val medkit = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("repair"))
+        val medkitDis = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("repairDisabled"))
 
         val bg = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("bar"))
         val pixel = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixelWhite"))
@@ -541,10 +509,13 @@ class GameScreenGUI(val game : GameScreen) {
             val nameLabel = Label(supply.displayName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
 
-            val repairButton = ImageButton(medkit)
-            repairButton.style.imageDisabled = medkitDis
-            if(supply.amt <= 0 || supply.currHealth >= supply.maxHealth)
-                repairButton.isDisabled = true
+            var repairButton:ImageButton? = null
+            if(supply.name != "ROV") {
+                repairButton = ImageButton(medkit)
+                repairButton.style.imageDisabled = medkitDis
+                if (supply.amt <= 0 || supply.currHealth >= supply.maxHealth)
+                    repairButton.isDisabled = true
+            }
 
             val changeLabel: Label = Label("", labelStyle)
             changeLabel.setFontScale(normalFontScale)
@@ -562,32 +533,24 @@ class GameScreenGUI(val game : GameScreen) {
                 changeLabel.setText("$modifier${result.amt.toInt().toString()}")
             }
 
-            val stack = Stack()
-
             val healthBar: CustomHealthBar = CustomHealthBar(supply, bg, pixel)
-
-            val healthLabel = Label("${(supply.currHealth).toInt()}/${(supply.maxHealth.toInt())}", healthLabelStyle)
-            healthLabel.setFontScale(0.3f)
-            healthLabel.setAlignment(Align.center)
-
-            stack.add(healthBar)
-            stack.add(healthLabel)
-//            stack.debugAll()
 
             ROVTable.add(nameLabel).right().colspan(3)
             ROVTable.row()
             ROVTable.add(changeLabel).right()
             ROVTable.add(repairButton).space(0f, 10f, 0f, 10f).size(16f).right()
-            ROVTable.add(stack).right().height(15f).width(100f)
+            ROVTable.add(healthBar).right().height(15f).width(100f)
             ROVTable.row().spaceTop(5f)
 
-            repairButton.addListener(object:ChangeListener(){
-                override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    supply.currHealth = supply.maxHealth
-                    SupplyManager.addToSupply(supply.name, -1f)
-                    buildROVTable()
-                }
-            })
+            if(repairButton != null) {
+                repairButton.addListener(object : ChangeListener() {
+                    override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                        supply.currHealth = supply.maxHealth
+                        SupplyManager.addToSupply(supply.name, -1f)
+                        buildROVTable()
+                    }
+                })
+            }
         }
     }
 
@@ -679,7 +642,7 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     private fun handleEvent(event:GameEventManager.EventJson?){
-        if(event!=null)
+        if(event != null)
             GH.executeEventActions(event)
 
         if((event == null || !event.hasDescriptions) && Result.hasEventResults){
@@ -811,7 +774,7 @@ class GameScreenGUI(val game : GameScreen) {
                     //If we have more than one choice
                     if(event.choices!!.size > 1) {
                         EventInfo.eventInnerTable.clear()
-                        EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill().padBottom(60f)
+                        EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill()
 
                     //If we only have one choice, trigger the event GUI again.
                     }else{
