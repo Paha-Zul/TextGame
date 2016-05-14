@@ -109,6 +109,7 @@ object SaveLoad{
         var supplyList:MutableList<SupplyPOJO> = mutableListOf()
         var funStatList:MutableList<Array<String>> = mutableListOf()
         var funStatUniqueList:MutableList<Array<String>> = mutableListOf()
+        var remainingEpicEvents:MutableList<String> = mutableListOf()
     }
 
     private class PersonPOJO(var name:String, var health:Float, var disabilities:List<Person.Disability>, var male:Boolean, val gameTimeAdded:Long){

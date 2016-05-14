@@ -32,19 +32,10 @@ object DataManager{
                 loadEvents(file)
             else {
                 val events: Array<GameEventManager.EventJson> = json.fromJson(Array<GameEventManager.EventJson>::class.java, file)
-                var rootMap:HashMap<String, GameEventManager.EventJson>? = null
-                if(file.name().equals("rare.json"))
-                    rootMap = GameEventManager.getMap("rare")
-                else if(file.name().equals("common.json"))
-                    rootMap = GameEventManager.getMap("common")
-                else if(file.name().equals("epic.json"))
-                    rootMap = GameEventManager.getMap("epic")
-                else if(file.name().equals("special.json"))
-                    rootMap = GameEventManager.getMap("special")
+                val type = file.name().substring(0, file.name().lastIndexOf('.'))
 
                 events.forEach { event ->
-                    if (event.root) rootMap!!.put(event.name, event)
-                    else GameEventManager.eventMap.put(event.name, event)
+                    GameEventManager.addEvent(event, type)
                 }
             }
         }

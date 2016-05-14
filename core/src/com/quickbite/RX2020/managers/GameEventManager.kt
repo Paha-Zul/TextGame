@@ -21,7 +21,8 @@ object GameEventManager{
     private val commonRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     private val rareRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
     private val epicRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    private val specialEvebtMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    val epicRootEventMapOriginal: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val specialEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
@@ -57,10 +58,20 @@ object GameEventManager{
         when(type){
             "common" -> return commonRootEventMap
             "rare" -> return rareRootEventMap
-            "special" -> return specialEvebtMap
+            "special" -> return specialEventMap
             "epic" -> return epicRootEventMap
             else -> return eventMap
         }
+    }
+
+    fun addEvent(event:EventJson, type: String = ""){
+        val map = getMap(type)
+        if(event.root){
+            map.put(event.name, event)
+            if(type == "epic") //Special case since we're gonna need to remember which epic events have alreayd triggered.
+                epicRootEventMapOriginal.put(event.name, event)
+        }else
+            GameEventManager.eventMap.put(event.name, event)
     }
 
     /**
@@ -75,6 +86,9 @@ object GameEventManager{
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
         if(randomizePeople) event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         else if(randomizedPeopleList != null) event!!.randomPersonList = randomizedPeopleList
+
+        //As a special case for the game, we only want 1 occurrence of each epic event.
+        if(type == "epic") map.remove(event!!.name)
 
         GH.replaceEventDescription(event!!) //TODO Watch this. May need to thread it.
         return event

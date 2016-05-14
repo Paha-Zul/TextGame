@@ -59,7 +59,8 @@ object EventManager : IResetable{
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
-            if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
+            if(name.matches("evt[0-9]".toRegex())) name = GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()].firstName
+            else if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
@@ -103,7 +104,9 @@ object EventManager : IResetable{
             val level = args[2] as String
 
             var person:Person
-            if(name == "rand") person = GroupManager.getRandomPerson()!!
+
+            if(name == "rand") person = GroupManager.getRandomPerson()!!                     //We need to do .toString() for the .toInt() method or else it converts the character to ascii value.
+            else if(name.matches("evt[0-9]".toRegex())) person = GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()]
             else if(name == "evt") person = GameEventManager.currActiveEvent!!.randomPersonList[0]
             else person = GroupManager.getPerson(name)!!
 
@@ -203,6 +206,23 @@ object EventManager : IResetable{
                     person.addHealth(amt)
                     FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
                 }
+            }
+        })
+
+        //Called to damage the ROV
+        EventManager.onEvent("addHealthROV", {args ->
+            val min = (args[0] as String).toFloat()
+            val max = if(args.count() >= 2) (args[1] as String).toFloat() else min
+            val chance = if(args.count() >= 3) (args[2] as String).toFloat() else 100f
+
+            val rand = MathUtils.random(1, 100)
+            if(rand <= chance) {
+                var amt = MathUtils.random(Math.abs(min), Math.abs(max))
+                if(min < 0) amt = -amt
+
+                ROVManager.addHealthROV(amt)
+
+                FunGameStats.addFunStat("Total ROV Net Health", amt.toInt().toString())
             }
         })
 

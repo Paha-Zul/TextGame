@@ -28,10 +28,13 @@ object Tester {
         }
 
         for(eventName in GameEventManager.getMap("common").keys)
-            func(GameEventManager.getEvent(eventName, "common"))
+            func(GameEventManager.getAndSetEvent(eventName, "common"))
 
         for(eventName in GameEventManager.getMap("rare").keys)
-            func(GameEventManager.getEvent(eventName, "rare"))
+            func(GameEventManager.getAndSetEvent(eventName, "rare"))
+
+        for(eventName in GameEventManager.getMap("epic").keys)
+            func(GameEventManager.getAndSetEvent(eventName, "epic"))
 
         System.out.println("Event Testing Done!")
 

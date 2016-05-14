@@ -237,7 +237,7 @@ class GameScreen(val game: TextGame): Screen {
         GameStats.update(delta)
         commonEventTimer.update(delta)
         rareEventTimer.update(delta)
-//        epicEventTimer.update(delta)
+        epicEventTimer.update(delta)
 
         noticeEventTimer.update(delta)
 

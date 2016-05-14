@@ -12,7 +12,6 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.quickbite.rx2020.managers.EasyAssetManager;
 import com.quickbite.rx2020.screens.LoadingScreen;
-import com.quickbite.rx2020.util.GH;
 import com.quickbite.rx2020.util.Logger;
 
 import java.util.concurrent.ExecutorService;
