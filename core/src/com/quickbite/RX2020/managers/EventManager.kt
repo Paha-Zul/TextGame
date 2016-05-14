@@ -172,7 +172,7 @@ object EventManager : IResetable{
                 val min: Float = (args[0] as String).toFloat()
                 val max: Float = (args[1] as String).toFloat()
                 val chance = (args[2] as String).toFloat()
-                val list: List<Any> = args.subList(3, args.size - 1)
+                val list: List<Any> = args.subList(3, args.size)
 
                 if(MathUtils.random(100) <= chance) {
                     val randomSupply = list[MathUtils.random(list.size - 1)] as String
@@ -274,8 +274,15 @@ object EventManager : IResetable{
 
             GameScreen.gui.buildGroupTable()
 
-            Result.addRecentDeath(person, GameEventManager.currActiveEvent != null)
+            Result.addRecentDeath(person)
             FunGameStats.addFunStat(person.fullName, "dead", true)
+        })
+
+        //Takes the recent deaths and puts them into the event deaths for displaying.
+        EventManager.onEvent("showDeaths", {args->
+            val pair = Result.recentDeathMap.toList()[0]
+            Result.recentDeathResult = pair.second      //Store the first death result.
+            Result.recentDeathMap.remove(pair.first)    //Remove it from the map.
         })
 
         //Called when a person's health changed.
@@ -292,6 +299,16 @@ object EventManager : IResetable{
         EventManager.onEvent("supplyChanged", { args ->
             val supply = args[0] as SupplyManager.Supply
             val amt = args[1] as Float
+            val oldAmt = args[2] as Float
+
+            if(oldAmt > 0 && supply.amt <= 0) {
+                val name = GH.checkSupply(supply, amt, oldAmt)
+                if (!name.isEmpty()) {
+                    gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")) }
+                    gameScreen.noticeEventTimer.restart()
+                    gameScreen.noticeEventTimer.start()
+                }
+            }
 
             Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameScreen.gui, GameEventManager.currActiveEvent != null)
         })
@@ -308,12 +325,9 @@ object EventManager : IResetable{
             Result.purgeEventResults()
         })
 
-        //Takes the recent deaths and puts them into the event deaths for displaying.
-        EventManager.onEvent("showDeaths", {args->
-            for(result in Result.recentDeathMap)
-                Result.addRecentDeath(result.key, result.value.name, true)
-
-            Result.purgeRecentDeaths()
+        //Called when an event finishes.
+        EventManager.onEvent("forceCamp", { args ->
+            gameScreen.changeToCamp()
         })
 
         //Called when the game is over. Shows the game over screen.

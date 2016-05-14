@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.gui.GameScreenGUI
 import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.util.CustomTimer
 import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Tester
@@ -46,6 +47,8 @@ class GameScreen(val game: TextGame): Screen {
     private val commonEventTimer: CustomTimer = CustomTimer(MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
     private val rareEventTimer: CustomTimer = CustomTimer(MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
     private val epicEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
+
+    val noticeEventTimer: CustomTimer = CustomTimer(MathUtils.random(1f, 1f)) //Used to trigger notices.
 
     private val purgeRecentChangeTimer: CustomTimer = CustomTimer(3f)
 
@@ -123,14 +126,16 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "rare"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Fishing", "common"))})
+        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("CragRock1Great"))})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("BreakIn", "rare"))})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
         gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Slipper", "common"))})
 
         commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
         rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
         epicEventTimer.callback = timerFunc("epic", epicEventTimer, epicEventTime.min, epicEventTime.max)
+
+        noticeEventTimer.stop()
 
         if(TextGame.testMode) {
             Tester.testEvents(50)
@@ -234,6 +239,8 @@ class GameScreen(val game: TextGame): Screen {
         rareEventTimer.update(delta)
 //        epicEventTimer.update(delta)
 
+        noticeEventTimer.update(delta)
+
         for(background in scrollingBackgroundList)
             background.update(delta)
     }
@@ -263,7 +270,7 @@ class GameScreen(val game: TextGame): Screen {
     fun onHourTick(delta:Float){
         //TODO Need to implement when you can't travel and need to camp.
 
-        if(GH.checkGameOverConditions())
+        if(GH.checkGameOverConditions().first)
             gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))
         else if(GameStats.TravelInfo.totalDistToGo <= 0)
             gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))
@@ -273,8 +280,9 @@ class GameScreen(val game: TextGame): Screen {
             GroupManager.updateHourly(delta)
             ChainTask.updateHourly(delta)
 
-            if (Result.recentDeathMap.size > 0)
+            if (Result.recentDeathMap.size > 0) {
                 gui.triggerEventGUI(GameEventManager.getEvent("Death", "special"))
+            }
 
             if (numHoursToAdvance > 0) numHoursToAdvance--
             timeTickEventList.forEach { evt -> evt.update() }
@@ -289,6 +297,7 @@ class GameScreen(val game: TextGame): Screen {
     fun changeToCamp(){
         this.state = State.CAMP
         this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
+        gui.openCampMenu()
     }
 
     /**
@@ -340,7 +349,7 @@ class GameScreen(val game: TextGame): Screen {
 
     }
 
-    fun timerFunc(eventType:String, timer:CustomTimer, min:Float, max:Float):()->Unit{
+    fun timerFunc(eventType:String, timer: CustomTimer, min:Float, max:Float):()->Unit{
         var func: (()->Unit)? = null
         func = {
             //Get the current event or a new one if we aren't on an event.

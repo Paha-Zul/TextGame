@@ -13,6 +13,7 @@ import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.EventManager
+import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
 import com.quickbite.rx2020.util.FunGameStats
@@ -28,6 +29,11 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
     override fun show() {
         TextGame.backgroundColor = Color(0f,0f,0f,1f)
+
+        FunGameStats.reset()
+        GroupManager.reset()
+        EventManager.reset()
+        GameStats.reset()
 
         var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -85,10 +91,6 @@ class MainMenuScreen(val game: TextGame) : Screen {
 
         //I like to fade almost everything
         mainTable.addAction(Actions.fadeIn(1f))
-
-        FunGameStats.reset()
-        GroupManager.reset()
-        EventManager.reset()
     }
 
     fun continueGameFade():ChainTask{

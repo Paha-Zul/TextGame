@@ -154,19 +154,18 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        campButton.addListener(object: ClickListener(){
-            override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                super.clicked(event, x, y)
-                campButton.isChecked = false
-
+        campButton.addListener(object: ChangeListener(){
+            //TODO change text when travel to camp and vice versa
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 if(game.state == GameScreen.State.TRAVELING) {
                     game.changeToCamp()
                     campButton.setText("Travel")
-                    applyCampTab()
                 }else if(game.state == GameScreen.State.CAMP) {
-                    game.changeToTravel()
-                    campButton.setText("Camp")
-                    applyTravelTab(groupTable)
+                    if(!GH.checkCantTravel()) {
+                        game.changeToTravel()
+                        campButton.setText("Camp")
+                        applyTravelTab(groupTable)
+                    }
                 }
             }
         })
@@ -262,6 +261,14 @@ class GameScreenGUI(val game : GameScreen) {
         activityButton.isDisabled = false
     }
 
+    fun disableCampButton(){
+        campButton.isDisabled = true
+    }
+
+    fun enableCampButton(){
+        campButton.isDisabled = false
+    }
+
     fun applyTravelTab(tableToApply: Table){
         mainTable.remove()
         mainTable.clear()
@@ -278,7 +285,7 @@ class GameScreenGUI(val game : GameScreen) {
      * Applies the travel screen GUI stuff, which is initially only the group stats
      * and supplies info.
      */
-    fun applyCampTab(){
+    fun openCampMenu(){
         TextGame.stage.clear()
         mainTable.clear()
 
@@ -646,7 +653,9 @@ class GameScreenGUI(val game : GameScreen) {
             GH.executeEventActions(event)
 
         if((event == null || !event.hasDescriptions) && Result.hasEventResults){
-            showEventResults(Result.eventChangeMap.values.toList(), Result.eventDeathMap.values.toList(), {closeEvent()})
+            //Using some trickery for the recent death.
+            showEventResults(Result.eventChangeMap.values.toList(), listOf(Result.recentDeathResult ?: null), {closeEvent()})
+            Result.recentDeathResult = null
             return
         }else if(event == null || !event.hasDescriptions){
             closeEvent()
@@ -694,7 +703,9 @@ class GameScreenGUI(val game : GameScreen) {
             val button = TextButton("($modifiedText)", buttonStyle)
             button.pad(0f, 10f, 0f, 10f)
             button.label.setFontScale(buttonFontScale)
-            EventInfo.eventChoicesTable.add(button).height(40f)
+            button.label.setWrap(true)
+
+            EventInfo.eventChoicesTable.add(button).minHeight(40f).expandX().fillX()
             EventInfo.eventChoicesTable.row()
 
             //If we don't pass the restrictions, disable this button
@@ -826,7 +837,7 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Shows the event results
      */
-    fun showEventResults(list: List<Result>, deathList: List<Result>, onDoneCallback:()->Unit){
+    fun showEventResults(list: List<Result>, deathList: List<Result?>, onDoneCallback:()->Unit){
         EventInfo.eventInnerTable.clear()
 
         /* Styles */
@@ -848,15 +859,15 @@ class GameScreenGUI(val game : GameScreen) {
         val resultsTable = Table()
 
         //Display the results of the event.
-        for(item in list){
+        for (item in list) {
             val nameLabel = Label(item.name + item.desc.toString(), labelStyle)
             var amtLabel: Label?
             amtLabel = Label("", labelStyle)
-            if(item.amt != 0f) {
+            if (item.amt != 0f) {
                 if (item.amt < 0) {
                     amtLabel.setText("${item.amt.toInt()}")
                     amtLabel.color = Color.RED
-                }else {
+                } else {
                     amtLabel.setText("+${item.amt.toInt()}")
                     amtLabel.color = Color.GREEN
                 }
@@ -870,25 +881,19 @@ class GameScreenGUI(val game : GameScreen) {
             resultsTable.row()
         }
 
-        for(item in deathList){
-            val nameLabel = Label(item.name + item.desc.toString(), labelStyle)
-            var amtLabel: Label?
-            amtLabel = Label("", labelStyle)
-            if(item.amt != 0f) {
-                amtLabel.setText(item.amt.toString())
-                if (item.amt < 0) amtLabel.color = Color.RED
-                else amtLabel.color = Color.GREEN
-            }
+        for (death in deathList) {
+            if(death == null) continue
 
-            nameLabel.setFontScale(normalFontScale)
-            amtLabel.setFontScale(normalFontScale)
+            val label = Label(death.name + death.desc.toString(), labelStyle)
+            label.setFontScale(normalFontScale)
+            label.setWrap(true)
+            label.setAlignment(Align.center)
 
-            resultsTable.add(amtLabel).padRight(10f)
-            resultsTable.add(nameLabel)
+            resultsTable.add(label).expand().fill()
             resultsTable.row()
         }
 
-        val container = Container<Table>(resultsTable)
+        val container = Container<Table>(resultsTable).fill().pad(10f, 10f, 0f, 10f)
         container.padTop(10f)
 
         //Put it into a scrollpane

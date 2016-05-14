@@ -15,6 +15,11 @@ object ROVManager {
     private var chargeAmountPerHour = 8.3f
     private var drivingSpeed = 10f
 
+    fun getPowerTick() = chargeAmountPerHour*(ROVPartMap["battery"]!!.currHealth/100f)
+    fun getMovementSpeed() = drivingSpeed*(ROVPartMap["track"]!!.currHealth/100f)
+    fun getPowerStorage() = drivingSpeed*(ROVPartMap["battery"]!!.currHealth/100f)
+    fun getStorageAmount() = drivingSpeed*(ROVPartMap["storage"]!!.currHealth/100f)
+
     fun addHealthToPart(name:String, amt:Float){
         val part = ROVPartMap[name]
         if(part != null) {

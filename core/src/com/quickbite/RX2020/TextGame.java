@@ -70,6 +70,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 		threadPool = Executors.newFixedThreadPool(cores);
 		Gdx.input.setInputProcessor(stage);
 		setScreen(new LoadingScreen(this));
+
 	}
 
 	@Override

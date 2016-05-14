@@ -34,13 +34,13 @@ object DataManager{
                 val events: Array<GameEventManager.EventJson> = json.fromJson(Array<GameEventManager.EventJson>::class.java, file)
                 var rootMap:HashMap<String, GameEventManager.EventJson>? = null
                 if(file.name().equals("rare.json"))
-                    rootMap = GameEventManager.rareRootEventMap
+                    rootMap = GameEventManager.getMap("rare")
                 else if(file.name().equals("common.json"))
-                    rootMap = GameEventManager.commonRootEventMap
+                    rootMap = GameEventManager.getMap("common")
                 else if(file.name().equals("epic.json"))
-                    rootMap = GameEventManager.epicRootEventMap
+                    rootMap = GameEventManager.getMap("epic")
                 else if(file.name().equals("special.json"))
-                    rootMap = GameEventManager.specialEvebtMap
+                    rootMap = GameEventManager.getMap("special")
 
                 events.forEach { event ->
                     if (event.root) rootMap!!.put(event.name, event)

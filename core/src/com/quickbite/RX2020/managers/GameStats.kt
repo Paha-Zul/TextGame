@@ -2,19 +2,21 @@ package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.IUpdateable
+import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.screens.GameScreen
 
 /**
  * Created by Paha on 2/8/2016.
  * Holds game stats like travel information (distance, speed, ect.) and time information (the total time traveled, current day, ect)
  */
-object GameStats : IUpdateable {
+object GameStats : IUpdateable, IResetable{
     lateinit var game: GameScreen
     var win:Boolean = false
     var loseReason:String = "?"
 
     fun init(gameScreen: GameScreen){
         game = gameScreen
+        TravelInfo.totalDistOfGame = MathUtils.random(36000, 108000)
     }
 
     override fun update(delta:Float){
@@ -35,7 +37,7 @@ object GameStats : IUpdateable {
 
     object TravelInfo{
         //Need total distance of the game, distance traveled, distance to go, mph traveling
-        var totalDistOfGame:Int = MathUtils.random(36000, 108000)
+        var totalDistOfGame:Int = 0
             get
             set
 
@@ -63,8 +65,19 @@ object GameStats : IUpdateable {
                 return _t
             }
 
-        var totalDaysTraveled:Int = 0
+        val totalDaysTraveled:Int
             get() = (totalTimeCounter / timeScale).toInt() + 1
 
+    }
+
+    override fun reset() {
+        TravelInfo.totalDistToGo = 0
+        TravelInfo.totalDistOfGame = 0
+        TravelInfo.totalDistTraveled = 0
+
+        TimeInfo.totalTimeCounter = 0f
+        TimeInfo.currTime = 0
+        TimeInfo.lastTime = 0
+        TimeInfo.timeOfDay = 0
     }
 }

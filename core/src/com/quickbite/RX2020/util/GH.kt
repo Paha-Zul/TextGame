@@ -1,5 +1,6 @@
 package com.quickbite.rx2020.util
 
+import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.managers.*
 import java.util.regex.Pattern
 
@@ -103,7 +104,7 @@ object GH {
 
         //For each description...
         for(desc in event.description){
-            newDesc += iterateText(desc, event)
+            newDesc += replaceGenderAndNames(desc, event)
         }
 
         //Add the descriptions back to the event.
@@ -111,10 +112,10 @@ object GH {
     }
 
     fun replaceChoiceForEvent(text:String, event:GameEventManager.EventJson):String{
-        return iterateText(text, event)
+        return replaceGenderAndNames(text, event)
     }
 
-    private fun iterateText(text:String, event:GameEventManager.EventJson):String{
+    private fun replaceGenderAndNames(text:String, event:GameEventManager.EventJson):String{
         val tokens = text.split(" ") //Split by spaces
         val newTokens:MutableList<String> = mutableListOf()
 
@@ -127,10 +128,10 @@ object GH {
 
             //If the token matches this pattern, let's send it to the gender changes!
             if(token.matches("(\\S*\\(?(H|h)(is|im|e)[0-9]\\(?\\S*)".toRegex()))
-                newToken = changeGender(token, event, pronounPattern, numberPattern)
+                newToken = replaceGender(token, event, pronounPattern, numberPattern)
 
             //If it matches a name, replace it.
-            if(token.matches("((%n[0-9]?\\S*)|(\\(?(N|n)ame[0-9]\\)?))".toRegex()))
+            if(token.matches("((%n[0-9]?)|(\\(?(N|n)ame[0-9]\\)?))\\S*".toRegex()))
                 newToken = replaceName(token, event)
 
             //Add it to the new token list.
@@ -141,11 +142,33 @@ object GH {
         return newTokens.joinToString(" ")
     }
 
-    fun changeGender(token:String, event:GameEventManager.EventJson, pronounePattern:Pattern, numberPattern:Pattern):String{
+    private fun replaceGender(text:String, person: Person):String{
+        val tokens = text.split(" ") //Split by spaces
+        val newTokens:MutableList<String> = mutableListOf()
+
+        val pronounPattern = Pattern.compile("((H|h)(is|im|e)[0-9])");
+
+        //For each token....
+        for(token in tokens){
+            var newToken = token
+
+            //If the token matches this pattern, let's send it to the gender changes!
+            if(token.matches("(\\S*\\(?(H|h)(is|im|e)[0-9]\\(?\\S*)".toRegex()))
+                newToken = replaceGender(token, person, pronounPattern)
+
+            //Add it to the new token list.
+            newTokens += newToken
+        }
+
+        //Join all the new tokens back up.
+        return newTokens.joinToString(" ")
+    }
+
+    fun replaceGender(token:String, event:GameEventManager.EventJson, pronounPattern:Pattern, numberPattern:Pattern):String{
         var _token = ""
 
         //First, find the he/him/his [0-9] token.
-        var matcher = pronounePattern.matcher(token);
+        var matcher = pronounPattern.matcher(token);
         if(matcher.find()){
             _token = matcher.group(1)
         }
@@ -160,6 +183,40 @@ object GH {
         var pronoun = ""                                    //The pronoun that will be changed
         val person = if(number >= event.randomPersonList.size) null else event.randomPersonList[number] //The person to base the pronoun off of
         var male = if(person!=null) person.male else true   //If it is of the male gender
+
+        if(_token.matches("((H|h)is[0-9])".toRegex())){
+            if(male) pronoun = "his"
+            else pronoun = "her"
+        }else if(_token.matches("((H|h)e[0-9])".toRegex())){
+            if(male) pronoun = "he"
+            else pronoun = "she"
+        }else if(_token.matches("((H|h)im[0-9])".toRegex())){
+            if(male) pronoun = "him"
+            else pronoun = "her"
+        }
+
+        //Change to uppercase if needed
+        if(_token[0].isUpperCase())
+            pronoun = pronoun.replaceRange(0, 1, pronoun[0].toUpperCase().toString())
+
+        //Basically, if we have a situation like "I want his3!" the pronoun might only be "her" after stripping anything else, so we take the pronoun
+        //and replace the token "his3!" with "her!" and assign it back to the pronoun. Return this!
+        pronoun = token.replace("(\\(?(H|h)(is|im|e)[0-9]\\)?)".toRegex(), pronoun)
+
+        return pronoun
+    }
+
+    fun replaceGender(token:String, person:Person, pronounPattern:Pattern):String{
+        var _token = ""
+
+        //First, find the he/him/his [0-9] token.
+        var matcher = pronounPattern.matcher(token);
+        if(matcher.find()){
+            _token = matcher.group(1)
+        }
+
+        var pronoun = ""        //The pronoun that will be changed
+        var male = person.male  //If it is of the male gender
 
         if(_token.matches("((H|h)is[0-9])".toRegex())){
             if(male) pronoun = "his"
@@ -206,19 +263,143 @@ object GH {
     fun checkCantTravel():Boolean{
         val energy = SupplyManager.getSupply("energy")
         val tracks = ROVManager.ROVPartMap["track"]!!
-        val panels = ROVManager.ROVPartMap["panel"]!!
 
-        return tracks.amt.toInt() == 0 && tracks.currHealth <= 0 && energy.amt.toInt() == 0
-        && panels.currHealth <= 0 && panels.amt.toInt() == 0
+        return (tracks.amt.toInt() == 0 && tracks.currHealth <= 0) || energy.amt.toInt() == 0
     }
 
-    fun checkGameOverConditions():Boolean{
+    fun checkGameOverConditions():Pair<Boolean, String>{
         val storage = ROVManager.ROVPartMap["storage"]!!
         val ammo = SupplyManager.getSupply("ammo")
+        val energy = SupplyManager.getSupply("energy")
+        val edibles = SupplyManager.getSupply("edibles")
+        val ROV = ROVManager.ROVPartMap["ROV"]!!
+        val panels = SupplyManager.getSupply("panel")
 
-        val lost = (checkCantTravel() && ammo.amt.toInt() == 0) || (storage.currHealth <= 0 && storage.amt.toInt() == 0) || GroupManager.numPeopleAlive == 0 ||
-                (SupplyManager.getSupply("energy").amt <= 0 && SupplyManager.getSupply("edibles").amt <= 0)
+        val cantGetEnergy = energy.amt <= 0 && panels.currHealth <= 0 && panels.amt <= 0 && edibles.amt <= 0
+        val noStorage = storage.currHealth <= 0 && storage.amt.toInt() == 0
+        val cantTravel = checkCantTravel() && ammo.amt.toInt() == 0
 
-        return lost
+        val lost = cantTravel || noStorage || cantGetEnergy || ROV.currHealth <= 0f || GroupManager.numPeopleAlive == 0
+
+        var evtName = ""
+        if(lost){
+            val tracks = SupplyManager.getSupply("track")
+            val batteries = SupplyManager.getSupply("battery")
+
+            if(panels.currHealth <= 0f && panels.amt <= 0f && energy.amt <= 0f)
+                evtName = "LostPanel"
+            else if(tracks.currHealth <= 0f && tracks.amt <= 0f && ammo.amt <= 0f)
+                evtName = "LostTrack"
+            else if(batteries.currHealth <= 0f && batteries.amt <= 0f && ammo.amt <= 0f)
+                evtName = "LostBattery"
+            else if(storage.currHealth <= 0f && storage.amt <= 0f)
+                evtName = "LostStorage"
+            else if(energy.amt <= 0f && edibles.amt <=0 && ammo.amt <= 0f)
+                evtName = "LostEnergy"
+            else if(tracks.currHealth <= 0f && tracks.amt <= 0f && ammo.amt <= 0f)
+                evtName = "LostTrack"
+            else if(ROV.currHealth <= 0f)
+                evtName = "LostROV"
+            else if(GroupManager.numPeopleAlive == 0)
+                evtName = "LostLife"
+        }
+
+        return Pair(lost, evtName)
+    }
+
+    fun checkSupply(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float):String{
+        val isNewlyZero = supply.amt <= 0f && amtChanged != 0f
+        var eventNameToCall = ""
+
+        if(isNewlyZero){
+            val ammo = SupplyManager.getSupply("ammo")
+
+            when(supply.name){
+                "panel" -> eventNameToCall = "LastPanel"
+                "track" -> {
+                    if(supply.amt <= 0 && ammo.amt > 0)
+                        eventNameToCall = "NoTrack"
+                    else
+                        eventNameToCall = "LastTrack"
+                }
+                "battery"  -> {
+                    if(supply.amt <= 0 && ammo.amt > 0)
+                        eventNameToCall = "NoBattery"
+                    else
+                        eventNameToCall = "LastBattery"
+                }
+                "storage"  -> eventNameToCall = "LastStorage"
+                "energy"  -> eventNameToCall = "NoEnergy"
+            }
+        }else{
+            when(supply.name){
+                "energy" -> {
+                    val five = supply.maxAmount*0.05f
+                    if (amtBefore > five && supply.amt <= five)
+                        eventNameToCall = "LastEnergy"
+                }
+            }
+        }
+
+        return eventNameToCall
+    }
+
+    fun specialDeathTextReplacement(text:String, person: Person):String{
+        var _text = replaceGender(text, person)
+        _text = _text.replace("%d", person.firstName).replace("%t", formatTimeText(formatTime()))
+
+        return _text
+    }
+
+    /**
+     * Uses the game time to format time.
+     */
+    fun formatTime():Triple<Int, Int, Int>{
+        return formatTime(GameStats.TimeInfo.totalTimeCounter.toInt())
+    }
+
+    /**
+     * Uses passed in time to return a formatted time.
+     */
+    fun formatTime(hours:Int):Triple<Int, Int, Int>{
+        val totalMonths = ( hours/(24*30)).toInt()
+        val totalDays = ((hours - totalMonths*(24*30))/24).toInt()
+        val totalHours =  (hours - (totalDays*24) - totalMonths*(24*30)).toInt()
+
+        return Triple(totalMonths, totalDays, totalHours)
+    }
+
+    fun formatTimeText(formattedTime:Triple<Int, Int, Int>):String{
+        val list:MutableList<String> = mutableListOf()
+
+        if(formattedTime.first != 0) {
+            list += "${formattedTime.first} months"
+        }
+        if(formattedTime.second != 0) {
+            list += "${formattedTime.second} days"
+        }
+        if(formattedTime.third != 0) {
+            list += "${formattedTime.third} hours"
+        }
+
+        var text = ""
+
+        for(i in 0.rangeTo(list.size-1)){
+            if(i == list.size-1 && list.size == 2){
+                text += " and "
+
+            //If we are at the end and the list size has more than 2 elements.
+            }else if(i == list.size-1 && list.size > 2){
+                text+=", and "
+
+            //If we are not at the start but not at the end, use a comma
+            }else if(i!=0 && list.size > 0){
+                text += ", "
+            }
+
+            text += list[i]
+        }
+
+        return text
     }
 }

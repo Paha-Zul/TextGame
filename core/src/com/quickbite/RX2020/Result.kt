@@ -1,6 +1,7 @@
 package com.quickbite.rx2020
 
 import com.quickbite.rx2020.gui.GameScreenGUI
+import com.quickbite.rx2020.util.GH
 
 /**
  * Created by Paha on 4/5/2016.
@@ -16,22 +17,21 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
             get
             private set
 
-        var eventDeathMap:MutableMap<String, Result> = mutableMapOf()
-            get
-            private set
-
         var recentDeathMap:MutableMap<String, Result> = mutableMapOf()
             get
             private set
 
+        var recentDeathResult:Result? = null
+            get
+            set
+
         private val hangTime = 3
 
         val hasEventResults:Boolean
-            get() = eventChangeMap.size > 0 || eventDeathMap.size > 0
+            get() = eventChangeMap.size > 0 || Result.recentDeathResult != null
 
         fun clearResultLists(){
             eventChangeMap = mutableMapOf()
-            eventDeathMap = mutableMapOf()
         }
 
         /**
@@ -59,12 +59,9 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
          * @param person The person to add. First name for map key, full name for displaying.
          * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
          */
-        fun addRecentDeath(person:Person, isEventRelated: Boolean){
-
-            if(isEventRelated)
-                eventDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
-            else
-                recentDeathMap.put(person.firstName, Result(person.fullName, 0f, " died"))
+        fun addRecentDeath(person:Person){
+            val text = GH.specialDeathTextReplacement(" has died. (He1) survived for %t before (his1) untimely demise.", person)
+            recentDeathMap.put(person.firstName, Result(person.fullName, 0f, text))
         }
 
         /**
@@ -73,11 +70,8 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
          * @param fullName The full name of the person that died. This is for displaying
          * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
          */
-        fun addRecentDeath(firstName:String, fullName:String, isEventRelated: Boolean){
-            recentDeathMap.put(firstName, Result(fullName, 0f, " died"))
-
-            if(isEventRelated)
-                eventDeathMap.put(firstName, Result(fullName, 0f, " died"))
+        fun addRecentDeath(firstName:String, fullName:String, desc: String){
+            recentDeathMap.put(firstName, Result(fullName, 0f, desc))
         }
 
         /**
@@ -102,7 +96,6 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
          */
         fun purgeEventResults(){
             recentChangeMap.clear()
-            eventDeathMap.clear()
         }
 
 

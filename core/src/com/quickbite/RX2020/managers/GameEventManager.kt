@@ -18,23 +18,21 @@ object GameEventManager{
     var currRareEvent:EventJson? = null
     var currEpicEvent:EventJson? = null
 
-    val commonRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    val rareRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    val epicRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    val specialEvebtMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val commonRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val rareRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val epicRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val specialEvebtMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     fun getRandomRoot(type:String):EventJson{
         var map = getMap(type)
         val event = map.values.toTypedArray()[MathUtils.random(map.size-1)]
-        event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         return event;
     }
 
     fun setNewRandomRoot(type:String):EventJson{
         val event = getAndSetEvent("", type)
-        event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
         when(type){
@@ -77,6 +75,7 @@ object GameEventManager{
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
         if(randomizePeople) event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         else if(randomizedPeopleList != null) event!!.randomPersonList = randomizedPeopleList
+
         GH.replaceEventDescription(event!!) //TODO Watch this. May need to thread it.
         return event
     }

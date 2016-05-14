@@ -619,7 +619,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50"] ]
 }, {
   "root" : false,
   "title" : "Hunting Expedition",

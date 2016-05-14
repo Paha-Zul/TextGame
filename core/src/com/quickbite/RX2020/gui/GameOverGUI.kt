@@ -34,10 +34,10 @@ class GameOverGUI(val game:TextGame) {
     var toMenu = false
 
     //Figure out some time stuff.
-    val hours = GameStats.TimeInfo.totalTimeCounter.toInt()
-    val totalMonths =( hours/(24*30)).toInt()
-    val totalDays = ((hours/24) - totalMonths*(24*30)).toInt()
-    val totalHours =  (hours - (totalDays*24) - totalMonths*(24*30)).toInt()
+    val time = GH.formatTime()
+    val totalMonths = time.first
+    val totalDays = time.second
+    val totalHours = time.third
 
     fun gameOver(){
         TextGame.stage.clear()
