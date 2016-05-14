@@ -649,7 +649,7 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     private fun handleEvent(event:GameEventManager.EventJson?){
-        if(event != null)
+        if(event != null && !event.hasDescriptions && !event.hasOutcomes)
             GH.executeEventActions(event)
 
         if((event == null || !event.hasDescriptions) && Result.hasEventResults){
@@ -795,8 +795,12 @@ class GameScreenGUI(val game : GameScreen) {
 
                 //Otherwise, we only have outcomes or actions. Deal with it!
                 else if (hasOnlyOutcomes || Result.hasEventResults){
+                    GH.executeEventActions(event)
                     handleEvent(GH.getEventFromChoice(event, ""))
+
+                //Otherwise, end the event.
                 }else{
+                    GH.executeEventActions(event)
                     handleEvent(null) //End the event.
                 }
             }

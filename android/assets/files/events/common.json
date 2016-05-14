@@ -249,7 +249,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "repairROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Crossing",
@@ -267,7 +267,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "10", "30" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-10", "-30" ] ]
 }, {
   "root" : true,
   "title" : "Crossing",
@@ -834,7 +834,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "repairROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Hmm...",
@@ -861,7 +861,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "How'd That Get There?",
@@ -870,7 +870,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "repairROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "How'd That Get There?",
@@ -925,7 +925,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "repairROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
 }, {
   "root" : false,
   "title" : "Knock-Knock",
@@ -934,7 +934,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
 }, {
   "root" : true,
   "title" : "Knock-Knock",
@@ -971,7 +971,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Missing Ammo!",
@@ -1070,7 +1070,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Red to Blue?",
@@ -1260,7 +1260,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "addHealthROV", "-1", "-10" ] ]
 }, {
   "root" : true,
   "title" : "Solar Power!",
@@ -1413,7 +1413,7 @@
   "choices" : [ "Whoa!" ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "damageROV", "1", "10" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "addHealthROV", "-1", "-10" ] ]
 }, {
   "root" : false,
   "title" : "Well...",

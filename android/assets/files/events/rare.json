@@ -75,7 +75,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "damageROV", "25", "55" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ], [ "addRndAmt", "-2", "-5", "edibles", "true" ], [ "addRndAmt", "-0", "-2", "medkits" ], [ "addRndAmt", "-1", "-25", "wealth" ], [ "addRndAmt", "-1", "-25", "ammo" ], [ "addRndAmt", "-1", "-25", "parts" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addHealthROV", "-25", "-55" ] ]
 }, {
   "root" : false,
   "title" : "Break in!",
@@ -493,7 +493,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "25", "50" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-25", "-50" ] ]
 }, {
   "root" : false,
   "title" : "Energy Experiment",
@@ -547,7 +547,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "1", "25", "100" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25", "100" ] ]
 }, {
   "root" : true,
   "title" : "Fire",
@@ -727,7 +727,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ], [ "damageROV", "1", "15" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ], [ "addHealthROV", "-1", "-15" ] ]
 }, {
   "root" : false,
   "title" : "Natives!",
@@ -772,7 +772,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "damageROV", "25", "55" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
+  "resultingAction" : [ [ "addHealthROV", "-25", "-55" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
 }, {
   "root" : true,
   "title" : "Poultice Test",
