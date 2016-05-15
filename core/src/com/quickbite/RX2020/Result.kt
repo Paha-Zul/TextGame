@@ -1,14 +1,14 @@
 package com.quickbite.rx2020
 
 import com.quickbite.rx2020.gui.GameScreenGUI
+import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.util.GH
 
 /**
  * Created by Paha on 4/5/2016.
  */
-class Result(val name:String, var amt:Float, val desc:String = "", var timeLastUpdated:Double = 0.0) {
-
-    companion object{
+class Result(val name:String, var amt:Float, val desc:String = "", var timeLastUpdated:Double = 0.0){
+    companion object : IResetable{
         var eventChangeMap:MutableMap<String, Result> = mutableMapOf()
             get
             private set
@@ -98,6 +98,9 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
             recentChangeMap.clear()
         }
 
-
+        override fun reset() {
+            purgeEventResults()
+            purgeRecentDeaths()
+        }
     }
 }

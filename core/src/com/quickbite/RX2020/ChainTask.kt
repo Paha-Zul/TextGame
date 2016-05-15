@@ -1,5 +1,7 @@
 package com.quickbite.rx2020
 
+import com.quickbite.rx2020.interfaces.IResetable
+import com.quickbite.rx2020.interfaces.IUpdateable
 import java.util.*
 
 /**
@@ -9,7 +11,7 @@ import java.util.*
  */
 class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, var finish:(()->Unit)? = null){
 
-    companion object : IUpdateable{
+    companion object : IUpdateable, IResetable {
         private val everyFrameTaskList:LinkedList<ChainTask> = LinkedList()
         private val newTaskList:LinkedList<ChainTask> = LinkedList() //Prevents concurrent modifications.
 
@@ -51,6 +53,13 @@ class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, va
                 else
                     task.update()
             }
+        }
+
+        override fun reset() {
+            everyFrameTaskList.clear()
+            hourlyTaskList.clear()
+            newHourlyTaskList.clear()
+            newTaskList.clear()
         }
     }
 

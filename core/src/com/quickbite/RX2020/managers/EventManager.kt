@@ -60,6 +60,7 @@ object EventManager : IResetable{
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
+            //If our name is supposed to be an event person, get it from the current event.
             if(name.matches("evt[0-9]".toRegex())) name = GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()].firstName
             else if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
 
@@ -81,7 +82,7 @@ object EventManager : IResetable{
                     FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
                 }
 
-                //If we are doing it to multiple people...
+            //If we are doing it to multiple people...
             }else if(numPeople > 1){
                 //TODO no use for it yet...
 
@@ -221,7 +222,7 @@ object EventManager : IResetable{
                     GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage)
                 }))
             }else{
-                GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage)
+                GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage, false)
             }
         })
 
@@ -366,13 +367,19 @@ object EventManager : IResetable{
 
         //Called when an event starts.
         EventManager.onEvent("eventStarted", { args ->
+            val name = args[0] as String
+
+            Logger.log("EventManager", "Event $name is starting")
             //TODO Implementation?
         })
 
         //Called when an event finishes.
         EventManager.onEvent("eventFinished", { args ->
+            val name = args[0] as String
+
+            Logger.log("EventManager", "Event $name is ending")
+
             if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false)
-            GameEventManager.currActiveEvent = null
             Result.purgeEventResults()
         })
 

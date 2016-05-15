@@ -1467,7 +1467,7 @@
   "choices" : [ "Whoa!" ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "15" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-10", "-20" ] ]
 }, {
   "root" : false,
   "title" : "What's That?",

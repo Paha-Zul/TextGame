@@ -280,32 +280,32 @@ object GH {
         val noStorage = storage.currHealth <= 0 && storage.amt.toInt() == 0
         val cantTravel = checkCantTravel() && ammo.amt.toInt() == 0
 
-        val lost = cantTravel || noStorage || cantGetEnergy || ROV.currHealth <= 0f || GroupManager.numPeopleAlive == 0
+        val lost = (cantTravel && (noStorage || cantGetEnergy)) || ROV.currHealth <= 0f || GroupManager.numPeopleAlive == 0
 
-        var evtName = ""
+        var reason = ""
         if(lost){
             val tracks = SupplyManager.getSupply("track")
             val batteries = SupplyManager.getSupply("battery")
 
             if(panels.currHealth <= 0f && panels.amt <= 0f && energy.amt <= 0f)
-                evtName = "LostPanel"
+                reason = "LostPanel"
             else if(tracks.currHealth <= 0f && tracks.amt <= 0f && ammo.amt <= 0f)
-                evtName = "LostTrack"
+                reason = "LostTrack"
             else if(batteries.currHealth <= 0f && batteries.amt <= 0f && ammo.amt <= 0f)
-                evtName = "LostBattery"
+                reason = "LostBattery"
             else if(storage.currHealth <= 0f && storage.amt <= 0f)
-                evtName = "LostStorage"
+                reason = "LostStorage"
             else if(energy.amt <= 0f && edibles.amt <=0 && ammo.amt <= 0f)
-                evtName = "LostEnergy"
-            else if(tracks.currHealth <= 0f && tracks.amt <= 0f && ammo.amt <= 0f)
-                evtName = "LostTrack"
+                reason = "LostEnergy"
             else if(ROV.currHealth <= 0f)
-                evtName = "LostROV"
+                reason = "LostROV"
             else if(GroupManager.numPeopleAlive == 0)
-                evtName = "LostLife"
+                reason = "LostLife"
+            else
+                reason = "I don't know?"
         }
 
-        return Pair(lost, evtName)
+        return Pair(lost, reason)
     }
 
     fun checkSupply(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float):String{
@@ -405,34 +405,41 @@ object GH {
     }
 
     fun alterSupplies(size:String, lose:Boolean = false){
-        val supplyList = listOf(SupplyManager.getSupply("energy"), SupplyManager.getSupply("edibles"), SupplyManager.getSupply("parts"), SupplyManager.getSupply("medkits"),
-                SupplyManager.getSupply("wealth"), SupplyManager.getSupply("ammo"))
+//        val supplyList = listOf(SupplyManager.getSupply("energy"), SupplyManager.getSupply("edibles"), SupplyManager.getSupply("parts"), SupplyManager.getSupply("medkits"),
+//                SupplyManager.getSupply("wealth"), SupplyManager.getSupply("ammo"))
+//
+//        val rndAmt:Pair<Float, Float> = if(size == "small") Pair(1f, 25f) else if(size == "medium") Pair(25f, 50f) else Pair(50f, 100f)
+//        val medkitAmount:Pair<Float, Float> = if(size == "small") Pair(0f, 0f) else if(size == "medium") Pair(1f, 2f) else Pair(2f, 4f)
+//
+//        for(i in 0.rangeTo(supplyList.size-1)){
+//            val supply = supplyList[i]
+//
+//            var amt = 0f
+//            if(i == 3) amt = MathUtils.random(medkitAmount.first, medkitAmount.second)
+//            else amt = MathUtils.random(rndAmt.first, rndAmt.second)
+//
+//            if(lose) amt = -amt
+//
+//            SupplyManager.addToSupply(supply, amt)
+//        }
 
-        val rndAmt:Pair<Float, Float> = if(size == "small") Pair(1f, 25f) else if(size == "medium") Pair(25f, 50f) else Pair(50f, 100f)
-        val medkitAmount:Pair<Float, Float> = if(size == "small") Pair(0f, 0f) else if(size == "medium") Pair(1f, 2f) else Pair(2f, 4f)
-
-        for(i in 0.rangeTo(supplyList.size-1)){
-            val supply = supplyList[i]
-
-            var amt = 0f
-            if(i == 3) amt = MathUtils.random(medkitAmount.first, medkitAmount.second)
-            else amt = MathUtils.random(rndAmt.first, rndAmt.second)
-
-            if(lose) amt = -amt
-
-            SupplyManager.addToSupply(supply, amt)
-        }
+        //Let's just reuse this since it's the same exact thing anyways?
+        applyReward(size, lose)
     }
 
-    fun applyReward(rewardName:String){
+    fun applyReward(rewardName:String, lose:Boolean = false){
         val reward = Reward.rewardMap[rewardName]!!
 
         //For supplies
-        for(i in 0.rangeTo(reward.supplies.size)){
+        for(i in 0.rangeTo(reward.supplies.size-1)){
             val supplyName = reward.supplies[i]
-            val pair = Pair(reward.supplyAmounts[i][0], reward.supplyAmounts[i][1])
+            val mult = if(supplyName == "edibles") GroupManager.numPeopleAlive else 1
+            val pair = Pair(reward.supplyAmounts[i][0]*mult, reward.supplyAmounts[i][1]*mult)
 
-            SupplyManager.addToSupply(supplyName, MathUtils.random(pair.first, pair.second).toFloat())
+            if(lose)
+                SupplyManager.addToSupply(supplyName, -MathUtils.random(pair.first, pair.second).toFloat())
+            else
+                SupplyManager.addToSupply(supplyName, MathUtils.random(pair.first, pair.second).toFloat())
         }
 
         //For parts...

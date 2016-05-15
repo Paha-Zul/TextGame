@@ -1,7 +1,7 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.IUpdateable
+import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
@@ -11,6 +11,10 @@ import com.quickbite.rx2020.util.Logger
  * Created by Paha on 2/8/2016.
  */
 object GroupManager : IUpdateable, IResetable {
+    var initialGroupSize:Int = 0
+        get
+        private set
+
     private var list:MutableList<Person> = arrayListOf()
 
     private val emptyFoodHealthDrain = -0.3f
@@ -22,6 +26,8 @@ object GroupManager : IUpdateable, IResetable {
         list.clear()
         val maxHealth = if(TextGame.testMode) 1000000f else 100f
         val range = MathUtils.random(0,4) + 4 //4 - 8
+
+        initialGroupSize = range
 
         for(i in 0.rangeTo(range-1)) {
             val triple = DataManager.pullRandomName()

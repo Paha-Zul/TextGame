@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
-import com.oracle.jrockit.jfr.EventInfo
+import com.badlogic.gdx.utils.Queue
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
@@ -72,6 +72,9 @@ class GameScreenGUI(val game : GameScreen) {
     private lateinit var selectBox: SelectBox<Label>
 
     private lateinit var distProgressBar: ProgressBar
+
+    private var gameEventGUIActive = false
+    private val guiQueue:Queue<Triple<GameEventManager.EventJson, Int, Boolean>> = Queue()
 
     init{
         instance = this
@@ -196,6 +199,9 @@ class GameScreenGUI(val game : GameScreen) {
 
         activityButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
+                if(activityHourSlider.value <= 0f)
+                    return
+
                 game.numHoursToAdvance = activityHourSlider.value.toInt()
                 game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
                 //If not null, get the action.
@@ -218,12 +224,13 @@ class GameScreenGUI(val game : GameScreen) {
     private fun sliderTask():ChainTask{
         var task:ChainTask? = null
         task = ChainTask(
-                { activityHourSlider.value > 0 && game.searchActivity != null },
+                { game.numHoursToAdvance >= 0 && game.searchActivity != null },
                 {
                     val passed = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
+
                     //If our list is 0, that means all the restrictions passed. We are good to proceed.
                     if (passed) {
-                        activityHourSlider.value = activityHourSlider.value - 1
+                        activityHourSlider.value = game.numHoursToAdvance.toFloat() - 1
                         game.searchFunc?.forEach { func -> func?.invoke() }
 
                     //Otherwise, stop such.
@@ -235,6 +242,7 @@ class GameScreenGUI(val game : GameScreen) {
                         task!!.setDone()
                     }
 
+                    //If the slider value made it to 0, set this task as done and enable the button if able.
                     if(activityHourSlider.value.toInt() == 0) {
                         task!!.setDone()
                         if(passed)
@@ -616,12 +624,24 @@ class GameScreenGUI(val game : GameScreen) {
         supplyTable.add(innerTable)
     }
 
-
     /**
      * Initially starts the event GUI
      */
-    fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0){
-        Result.clearResultLists()
+    fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResults:Boolean = true){
+        //We do this to ensure that the currActiveEvent is not null. Sometimes when overlapping events happen
+        //the currActiveEvent can become null after being set.
+        GameEventManager.currActiveEvent = event
+
+        //If the GUI is already active, lets add it to the queue instead of going further.
+        if(gameEventGUIActive) {
+            guiQueue.addLast(Triple(event, startPage, eraseResults))
+            return
+        }
+
+        gameEventGUIActive = true
+        if(eraseResults) Result.clearResultLists()
+
+        EventManager.callEvent("eventStarted", event.name)
 
         game.pauseGame()
         EventInfo.eventTable.clear()
@@ -731,39 +751,6 @@ class GameScreenGUI(val game : GameScreen) {
             nextPageButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
             nextPageButtonStyle.fontColor = Color.WHITE
 
-            //        //Make a button for each choice.
-            //        for(i in 0.rangeTo(event.choices!!.size-1)){
-            //            val choice = event.choices!![i]
-            //
-            //            //Need a style specifically for each button since we may be changing colors.
-            //            val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-            //            buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-            //            buttonStyle.fontColor = Color.WHITE
-            //
-            //            val modifiedText = GH.replaceChoiceForEvent(choice, event)
-            //            val button = TextButton("($modifiedText)", buttonStyle)
-            //            button.pad(0f, 10f, 0f, 10f)
-            //            button.label.setFontScale(buttonFontScale)
-            //            button.label.setWrap(true)
-            //
-            //            EventInfo.eventChoicesTable.add(button).minHeight(40f).expandX().fillX()
-            //            EventInfo.eventChoicesTable.row()
-            //
-            //            //If we don't pass the restrictions, disable this button
-            //            if(event.restrictions != null && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
-            //                button.isDisabled = true
-            //                button.style.fontColor = Color.GRAY
-            //            }
-            //
-            //            //Choose a choice buttons.
-            //            button.addListener(object: ChangeListener(){
-            //                override fun changed(evt: ChangeEvent?, actor: Actor?) {
-            //                    //EventInfo.outerEventTable.remove()
-            //                    handleEvent(GH.getEventFromChoice(event, choice))
-            //                }
-            //            })
-            //        }
-
             //Make the description label
             val descLabel = Label(event.modifiedDescription[pageNumber], labelStyle)
             descLabel.setAlignment(Align.center)
@@ -829,6 +816,7 @@ class GameScreenGUI(val game : GameScreen) {
 
                             //If we only have one choice, trigger the event GUI again.
                         } else {
+                            GH.executeEventActions(event)   //TODO Watch this. Might fire twice if I'm wrong.
                             handleEvent(GH.getEventFromChoice(event, ""))
                         }
                     }
@@ -838,7 +826,7 @@ class GameScreenGUI(val game : GameScreen) {
                         GH.executeEventActions(event)
                         handleEvent(GH.getEventFromChoice(event, ""))
 
-                        //Otherwise, end the event.
+                    //Otherwise, end the event.
                     } else {
                         GH.executeEventActions(event)
                         handleEvent(null) //End the event.
@@ -986,9 +974,18 @@ class GameScreenGUI(val game : GameScreen) {
      */
     fun closeEvent(){
         campButton.isDisabled = false;
+        gameEventGUIActive = false
+        EventManager.callEvent("eventFinished", GameEventManager.currActiveEvent!!.name)
+        GameEventManager.lastCurrEvent = GameEventManager.currActiveEvent
+        GameEventManager.currActiveEvent = null
         EventInfo.eventContainer.remove()
-        EventManager.callEvent("eventFinished")
-        game.resumeGame()
+
+        //If the queue is not empty, lets call the event gui again
+        if(guiQueue.size != 0) {
+            val last = guiQueue.removeLast()
+            triggerEventGUI(last.first, last.second, last.third)
+        }else
+            game.resumeGame()
     }
 
     fun buildCampTable(){

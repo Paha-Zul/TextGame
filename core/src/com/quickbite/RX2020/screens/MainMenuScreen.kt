@@ -10,12 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.quickbite.rx2020.ChainTask
+import com.quickbite.rx2020.Result
 import com.quickbite.rx2020.SaveLoad
 import com.quickbite.rx2020.TextGame
-import com.quickbite.rx2020.managers.EventManager
-import com.quickbite.rx2020.managers.GameStats
-import com.quickbite.rx2020.managers.GroupManager
-import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.util.CustomTimer
 import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.GH
 
@@ -34,6 +33,11 @@ class MainMenuScreen(val game: TextGame) : Screen {
         GroupManager.reset()
         EventManager.reset()
         GameStats.reset()
+        SupplyManager.reset()
+        ROVManager.reset()
+        Result.reset()
+        CustomTimer.reset()
+        ChainTask.reset()
 
         var labelStyle:Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -60,6 +64,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
                 ChainTask.addTaskToEveryFrameList(crazyFade())
                 GroupManager.init()
                 SupplyManager.init()
+                ROVManager.init()
             }
         })
 
@@ -68,6 +73,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
                 ChainTask.addTaskToEveryFrameList(continueGameFade())
                 GroupManager.init()
                 SupplyManager.init()
+                ROVManager.init()
             }
         })
 

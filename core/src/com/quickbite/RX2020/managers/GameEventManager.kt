@@ -13,22 +13,24 @@ import java.util.*
 
 object GameEventManager{
     var currActiveEvent:EventJson? = null
+        get
+        set(value){
+            field = value
+        }
 
-    var currCommonEvent:EventJson? = null
-    var currRareEvent:EventJson? = null
-    var currEpicEvent:EventJson? = null
+    var lastCurrEvent:EventJson? = null //Mainly for debugging.
 
-    private val commonRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    private val rareRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    private val epicRootEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
-    val epicRootEventMapOriginal: HashMap<String, EventJson> = HashMap() //For Json Events
-    private val specialEventMap: HashMap<String, EventJson> = HashMap() //For Json Events
+    private val commonRootList: MutableList<String> = mutableListOf() //For Json Events
+    private val rareRootList: MutableList<String> = mutableListOf() //For Json Events
+    private val epicRootList: MutableList<String> = mutableListOf() //For Json Events
+    val epicRootListOriginal: MutableList<String> = mutableListOf() //For Json Events
+    private val specialRootList: MutableList<String> = mutableListOf() //For Json Events
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     fun getRandomRoot(type:String):EventJson{
-        var map = getMap(type)
-        val event = map.values.toTypedArray()[MathUtils.random(map.size-1)]
+        var list = getEventNameList(type)
+        val event = eventMap[list.toTypedArray()[MathUtils.random(list.size-1)]]!!
         return event;
     }
 
@@ -36,40 +38,27 @@ object GameEventManager{
         val event = getAndSetEvent("", type)
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
-        when(type){
-            "common" -> currCommonEvent = event;
-            "rare" -> currRareEvent = event;
-            else -> currEpicEvent = event;
-        }
         return event;
     }
 
-    fun getCurrEvent(type:String):EventJson?{
-        var event:EventJson?;
+    fun getEventNameList(type:String):MutableList<String>{
         when(type){
-            "common" -> event = currCommonEvent
-            "rare" -> event = currRareEvent
-            else -> event = currEpicEvent
-        }
-        return event
-    }
-
-    fun getMap(type:String):HashMap<String, EventJson>{
-        when(type){
-            "common" -> return commonRootEventMap
-            "rare" -> return rareRootEventMap
-            "special" -> return specialEventMap
-            "epic" -> return epicRootEventMap
-            else -> return eventMap
+            "common" -> return commonRootList
+            "rare" -> return rareRootList
+            "special" -> return specialRootList
+            else -> return epicRootList
         }
     }
 
     fun addEvent(event:EventJson, type: String = ""){
-        val map = getMap(type)
+        val map = getEventNameList(type)
+        eventMap.put(event.name, event) //Add the event to the main map.
+
+        //If the event is a root, add it to the right list for later use.
         if(event.root){
-            map.put(event.name, event)
+            map.add(event.name) //Add it.
             if(type == "epic") //Special case since we're gonna need to remember which epic events have alreayd triggered.
-                epicRootEventMapOriginal.put(event.name, event)
+                epicRootListOriginal.add(event.name)
         }else
             GameEventManager.eventMap.put(event.name, event)
     }
@@ -81,14 +70,17 @@ object GameEventManager{
      * @return The event retrieved from the event map.
      */
     private fun getEvent(eventName:String="", type:String = "", randomizePeople:Boolean = false, randomizedPeopleList:List<Person>? = null):EventJson{
-        val map = getMap(type)
-        var event:EventJson? = if(!eventName.isEmpty()) map[eventName] else map.values.toList()[MathUtils.random(0, map.size-1)]
+        val list = getEventNameList(type)
+
+        //Get the event either by name or randomly.
+        var event:EventJson? = if(!eventName.isEmpty()) eventMap[eventName] else eventMap[list[MathUtils.random(0, list.size-1)]]
+
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
         if(randomizePeople) event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
         else if(randomizedPeopleList != null) event!!.randomPersonList = randomizedPeopleList
 
         //As a special case for the game, we only want 1 occurrence of each epic event.
-        if(type == "epic") map.remove(event!!.name)
+        if(type == "epic") list.remove(event!!.name)
 
         GH.replaceEventDescription(event!!) //TODO Watch this. May need to thread it.
         return event

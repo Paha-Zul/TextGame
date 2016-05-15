@@ -8,11 +8,12 @@ import com.quickbite.rx2020.managers.GameEventManager
  * Created by Paha on 2/6/2016.
  */
 object Tester {
-    val eventMap:MutableMap<String, GameEventManager.EventJson> = hashMapOf()
+    val eventMap:MutableMap<String, GameEventManager.EventJson?> = hashMapOf()
 
     fun testEvents(numTests:Int){
-        eventMap.putAll(GameEventManager.getMap("common"))
-        eventMap.putAll(GameEventManager.getMap("rare"))
+        GameEventManager.getEventNameList("common").forEach { name -> eventMap.put(name, null) }
+        GameEventManager.getEventNameList("rare").forEach { name -> eventMap.put(name, null) }
+        GameEventManager.getEventNameList("epic").forEach { name -> eventMap.put(name, null) }
 
         System.out.println("---------------------")
 
@@ -27,18 +28,17 @@ object Tester {
             System.out.println("---------------------")
         }
 
-        for(eventName in GameEventManager.getMap("common").keys)
+        for(eventName in GameEventManager.getEventNameList("common"))
             func(GameEventManager.getAndSetEvent(eventName, "common"))
 
-        for(eventName in GameEventManager.getMap("rare").keys)
+        for(eventName in GameEventManager.getEventNameList("rare"))
             func(GameEventManager.getAndSetEvent(eventName, "rare"))
 
-        for(eventName in GameEventManager.getMap("epic").keys)
+        //We use .toList() to make a copy because of the specialness of epic events.
+        for(eventName in GameEventManager.getEventNameList("epic").toList())
             func(GameEventManager.getAndSetEvent(eventName, "epic"))
 
         System.out.println("Event Testing Done!")
-
-        assert(eventMap.isEmpty())
 
         if(!eventMap.isEmpty()) {
             Logger.log("Tester", "Event map is not empty. This means that something was not linked up. Map:")
@@ -69,7 +69,7 @@ object Tester {
     }
 
     private fun testActions(event:GameEventManager.EventJson){
-        GameEventManager.currActiveEvent = event
+//        GameEventManager.currActiveEvent = event
         //Execute any actions
         val list = event.resultingAction;
         if(list != null) {

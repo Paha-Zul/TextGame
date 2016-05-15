@@ -24,7 +24,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 	public static Viewport viewport;
     public static Stage stage;
     public static EasyAssetManager manager;
-	public static int tick=0;
+	static int tick=0;
 
 	public static TextureAtlas smallGuiAtlas;
 

@@ -271,11 +271,14 @@ class GameScreen(val game: TextGame): Screen {
     fun onHourTick(delta:Float){
         //TODO Need to implement when you can't travel and need to camp.
 
-        if(GH.checkGameOverConditions().first)
+        val gameOver = GH.checkGameOverConditions()
+        if(gameOver.first) {
+            GameStats.gameOverStatus = gameOver.second
             gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))
-        else if(GameStats.TravelInfo.totalDistToGo <= 0)
+        }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
+            GameStats.gameOverStatus = "won"
             gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))
-        else {
+        }else {
             GameStats.updateHourly(delta)
             SupplyManager.updateHourly(delta)
             GroupManager.updateHourly(delta)
@@ -355,7 +358,6 @@ class GameScreen(val game: TextGame): Screen {
         func = {
             //Get the current event or a new one if we aren't on an event.
             var currEvent = GameEventManager.setNewRandomRoot(eventType);
-            GameEventManager.currActiveEvent = currEvent;
 
             Logger.log("GameScreen", "Starting event ${GameEventManager.currActiveEvent!!.name}")
 

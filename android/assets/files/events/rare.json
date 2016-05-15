@@ -1234,7 +1234,7 @@
   "root" : false,
   "title" : "Wanderer's Return",
   "name" : "WanderReturn",
-  "description" : [ "The group spots a lone native on the horizon. At first they grab for their weapons, but as the native draws near, they recognize her face. It’s the small native they saved earlier. She’s clothed in a tunic made of fine furs and carrying a large wooly sack. She cautiously approaches the ROV, gently sets the sack down, and then turns and runs away.", "The group emerges from the ROV. They collect the sack and tot it back inside the ROV. Then they unravel its rope knots and open the top; it’s filled to the brim with all sorts of delicious looking foods. " ],
+  "description" : [ "The group spots a lone native on the horizon. At first they grab for their weapons, but as the native draws near, they recognize her face. It's the small native they saved earlier. She's clothed in a tunic made of fine furs and carrying a large wooly sack. She cautiously approaches the ROV, gently sets the sack down, and then turns and runs away.", "The group emerges from the ROV. They collect the sack and tot it back inside the ROV. Then they unravel its rope knots and open the top; it's filled to the brim with all sorts of delicious looking foods. " ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],

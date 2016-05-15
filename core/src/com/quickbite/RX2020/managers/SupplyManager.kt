@@ -1,15 +1,16 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.IUpdateable
+import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
 /**
  * Created by Paha on 2/8/2016.
  */
-object SupplyManager : IUpdateable {
+object SupplyManager : IUpdateable, IResetable{
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
     fun init(){
@@ -99,6 +100,10 @@ object SupplyManager : IUpdateable {
     fun getSupply(name:String):Supply = supplyMap[name]!!
 
     fun clearSupplies() = supplyMap.clear()
+
+    override fun reset() {
+        supplyMap.clear()
+    }
 
     class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f, val affectedByHealth:Boolean){
         var consumePerDay:Float = 0f

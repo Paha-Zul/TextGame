@@ -1,6 +1,7 @@
 package com.quickbite.rx2020
 
 import com.badlogic.gdx.math.MathUtils
+import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
 
@@ -169,7 +170,7 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         }
     }
 
-    class Disability(var level: DisabilityLevel, var type:DisabilityType):IUpdateable{
+    class Disability(var level: DisabilityLevel, var type:DisabilityType): IUpdateable {
         enum class DisabilityType{Injury, Sickness}
         enum class DisabilityLevel {Minor, Regular, Major, Trauma}
         val done:Boolean

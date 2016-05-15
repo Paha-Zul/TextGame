@@ -1,5 +1,7 @@
 package com.quickbite.rx2020.util
 
+import com.quickbite.rx2020.interfaces.IResetable
+
 /**
  * Created by Paha on 2/7/2016.
  * Creates the timer as one time.
@@ -7,7 +9,8 @@ package com.quickbite.rx2020.util
  * @param _callback The callback to be
  */
 class CustomTimer(private var secondsDelay: Float, private var secondsInterval: Float, private var _callback: (() -> Unit)? = null){
-    companion object{
+
+    companion object:IResetable{
         val gameTimerList:MutableList<CustomTimer> = mutableListOf()
 
         fun updateGameTimerList(delta:Float){
@@ -22,6 +25,10 @@ class CustomTimer(private var secondsDelay: Float, private var secondsInterval: 
 
         fun addGameTimer(timer:CustomTimer){
             gameTimerList.add(timer)
+        }
+
+        override fun reset() {
+            gameTimerList.clear()
         }
     }
 

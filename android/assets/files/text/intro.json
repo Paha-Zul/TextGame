@@ -6,17 +6,17 @@
     "desc": ["Secturn; a relatively small planet orbiting on the edge of a weak sun. Most of its surface is covered in vast boreal forest, enclosed in humongous polar caps. Its atmosphere is composed of two distinctly different layers. The stratosphere is a thick, turbulent, and nearly impassible barrier, composed mainly of Hydrogen, but the troposphere underneath is a breathable mix of nitrogen and oxygen cable of supporting life."]
   },
   {
-    "desc": ["Exomer751’s mission is to rendezvous with cargo pods that await them on the surface of Secturn. The Cargo pods are stocked with enough supplies and equipment to serve as a makeshift base of operations, code named RX-2020. The crew is to establish a base at RX-2020 where they can then begin their job of surveying, researching, and mapping the planet’s surface in preparation for colonization."]
+    "desc": ["Exomer751's mission is to rendezvous with cargo pods that await them on the surface of Secturn. The Cargo pods are stocked with enough supplies and equipment to serve as a makeshift base of operations, code named RX-2020. The crew is to establish a base at RX-2020 where they can then begin their job of surveying, researching, and mapping the planet's surface in preparation for colonization."]
   },
   {
-    "desc": ["Unfortunately, upon entering Secturn’s dense atmosphere, catastrophic failure of Exomer751’s exploration vessel causes the crew to crash land many miles from their destination. The ship is nearly obliterated in the initial impact, leaving the surviving crew members with virtually no supplies and no hope."],
+    "desc": ["Unfortunately, upon entering Secturn's dense atmosphere, catastrophic failure of Exomer751's exploration vessel causes the crew to crash land many miles from their destination. The ship is nearly obliterated in the initial impact, leaving the surviving crew members with virtually no supplies and no hope."],
     "action": "Count the Losses"
   },
   {
     "desc": ["Thankful to be alive, the surviving members of Exomer751 try to scrape together what supplies they can. With few supplies, no working communications, and one mostly functioning ROV, the crew is forced to attempt to travel to the RX-2020 by ROV, deploy the Long-range Coms, and await further instructions."]
   },
   {
-    "desc": ["The ship’s last coordinates place the crew %n miles away from the RX-2020."],
+    "desc": ["The ship's last coordinates place the crew %n miles away from the RX-2020."],
     "replace": true
   },
   {

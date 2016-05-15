@@ -42,15 +42,32 @@ class GameOverGUI(val game:TextGame) {
     fun gameOver(){
         TextGame.stage.clear()
 
+        var text:Array<String> = arrayOf()
+
+        when(GameStats.gameOverStatus){
+            "won" -> text = DataManager.end.win
+            "LostPanel" -> text = DataManager.end.solar
+            "LostTrack" -> text = DataManager.end.tracks
+            "LostBattery" -> text = DataManager.end.batteries
+            "LostStorage" -> text = DataManager.end.storage
+            "LostEnergy" -> text = DataManager.end.energy
+            "LostROV" -> text = DataManager.end.ROV
+            "LostLife" -> text = DataManager.end.crew
+            else -> text = arrayOf("What did I lose to? The reason was ${GameStats.gameOverStatus}")
+        }
+
         nextButton = ImageButton(TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButton")))
 
         var page = 0
         nextButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 page++
-                if(displayPage(page)) {
+                if(displayTextPage(text, page)) {
                     if(!toMenu) {
-                        displayFunStats()
+                        if(GameStats.gameOverStatus == "won" || GameStats.gameOverStatus == "LostLife")
+                            displayFunStats()
+                        else
+                            displayTextPage(DataManager.end.deathText, 0)
                         toMenu = true
                     }else
                         backToMainMenu()
@@ -61,11 +78,11 @@ class GameOverGUI(val game:TextGame) {
         mainTable.setFillParent(true)
         TextGame.stage.addActor(mainTable)
 
-        displayPage(page)
+        displayTextPage(text, page)
     }
 
-    fun displayPage(page:Int):Boolean{
-        if((!GameStats.win && page >= DataManager.end.lose.size) || (GameStats.win && page >= DataManager.end.win.size))
+    fun displayTextPage(text:Array<String>, page:Int):Boolean{
+        if(page >= text.size)
             return true
 
         mainTable.clear()
@@ -73,10 +90,10 @@ class GameOverGUI(val game:TextGame) {
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK)
 
         //Replace lots of stuff.
-        var modifiedDesc = if(GameStats.win) DataManager.end.win[page] else DataManager.end.lose[page]
-        modifiedDesc = modifiedDesc.replace("%o", 10.toString()).replace("%a", GroupManager.numPeopleAlive.toString()).replace("%r", GameStats.TravelInfo.totalDistOfGame.toString()).
-                replace("%m", totalMonths.toString()).replace("%d", totalDays.toString()).replace("%h", totalHours.toString()).replace("%i", GameStats.loseReason).replace("%w", MathUtils.random(25, 75).toString())
-        .replace("%e", GameStats.TravelInfo.totalDistToGo.toString())
+        var modifiedDesc = text[page]
+        modifiedDesc = modifiedDesc.replace("%o", GroupManager.initialGroupSize.toString()).replace("%a", GroupManager.numPeopleAlive.toString()).replace("%r", GameStats.TravelInfo.totalDistOfGame.toString()).
+                replace("%m", totalMonths.toString()).replace("%d", totalDays.toString()).replace("%h", totalHours.toString()).replace("%i", GameStats.gameOverStatus).replace("%w", MathUtils.random(25, 75).toString())
+        .replace("%e", GameStats.TravelInfo.totalDistToGo.toString()).replace("%t", GameStats.TravelInfo.totalDistTraveled.toString()).replace("%f", GH.formatTimeText(GH.formatTime()))
 
         //Make the description label
         val descLabel = Label(modifiedDesc, labelStyle)
@@ -85,7 +102,7 @@ class GameOverGUI(val game:TextGame) {
         descLabel.setWrap(true)
         descLabel.setAlignment(Align.center)
 
-        //Add the label and the button.
+        //Add the label and the button.y
         mainTable.add(descLabel).fill().expand().pad(0f, 30f, 0f, 30f)
         mainTable.row()
         mainTable.add(nextButton).size(64f)

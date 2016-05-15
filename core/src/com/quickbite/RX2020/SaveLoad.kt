@@ -3,6 +3,7 @@ package com.quickbite.rx2020
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
+import com.quickbite.rx2020.managers.GameEventManager
 import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
@@ -52,6 +53,7 @@ object SaveLoad{
         SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
         FunGameStats.statsMap.toList().forEach { stat -> save.funStatList.add(arrayOf(stat.first, stat.second)) }
         FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
+        save.remainingEpicEvents.addAll(GameEventManager.getEventNameList("epic"))
 
         Logger.log("SaveLoad", "Gathered game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
 
@@ -93,6 +95,9 @@ object SaveLoad{
         save.funStatUniqueList.forEach { stat ->
             FunGameStats.addFunStat(stat[0], stat[1], true)
         }
+
+        GameEventManager.getEventNameList("epic").clear() //Let's clear this since it was probably loaded by the game
+        GameEventManager.getEventNameList("epic").addAll(save.remainingEpicEvents) //Load the remaining events in.
 
         Logger.log("SaveLoad", "Loaded game in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
     }

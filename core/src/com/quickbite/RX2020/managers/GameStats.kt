@@ -1,7 +1,7 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.IUpdateable
+import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.screens.GameScreen
 
@@ -12,7 +12,7 @@ import com.quickbite.rx2020.screens.GameScreen
 object GameStats : IUpdateable, IResetable{
     lateinit var game: GameScreen
     var win:Boolean = false
-    var loseReason:String = "?"
+    var gameOverStatus:String = "?"
 
     fun init(gameScreen: GameScreen){
         game = gameScreen

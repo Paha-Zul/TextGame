@@ -147,6 +147,13 @@ object DataManager{
 
     class EndJSON(){
         lateinit var win:Array<String>
-        lateinit var lose:Array<String>
+        lateinit var solar:Array<String>
+        lateinit var tracks:Array<String>
+        lateinit var batteries:Array<String>
+        lateinit var storage:Array<String>
+        lateinit var energy:Array<String>
+        lateinit var ROV:Array<String>
+        lateinit var crew:Array<String>
+        lateinit var deathText:Array<String>
     }
 }

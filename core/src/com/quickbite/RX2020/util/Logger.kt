@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx
  * Created by Paha on 3/27/2016.
  */
 object Logger {
-    var loggerEnabled = true
-    var toConsole = true
+    var loggerEnabled = false
+    var toConsole = false
 
     private val logList:MutableList<String> = mutableListOf("Starting Logger")
 
@@ -19,15 +19,19 @@ object Logger {
     fun log(prefix:String, message:String, logLevel: LogLevel = LogLevel.Info){
         val string = "[$logLevel] [$prefix]: $message"
         if(toConsole) Gdx.app.log(prefix, message)
-        logList.add(string)
+
+        if(loggerEnabled)
+            logList.add(string)
     }
 
     @JvmStatic
     fun writeLog(fileName:String){
-       val handle = Gdx.files.internal("$fileName")
-        handle.file().printWriter().use { out ->
-            logList.forEach {
-                out.println("$it")
+        if(loggerEnabled) {
+            val handle = Gdx.files.internal("$fileName")
+            handle.file().printWriter().use { out ->
+                logList.forEach {
+                    out.println("$it")
+                }
             }
         }
     }
