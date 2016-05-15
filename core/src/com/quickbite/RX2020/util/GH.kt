@@ -1,5 +1,6 @@
 package com.quickbite.rx2020.util
 
+import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.managers.*
 import java.util.regex.Pattern
@@ -401,5 +402,43 @@ object GH {
         }
 
         return text
+    }
+
+    fun alterSupplies(size:String, lose:Boolean = false){
+        val supplyList = listOf(SupplyManager.getSupply("energy"), SupplyManager.getSupply("edibles"), SupplyManager.getSupply("parts"), SupplyManager.getSupply("medkits"),
+                SupplyManager.getSupply("wealth"), SupplyManager.getSupply("ammo"))
+
+        val rndAmt:Pair<Float, Float> = if(size == "small") Pair(1f, 25f) else if(size == "medium") Pair(25f, 50f) else Pair(50f, 100f)
+        val medkitAmount:Pair<Float, Float> = if(size == "small") Pair(0f, 0f) else if(size == "medium") Pair(1f, 2f) else Pair(2f, 4f)
+
+        for(i in 0.rangeTo(supplyList.size-1)){
+            val supply = supplyList[i]
+
+            var amt = 0f
+            if(i == 3) amt = MathUtils.random(medkitAmount.first, medkitAmount.second)
+            else amt = MathUtils.random(rndAmt.first, rndAmt.second)
+
+            if(lose) amt = -amt
+
+            SupplyManager.addToSupply(supply, amt)
+        }
+    }
+
+    fun applyReward(rewardName:String){
+        val reward = Reward.rewardMap[rewardName]!!
+
+        //For supplies
+        for(i in 0.rangeTo(reward.supplies.size)){
+            val supplyName = reward.supplies[i]
+            val pair = Pair(reward.supplyAmounts[i][0], reward.supplyAmounts[i][1])
+
+            SupplyManager.addToSupply(supplyName, MathUtils.random(pair.first, pair.second).toFloat())
+        }
+
+        //For parts...
+        if(reward.parts.size > 0){
+            val partName = reward.parts[MathUtils.random(0, reward.parts.size-1)]
+            SupplyManager.addToSupply(partName, 1f)
+        }
     }
 }

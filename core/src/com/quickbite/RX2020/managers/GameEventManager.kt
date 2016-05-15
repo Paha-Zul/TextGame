@@ -80,7 +80,7 @@ object GameEventManager{
      * @param type The type of event. If left out, gets an event from the non root event map
      * @return The event retrieved from the event map.
      */
-    fun getEvent(eventName:String="", type:String = "", randomizePeople:Boolean = false, randomizedPeopleList:List<Person>? = null):EventJson{
+    private fun getEvent(eventName:String="", type:String = "", randomizePeople:Boolean = false, randomizedPeopleList:List<Person>? = null):EventJson{
         val map = getMap(type)
         var event:EventJson? = if(!eventName.isEmpty()) map[eventName] else map.values.toList()[MathUtils.random(0, map.size-1)]
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
@@ -125,7 +125,7 @@ object GameEventManager{
             get() = resultingAction != null && resultingAction!!.size > 0 && resultingAction!![0].size > 0
 
         val hasDescriptions:Boolean
-            get() = description.size > 0
+            get() = description.size > 0 && !(description.size == 1 && description[0].isEmpty())
 
         /**
          * Selects another Event using a choice and chance.

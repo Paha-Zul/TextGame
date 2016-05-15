@@ -127,7 +127,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc1)
 
         gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("CragRock1Great"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("BreakIn", "rare"))})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Power", "epic"))})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
         gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Slipper", "common"))})
 
@@ -230,11 +230,12 @@ class GameScreen(val game: TextGame): Screen {
     }
 
     /**
-     * Called every frame but only during the traveling state.
+     * Called every frame but only during the traveling state. Only runs when not paused.
      * @param delta Time between frames.
      */
     private fun travelUpdate(delta:Float){
         GameStats.update(delta)
+        CustomTimer.updateGameTimerList(delta)
         commonEventTimer.update(delta)
         rareEventTimer.update(delta)
         epicEventTimer.update(delta)
@@ -255,7 +256,7 @@ class GameScreen(val game: TextGame): Screen {
         currPosOfSun = ((-GameStats.TimeInfo.totalTimeCounter)/(GameStats.TimeInfo.timeScale/2f)).toFloat()* MathUtils.PI
 
         purgeRecentChangeTimer.update(delta)
-        if(purgeRecentChangeTimer.expired){
+        if(purgeRecentChangeTimer.done){
             Result.purgeRecentResults(currGameTime)
             purgeRecentChangeTimer.reset()
         }
@@ -281,7 +282,7 @@ class GameScreen(val game: TextGame): Screen {
             ChainTask.updateHourly(delta)
 
             if (Result.recentDeathMap.size > 0) {
-                gui.triggerEventGUI(GameEventManager.getEvent("Death", "special"))
+                gui.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special"))
             }
 
             if (numHoursToAdvance > 0) numHoursToAdvance--

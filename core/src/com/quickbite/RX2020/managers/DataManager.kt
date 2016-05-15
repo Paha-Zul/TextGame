@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
 import com.quickbite.rx2020.util.Logger
+import com.quickbite.rx2020.util.Reward
 import java.util.*
 
 /**
@@ -66,10 +67,25 @@ object DataManager{
     }
 
     fun loadSearchActivities(file:FileHandle){
+        val startTime:Long = TimeUtils.millis()
+
         val activities: Array<SearchActivityJSON> = json.fromJson(Array<SearchActivityJSON>::class.java, file)
         activities.forEach { activity ->
             searchActivities.put(activity.buttonTitle, activity) //Hash it by the button title.
         }
+
+        val time:Long = TimeUtils.millis() - startTime
+        Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load search activities.")
+    }
+
+    fun loadRewards(nameFileHandle:FileHandle){
+        val startTime:Long = TimeUtils.millis()
+
+        val rewards = json.fromJson(Array<Reward>::class.java, nameFileHandle)
+        rewards.forEach { reward -> Reward.rewardMap.put(reward.name, reward) }
+
+        val time:Long = TimeUtils.millis() - startTime
+        Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load rewards.")
     }
 
     fun loadEnd(file:FileHandle){

@@ -56,7 +56,8 @@ object Tester {
         if(event.outcomes!=null){
             event.outcomes!!.forEachIndexed { i, list -> list.forEachIndexed { j, outcomeName ->
                 eventMap.remove(outcomeName)
-                val _evt = GameEventManager.getEvent(outcomeName)
+//                val _evt = GameEventManager.getEvent(outcomeName)
+                val _evt = GameEventManager.getAndSetEvent(outcomeName)
                 _evt.randomPersonList = event.randomPersonList
                 System.out.println("Testing ${_evt.name}")
                 testEvent(_evt)

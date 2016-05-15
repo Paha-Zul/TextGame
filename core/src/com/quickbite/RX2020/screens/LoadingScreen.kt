@@ -87,6 +87,7 @@ class LoadingScreen(val game: TextGame): Screen {
         DataManager.loadEvents(Gdx.files.internal("files/events/"))
         DataManager.loadRandomNames(Gdx.files.internal("files/text/names.json"))
         DataManager.loadSearchActivities(Gdx.files.internal("files/searchActivities.json"))
+        DataManager.loadRewards(Gdx.files.internal("files/rewards.json"))
         DataManager.loadItems(Gdx.files.internal("files/items.json"))
         DataManager.loadEnd(Gdx.files.internal("files/end.json"))
     }

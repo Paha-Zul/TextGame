@@ -6,6 +6,7 @@ import com.quickbite.rx2020.*
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.screens.GameOverScreen
 import com.quickbite.rx2020.screens.GameScreen
+import com.quickbite.rx2020.util.CustomTimer
 import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
@@ -194,7 +195,37 @@ object EventManager : IResetable{
             }
         })
 
-        //A chance to rest. Heals the group memebers.
+        EventManager.onEvent("alterSupplies", {args ->
+            val size = args[0] as String
+            val lose = if(args.size > 1) (args[1] as String).toBoolean() else false
+
+            GH.alterSupplies(size, lose)
+        })
+
+        EventManager.onEvent("reward", {args ->
+            val size = args[0] as String
+
+            GH.applyReward(size)
+        })
+
+        EventManager.onEvent("scheduleEvent", {args ->
+            val evtName = args[0] as String
+            val minHours = (args[1] as String).toFloat()
+            val maxHours = (args[2] as String).toFloat()
+            val evtType = if(args.size > 3) args[3] as String else ""
+            val evtPage = if(args.size > 4) (args[4] as String).toInt() else 0
+
+            if(minHours > 0) {
+                //Add a timer to call the event later
+                CustomTimer.addGameTimer(CustomTimer(MathUtils.random(minHours, maxHours), {
+                    GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage)
+                }))
+            }else{
+                GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage)
+            }
+        })
+
+        //A chance to rest. Heals the group members.
         EventManager.onEvent("rest", {args ->
             val amt = (args[0] as String).toFloat()
             val chance = if(args.size >= 2) (args[0] as String).toFloat() else 100f

@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
+import com.oracle.jrockit.jfr.EventInfo
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
@@ -619,7 +620,7 @@ class GameScreenGUI(val game : GameScreen) {
     /**
      * Initially starts the event GUI
      */
-    fun triggerEventGUI(event: GameEventManager.EventJson){
+    fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0){
         Result.clearResultLists()
 
         game.pauseGame()
@@ -645,10 +646,10 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventContainer.add(EventInfo.eventTable).expand().fill()
         TextGame.stage.addActor(EventInfo.eventContainer)
 
-        handleEvent(event)
+        handleEvent(event, startPage)
     }
 
-    private fun handleEvent(event:GameEventManager.EventJson?){
+    private fun handleEvent(event:GameEventManager.EventJson?, startPage:Int = 0){
         if(event != null && !event.hasDescriptions && !event.hasOutcomes)
             GH.executeEventActions(event)
 
@@ -662,7 +663,7 @@ class GameScreenGUI(val game : GameScreen) {
             return
         }
 
-        showEventPage(event, 0)
+        showEventPage(event, startPage)
     }
 
     /**
@@ -673,169 +674,212 @@ class GameScreenGUI(val game : GameScreen) {
         EventInfo.eventInnerTable.clear()
         EventInfo.eventChoicesTable.clear()
 
-        val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
+        //Let's check if we are within the page number boundaries
+        //If we are over the description size....
+        if(pageNumber >= event.description.size && event.hasChoices){
+            EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill()
 
-        //Set some styles
-        val scrollPaneStyle = ScrollPane.ScrollPaneStyle()
-        scrollPaneStyle.vScrollKnob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollKnob"))
-        scrollPaneStyle.vScroll = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollBar"))
+            //Make a button for each choice.
+            for(i in 0.rangeTo(event.choices!!.size-1)){
+                val choice = event.choices!![i]
 
-        val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+                //Need a style specifically for each button since we may be changing colors.
+                val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+                buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+                buttonStyle.fontColor = Color.WHITE
 
-        val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        textButtonStyle.fontColor = Color.WHITE
+                val modifiedText = GH.replaceChoiceForEvent(choice, event)
+                val button = TextButton("($modifiedText)", buttonStyle)
+                button.pad(0f, 10f, 0f, 10f)
+                button.label.setFontScale(buttonFontScale)
+                button.label.setWrap(true)
 
-        val nextPageButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-        nextPageButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-        nextPageButtonStyle.fontColor = Color.WHITE
+                EventInfo.eventChoicesTable.add(button).minHeight(40f).expandX().fillX()
+                EventInfo.eventChoicesTable.row()
 
-        //Make a button for each choice.
-        for(i in 0.rangeTo(event.choices!!.size-1)){
-            val choice = event.choices!![i]
-
-            //Need a style specifically for each button since we may be changing colors.
-            val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-            buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-            buttonStyle.fontColor = Color.WHITE
-
-            val modifiedText = GH.replaceChoiceForEvent(choice, event)
-            val button = TextButton("($modifiedText)", buttonStyle)
-            button.pad(0f, 10f, 0f, 10f)
-            button.label.setFontScale(buttonFontScale)
-            button.label.setWrap(true)
-
-            EventInfo.eventChoicesTable.add(button).minHeight(40f).expandX().fillX()
-            EventInfo.eventChoicesTable.row()
-
-            //If we don't pass the restrictions, disable this button
-            if(event.restrictions != null && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
-                button.isDisabled = true
-                button.style.fontColor = Color.GRAY
-            }
-
-            //Choose a choice buttons.
-            button.addListener(object: ChangeListener(){
-                override fun changed(evt: ChangeEvent?, actor: Actor?) {
-                    //EventInfo.outerEventTable.remove()
-                    handleEvent(GH.getEventFromChoice(event, choice))
+                //If we don't pass the restrictions, disable this button
+                if(event.restrictions != null && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
+                    button.isDisabled = true
+                    button.style.fontColor = Color.GRAY
                 }
-            })
-        }
 
-        //Make the description label
-        val descLabel = Label(event.modifiedDescription[pageNumber], labelStyle)
-        descLabel.setAlignment(Align.center)
-        descLabel.setFontScale(normalFontScale)
-        descLabel.setWrap(true)
-
-        //This is to add some extra padding to the label. Without this, the text gets cut off a bit
-        //by the scrollpane.
-        val container = Container<Label>(descLabel)
-        container.pad(5f,5f,5f,5f)
-        container.fillX().fillY()
-
-        //Put it into a scrollpane
-        val scrollPane = ScrollPane(container, scrollPaneStyle)
-        scrollPane.setFadeScrollBars(false)
-
-        //Make the next page button
-        val nextPageButton: TextButton = TextButton("", nextPageButtonStyle)
-        nextPageButton.label.setFontScale(0.15f)
-
-        //Add the title and description label
-        EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 10f, 0f, 10f).center()
-        EventInfo.eventInnerTable.row()
-
-        val hasAnotherPage = event.description.size - 1 > pageNumber
-        val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions || Result.hasEventResults
-        var toNext = hasAnotherSomething || event.hasChoices && event.choices!!.size == 1
-
-        val setNextPageButton = {
-            nextPageButton.isDisabled = false
-            nextPageButton.setText("")
-
-            //If we have another page, add a next page button.
-            if (toNext) {
-                if (event.choices!!.size == 1 && !hasAnotherPage)
-                    nextPageButton.label.setText(event.choices!![0])
-                else
-                    nextPageButton.style.up = drawable
-
-                //Otherwise, add a close button.
-            } else {
-                nextPageButton.setText("- Close -")
+                //Choose a choice buttons.
+                button.addListener(object: ChangeListener(){
+                    override fun changed(evt: ChangeEvent?, actor: Actor?) {
+                        //EventInfo.outerEventTable.remove()
+                        handleEvent(GH.getEventFromChoice(event, choice))
+                    }
+                })
             }
-        }
 
-        setNextPageButton()
-        EventInfo.eventInnerTable.add(nextPageButton).size(32f).padBottom(5f).bottom()
+        //Otherwise, we are not showing possible choices. Let's show the descriptions!
+        }else {
+            val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
 
-        //Kinda complicated listener for the next page button.
-        nextPageButton.addListener(object: ChangeListener(){
-            override fun changed(evt: ChangeEvent?, actor: Actor?) {
-                val hasOnlyOutcomes = (!event.hasChoices) && event.hasOutcomes
+            //Set some styles
+            val scrollPaneStyle = ScrollPane.ScrollPaneStyle()
+            scrollPaneStyle.vScrollKnob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollKnob"))
+            scrollPaneStyle.vScroll = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("scrollBar"))
 
-                //If we have another description, simply go to the next page.
-                if(event.description.size - 1 > pageNumber)
-                    showEventPage(event, pageNumber +1)
+            val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
-                //If we have choices, layout the choices.
-                else if(event.hasChoices){
-                    //If we have more than one choice
-                    if(event.choices!!.size > 1) {
-                        EventInfo.eventInnerTable.clear()
-                        EventInfo.eventInnerTable.add(EventInfo.eventChoicesTable).expand().fill()
+            val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+            textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+            textButtonStyle.fontColor = Color.WHITE
 
-                    //If we only have one choice, trigger the event GUI again.
-                    }else{
+            val nextPageButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+            nextPageButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+            nextPageButtonStyle.fontColor = Color.WHITE
+
+            //        //Make a button for each choice.
+            //        for(i in 0.rangeTo(event.choices!!.size-1)){
+            //            val choice = event.choices!![i]
+            //
+            //            //Need a style specifically for each button since we may be changing colors.
+            //            val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+            //            buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+            //            buttonStyle.fontColor = Color.WHITE
+            //
+            //            val modifiedText = GH.replaceChoiceForEvent(choice, event)
+            //            val button = TextButton("($modifiedText)", buttonStyle)
+            //            button.pad(0f, 10f, 0f, 10f)
+            //            button.label.setFontScale(buttonFontScale)
+            //            button.label.setWrap(true)
+            //
+            //            EventInfo.eventChoicesTable.add(button).minHeight(40f).expandX().fillX()
+            //            EventInfo.eventChoicesTable.row()
+            //
+            //            //If we don't pass the restrictions, disable this button
+            //            if(event.restrictions != null && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
+            //                button.isDisabled = true
+            //                button.style.fontColor = Color.GRAY
+            //            }
+            //
+            //            //Choose a choice buttons.
+            //            button.addListener(object: ChangeListener(){
+            //                override fun changed(evt: ChangeEvent?, actor: Actor?) {
+            //                    //EventInfo.outerEventTable.remove()
+            //                    handleEvent(GH.getEventFromChoice(event, choice))
+            //                }
+            //            })
+            //        }
+
+            //Make the description label
+            val descLabel = Label(event.modifiedDescription[pageNumber], labelStyle)
+            descLabel.setAlignment(Align.center)
+            descLabel.setFontScale(normalFontScale)
+            descLabel.setWrap(true)
+
+            //This is to add some extra padding to the label. Without this, the text gets cut off a bit
+            //by the scrollpane.
+            val container = Container<Label>(descLabel)
+            container.pad(5f, 5f, 5f, 5f)
+            container.fillX().fillY()
+
+            //Put it into a scrollpane
+            val scrollPane = ScrollPane(container, scrollPaneStyle)
+            scrollPane.setFadeScrollBars(false)
+
+            //Make the next page button
+            val nextPageButton: TextButton = TextButton("", nextPageButtonStyle)
+            nextPageButton.label.setFontScale(0.15f)
+
+            //Add the title and description label
+            EventInfo.eventInnerTable.add(scrollPane).expand().fill().pad(10f, 10f, 0f, 10f).center()
+            EventInfo.eventInnerTable.row()
+
+            val hasAnotherPage = event.description.size - 1 > pageNumber
+            val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions || Result.hasEventResults
+            var toNext = hasAnotherSomething || event.hasChoices && event.choices!!.size == 1
+
+            val setNextPageButton = {
+                nextPageButton.isDisabled = false
+                nextPageButton.setText("")
+
+                //If we have another page, add a next page button.
+                if (toNext) {
+                    if (event.choices!!.size == 1 && !hasAnotherPage)
+                        nextPageButton.label.setText(event.choices!![0])
+                    else
+                        nextPageButton.style.up = drawable
+
+                    //Otherwise, add a close button.
+                } else {
+                    nextPageButton.setText("- Close -")
+                }
+            }
+
+            setNextPageButton()
+            EventInfo.eventInnerTable.add(nextPageButton).size(32f).padBottom(5f).bottom()
+
+            //Kinda complicated listener for the next page button.
+            nextPageButton.addListener(object : ChangeListener() {
+                override fun changed(evt: ChangeEvent?, actor: Actor?) {
+                    val hasOnlyOutcomes = (!event.hasChoices) && event.hasOutcomes
+
+                    //If we have another description, simply go to the next page.
+                    if (event.description.size - 1 > pageNumber)
+                        showEventPage(event, pageNumber + 1)
+
+                    //If we have choices, layout the choices.
+                    else if (event.hasChoices) {
+                        //If we have more than one choice
+                        if (event.choices!!.size > 1) {
+                            showEventPage(event, pageNumber + 1)
+
+                            //If we only have one choice, trigger the event GUI again.
+                        } else {
+                            handleEvent(GH.getEventFromChoice(event, ""))
+                        }
+                    }
+
+                    //Otherwise, we only have outcomes or actions. Deal with it!
+                    else if (hasOnlyOutcomes || Result.hasEventResults) {
+                        GH.executeEventActions(event)
                         handleEvent(GH.getEventFromChoice(event, ""))
+
+                        //Otherwise, end the event.
+                    } else {
+                        GH.executeEventActions(event)
+                        handleEvent(null) //End the event.
                     }
                 }
+            })
 
-                //Otherwise, we only have outcomes or actions. Deal with it!
-                else if (hasOnlyOutcomes || Result.hasEventResults){
-                    GH.executeEventActions(event)
-                    handleEvent(GH.getEventFromChoice(event, ""))
+            //Invalidate all this crap so that the scroll panel show correctly, otherwise it'll say 'scroll down' when
+            //it shouldn't
+            EventInfo.eventTable.invalidateHierarchy()
+            EventInfo.eventTable.act(0.016f)
+            EventInfo.eventTable.validate()
 
-                //Otherwise, end the event.
-                }else{
-                    GH.executeEventActions(event)
-                    handleEvent(null) //End the event.
-                }
+            EventInfo.eventContainer.invalidateHierarchy()
+            EventInfo.eventContainer.act(0.016f)
+            EventInfo.eventContainer.validate()
+
+            EventInfo.eventInnerTable.invalidateHierarchy()
+            EventInfo.eventInnerTable.act(0.016f)
+            EventInfo.eventInnerTable.validate()
+
+            scrollPane.invalidateHierarchy()
+            scrollPane.act(0.016f)
+            scrollPane.validate()
+
+            TextGame.stage.act(0.016f)
+
+            //If we are not at the bottom, say scroll down!
+            if (!scrollPane.isBottomEdge) {
+                nextPageButton.isDisabled = true
+                nextPageButton.style.up = null
+                nextPageButton.setText("Scroll Down")
             }
-        })
 
-        EventInfo.eventTable.invalidateHierarchy()
-        EventInfo.eventTable.act(0.016f)
-        EventInfo.eventTable.validate()
-
-        EventInfo.eventContainer.invalidateHierarchy()
-        EventInfo.eventContainer.act(0.016f)
-        EventInfo.eventContainer.validate()
-
-        EventInfo.eventInnerTable.invalidateHierarchy()
-        EventInfo.eventInnerTable.act(0.016f)
-        EventInfo.eventInnerTable.validate()
-
-        scrollPane.invalidateHierarchy()
-        scrollPane.act(0.016f)
-        scrollPane.validate()
-
-        TextGame.stage.act(0.016f)
-
-        if(!scrollPane.isBottomEdge) {
-            nextPageButton.isDisabled = true
-            nextPageButton.style.up = null
-            nextPageButton.setText("Scroll Down")
+            //If we are at the bottom, allow the button to go to the next page.
+            scrollPane.addListener {
+                if (scrollPane.isBottomEdge)
+                    setNextPageButton()
+                false
+            }
         }
-
-        scrollPane.addListener {
-            if(scrollPane.isBottomEdge)
-                setNextPageButton()
-            false
-        }
-
     }
 
     /**

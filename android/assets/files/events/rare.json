@@ -213,7 +213,7 @@
   "root" : false,
   "title" : "Crag Rock Cave",
   "name" : "CragRock2",
-  "description" : [ "While the search fails to turn up any crystals, they do discover a second small pathway that descends even further into the belly of the cavern. Disappointed by the lack of crystals thus far, the group decides to risk going further into the unknown.","Following this new passage eventually leads to yet another open chamber, this one larger than the last. Once again the group fans out in search of crystals." ],
+  "description" : [ "While the search fails to turn up any crystals, they do discover a second small pathway that descends even further into the belly of the cavern. Disappointed by the lack of crystals thus far, the group decides to risk going further into the unknown.", "Following this new passage eventually leads to yet another open chamber, this one larger than the last. Once again the group fans out in search of crystals." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "CragRock2Good", "CragRock2Okay", "CragRock2Nothing", "CragRock2Bad", "CragRock2Worse" ] ],
@@ -619,7 +619,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50"] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50" ] ]
 }, {
   "root" : false,
   "title" : "Hunting Expedition",
@@ -708,7 +708,7 @@
   "description" : [ "(Name1) embarks on a lengthy hunting expedition. The goal is to descend the mountainside on foot, into the open valley below and search for edibles, then ascend out of the valley and reconnect with the ROV on the adjacent peak." ],
   "choices" : [ ],
   "outcomes" : [ [ "Hunting1", "Hunting2", "Hunting3", "Hunting4", "Hunting5", "Hunting6", "Hunting7", "Hunting8", "Hunting9", "Hunting10", "Hunting11", "Hunting12" ] ],
-  "chances" : [ [ 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3, 8.3 ] ],
+  "chances" : [ [ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
@@ -926,6 +926,16 @@
   "outcomes" : [ [ "ReworkingSuccess", "ReworkingFailure" ] ],
   "chances" : [ [ 50, 50 ] ],
   "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Riders Return",
+  "name" : "RidersReturn",
+  "description" : [ "Two large natives, riding on the backs of large wolf-like beast, suddenly appear on the path ahead. Crewmembers reach for their weapons as the natives approach, unsure of what to expect from their visit. The natives calmly ride up to the ROV and toss a pair of small brown sacks on the ground. Then they turn and ride off.", "Once the natives are out if sight, the crew cautiously disembark and inspects the bags. Finding nothing out of the ordinary, they unravel the knotted string bindings and open them up. The sacks are filled with fresh fruits, dried meats, and other such tasty edibles." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ] ]
 }, {
   "root" : false,
   "title" : "Salvage",
@@ -1220,6 +1230,16 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ], [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "Wanderer's Return",
+  "name" : "WanderReturn",
+  "description" : [ "The group spots a lone native on the horizon. At first they grab for their weapons, but as the native draws near, they recognize her face. It’s the small native they saved earlier. She’s clothed in a tunic made of fine furs and carrying a large wooly sack. She cautiously approaches the ROV, gently sets the sack down, and then turns and runs away.", "The group emerges from the ROV. They collect the sack and tot it back inside the ROV. Then they unravel its rope knots and open the top; it’s filled to the brim with all sorts of delicious looking foods. " ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "edibles" ] ]
 }, {
   "root" : false,
   "title" : "Watering Hole",
