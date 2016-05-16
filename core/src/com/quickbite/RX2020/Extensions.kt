@@ -30,6 +30,22 @@ fun <T> Array<T>.shuffle() : Array<T>{
     return this;
 }
 
+fun <T> MutableList<T>.shuffle() : MutableList<T>{
+    val rg : Random = Random();
+    for (i in 0..this.size - 1) {
+        val randomPosition = rg.nextInt(this.size);
+        swap(this, i, randomPosition);
+    }
+    return this;
+}
+
+fun <T> swap(arr: MutableList<T>, i: Int, j: Int) : MutableList<T>{
+    val tmp : T = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+    return arr;
+}
+
 fun <T> swap(arr: Array<T>, i: Int, j: Int) : Array<T>{
     val tmp : T = arr[i];
     arr[i] = arr[j];

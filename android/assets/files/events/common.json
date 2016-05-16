@@ -68,7 +68,7 @@
   "description" : [ "%n crawls over to the opening of the hole and reaches in..." ],
   "choices" : [ ],
   "outcomes" : [ [ "ReachEmpty", "ReachFood", "ReachFoodHurt", "ReachFoodHurtPerc" ] ],
-  "chances" : [ [ 25, 25, 25, 25 ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -77,7 +77,7 @@
   "description" : [ "%n crawls over to the opening and looks inside..." ],
   "choices" : [ ],
   "outcomes" : [ [ "EmptyBurrow", "FoodBurrow", "CreatureHurtBurrow", "CreatureHurtFoodBurrow" ] ],
-  "chances" : [ [ 25, 25, 25, 25 ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
@@ -86,7 +86,7 @@
   "description" : [ "%n spots a small burrow-like hole a few feet ahead of the ROV. It's just big enough for a small animal to take shelter or for an adventurous traveler to reach their arm in..." ],
   "choices" : [ "Pass it By", "Look Inside", "Reach Inside" ],
   "outcomes" : [ [ "PassBy" ], [ "LookInside" ], [ "ReachInside" ] ],
-  "chances" : [ [ 100 ], [ 100 ], [ 100 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -140,7 +140,7 @@
   "description" : [ "While the Exomer crew was dismantling a big pile of rocks in search of crystals, they accidently unearth a nest of large angry beetles.", "The beetles, about the size of an adult horseshoe crab and just as ugly, start emerging all around the crew." ],
   "choices" : [ ],
   "outcomes" : [ [ "BeetleGood", "BeetleBad" ] ],
-  "chances" : [ [ 50, 50, 0 ] ],
+  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -164,19 +164,10 @@
   "root" : true,
   "title" : "Berries",
   "name" : "Berry",
-  "description" : [ "While searching for food, %n uncovers a thicket of unusual dark red berries. They're plump, juicy, and look very tasty, but looks can be deceiving..." ],
+  "description" : [ "While searching for food, %n uncovers a thicket of unusual dark red berries. They're plump, juicy, and look very tasty, but looks can be deceiving...", "He1 pops one of the berries into his1 mouth..." ],
   "choices" : [ ],
   "outcomes" : [ [ "BerryBad", "BerryGood" ] ],
-  "chances" : [ [ 50, 50 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Berries",
-  "name" : "BerryEat",
-  "description" : [ "He1 pops one of the berries into his1 mouth..." ],
-  "choices" : [ ],
-  "outcomes" : [ [ "BerryGood", "BerryBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -275,7 +266,7 @@
   "description" : [ "A herd of cow-like creatures are lumbering across the path head. They're too vast to easily go around." ],
   "choices" : [ "Go Through", "Wait" ],
   "outcomes" : [ [ "HerdHit", "HerdMiss" ], [ "HerdWait" ] ],
-  "chances" : [ [ 50, 50 ], [ 100 ] ],
+  "chances" : [ [ 50.0, 50.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -311,7 +302,7 @@
   "description" : [ "%n is sorting through the group's ammunition crystals, when he1 comes something unusual.", "One of the crystals is abnormally warm compared to the rest..." ],
   "choices" : [ ],
   "outcomes" : [ [ "CrystalGood", "CrystalBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
@@ -363,9 +354,9 @@
   "title" : "Fisherman",
   "name" : "Fisherman",
   "description" : [ "%n discovers a small pond while searching for food. After a few minutes of scrounging manages to piece together a temporary fishing pole and baits it with some of the food he1 brought." ],
-  "choices" : [ "He1 cast out the line..." ],
+  "choices" : [ "(He1) cast out the line..." ],
   "outcomes" : [ [ "FishermanFish", "FishermanLost" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -383,7 +374,7 @@
   "description" : [ "Finding nothing of use in his1 back %n decides to try and find a bug in the brush around the water's edge and after few minutes kicking around some of the tall grass a small bug hops out. He1 chases it down and places it on the makeshift hook. Then he1 tosses his1 line out and waits." ],
   "choices" : [ ],
   "outcomes" : [ [ "LostFishBug", "SmallFishBug", "MidFishBug", "BigFishBug" ] ],
-  "chances" : [ [ 20, 20, 20, 40 ] ],
+  "chances" : [ [ 20.0, 20.0, 20.0, 40.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -491,7 +482,7 @@
   "description" : [ "He1 spots a dark mass under some low hanging branches in a pool edge of the stream. He1 creeps over and toss the spear hard." ],
   "choices" : [ ],
   "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf" ] ],
-  "chances" : [ [ 30, 40, 30 ] ],
+  "chances" : [ [ 30.0, 40.0, 30.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -500,7 +491,7 @@
   "description" : [ "He1 looks around for something useful to help him1 catch some fish. His1 eyes scan the ground around him1 for anything useful. A few dead branches lay long the stream's edge and some loose vine dangles from the trees..." ],
   "choices" : [ "Craft Fishing Pole", "Craft Net", "Craft Spear" ],
   "outcomes" : [ [ "CraftPole" ], [ "CraftNet" ], [ "CraftSpear" ] ],
-  "chances" : [ [ 100 ], [ 100 ], [ 100 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -572,7 +563,7 @@
   "description" : [ "%n decides to drag the net through the deepest part of the stream and hope for the best. He1 wades out into the water and gives the net a quick sweep." ],
   "choices" : [ ],
   "outcomes" : [ [ "NetSmallFish", "NetLargeFish" ] ],
-  "chances" : [ [ 60, 40 ] ],
+  "chances" : [ [ 60.0, 40.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -599,7 +590,7 @@
   "description" : [ "At the bottom of his1 bag he1 finds a few hard pieces of bread. He1 can't remember the last time he1 had bread but he1 assumes the fish won't mind and baits the hook and tosses out the line." ],
   "choices" : [ ],
   "outcomes" : [ [ "LostFishBread", "SmallFishBread", "MidFishBread", "BigFishBread" ] ],
-  "chances" : [ [ 20, 20, 40, 20 ] ],
+  "chances" : [ [ 20.0, 20.0, 40.0, 20.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -608,7 +599,7 @@
   "description" : [ "%n decides try and throw the net on some unsuspecting fish. He1 waits near the deeper pools around the edges of the stream until he1 sees some movement under the surface, then he1 gives the net a toss." ],
   "choices" : [ ],
   "outcomes" : [ [ "LostNet", "NetFish" ] ],
-  "chances" : [ [ 40, 60 ] ],
+  "chances" : [ [ 40.0, 60.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -617,7 +608,7 @@
   "description" : [ "He1 decides to craft small net from some of the vines he1 sees hanging from the nearby trees. It takes quite some time to weave together the smaller vines but it's eventually completed. He1 ponders how best to put the net to use." ],
   "choices" : [ "Throw the Net", "Drag the Net" ],
   "outcomes" : [ [ "ThrowNet" ], [ "DragNet" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -644,7 +635,7 @@
   "description" : [ "While searching for food %n hears the faint trickle of water and following the sound soon leads him1 to a small gently flowing stream. He1 can see the occasional splash of a fish darting around beneath the surface." ],
   "choices" : [ "Try and catch some fish?", "Leave" ],
   "outcomes" : [ [ "TryCatchFish" ], [ "NoFishing" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -653,7 +644,7 @@
   "description" : [ "He1 grabs a sturdy stick from shore line and uses his1 knife to carve the tip into a sharp point, but he1 wonders what the best way to spear a fish is." ],
   "choices" : [ "Throw the spear", "Stab with the Spear" ],
   "outcomes" : [ [ "ThrowSpear" ], [ "StabSpear" ] ],
-  "chances" : [ [ 100 ], [ 100 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -671,7 +662,7 @@
   "description" : [ "Luckily he1 brought a few pieces of jerky along with him1 for a snack. He1 baits his1 makeshift hook with the jerky and out the line." ],
   "choices" : [ ],
   "outcomes" : [ [ "LostFishJerky", "SmallFishJerky", "MidFishJerky", "BigFishJerky" ] ],
-  "chances" : [ [ 20, 40, 20, 20 ] ],
+  "chances" : [ [ 20.0, 40.0, 20.0, 20.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -680,7 +671,7 @@
   "description" : [ "He1 grabs a suitable branch and the thinnest vines he1 can find and after a few minutes has a somewhat working fishing pole. He1 rummages through his1 bags for some food for bait." ],
   "choices" : [ "Use Strange Berries", "Use Jerky ", "Use Bread", "Try to Find a Bug" ],
   "outcomes" : [ [ "UseBerries" ], [ "UseJerky" ], [ "UseBread" ], [ "UseBug" ] ],
-  "chances" : [ [ 100 ], [ 100 ], [ 100 ], [ 100 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ], [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -707,7 +698,7 @@
   "description" : [ "He1 spots a dark mass under some low hanging branches in a pool edge of the stream. He1 sneaks over to it and thrust the spear wildly at the fish." ],
   "choices" : [ ],
   "outcomes" : [ [ "SpearStabSmall", "SpearStabLarge", "SpearStabHurtSelf" ] ],
-  "chances" : [ [ 40, 30, 30 ] ],
+  "chances" : [ [ 40.0, 30.0, 30.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -716,7 +707,7 @@
   "description" : [ "%n remembers he1 has some small berries he1 pick earlier in his1 pocket. They didn't taste great but maybe the fish will like them. He1 baits his1 makeshift hook and cast the line out." ],
   "choices" : [ ],
   "outcomes" : [ [ "LostFish", "SmallFish", "MidFish", "BigFish" ] ],
-  "chances" : [ [ 40, 20, 20, 20 ] ],
+  "chances" : [ [ 40.0, 20.0, 20.0, 20.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -734,7 +725,7 @@
   "description" : [ "%n is putting the finishing touches on a simple flute he1 has been making.", "He1's carved it out of a hard branch he1 found lying around. He1 makes his1 last cut and gives the flute a blow..." ],
   "choices" : [ ],
   "outcomes" : [ [ "FluteGood", "FluteBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -772,15 +763,15 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
-},{
+}, {
   "root" : true,
   "title" : "Fruity",
   "name" : "Fruity",
   "description" : [ "While out searching for food, %n spots a piece of fruit hanging high up on a tree. He1 jumps up and manages to snag it with his1 fingertips. It snaps free, showering him1 with leaves and twigs...", "...unfortunately also showering him1 in angry stinging wasp-like creatures. He1 feels them fall onto his1 arms and down the back of his1 shirt. He1 screams, dropping the fruit, and runs, wafting his1 clothes and swatting the air around him1! By the time he1 reaches the ROV he1's lost the swarm and most of his1 clothes." ],
   "choices" : [ ],
-  "outcomes" : [],
-  "chances" : [],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ]  ]
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Fruity!",
@@ -797,7 +788,7 @@
   "description" : [ "%n finds a nice gemstone in a roadside dirt clump!" ],
   "choices" : [ "Nice!" ],
   "outcomes" : [ [ ] ],
-  "chances" : [ [ 0 ] ],
+  "chances" : [ [ 0.0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
 }, {
   "root" : true,
@@ -806,7 +797,7 @@
   "description" : [ "%n reexamines the group's gemstones." ],
   "choices" : [ "Okay" ],
   "outcomes" : [ [ "MoreGems", "LessGems" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -875,11 +866,10 @@
   "root" : true,
   "title" : "How'd That Get There?",
   "name" : "RockShard",
-  "description" : [ "A large shard of rock has somehow become lodged like a thorn between one of the large armor panels coating the outside of the ROV. The crew all takes turns trying to pry it loose but it won't budge.",
-    "%n steps up telling everyone to stand aside, exaggeratedly flexing like a strongman and boasting about his1 feats of strength. He1 grabs on tight and starts prying..." ],
+  "description" : [ "A large shard of rock has somehow become lodged like a thorn between one of the large armor panels coating the outside of the ROV. The crew all takes turns trying to pry it loose but it won't budge.", "%n steps up telling everyone to stand aside, exaggeratedly flexing like a strongman and boasting about his1 feats of strength. He1 grabs on tight and starts prying..." ],
   "choices" : [ ],
   "outcomes" : [ [ "RockShardGood", "RockShardBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -897,7 +887,7 @@
   "description" : [ "%n sorts through some piles of space junk the group has collected.", "He1's trying to clean and test the parts to see if they will be any good, because just because you find space debris doesn't mean it's going to be useable after all the grime is cleaned off." ],
   "choices" : [ ],
   "outcomes" : [ [ "JunkSorterGood", "JunkSorterBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -942,7 +932,7 @@
   "description" : [ "The crew notices the ROV has been making a strange knocking sound and running poorly the last few days so they pull over to check things out. %n opens the engine hatches and peers around, but doesn't see anything obviously wrong.", "He1 spends the next few hours taking things apart, cleaning things down, and reassembling them back where they belong. %n cranks up the ROV and it hums to life. The rest of the crew hops aboard and they pull back onto the trail." ],
   "choices" : [ ],
   "outcomes" : [ [ "KnockGood", "KnockBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ [ ] ]
 }, {
   "root" : true,
@@ -951,14 +941,13 @@
   "description" : [ "%n organizes the food storage." ],
   "choices" : [ "Continue" ],
   "outcomes" : [ [ "MoreEdibles", "LessEdibles" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
   "title" : "Log-in",
   "name" : "Moss",
-  "description" : [ "While out looking for new medical plants %n slips on a slimy log and falls on his1 elbow pretty hard.",
-    "It just so happens that a patch of little mushrooms were growing under that log, mushrooms that work great as a poultice for bumps and bruises." ],
+  "description" : [ "While out looking for new medical plants %n slips on a slimy log and falls on his1 elbow pretty hard.", "It just so happens that a patch of little mushrooms were growing under that log, mushrooms that work great as a poultice for bumps and bruises." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -997,7 +986,7 @@
   "description" : [ "%n has been busy combining different herbs in an attempt to create a new tonic to stock some empty medical kits.", "He1's just about finished; all that's left to do is try it out." ],
   "choices" : [ ],
   "outcomes" : [ [ "MixologyGood", "MixologyBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1018,7 +1007,7 @@
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
 }, {
-  "root" : false,
+  "root" : true,
   "title" : "Nap",
   "name" : "Nap",
   "description" : [ "%n sneaks in a quick nap." ],
@@ -1036,13 +1025,13 @@
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "wealth" ] ]
 }, {
-  "root" : false,
+  "root" : true,
   "title" : "Oops",
   "name" : "Oops",
   "description" : [ "%n accidentally crushed a small trinket while moving supplies around..." ],
   "choices" : [ "Disappointing" ],
   "outcomes" : [ [ ] ],
-  "chances" : [ [ 0, 0 ] ],
+  "chances" : [ [ 0.0, 0.0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
 }, {
   "root" : true,
@@ -1061,7 +1050,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "100", "-1", "true"] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "100", "-1", "true" ] ]
 }, {
   "root" : true,
   "title" : "Really!?",
@@ -1078,7 +1067,7 @@
   "description" : [ "%n tries rearranging the batteries' wiring." ],
   "choices" : [ "Careful!" ],
   "outcomes" : [ [ "MoreEnergy", "LessEnergy" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
@@ -1087,7 +1076,7 @@
   "description" : [ "While out looking for space debris, %n decides to sit down for a rest.", "He1 spots a patch of small berries growing from between some nearby rocks. He1 knows they are safe to eat, so he1 picks a few and tosses them into his1 mouth." ],
   "choices" : [ ],
   "outcomes" : [ [ "RefreshBerryGood", "RefreshBerryBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1114,7 +1103,7 @@
   "description" : [ "%n sticks his1 head out of the ROV and takes a look around. After some consideration he1 suggest a shortcut to save some time." ],
   "choices" : [ "Try it", "Don't Try it" ],
   "outcomes" : [ [ "ShortcutGood", "ShortcutBad" ], [ ] ],
-  "chances" : [ [ 50, 50 ], [ 0 ] ],
+  "chances" : [ [ 50.0, 50.0 ], [ 0.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1150,7 +1139,7 @@
   "description" : [ "%n has some ideas about how to increase the batteries' efficiency.", "After some reworking he1 thinks he1's got it all working..." ],
   "choices" : [ ],
   "outcomes" : [ [ "ReworkingGood", "ReworkingBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1174,8 +1163,7 @@
   "root" : true,
   "title" : "Rock Collector",
   "name" : "Collector",
-  "description" : [ "While out on a walk, %n collects a few interesting rocks he1 comes across. He1 then arranges them in a simple pattern and laces them to some cordage to make a necklace.",
-    "He1 puts the necklace on. Not only is it a nice souvenir, but it might be useful for trade value." ],
+  "description" : [ "While out on a walk, %n collects a few interesting rocks he1 comes across. He1 then arranges them in a simple pattern and laces them to some cordage to make a necklace.", "He1 puts the necklace on. Not only is it a nice souvenir, but it might be useful for trade value." ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
@@ -1187,7 +1175,7 @@
   "description" : [ "While searching for food %n notices a thick oozy sap dripping from some of the trees. He1 touches the tip of his1 finger to the sap..." ],
   "choices" : [ ],
   "outcomes" : [ [ "SapGood" ] ],
-  "chances" : [ [ 100 ] ],
+  "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1223,7 +1211,7 @@
   "description" : [ "While %n is resting and having a snack, something buzzes around him1. It's a little fly; he1 shoos it away, but it comes back. He1 shoos it again, but once again it buzzes back and lands on the back of his1 neck. He1 swats it, this time killing it. A few minutes later he1 finds him1self scratching that same spot.", "He1 feels a little welt on his1 neck. The persistent fly managed to bite him1 before dying; he1 hadn't even noticed." ],
   "choices" : [ ],
   "outcomes" : [ [ "FlyHurt", "FlyHeal" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1235,7 +1223,7 @@
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
-  "root" : false,
+  "root" : true,
   "title" : "Slip Slide",
   "name" : "Slide",
   "description" : [ "While out walking to stretch his1 legs %n slips some mossy rocks and falls hard on his1 back.", "It feels really terrible and he1 scrapes his1 elbows in the fall." ],
@@ -1250,7 +1238,7 @@
   "description" : [ "As the ROV ascends the crest of a large hilltop it loses traction and slips rearward. Gaining speed it slides down the cliff face toward the rocks below. Fortunately, it becomes entangled in a patch of trees before plummeting further." ],
   "choices" : [ ],
   "outcomes" : [ [ "SlipperBad" ] ],
-  "chances" : [ [ 100 ] ],
+  "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1295,7 +1283,7 @@
   "description" : [ "%n, tired from the night before, runs some test on the batteries", "He1 accidentally touches something he1 shouldn't and sparks fly!" ],
   "choices" : [ ],
   "outcomes" : [ [ "TextGood", "TextBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1322,7 +1310,7 @@
   "description" : [ "%n checks the groups Ammo storage." ],
   "choices" : [ "Continue" ],
   "outcomes" : [ [ "ExtraAmmo", "LessAmmo" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
@@ -1340,7 +1328,7 @@
   "description" : [ "%n tinkers with the ROV." ],
   "choices" : [ "Careful" ],
   "outcomes" : [ [ "MoreParts", "LessParts" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1368,9 +1356,9 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25", "100", "-1"] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25", "100", "-1" ] ]
 }, {
-  "root" : false,
+  "root" : true,
   "title" : "Traps",
   "name" : "TrapsBad",
   "description" : [ "%n decided to use some of the crew's food for traps, but all they caught was spoiled food." ],
@@ -1385,7 +1373,7 @@
   "description" : [ "%n decided to set some traps which caught some extra food for the crew." ],
   "choices" : [ "Good Job" ],
   "outcomes" : [ [ ] ],
-  "chances" : [ [ 100 ] ],
+  "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ] ]
 }, {
   "root" : true,
@@ -1452,12 +1440,22 @@
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
+  "title" : "What's That?",
+  "name" : "BugHurt",
+  "description" : [ "A huge bug is grasping (his1) thigh! (He1) screams and jumps out of (his1) sleeping bag so hard (he1) hits (his1) head on the low ceiling. Chaos ensues as everyone else in the ROV panics, some out of confusion and some because they see the bug darting off. After a few minutes of thrashing, stomping and shouting the bug lies vanquished." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : true,
   "title" : "What's that?",
   "name" : "Bug",
   "description" : [ "%n is sound asleep in this sleeping bag in the back of the ROV, dreaming home when the thought of something crawling on him1 interrupts his1 pleasant dreams. He1 jumps awake, but doesn't feel anything. Assuming he1 was just dreaming he1 considers going back to sleep, but then he1 feels it again... ", "He1 decides to bite the bullet and yanks back the flap on his1 sleeping bag!" ],
   "choices" : [ ],
   "outcomes" : [ [ "BugNothing", "BugHurt" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1493,7 +1491,7 @@
   "description" : [ "The group spots a small dark object nestled in some tall grass. Upon closer inspection it seems to be a small brownish sack..." ],
   "choices" : [ "Leave it", "Open it" ],
   "outcomes" : [ [ "PassBag" ], [ "FoundStuff", "EmptyBag", "CreatureBag" ] ],
-  "chances" : [ [ 100 ], [ 45, 45, 10 ] ],
+  "chances" : [ [ 100.0 ], [ 45.0, 45.0, 10.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1520,7 +1518,7 @@
   "description" : [ "(Name1) was carving a little wooden figurine out of a chuck of wood (he1) picked up earlier, but now (he1) can't find it anywhere.", "He1 checks where he1 last remembers having it, he1 digs though piles of supplies, and he1 looks under tables, but it's nowhere to be found." ],
   "choices" : [ ],
   "outcomes" : [ [ "FigurineGood", "FigurineBad" ] ],
-  "chances" : [ [ 50, 50 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,

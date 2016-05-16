@@ -1,0 +1,39 @@
+[
+  {
+    "root" : false,
+    "title" : "Natives!",
+    "name" : "NativesFight",
+    "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The large native roars and knocks (Name1) to the ground and unsheathes his weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process." ],
+    "choices" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [ [ "addHealth", "evt", "-10", "-35", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addAilment", "evt", "injury", "regular" ] ]
+  }, {
+    "root" : true,
+    "title" : "Natives!",
+    "name" : "NativeEncounter",
+    "description" : [ "The ROV grinds to a stop. Shadowy figures dot the horizon along the path ahead. Natives no doubt, but their intentions are unclear. Upon closer inspection they seem to be quite large in stature, with rugged bark-like skin and features. They appear to be wearing simple garb most likely made from local flora and fauna." ],
+    "choices" : [ "Approach Peacefully", "Approach Hostilely", "Avoid Natives" ],
+    "outcomes" : [ [ "NativesTrade", "NativesFight" ], [ "NativesDriveOver", "NativesStuckIn" ], [ "NativeAvoidSuccess", "NativeAvoidAmbushed" ] ],
+    "chances" : [ [ 50, 50 ], [ 75, 25 ], [ 75, 25 ] ],
+    "resultingAction" : [ ]
+  }, {
+    "root" : false,
+    "title" : "Natives!",
+    "name" : "NativesTrade",
+    "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The natives grunt and grumble to each other until the larger native settles them. The group parts to reveal a pile of treasures of their own. Thankfully, it seems they are friendlier than they look and welcome the trade!" ],
+    "choices" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [  [ "openTrade" ] ]
+  }, {
+    "root" : false,
+    "title" : "Natives!",
+    "name" : "NativesStuckIn",
+    "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back...", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
+    "choices" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [ [ "addHealthROV", "-25", "-55" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
+  }
+]

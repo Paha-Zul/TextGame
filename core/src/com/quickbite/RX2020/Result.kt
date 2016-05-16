@@ -1,6 +1,5 @@
 package com.quickbite.rx2020
 
-import com.quickbite.rx2020.gui.GameScreenGUI
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.util.GH
 
@@ -42,7 +41,7 @@ class Result(val name:String, var amt:Float, val desc:String = "", var timeLastU
          * @param gui The GameScreenGUI to update if needed on change.
          * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
          */
-        fun addRecentChange(name: String, amt: Float, currTime: Double, desc: String = "", gui: GameScreenGUI, isEventRelated:Boolean){
+        fun addRecentChange(name: String, amt: Float, currTime: Double, desc: String = "", isEventRelated: Boolean){
             //TODO A little bit of a hack until I figure out where to better put the values.
             if(isEventRelated) {
                 val result = eventChangeMap.getOrPut(name, { Result(name, 0f, desc) })

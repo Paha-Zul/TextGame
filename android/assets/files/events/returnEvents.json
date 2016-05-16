@@ -1,0 +1,444 @@
+[
+  {
+    "root" : false,
+    "title" : "Karma",
+    "name" : "GreenAmbush2Hurt",
+    "description" : [ "Under a hail of gunfire, the crew runs to the ROV. Thankfully, the natives’ simplistic muskets are dreadfully inaccurate and slow to reload, so the crew is able to escape into the ROV. The sounds of bullets pinging metal echoes inside the ROV. As the crew drives further and further away, the sound gradually fades away." ],
+    "choices" : [ ],
+    "restrictions" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
+  }, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush2Damage",
+  "description" : [ "Under a hail of gunfire, the crew runs to the ROV. Thankfully, the natives’ simplistic muskets are dreadfully inaccurate and slow to reload, so the crew is able to escape into the ROV. Natives toss small pots of flaming oil against the sides of the ROV, coating it in a viscus red-hot sheen. The crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush2Terrible",
+  "description" : [ "Bullet strikes flesh, as the natives pepper the crew with rifle fire. The wounded crew retreats to the ROV, jumping inside as the native converge on all sides. Sporadic rifle fire continues as the natives begin tossing flaming pots of oil into the ROV, covering the ROV in a layer of burning tar. The crew accelerates the ROV, running over some natives. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush1Nothing",
+  "description" : [ "The group gets into the ROV and they slowly pull away. They leave the small clearing behind, but the uneasy feeling remains." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush1Hurt",
+  "description" : [ "Just as the crew begins to board the ROV a group of green-skinned native appear amongst the trees on either side of the crew. Armed with muskets, they unleash a devastating broadside before the crew can react. The injured crewmembers dive for cover inside the ROV and the natives slowly reload their simplistic rifles. Rifle shot pelts the sides of the ROV as the crew pulls away from the clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush1Bad",
+  "description" : [ "As the crew begins boarding the ROV, groups of green-skinned natives appear on either side of the ROV. The natives unleash a volley of musket fire into the exposed crew, following up with a slew of flaming pots of oil. The pots rain down around the crew as they dive into the ROV, cracking open and spattering the crew and ROV with a viscous burning oil. Burned and blooded the crew cowers inside the ROV as they pull away. Eventually the sounds of sporadic gunfire fade into the distance as the injured crew presses onward." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush1",
+  "description" : [ "The crew loads their stuff into the ROV, all the while glancing over their shoulder, expecting trouble." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "GreenAmbush1Nothing", "GreenAmbush1Hurt", "GreenAmbush1Damage", "GreenAmbush1Bad" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush2",
+  "description" : [ "As the crew begins to pack the ROV, squads of green-skinned natives appear on either side of the ROV and broadside the exposed crew." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "GreenAmbush2Hurt", "GreenAmbush2HurtBad", "GreenAmbush2Damage", "GreenAmbush2Terrible" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush3",
+  "description" : [ "As the crew begin to pack the ROV, small pots of flaming oil shatter against the sides of the ROV as green-skinned natives appear on either side of the exposed crew." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "GreenAmbush3Damage", "GreenAmbush3Bad1", "GreenAmbush3Bad2", "GreenAmbush3Terrible" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush4",
+  "description" : [ "The crew are peppered with rifle fire as they make a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. Fire engulfs the ROV as the crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "GreenAmbush4Bad1", "GreenAmbush4Bad2", "GreenAmbush4Bad3", "GreenAmbush4Bad4" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush3Damage",
+  "description" : [ "The crew, braving the growing flames, dart into the ROV just as the natives unleash a volley of rifle fire. As the natives converge on them, they accelerate the ROV and leave the natives in the dust." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush4Bad2",
+  "description" : [ "Bullets strikes flesh as the crew make a break for the ROV and dive inside. Once safely inside the ROV, the injured crew accelerates the ROV, plowing through the natives, and sending them tumbling in all directions. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush4Bad3",
+  "description" : [ "The crew, braving the growing flames, dart into the ROV just as the natives unleash a volley of rifle fire. The natives converge on ROV, clawing at the outside of the ROV, undeterred by the patches of burning oil. The crew accelerates the ROV, plowing through the natives, and sending them tumbling in all directions. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush4Bad4",
+  "description" : [ "Bullets strikes flesh as the crew makes a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. Fire engulfs the ROV as the injured crew accelerates, plowing over some approaching natives, diving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : true,
+  "title" : "Karma",
+  "name" : "GreenAmbush",
+  "description" : [ "While the group is stopped for a short break, a strange silence falls over the camp. Feeling uneasy the group starts to pack up." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "GreenAmbush1", "GreenAmbush2", "GreenAmbush3", "GreenAmbush4" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush4Bad1",
+  "description" : [ "The crew braves growing flames, under a hail of gunfire, and runs into the ROV. The sounds of bullets pinging metal echoes inside the ROV, as the crew cowards inside. They accelerate the ROV, driving further and further away until the sound of gunfire gradually fades away." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush1Damage",
+  "description" : [ "(25%) The boards the ROV, but before they can leave, a group of green-skinned natives appear on either side of the ROV. They begin their rifles firing into the ROV’s armored sides and throwing burning pots of oil over top of it. The pots crack open upon impact, coating the ROV in a viscus red-hot sheen. Unable to return fire, the group is forced to cower inside the ROV as they drive off. Eventually the sounds of sporadic gunfire fade into the distance as the crew presses onwards." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush3Terrible",
+  "description" : [ "The crew are peppered with rifle fire as they make a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. Fire engulfs the ROV as the crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush2HurtBad",
+  "description" : [ "Bullets tear into flesh, as the crewmembers dive for cover inside the ROV. The natives slowly reload their simplistic rifles, pelting the sides of the ROV as the crew pulls away from the clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush3Bad1",
+  "description" : [ "The crew is peppered with rifle fire as they make a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. The injured crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "GreenAmbush3Bad2",
+  "description" : [ "The crew, braving the growing flames, dart into the ROV just as the natives unleash a volley of rifle fire. The natives converge on ROV, clawing at the outside of the ROV, undeterred by the patches of burning oil. The crew accelerates the ROV, plowing through the natives, and sending them tumbling in all directions. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ] ]
+},
+  {
+    "root" : false,
+    "title" : "Karma",
+    "name" : "RedAmbush2Hurt",
+    "description" : [ "Under a hail of gunfire, the crew runs to the ROV. Thankfully, the natives’ simplistic muskets are dreadfully inaccurate and slow to reload, so the crew is able to escape into the ROV. The sounds of bullets pinging metal echoes inside the ROV. As the crew drives further and further away, the sound gradually fades away." ],
+    "choices" : [ ],
+    "restrictions" : [ ],
+    "outcomes" : [ ],
+    "chances" : [ ],
+    "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
+  }, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush2Damage",
+  "description" : [ "Under a hail of gunfire, the crew runs to the ROV. Thankfully, the natives’ simplistic muskets are dreadfully inaccurate and slow to reload, so the crew is able to escape into the ROV. Natives toss small pots of flaming oil against the sides of the ROV, coating it in a viscus red-hot sheen. The crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush2Terrible",
+  "description" : [ "Bullet strikes flesh, as the natives pepper the crew with rifle fire. The wounded crew retreats to the ROV, jumping inside as the native converge on all sides. Sporadic rifle fire continues as the natives begin tossing flaming pots of oil into the ROV, covering the ROV in a layer of burning tar. The crew accelerates the ROV, running over some natives. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush1Nothing",
+  "description" : [ "The group gets into the ROV and they slowly pull away. They leave the small clearing behind, but the uneasy feeling remains." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush1Hurt",
+  "description" : [ "Just as the crew begins to board the ROV a group of red-skinned native appear amongst the trees on either side of the crew. Armed with muskets, they unleash a devastating broadside before the crew can react. The injured crewmembers dive for cover inside the ROV and the natives slowly reload their simplistic rifles. Rifle shot pelts the sides of the ROV as the crew pulls away from the clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush1Bad",
+  "description" : [ "As the crew begins boarding the ROV, groups of red-skinned natives appear on either side of the ROV. The natives unleash a volley of musket fire into the exposed crew, following up with a slew of flaming pots of oil. The pots rain down around the crew as they dive into the ROV, cracking open and spattering the crew and ROV with a viscous burning oil. Burned and blooded the crew cowers inside the ROV as they pull away. Eventually the sounds of sporadic gunfire fade into the distance as the injured crew presses onward." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush1",
+  "description" : [ "The crew loads their stuff into the ROV, all the while glancing over their shoulder, expecting trouble." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "RedAmbush1Nothing", "RedAmbush1Hurt", "RedAmbush1Damage", "RedAmbush1Bad" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush2",
+  "description" : [ "As the crew begins to pack the ROV, squads of red-skinned natives appear on either side of the ROV and broadside the exposed crew." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "RedAmbush2Hurt", "RedAmbush2HurtBad", "RedAmbush2Damage", "RedAmbush2Terrible" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush3",
+  "description" : [ "As the crew begin to pack the ROV, small pots of flaming oil shatter against the sides of the ROV as red-skinned natives appear on either side of the exposed crew." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "RedAmbush3Damage", "RedAmbush3Bad1", "RedAmbush3Bad2", "RedAmbush3Terrible" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush4",
+  "description" : [ "The crew are peppered with rifle fire as they make a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. Fire engulfs the ROV as the crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "RedAmbush4Bad1", "RedAmbush4Bad2", "RedAmbush4Bad3", "RedAmbush4Bad4" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush3Damage",
+  "description" : [ "The crew, braving the growing flames, dart into the ROV just as the natives unleash a volley of rifle fire. As the natives converge on them, they accelerate the ROV and leave the natives in the dust." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush4Bad2",
+  "description" : [ "Bullets strikes flesh as the crew make a break for the ROV and dive inside. Once safely inside the ROV, the injured crew accelerates the ROV, plowing through the natives, and sending them tumbling in all directions. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush4Bad3",
+  "description" : [ "The crew, braving the growing flames, dart into the ROV just as the natives unleash a volley of rifle fire. The natives converge on ROV, clawing at the outside of the ROV, undeterred by the patches of burning oil. The crew accelerates the ROV, plowing through the natives, and sending them tumbling in all directions. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush4Bad4",
+  "description" : [ "Bullets strikes flesh as the crew makes a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. Fire engulfs the ROV as the injured crew accelerates, plowing over some approaching natives, diving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : true,
+  "title" : "Karma",
+  "name" : "RedAmbush",
+  "description" : [ "While the group is stopped for a short break, a strange silence falls over the camp. Feeling uneasy the group starts to pack up." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "RedAmbush1", "RedAmbush2", "RedAmbush3", "RedAmbush4" ] ],
+  "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush4Bad1",
+  "description" : [ "The crew braves growing flames, under a hail of gunfire, and runs into the ROV. The sounds of bullets pinging metal echoes inside the ROV, as the crew cowards inside. They accelerate the ROV, driving further and further away until the sound of gunfire gradually fades away." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealthROV", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush1Damage",
+  "description" : [ "(25%) The boards the ROV, but before they can leave, a group of red-skinned natives appear on either side of the ROV. They begin their rifles firing into the ROV’s armored sides and throwing burning pots of oil over top of it. The pots crack open upon impact, coating the ROV in a viscus red-hot sheen. Unable to return fire, the group is forced to cower inside the ROV as they drive off. Eventually the sounds of sporadic gunfire fade into the distance as the crew presses onwards." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush3Terrible",
+  "description" : [ "The crew are peppered with rifle fire as they make a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. Fire engulfs the ROV as the crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush2HurtBad",
+  "description" : [ "Bullets tear into flesh, as the crewmembers dive for cover inside the ROV. The natives slowly reload their simplistic rifles, pelting the sides of the ROV as the crew pulls away from the clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush3Bad1",
+  "description" : [ "The crew is peppered with rifle fire as they make a break for the ROV. More pots of fiery oil shatter on the ground around the ROV, spattering the crew with burning grease as they dive inside the ROV. The injured crew accelerates, plowing over some approaching natives, driving away from the perilous clearing." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Karma",
+  "name" : "RedAmbush3Bad2",
+  "description" : [ "The crew, braving the growing flames, dart into the ROV just as the natives unleash a volley of rifle fire. The natives converge on ROV, clawing at the outside of the ROV, undeterred by the patches of burning oil. The crew accelerates the ROV, plowing through the natives, and sending them tumbling in all directions. They keep on going until the sound of rifle fire fades into the distance." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealthROV", "-1", "-25" ], [ "addHealthROV", "-25", "-50" ] ]
+}, {
+  "root" : true,
+  "title" : "Riders Return",
+  "name" : "RidersReturn",
+  "description" : [ "Two large natives, riding on the backs of large wolf-like beast, suddenly appear on the path ahead. Crewmembers reach for their weapons as the natives approach, unsure of what to expect from their visit. The natives calmly ride up to the ROV and toss a pair of small brown sacks on the ground. Then they turn and ride off.", "Once the natives are out if sight, the crew cautiously disembark and inspects the bags. Finding nothing out of the ordinary, they unravel the knotted string bindings and open them up. The sacks are filled with fresh fruits, dried meats, and other such tasty edibles." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ] ]
+}, {
+  "root" : true,
+  "title" : "Wanderer's Return",
+  "name" : "WanderReturn",
+  "description" : [ "The group spots a lone native on the horizon. At first they grab for their weapons, but as the native draws near, they recognize her face. It's the small native they saved earlier. She's clothed in a tunic made of fine furs and carrying a large wooly sack. She cautiously approaches the ROV, gently sets the sack down, and then turns and runs away.", "The group emerges from the ROV. They collect the sack and tot it back inside the ROV. Then they unravel its rope knots and open the top; it's filled to the brim with all sorts of delicious looking foods. " ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "edibles" ] ]
+}
+]

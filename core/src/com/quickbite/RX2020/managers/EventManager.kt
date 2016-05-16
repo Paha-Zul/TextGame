@@ -128,7 +128,9 @@ object EventManager : IResetable{
             }
 
             person.addDisability(disLevel, disType)
+
             FunGameStats.addFunStat("Ailments Inflicted: ", "1")
+            Result.addRecentChange("$level $type for ${person.firstName}", 1f, GameScreen.currGameTime, "", true)
         })
 
         //Called to remove and injury from a person.
@@ -297,7 +299,7 @@ object EventManager : IResetable{
 
             GameStats.TravelInfo.totalDistTraveled += amt
 
-            Result.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, gui = GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+            Result.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
             FunGameStats.addFunStat("Total Miles Net", amt.toInt().toString())
         })
 
@@ -310,7 +312,7 @@ object EventManager : IResetable{
 
             GameStats.TimeInfo.totalTimeCounter += amt
 
-            Result.addRecentChange("hours waited", amt.toFloat(), GameScreen.currGameTime, gui = GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+            Result.addRecentChange("hours waited", amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
             FunGameStats.addFunStat("Hours Waited", amt.toInt().toString())
         })
 
@@ -344,7 +346,7 @@ object EventManager : IResetable{
 
             GameScreen.gui.buildGroupTable()
 
-            Result.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameScreen.gui, GameEventManager.currActiveEvent != null)
+            Result.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameEventManager.currActiveEvent != null)
         })
 
         //Called when a supply from the SupplyManager has changed. This is called from SupplyManager usually.
@@ -353,16 +355,14 @@ object EventManager : IResetable{
             val amt = args[1] as Float
             val oldAmt = args[2] as Float
 
-            if(oldAmt > 0 && supply.amt <= 0) {
-                val name = GH.checkSupply(supply, amt, oldAmt)
-                if (!name.isEmpty()) {
-                    gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")) }
-                    gameScreen.noticeEventTimer.restart()
-                    gameScreen.noticeEventTimer.start()
-                }
+            val name = GH.checkSupply(supply, amt, oldAmt)
+            if (!name.isEmpty()) {
+                gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")) }
+                gameScreen.noticeEventTimer.restart()
+                gameScreen.noticeEventTimer.start()
             }
 
-            Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameScreen.gui, GameEventManager.currActiveEvent != null)
+            Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
         })
 
         //Called when an event starts.
@@ -385,7 +385,11 @@ object EventManager : IResetable{
 
         //Called when an event finishes.
         EventManager.onEvent("forceCamp", { args ->
-            gameScreen.changeToCamp()
+            val gameOver = GH.checkGameOverConditions()
+            if(gameOver.first)
+                gameScreen.setGameOver(gameOver.second)
+            else
+                gameScreen.changeToCamp()
         })
 
         //Called when the game is over. Shows the game over screen.

@@ -27,7 +27,7 @@ object ROVManager : IResetable{
             part.currHealth.clamp(0f, part.maxHealth)
         }
 
-        Result.addRecentChange("${part!!.name} health", amt.toFloat(), GameScreen.currGameTime, "", GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+        Result.addRecentChange("${part!!.name} health", amt.toFloat(), GameScreen.currGameTime, "", isEventRelated = GameEventManager.currActiveEvent != null)
     }
 
     fun addHealthROV(amt:Float){
@@ -35,7 +35,7 @@ object ROVManager : IResetable{
         ROV.currHealth += amt
         ROV.currHealth = ROV.currHealth.clamp(0f,  ROV.maxHealth)
 
-        Result.addRecentChange("ROV", amt.toFloat(), GameScreen.currGameTime, "'s HP", GameScreen.gui, isEventRelated = GameEventManager.currActiveEvent != null)
+        Result.addRecentChange("ROV", amt.toFloat(), GameScreen.currGameTime, "'s HP", isEventRelated = GameEventManager.currActiveEvent != null)
     }
 
     override fun reset() {

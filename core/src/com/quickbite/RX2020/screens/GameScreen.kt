@@ -44,9 +44,10 @@ class GameScreen(val game: TextGame): Screen {
     private val rareEventTime = object {val min=84f; val max = 252f}
     private val epicEventTime = object {val min=360f; val max = 1080f}
 
-    private val commonEventTimer: CustomTimer = CustomTimer(MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
-    private val rareEventTimer: CustomTimer = CustomTimer(MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
-    private val epicEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
+    private val dailyEventTimer: CustomTimer = CustomTimer(MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
+    private val weeklyEventTimer: CustomTimer = CustomTimer(MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
+    private val MonthlyEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
+    private val MonthlyNativeEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
 
     val noticeEventTimer: CustomTimer = CustomTimer(MathUtils.random(1f, 1f)) //Used to trigger notices.
 
@@ -126,14 +127,17 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("CragRock1Great"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Power", "epic"))})
-        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))})
-        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Slipper", "common"))})
+//        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
+//        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Stream", "epic"))})
+//        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Path", "epic"))})
+//        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
+//        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
+//        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
 
-        commonEventTimer.callback = timerFunc("common", commonEventTimer, commonEventTime.min, commonEventTime.max)
-        rareEventTimer.callback = timerFunc("rare", rareEventTimer, rareEventTime.min, rareEventTime.max)
-        epicEventTimer.callback = timerFunc("epic", epicEventTimer, epicEventTime.min, epicEventTime.max)
+        dailyEventTimer.callback = timerFunc("common", dailyEventTimer, commonEventTime.min, commonEventTime.max)
+        weeklyEventTimer.callback = timerFunc("rare", weeklyEventTimer, rareEventTime.min, rareEventTime.max)
+        MonthlyEventTimer.callback = timerFunc("epic", MonthlyEventTimer, epicEventTime.min, epicEventTime.max)
+        MonthlyNativeEventTimer.callback = timerFunc("monthlyNative", MonthlyEventTimer, epicEventTime.min, epicEventTime.max)
 
         noticeEventTimer.stop()
 
@@ -236,9 +240,10 @@ class GameScreen(val game: TextGame): Screen {
     private fun travelUpdate(delta:Float){
         GameStats.update(delta)
         CustomTimer.updateGameTimerList(delta)
-        commonEventTimer.update(delta)
-        rareEventTimer.update(delta)
-        epicEventTimer.update(delta)
+        dailyEventTimer.update(delta)
+        weeklyEventTimer.update(delta)
+        MonthlyEventTimer.update(delta)
+        MonthlyNativeEventTimer.update(delta)
 
         noticeEventTimer.update(delta)
 
@@ -273,8 +278,7 @@ class GameScreen(val game: TextGame): Screen {
 
         val gameOver = GH.checkGameOverConditions()
         if(gameOver.first) {
-            GameStats.gameOverStatus = gameOver.second
-            gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))
+            setGameOver(gameOver.second)
         }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
             GameStats.gameOverStatus = "won"
             gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))
@@ -326,26 +330,10 @@ class GameScreen(val game: TextGame): Screen {
         this.paused = false;
     }
 
-    fun setGameOver(){
-        pauseGame()
-        SaveLoad.deleteSave()
-        var counter = 0
-        var opacity = 0f
-        var whitePixel = TextGame.smallGuiAtlas.findRegion("pixelWhite")
-        val task = ChainTask({opacity < 1}, {
-            counter++
-            opacity = GH.lerpValue(opacity, 0f, 1f, 1f)
-            TextGame.batch.color = Color(1f, 0f, 0f, opacity)
-            TextGame.batch.begin()
-            TextGame.batch.draw(whitePixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
-            TextGame.batch.end()
-            TextGame.batch.color = Color.WHITE
-        }, {
-            TextGame.stage.clear() //Make sure to clear the stage
-            game.screen = MainMenuScreen(game)
-        })
-
-        ChainTask.addTaskToEveryFrameList(task)
+    fun setGameOver(reason:String){
+        GameStats.gameOverStatus = reason
+        this.state = State.GAMEOVER
+        gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))
     }
 
 
@@ -354,8 +342,7 @@ class GameScreen(val game: TextGame): Screen {
     }
 
     fun timerFunc(eventType:String, timer: CustomTimer, min:Float, max:Float):()->Unit{
-        var func: (()->Unit)? = null
-        func = {
+        var func: (()->Unit) = {
             //Get the current event or a new one if we aren't on an event.
             var currEvent = GameEventManager.setNewRandomRoot(eventType);
 

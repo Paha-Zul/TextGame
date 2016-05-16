@@ -265,7 +265,7 @@ object GH {
         val energy = SupplyManager.getSupply("energy")
         val tracks = ROVManager.ROVPartMap["track"]!!
 
-        return (tracks.amt.toInt() == 0 && tracks.currHealth <= 0) || energy.amt.toInt() == 0
+        return (tracks.amt.toInt() == 0 && tracks.currHealth <= 0) || energy.amt <= 0
     }
 
     fun checkGameOverConditions():Pair<Boolean, String>{
@@ -276,7 +276,7 @@ object GH {
         val ROV = ROVManager.ROVPartMap["ROV"]!!
         val panels = SupplyManager.getSupply("panel")
 
-        val cantGetEnergy = energy.amt <= 0 && panels.currHealth <= 0 && panels.amt <= 0 && edibles.amt <= 0
+        val cantGetEnergy = energy.amt <= 0 && edibles.amt <= 0 && ammo.amt <= 0
         val noStorage = storage.currHealth <= 0 && storage.amt.toInt() == 0
         val cantTravel = checkCantTravel() && ammo.amt.toInt() == 0
 
@@ -309,7 +309,7 @@ object GH {
     }
 
     fun checkSupply(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float):String{
-        val isNewlyZero = supply.amt <= 0f && amtChanged != 0f
+        val isNewlyZero = supply.amt <= 0f && amtBefore > 0
         var eventNameToCall = ""
 
         if(isNewlyZero){

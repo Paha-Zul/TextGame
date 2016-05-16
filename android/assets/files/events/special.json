@@ -8,22 +8,13 @@
   "chances" : [ ],
   "resultingAction" : [ [ "showDeaths" ] ]
 }, {
-  "root" : false,
-  "title" : "End of the Line",
-  "name" : "EndLose2",
-  "description" : [ ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "gameOver", "false" ] ]
-}, {
   "root" : true,
   "title" : "End of the Line",
   "name" : "EndLose",
   "description" : [ "You have lost..." ],
   "choices" : [ ],
   "outcomes" : [ [ "EndLose2" ] ],
-  "chances" : [ [ 100 ] ],
+  "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : true,
@@ -32,7 +23,7 @@
   "description" : [ "The weathered ROV creaks to a stop in front of a large clearing. The weary crew opens the ROV's hatches and glances outward. Before them lies the tattered remains of huge parachutes and the worn but intact hulls of the enormous cargo crates, guided from outer space to this very spot months before Exomer751's arrival. They've made it... RX-2020." ],
   "choices" : [ ],
   "outcomes" : [ [ "EndWin2" ] ],
-  "chances" : [ [ 100 ] ],
+  "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -44,30 +35,19 @@
   "chances" : [ ],
   "resultingAction" : [ [ "gameOver", "true" ] ]
 }, {
+  "root" : false,
+  "title" : "End of the Line",
+  "name" : "EndLose2",
+  "description" : [ ],
+  "choices" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "gameOver", "false" ] ]
+}, {
   "root" : true,
   "title" : "Notice",
   "name" : "LastStorage",
   "description" : [ "The crew uses the last of their spare parts to repair the badly damaged storage. While at first storage space might sound like an inconsequential issue an a vehicle the size of the ROV, but the space required to house supplies for a crew the size of the Exomer crew quickly adds up. The ROV's specialized storage compartments allow the crew to store supplies well beyond the capabilities of an average storage container, but at the cost of specialized parts, that are very hard to come by on a planet supplied only by the occasional space wreck. Chances to find a wreck are slim and the chances to find these spare parts are even slimmer, but it may be wise to search for spare storage parts to avoid a supply catastrophe." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "Notice",
-  "name" : "NoEnergy",
-  "description" : [ "As the batteries reach 0% the internal displays flicker off, their electronic buzz fades away, and the ROV glides quietly to a rest." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ [ "ForceCamp" ] ],
-  "chances" : [ [ 100 ] ],
-  "resultingAction" : [ [ ] ]
-}, {
-  "root" : true,
-  "title" : "Notice",
-  "name" : "LastTrack",
-  "description" : [ "The crew used the last of their spare parts to fix the broken tracks. If the tracks break again, they will be unable to travel and will be forced to camp. It might be a good idea to search for spare track parts before that happens." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
@@ -91,18 +71,8 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "ForceCamp" ] ],
-  "chances" : [ [ 100 ] ],
+  "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ [ ] ]
-}, {
-  "root" : true,
-  "title" : "Notice",
-  "name" : "LastEnergy",
-  "description" : [ "Only 5% of the batteries power remains. When the energy reaches 0%, the ROV's subsystems will be shutdown and the crew may not have the resources to restart and recharge the batteries. If possible, it may be a good idea to charge the batteries now." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ ]
 }, {
   "root" : false,
   "title" : "Notice",
@@ -116,8 +86,28 @@
 }, {
   "root" : true,
   "title" : "Notice",
-  "name" : "LastPanel",
-  "description" : [ "The crew has used up all its spare solar panel parts, if something happens to their last solar panel they won't be able to charge the batteries anymore. It might be a good idea to search for more solar panel parts before it's too late." ],
+  "name" : "NoBattery",
+  "description" : [ "The batteries have broken and the ROV's control panel grows dark. The crew's last hope lies in the slim chance of finding spare batteries in a nearby wreckage. With limited ammo, they load their weapons and prepare for the journey." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ForceCamp" ] ],
+  "chances" : [ [ 100.0 ] ],
+  "resultingAction" : [ [ ] ]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "NoEnergy",
+  "description" : [ "As the batteries reach 0% the internal displays flicker off, their electronic buzz fades away, and the ROV glides quietly to a rest." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ForceCamp" ] ],
+  "chances" : [ [ 100.0 ] ],
+  "resultingAction" : [ [ ] ]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "LastTrack",
+  "description" : [ "The crew used the last of their spare parts to fix the broken tracks. If the tracks break again, they will be unable to travel and will be forced to camp. It might be a good idea to search for spare track parts before that happens." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
@@ -126,11 +116,22 @@
 }, {
   "root" : true,
   "title" : "Notice",
-  "name" : "NoBattery",
-  "description" : [ "The batteries have broken and the ROV's control panel grows dark. The crew's last hope lies in the slim chance of finding spare batteries in a nearby wreckage. With limited ammo, they load their weapons and prepare for the journey." ],
+  "name" : "LastEnergy",
+  "description" : [ "Only 5% of the batteries power remains. When the energy reaches 0%, the ROV's subsystems will be shutdown and the crew may not have the resources to restart and recharge the batteries. If possible, it may be a good idea to charge the batteries now." ],
   "choices" : [ ],
   "restrictions" : [ ],
-  "outcomes" : [ [ "ForceCamp" ] ],
-  "chances" : [ [ 100 ] ],
-  "resultingAction" : [ [ ] ]
-} ]
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "LastPanel",
+  "description" : [ "The crew has used up all its spare solar panel parts, if something happens to their last solar panel they won't be able to charge the batteries anymore. It might be a good idea to search for more solar panel parts before it's too late." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}
+]

@@ -439,7 +439,6 @@ class GameScreenGUI(val game : GameScreen) {
         groupTable.padRight(10f)
 
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-        val healthLabelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2Small", BitmapFont::class.java), Color.FOREST)
 
         val imageButtonStyle:ImageButton.ImageButtonStyle = ImageButton.ImageButtonStyle()
         imageButtonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("medkit"))
@@ -628,15 +627,19 @@ class GameScreenGUI(val game : GameScreen) {
      * Initially starts the event GUI
      */
     fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResults:Boolean = true){
-        //We do this to ensure that the currActiveEvent is not null. Sometimes when overlapping events happen
-        //the currActiveEvent can become null after being set.
-        GameEventManager.currActiveEvent = event
-
         //If the GUI is already active, lets add it to the queue instead of going further.
         if(gameEventGUIActive) {
             guiQueue.addLast(Triple(event, startPage, eraseResults))
             return
         }
+
+//        //Don't start any more events if game over.
+//        if(game.state == GameScreen.State.GAMEOVER)
+//            return
+
+        //We do this to ensure that the currActiveEvent is not null. Sometimes when overlapping events happen
+        //the currActiveEvent can become null after being set.
+        GameEventManager.currActiveEvent = event
 
         gameEventGUIActive = true
         if(eraseResults) Result.clearResultLists()
@@ -786,7 +789,7 @@ class GameScreenGUI(val game : GameScreen) {
                 //If we have another page, add a next page button.
                 if (toNext) {
                     if (event.choices!!.size == 1 && !hasAnotherPage)
-                        nextPageButton.label.setText(event.choices!![0])
+                        nextPageButton.label.setText(GH.replaceChoiceForEvent(event.choices!![0], event))
                     else
                         nextPageButton.style.up = drawable
 
@@ -797,7 +800,7 @@ class GameScreenGUI(val game : GameScreen) {
             }
 
             setNextPageButton()
-            EventInfo.eventInnerTable.add(nextPageButton).size(32f).padBottom(5f).bottom()
+            EventInfo.eventInnerTable.add(nextPageButton).size(40f).padBottom(5f).bottom()
 
             //Kinda complicated listener for the next page button.
             nextPageButton.addListener(object : ChangeListener() {
@@ -814,7 +817,7 @@ class GameScreenGUI(val game : GameScreen) {
                         if (event.choices!!.size > 1) {
                             showEventPage(event, pageNumber + 1)
 
-                            //If we only have one choice, trigger the event GUI again.
+                        //If we only have one choice, trigger the event GUI again.
                         } else {
                             GH.executeEventActions(event)   //TODO Watch this. Might fire twice if I'm wrong.
                             handleEvent(GH.getEventFromChoice(event, ""))
@@ -984,7 +987,7 @@ class GameScreenGUI(val game : GameScreen) {
         if(guiQueue.size != 0) {
             val last = guiQueue.removeLast()
             triggerEventGUI(last.first, last.second, last.third)
-        }else
+        }else if(tradeWindowTable.parent == null)
             game.resumeGame()
     }
 
@@ -1380,6 +1383,7 @@ class GameScreenGUI(val game : GameScreen) {
      */
     fun closeTradeWindow() {
         tradeWindowTable.remove()
+        game.resumeGame()
         //TODO For now took out resumeGame()
     }
 

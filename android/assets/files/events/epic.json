@@ -1,13 +1,613 @@
 [ {
   "root" : false,
-  "title" : "Power Problem",
-  "name" : "PowerManualChoose",
-  "description" : [ "" ],
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveActiveHurt",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, slaps the crew aside like a bunch of toys.", "As crewmembers try and regain their footing and unleash another volley, the bear-ogre slams one crewmember after another into the walls of the cave.", "Severely injured and unable to overcome the power of the mighty beast, the crew makes a disorganized retreat. Weaving through the trees, the crew quickly loses the lumbering beast. Regrouping at the ROV, they climb inside and drive off." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "scheduleEvent", "Power", "0", "0", "epic", "2" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addRndAmt", "25", "50", "edibles", "true" ], [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCaveHurt",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, slaps the crew aside like a bunch of toys.", "As crewmembers try and regain their footing and unleash another volley, the bear-ogre slams one crewmember after another into the walls of the cave.", "Severely injured and unable to overcome the power of the mighty beast, the crew makes a disorganized retreat. Weaving through the trees, the crew quickly loses the lumbering beast. Regrouping at the ROV, they climb inside and drive off." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingFight",
+  "description" : [ "As the crew delves deeper into the woods, they stumble upon the opening to small cave. Freshly slain animals lay scattered about its entrance. As the crew approaches the cave’s entrance, humongous bear-like ogre creature charges from the woods behind them. ", "It carries a large splintered tree trunk on one if its massive paw hands, and as the crew begins to fire on the creature, it swipes the tree trunk across the crew. The blow sends crewmembers flying in all directions. The scattered crewmembers shakily roll to their feet and begin to run as the bear-ogre gives chase.", "The crew runs, weaving in and out between the trees, all the way back to the ROV. They dive in and tear off just as the enormous creature burst out from the trees." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveEmptyFight",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, slaps the crew aside like a bunch of toys.", "As crewmembers try and regain their footing and unleash another volley, the bear-ogre slams one crewmember after another into the walls of the cave.", "Severely injured and unable to overcome the power of the mighty beast, the crew makes a disorganized retreat. Weaving through the trees, the crew quickly loses the lumbering beast. Regrouping at the ROV, they climb inside and drive off." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addHealth", "evt", "50", "100", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveActiveEdibles2",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, swipes its tree trunk sized arms into the group.", "The group scatters, dodging one swing after another, while unleashing a steady stream of fire at the creature’s massive body. This dance goes on for several minutes until finally, unable to keep up with the agile crew members, the beast falls.", "Exhausted but uninjured, the crew begins the lengthy process of butchering the large beast. The huge body provides the crew with ample food. They combine the meat with the meat and berries they already collected and return, packs laden with food, back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addRndAmt", "25", "50", "edibles", "true" ], [ "addRndAmt", "50", "100", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothing",
+  "description" : [ "The crew exits the ROV and enters the woods on foot. They search around for any signs of the creature, but find nothing out of the ordinary." ],
+  "choices" : [ "Keep Going?", "Turn Back?" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntNothingCave", "BearfootHuntNothingCave2", "BearfootHuntNothingFight" ], [ "BearfootHuntNothingLeave" ] ],
+  "chances" : [ [ 33.34, 33.4, 33.4 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveActiveEdibles",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As the crew turns to leave, (Name1) lets out a loud sneeze and scares everyone. Everyone laughs and heads back to the ROV with the scraps of meat and berries tucked safely away." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addRndAmt", "25", "50", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCave",
+  "description" : [ "The crew exits the ROV and enters the woods on foot. They search around for any signs of the creature, but instead find a patch of ripe berries. They stop and collect the berries, possibly like many of the creatures prey in the past did." ],
+  "choices" : [ "Keep Going?", "Turn Back?" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntCaveEmpty", "BearfootHuntCaveActive", "BearfootHuntCaveInjury" ], [ "BearfootHuntCaveLeave" ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCave2Leave",
+  "description" : [ "After collecting all the meat scraps they can, the crew decides they have enough food and they return to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingLeave",
+  "description" : [ "Having second thoughts, the group decides to head back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCave2Edibles2",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, swipes its tree trunk sized arms into the group.", "The group scatters, dodging one swing after another, while unleashing a steady stream of fire at the creature’s massive body. This dance goes on for several minutes until finally, unable to keep up with the agile crew members, the beast falls.", "Exhausted but uninjured, the crew begins the lengthy process of butchering the large beast. The huge body provides the crew with ample food. They combine the meat with what they already collected and return, packs laden with meat, back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles", "true" ], [ "addRndAmt", "50", "100", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveInjury",
+  "description" : [ "As the crew delves deeper into the woods, they stumble upon the opening to small cave. Freshly slain animals lay scattered about its entrance. As the crew approaches the cave’s entrance, humongous bear-like ogre creature charges from the woods behind them. ", "It carries a large splintered tree trunk on one if its massive paw hands, and as the crew begins to fire on the creature, it swipes the tree trunk across the crew. The blow sends crewmembers flying in all directions. The scattered crewmembers shakily roll to their feet and begin to run as the bear-ogre gives chase.", "The crew runs, weaving in and out between the trees, all the way back to the ROV. They dive in and tear off just as the enormous creature burst out from the trees." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCave2Hurt",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, slaps the crew aside like a bunch of toys.", "As crewmembers try and regain their footing and unleash another volley, the bear-ogre slams one crewmember after another into the walls of the cave.", "Severely injured and unable to overcome the power of the mighty beast, the crew makes a disorganized retreat. Weaving through the trees, the crew quickly loses the lumbering beast. Regrouping at the ROV, they climb inside and drive off." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles", "true" ], [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCave2Edibles",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As the crew turns to leave, (Name1) lets out a loud sneeze and scares everyone. Everyone laughs and heads back to the ROV with the scraps of meat safely packed away." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCave",
+  "description" : [ "As the crew delves deeper into the woods, they stumble upon the opening to small cave. The trees and shrubs around opening are undisturbed and the cave show no obvious signs of habitation." ],
+  "choices" : [ "Enter the cave?", "Turn Back?" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntNothingCaveNothing", "BearfootHuntNothingCaveEdibles", "BearfootHuntNothingCaveHurt" ], [ "BearfootHuntNothingCaveLeave" ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCaveEdibles",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, swipes its tree trunk sized arms into the group.", "The group scatters, dodging one swing after another, while unleashing a steady stream of fire at the creature’s massive body. This dance goes on for several minutes until finally, unable to keep up with the agile crew members, the beast falls.", "Exhausted but uninjured, the crew begins the lengthy process of butchering the large beast. The huge body provides the crew with ample food. They pack their bags and return to the ROV, pleased with the day’s events." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCave2",
+  "description" : [ "As the crew delves deeper into the woods, they stumble upon the opening to small cave. Freshly slain animals lay scattered about its entrance. Keeping a watchful eye out for any signs of trouble, the crew collects any scraps of good meat they can." ],
+  "choices" : [ "Enter the cave?", "Turn Back?" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntNothingCave2Edibles", "BearfootHuntNothingCave2Edibles2", "BearfootHuntNothingCave2Hurt" ], [ "BearfootHuntNothingCave2Leave" ] ],
+  "chances" : [ [ 33.34, 33.4, 33.4 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveActiveLeave",
+  "description" : [ "Content with their handful of berries and bags of meat, the crew decides to turn back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addRndAmt", "25", "50", "edibles", "true" ] ]
+}, {
+  "root" : true,
+  "title" : "Bearfoot",
+  "name" : "Bearfoot",
+  "description" : [ "While traveling, the crew comes across a wooden post sign with a crudely drawn picture depicting a large, bipedal bear-creature eating a group of fleeing natives. The group assumes it must serve as a warning to the local native inhabitants of the forest. Always looking for an opportunity to gain some food, the crew discuss the possibility of hunt such a creature." ],
+  "choices" : [ "Hunt", "Don't Hunt" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntNothing", "BearfootHuntCave", "BearfootHuntFight" ], [ "BearfootLeave" ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveLeave",
+  "description" : [ "Having second thoughts, group decides to keep their berries and head home." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveEmptyEdibles",
+  "description" : [ "They enter the cave cautiously. With guns drawn, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. Assuming whatever lived inside the cave have long since moved out, the crew heads back to the ROV with nothing more than a meager amount of berries." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveEmptyLeave",
+  "description" : [ "The group decides they’ll just keep their berries and head home." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveActive",
+  "description" : [ "As the crew delves deeper into the woods, they stumble upon the opening to small cave. Freshly slain animals lay scattered about its entrance. Keeping a watchful eye out for any signs of trouble, the crew collects any scraps of good meat they can." ],
+  "choices" : [ "Enter the Cave?", "Turn Back?" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntCaveActiveEdibles", "BearfootHuntCaveActiveEdibles2", "BearfootHuntCaveActiveHurt" ], [ "BearfootHuntCaveActiveLeave" ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCaveLeave",
+  "description" : [ "The crew decides they have done enough exploring for one day and they head back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootLeave",
+  "description" : [ "After discussing their options the group decides against hunting such a potentially dangerous beast." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntNothingCaveNothing",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. Assuming whatever lived inside the cave have long since moved out, the crew heads back to the ROV empty handed." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveEmpty",
+  "description" : [ "As the crew delves deeper into the woods, they stumble upon the opening to small cave. The trees and shrubs around opening are undisturbed and the cave show no obvious signs of habitation." ],
+  "choices" : [ "Enter the cave?", "Turn Back?" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "BearfootHuntCaveEmptyEdibles", "BearfootHuntCaveEmptyEdibles2", "BearfootHuntCaveEmptyFight" ], [ "BearfootHuntCaveEmptyLeave" ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntFight",
+  "description" : [ "The crew exits the ROV and enters the woods on foot. They search around for any signs of the creature, but instead find a patch of ripe berries. They stop to collect the berries, and as they do, a huge shadow falls over them.", "They turn to see an enormous bear-like ogre towering over them. It lets out an earthshaking roar and the group takes off running.  The group scatters in all directions as the huge creature stomps after them. They sprint, falling over rocks and being whipped by branches, all the way back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Bearfoot",
+  "name" : "BearfootHuntCaveEmptyEdibles2",
+  "description" : [ "They enter the cave cautiously. With guns draw, they probe around the inside the cave. The shallow cave is strewn with bones of various size. The crew thoroughly searching every nook and cranny, but find nothing. As they turn to leave, a huge shadow falls over the mouth of the cave.", "An earthshaking roar echoes through the cave and the enormous body of a bear-like ogre creature stands up. The trapped crew opens fire as the bear-ogre charges in. The bear-ogre, unfazed by the gunfire, swipes its tree trunk sized arms into the group.", "The group scatters, dodging one swing after another, while unleashing a steady stream of fire at the creature’s massive body. This dance goes on for several minutes until finally, unable to keep up with the agile crew members, the beast falls.", "Exhausted but uninjured, the crew begins the lengthy process of butchering the large beast. The huge body provides the crew with ample food. They pack their bags and return to the ROV, pleased with the day’s events." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addRndAmt", "50", "100", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFindMaybeMany",
+  "description" : [ "Eventually the steep rock walls widen into an open pool. Water bubbles up from somewhere deep beneath the surface. Surrounding the mouth of the stream are large chunks of crystal, exposed over many years of the waters steady flow. The crew extracts the crystal and head back to the ROV, loot in hand." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "50", "100", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollowMoreNothing",
+  "description" : [ "Eventually the steep rock walls widen into an open pool. Water bubbles up from somewhere deep beneath the surface. Large rocks are scattered around the mouth of the spring, worn bare from years of flowing water. Unfortunately none of them contain any crystals. Disappointed, the crew returns to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollowFind",
+  "description" : [ "As they follow the river further upstream the shallow banks gradually turn to steep rock walls. Surprisingly, chucks of crystals are embedded rock along the river’s banks. " ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFollowFindSome", "StreamFollowFindMany" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFindMaybe",
+  "description" : [ "As they follow the river further upstream the shallow banks gradually turn to steep rock walls. Finding no additional crystals, the crew continues onwards." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFindMaybeSome", "StreamFindMaybeMany" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFindMaybeSome",
+  "description" : [ "Eventually the steep rock walls widen into an open pool. Water bubbles up from somewhere deep beneath the surface. Large rocks are scattered around the mouth of the spring, worn bare from years of flowing water. Unfortunately none of them contain any crystals. Disappointed, the crew returns to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollowFindMany",
+  "description" : [ "After dislodging the embedded chunks, the crew continues further upstream until they arrive at the mouth of the spring. Water bubbles up from somewhere deep beneath the surface. Large rocks are scattered around the mouth of the spring, worn bare from years of flowing water. Large chunks of crystals protrude from between the rocks and after a few minutes of work, the crew extracts them. Bags heavy with crystals, the crew heads back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "ammo" ], [ "addRndAmt", "50", "100", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollow",
+  "description" : [ "They follow the river, checking through the gravely rocks that make up the riverbed, but don’t find any crystals." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFollowMore", "StreamFollowFind" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollowMoreFind",
+  "description" : [ "Eventually the steep rock walls widen into an open pool. Water bubbles up from somewhere deep beneath the surface. Unexpectedly large chunks of crystal surround the mouth of the spring, exposed over many years of the waters steady flow. The crew knock the crystals loose and head back to the ROV, loot in hand." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFindMoreSome",
+  "description" : [ "Eventually the steep rock walls widen into an open pool. Water bubbles up from somewhere deep beneath the surface. Large rocks are scattered around the mouth of the spring, worn bare from years of flowing water. Amazingly, none of them contain any crystals. The crew return the ROV, disappointed, but not empty handed." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "25", "50", "ammo" ] ]
+}, {
+  "root" : true,
+  "title" : "Carving Stream",
+  "name" : "Stream",
+  "description" : [ "While the crew is traveling, they spot a shallow stream carving a path through a rocky mountain pass and decide to follow it upstream in hopes of finding crystals. The crew makes their way down to the stream and begins following its winding path." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFollow", "StreamFind" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFindMore",
+  "description" : [ "As they follow the river further upstream the shallow banks gradually turn to steep rock walls. The crew finds even more crystals embedded in the rock along the river’s banks. They break them free and continue onwards, hoping to find the source of the crystals." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFindMoreSome", "StreamFindMoreMany" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollowFindSome",
+  "description" : [ "After dislodging the embedded chunks, the crew continues further upstream until they arrive at the mouth of the spring. Years of flowing water have worn the rocks around the spring smooth. Unfortunately the crew doesn’t find anymore crystals amongst the smooth rocks, so they head back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFollowMore",
+  "description" : [ "The crew follow the river further upstream. The walls begin to turn from shallow banks to steep rock walls, but there’s still no crystal to be found." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFollowMoreNothing", "StreamFollowMoreFind" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFind",
+  "description" : [ "It doesn’t take long for them to notice a few stray crystals amongst the gravely rock that makes up the riverbed. They scoop them up as they find them and hope they’re a sign of more to come." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "StreamFindMaybe", "StreamFindMore" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Carving Stream",
+  "name" : "StreamFindMoreMany",
+  "description" : [ "Eventually the steep rock walls widen into an open pool. Water bubbles up from somewhere deep beneath the surface. Large rocks are scattered around the mouth of the spring, worn bare from years of flowing water. Large chunks of crystals protrude from between the rocks and after a few minutes of work, the crew extracts them. Bags heavy with crystals, the crew heads back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "25", "50", "ammo" ], [ "addRndAmt", "50", "100", "ammo" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFindNothing",
+  "description" : [ "As they head deeper into the woods the parts stop, but the occasional broken tree remains." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathFindNothingOkay", "PathFindNothingGood" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothing",
+  "description" : [ "After traveling for a few minutes they still haven’t found anything and the path becomes harder to follow." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathNothing2", "PathNothingFind" ] ],
+  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFindMoreOkay",
+  "description" : [ "The crew spends many hours searching the woods for any sign of a crash, but are unable to uncover the main wreck or any indication of an impact crater. Perplexed and disappointed the crew heads back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ], [ "addRndAmt", "25", "50", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothing2Parts",
+  "description" : [ "Suddenly the trees give way to a large clearing and, much to the crew’s surprise, the burnt shell of a Ya492 light frigate: a small, lightly armored, combat vessel often used for hit and runs by pirates due to its light weight and mobility.", "Atmospheric entry, the crash, and overall decay made the small vessel almost unrecognizable. While it’s unclear how or why the crash is here, the overgrowth and weathering would indicate it has been sitting for many years.", "The crew cuts through the vines and overgrowth and begins the extensive procedure of extracting any valuables from the wreckage. Much of the ship is unrecoverable ruins, but nevertheless the crew manages to extract a fine mound of pieces and parts." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothing2Nothing",
+  "description" : [ "Eventually they stumble upon a large crater, but there’s nothing inside it. Whatever was inside was either totally incinerated as it landed or the natives already pick the area clean a long time ago." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFindNothingOkay",
+  "description" : [ "Eventually they stumble upon a large crater, but there’s nothing inside it. Whatever was inside was either totally incinerated as it landed or the natives already pick the area clean a long time ago. The disappointed crew heads back to the ROV with only a few scrap parts, not the treasure trove they expected." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
+}, {
+  "root" : true,
+  "title" : "Faintest of Paths",
+  "name" : "Path",
+  "description" : [ "As the crew is stopped from a quick rest-stop they see a faint path of broken trees, so overgrown it’s hard to make out. Expecting to find some parts, they decide to follow it and see where it leads." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathNothing", "PathFind" ] ],
+  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothingFindGood",
+  "description" : [ "Suddenly the trees give way to a large clearing and, much to the crew’s surprise, the burnt shell of a Ya492 light frigate: a small, lightly armored, combat vessel often used for hit and runs by pirates due to its light weight and mobility.", "Atmospheric entry, the crash, and overall decay made the small vessel almost unrecognizable. While it’s unclear how or why the crash is here, the overgrowth and weathering would indicate it has been sitting for many years.", "The crew cuts through the vines and overgrowth and begins the extensive procedure of extracting any valuables from the wreckage. Much of the ship is unrecoverable ruins, but nevertheless the crew manages to extract a fine mound of pieces and parts." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "parts" ], [ "addRndAmt", "50", "100", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFindMore",
+  "description" : [ "As the crew head deeper into the woods they start to see more broken trees and begin to find larger chunks of metal debris. Feeling they are close to the source, they collect what they can and press on." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathFindMoreOkay", "PathFindMoreGood" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFindMoreGood",
+  "description" : [ "Suddenly the trees give way to a large clearing and, much to the crew’s surprise, the burnt shell of a Ya492 light frigate: a small, lightly armored, combat vessel often used for hit and runs by pirates due to its light weight and mobility.", "Atmospheric entry, the crash, and overall decay made the small vessel almost unrecognizable. While it’s unclear how or why the crash is here, the overgrowth and weathering would indicate it has been sitting for many years.", "The crew cuts through the vines and overgrowth and begins the extensive procedure of extracting any valuables from the wreckage. Much of the ship is unrecoverable ruins, but nevertheless the crew manages to extract a fine mound of pieces and parts." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ], [ "addRndAmt", "25", "50", "parts" ], [ "addRndAmt", "50", "100", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothingFind",
+  "description" : [ "As the crew heads deeper into the woods they start to see more broken trees and begin to find large chunks of metal debris. Feeling they are close to the source, they collect what they can and press on." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathNothingFindOkay", "PathNothingFindGood" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothingFindOkay",
+  "description" : [ "The crew spends many hours searching the woods for any sign of a crash, but are unable to uncover the main wreck or any indication of an impact crater. Perplexed and disappointed the crew heads back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathNothing2",
+  "description" : [ "As they head deeper into the woods they spot more broken trees, but they still haven’t found any parts or wreckage." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathNothing2Nothing", "PathNothing2Parts" ] ],
+  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFindNothingGood",
+  "description" : [ "Suddenly the trees give way to a large clearing and, much to the crew’s surprise, the burnt shell of a Ya492 light frigate: a small, lightly armored, combat vessel often used for hit and runs by pirates due to its light weight and mobility.", "Atmospheric entry, the crash, and overall decay made the small vessel almost unrecognizable. While it’s unclear how or why the crash is here, the overgrowth and weathering would indicate it has been sitting for many years.", "The crew cuts through the vines and overgrowth and begins the extensive procedure of extracting any valuables from the wreckage. Much of the ship is unrecoverable ruins, but nevertheless the crew manages to extract a fine mound of pieces and parts." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ], [ "addRndAmt", "50", "100", "parts" ] ]
+}, {
+  "root" : false,
+  "title" : "Faintest of Paths",
+  "name" : "PathFind",
+  "description" : [ "After traveling for a few minutes the crew starts to come across a few small pieces of metal scrap, confirming what they suspected." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "PathFindNothing", "PathFindMore" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Problem",
+  "name" : "PowerAutoHurt",
+  "description" : [ "(He1) tries to run an auto fix from inside the ROV, but the batteries' temperature continues to rise. In a last ditch effort, (Name1) grabs (his1) tools and runs outside. (He1) fights against the scalding temperatures, trying to fix the batteries manually before it's too late. The sirens finally fade as the temperatures drop. (Name1) collapses to the ground, burned and exhausted." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50" ] ]
+}, {
+  "root" : true,
+  "title" : "Power Problem",
+  "name" : "Power",
+  "description" : [ "The ROV lumbers lazily along when suddenly, the crew is startled by a loud warning coming from the ROV subsystem control panel. (Name1) Rushes over to the screen to discover the batteries are dangerously hot and on the brink of catastrophic failure. ", "(Name1) knows (he1) must act fast to have any hope of saving the batteries. With the batteries temperature skyrocketing, working on the batteries is extremely dangerous, maybe even fatal. (Name1) has two options: (he1) can attempt to fix the problem manually from outside, which is likely to fix the problem, but is also dangerous or (he1) can run an auto fix from the console inside the ROV, which is safer, but less likely to fix the problem." ],
+  "choices" : [ "Manual Fix", "Auto Fix" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "PowerManualNothing", "PowerManualHurt", "PowerManualLoseEnergy" ], [ "PowerAutoNothing", "PowerAutoHurt", "PowerAutoLosePower" ] ],
+  "chances" : [ [ 35.0, 35.0, 30.0 ], [ 35.0, 30.0, 35.0 ] ],
+  "resultingAction" : [ ]
 }, {
   "root" : false,
   "title" : "Power Problem",
@@ -31,36 +631,6 @@
 }, {
   "root" : false,
   "title" : "Power Problem",
-  "name" : "PowerAutoNothing",
-  "description" : [ "(He1) tries to run an auto fix from inside the ROV and as the batteries reach critical mass, the auto fix completes. Miraculously, the sirens fade and the temperature drops. Somehow the auto fix worked." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Power Problem",
-  "name" : "PowerAutoHurt",
-  "description" : [ "(He1) tries to run an auto fix from inside the ROV, but the batteries' temperature continues to rise. In a last ditch effort, (Name1) grabs (his1) tools and runs outside. (He1) fights against the scalding temperatures, trying to fix the batteries manually before it's too late. The sirens finally fade as the temperatures drop. (Name1) collapses to the ground, burned and exhausted." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50" ] ]
-}, {
-  "root" : false,
-  "title" : "Power Problem",
-  "name" : "PowerAutoChoose",
-  "description" : [ "" ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "scheduleEvent", "Power", "0", "0", "", "2" ] ]
-}, {
-  "root" : false,
-  "title" : "Power Problem",
   "name" : "PowerAutoLosePower",
   "description" : [ "(He1) tries to run an auto fix from inside the ROV, but the batteries' temperature continues to rise." ],
   "choices" : [ "Choose Again" ],
@@ -79,25 +649,245 @@
   "chances" : [ ],
   "resultingAction" : [ ]
 }, {
-  "root" : true,
-  "title" : "Power Problem",
-  "name" : "Power",
-  "description" : [ "The ROV lumbers lazily along when suddenly, the crew is startled by a loud warning coming from the ROV subsystem control panel. (Name1) Rushes over to the screen to discover the batteries are dangerously hot and on the brink of catastrophic failure. ", "(Name1) knows (he1) must act fast to have any hope of saving the batteries. With the batteries temperature skyrocketing, working on the batteries is extremely dangerous, maybe even fatal. (Name1) has two options: (he1) can attempt to fix the problem manually from outside, which is likely to fix the problem, but is also dangerous or (he1) can run an auto fix from the console inside the ROV, which is safer, but less likely to fix the problem." ],
-  "choices" : [ "Manual Fix", "Auto Fix" ],
-  "restrictions" : [ "", "" ],
-  "outcomes" : [ [ "PowerManualNothing", "PowerManualHurt", "PowerManualLoseEnergy" ], [ "PowerAutoNothing", "PowerAutoHurt", "PowerAutoLosePower" ] ],
-  "chances" : [ [ 35.0, 35.0, 30.0 ], [ 35.0, 30.0, 35.0 ] ],
-  "resultingAction" : [ ]
-}, {
   "root" : false,
-  "title" : "The Runaway",
-  "name" : "RunawayDoNothingMinorHurt",
-  "description" : [ "One of the large natives dismounts from this wolf-beast and reaches under the ROV. He grabs the tiny native by her ankles and drags her out from underneath it. She kicks and scratches, trying to free herself from his grasp as he unsheathes a long blade that hangs from his belt. He swings back the long blade, but as he brings it down a shot rings out. He turns to (Name1) as (his1) sidearm fire three more shots into the big native's chest. The native's wolf-beast lets out a howl and charges into the crew.", "All hell breaks loose as the remaining native fires a volley of arrows into the crew and they fire back. Bullets fly in all directions as the rampaging wolf-beast barrels through the crew, snapping its massive jaws at anything and everything.", "The skirmish last only a few minutes in total and as the dust settles the crew assess battlefield. Near the front of the ROV, one native lies dead atop the squirming smaller native. His beast mount lying a few feet away, surrounded by the battered crew. A few yards from the crew rests the second native and his mount, both riddled with bullet holes.", "The smaller native, still squirming beneath the dead native's large body, fearfully glances around at the crew. (Name1) rolls the large native's body off her, and she scrambles to her feet. She hurriedly runs to the bodies of the dead natives and begins rifling through their belongings, all the while keeping her eyes glued to the motionless crew.", "After grabbing a few things she stops. Timidly approaching the crew, she reaches out and lightly touches (Name1)'s hand. Then she turns to the woods and runs off, quickly vanishing into its tangled branches." ],
+  "title" : "Power Problem",
+  "name" : "PowerManualChoose",
+  "description" : [ "" ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "reward", "medium" ], [ "reward", "low" ], [ "reward", "low" ] ]
+  "resultingAction" : [ [ "scheduleEvent", "Power", "0", "0", "epic", "2" ] ]
+}, {
+  "root" : false,
+  "title" : "Power Problem",
+  "name" : "PowerAutoNothing",
+  "description" : [ "(He1) tries to run an auto fix from inside the ROV and as the batteries reach critical mass, the auto fix completes. Miraculously, the sirens fade and the temperature drops. Somehow the auto fix worked." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Power Problem",
+  "name" : "PowerAutoChoose",
+  "description" : [ "" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "scheduleEvent", "Power", "0", "0", "", "2" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess3",
+  "description" : [ "They work on the batteries for a few minutes, reconfiguring, rewiring, and rearranging, until at last, they’re satisfied. (Name1) runs some quick test from inside the ROV, and it shows a substantial improvement to the energy output. Hoping to increase their power production even further, the crew turns their attention to the solar panels." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkSuccess3Okay", "ReworkSuccess3Good" ] ],
+  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess2",
+  "description" : [ "They work on the batteries for a few minutes, reconfiguring, rewiring, and rearranging, until at last, they’re satisfied. (Name1) runs some quick test from inside the ROV, but it shows no energy has been gained. Disheartened, the crew turns to the solar panels as another means to provide the much needed energy boost." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkSuccess2Okay", "ReworkSuccess2Good" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "System Rework",
+  "name" : "Rework",
+  "description" : [ "The crew decides to rework energy generating subsystems in an attempt to generate some additional power." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkFail", "ReworkSuccess" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail3Good",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results still show a sizable growth to power output from the batteries in addition to a considerable increase from the solar panels!" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "energy" ], [ "addRndAmt", "50", "100", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess3Okay",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results still show a significant increase to power output from the batteries, but unfortunately, no additional increase from the solar panels." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "25", "50", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess2Good",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results show a considerable increase to power output from the solar panels!" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "50", "100", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail3",
+  "description" : [ "They work on the batteries for a few minutes, reconfiguring, rewiring, and rearranging, until at last, they’re satisfied. (Name1) runs some quick test from inside the ROV, and it shows a substantial improvement to the energy output. Hoping to increase their power production even further, the crew turns their attention to the solar panels." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkFail3Okay", "ReworkFail3Good" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail2",
+  "description" : [ "They work on the batteries for a few minutes, reconfiguring, rewiring, and rearranging, until at last, they’re satisfied. (Name1) runs some quick test from inside the ROV, but it shows no energy has been gained. Disheartened, the crew turns to the solar panels as another means to provide the much needed energy boost." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkFail2Nothing", "ReworkFail2Good" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail",
+  "description" : [ "They begin by working on the subsystem’s display console inside the ROV. They try switching several setting and redefining different parameters, but it doesn’t result in any energy gain, so the crew heads outside to work on the batteries." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkFail2", "ReworkFail3" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess",
+  "description" : [ "They begin by working on the subsystem’s display console inside the ROV. They try switching several setting and redefining different parameters. After running a few test, screens show a slight power increase. The crew heads outside to work on the batteries, hoping to boost the power output even further." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ReworkSuccess2", "ReworkSuccess3" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail2Good",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results show a considerable increase to power output from the solar panels!" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail2Nothing",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results still show no change to the energy output." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess3Good",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results still show a sizable growth to power output from the batteries in addition to a considerable increase from the solar panels!" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "25", "50", "energy" ], [ "addRndAmt", "50", "100", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkSuccess2Okay",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results show no additional change to the energy output." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "System Rework",
+  "name" : "ReworkFail3Okay",
+  "description" : [ "They modify the solar panels, adjust their gradient, and change their wiring around. Once their contented with their work, they head inside the ROV and run some test. After a few minutes of processing, test results still show a significant increase to power output from the batteries, but no additional increase from the solar panels." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "energy" ] ]
+}, {
+  "root" : false,
+  "title" : "The Gift",
+  "name" : "GiftOpenKeep",
+  "description" : [ "The group decides (Name2) is right, they shouldn't waste their time searching treasure. They pack the map back into its box and store it away for later." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "25", "50", "wealth" ] ]
+}, {
+  "root" : true,
+  "title" : "The Gift",
+  "name" : "Gift",
+  "description" : [ "While the crew is stopped for a quick stretch break, (Name1) decides to have a quick snack. After rustling through the food storage, (he1) picks out a nice ripe piece of fruit and finds a comfy log to sit on while (he1) eats. As (he1) finishes (his1) fruit (he1) turns to toss the pit into the woods and finds (him1)self face to face with a tiny impish creature holding a small wooden box. As he grabs for his pistol, the creature quickly places the box down and scampers off. ", "Perplexed, (Name1) picks up the box and examines it. The ornate wooden box is inscribed with simplistic pictures depicting tribal life. The lid of the box is held in place by a twine-like string. (Name1) brings the box back to the crew to discuss what to do with it." ],
+  "choices" : [ "Open the Box", "Don't Open the Box" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "GiftOpen" ], [ "GiftDont" ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "The Gift",
+  "name" : "GiftDont",
+  "description" : [ "Unsure of what lies inside, the crew is apprehensive to open the small box. They decide to keep the box to use for trade. Surely some other natives will be interested in it." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "The Gift",
+  "name" : "GiftOpenFollowHurt",
+  "description" : [ "The group spends the next few hours traveling from landmark to landmark, until at last they arrive at the location marked by the unrecognizable shape. Next to the large unrecognizable symbol on the map is smaller one, shaped like a fat lightning bolt.", "The group searches around for something that matches the description, but all they see are rocks and trees. The disheartened group turns to leave, frustrated over wasted time, when they spot a large crack in a nearby rock face. The crack is deep and narrow, widening at the base just enough for someone to squeeze in.", "(Name1) disappears into the rock crevasse, reappearing a moment later holding a large empty sack. Disappointed by this discovery, the group turns to leave, and finds themselves surrounded by a group of tree-like natives. Caught out in the open, the crew is unable to escape the first volley of arrows. The injured crew runs for the trees, as more arrows rain down around them. They zigzag through the trees until they come to a banks of a deep river. Unable to turn back, the crew jumps into the icy water below.", "Sometime later, they wash ashore downstream, injured, tired, and cold. Using their now waterlogged bark map, they backtrack their way back to the ROV and collapse inside." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "The Gift",
+  "name" : "GiftOpenFollowGood",
+  "description" : [ "The group spends the next few hours traveling from landmark to landmark, until at last they arrive at the location marked by the unrecognizable shape. Next to the large unrecognizable symbol on the map is smaller one, shaped like a fat lightning bolt.", "The group searches around for something that matches the description, but all they see are rocks and trees. The disheartened group turns to leave, frustrated over wasted time, when they spot a large crack in a nearby rock face. The crack is deep and narrow, widening at the base just enough for someone to squeeze in.", "(Name1) slides into the rock crevasse and disappears inside. (He1) reappears a moment later holding a large sack. Inside the sack is: a small amount of food, some simple tools, a few miscellaneous doodads, and a pair of fine fur clothes. Pleased with their discovery, (Name1) repacks the back, throws it over (his1) shoulder, and the crew begins the long journey back to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addRndAmt", "50", "100", "wealth" ] ]
+}, {
+  "root" : false,
+  "title" : "The Gift",
+  "name" : "GiftOpen",
+  "description" : [ "The group decides to open the box. They carefully unravel the string latch and cautiously open the lid. Inside is a small rolled up piece of thin bark. (Name1) unrolls the bark paper and discovers a crude map has been drawn on the inside. The crew recognizes some of the more obvious land marks, such as a large arch shaped rock and the small weaving river nearby. A small path is outlined on the map that ends with an unrecognizable shape, marking something of importance. (Name1) suggests following the map to see where it leads, but (Name2) proposes the group keep the map to trade to the natives for something more practical." ],
+  "choices" : [ "Follow the map", "Keep the Map for Trade" ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "GiftOpenFollow" ], [ "GiftOpenKeep" ] ],
+  "chances" : [ [ 100.0 ], [ 100.0, 0.0 ] ],
+  "resultingAction" : [ ]
 }, {
   "root" : false,
   "title" : "The Runaway",
@@ -108,6 +898,66 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "scheduleEvent", "RidersReturn", "84", "252" ] ]
+}, {
+  "root" : false,
+  "title" : "The Runaway",
+  "name" : "RunawayDoNothing",
+  "description" : [ "The crew, armed only with their sidearms, tensely watch the circling natives. " ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "RunawayDoNothingWanderer", "RunawayDoNothingMinorHurt", "RunawayDoNothingMajorHurt" ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "The Runaway",
+  "name" : "RunawayRevealInjured",
+  "description" : [ "At first she struggles, but quickly stops, seemingly resigned to the fact that she can't overpower her captors. She stares hatefully into the eyes of the crew and shouts unintelligible words at them.", "As the muscular native begins to tie a rope around the hands of the thin native, she lashes out. Grabbing the natives exposed sword, she stabs (Name1) in the side and pounces on (Name2), clawing (him2) to the ground. As she turns to the rest of the crew, the second big native fires an arrow and strikes her down.", "As the crew rushes to their wounded comrades, the big native collects the body of the, now dead, native and toss it on the back of his great beast. The second big native grunts and tosses a large sack on the ground in front of the crew. The pair turn on their mounts, let out a grunt, and ride off.", "Once the riders are out of sight and the crew's injured are tended to, they untie the bag's thick leather straps and open it up to reveal an assortment of different meats and berries!" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addAilment", "evt", "injury", "regular" ], [ "addHealth", "evt2", "-25", "-50" ], [ "addRndAmt", "50", "100", "edibles", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "The Runaway",
+  "name" : "RunawayDoNothingMinorHurt",
+  "description" : [ "One of the large natives dismounts from this wolf-beast and reaches under the ROV. He grabs the tiny native by her ankles and drags her out from underneath it. She kicks and scratches, trying to free herself from his grasp as he unsheathes a long blade that hangs from his belt. He swings back the long blade, but as he brings it down a shot rings out. He turns to (Name1) as (his1) sidearm fire three more shots into the big native's chest. The native's wolf-beast lets out a howl and charges into the crew.", "All hell breaks loose as the remaining native fires a volley of arrows into the crew and they fire back. Bullets fly in all directions as the rampaging wolf-beast barrels through the crew, snapping its massive jaws at anything and everything.", "The skirmish last only a few minutes in total and as the dust settles the crew assess battlefield. Near the front of the ROV, one native lies dead atop the squirming smaller native. His beast mount lying a few feet away, surrounded by the battered crew. A few yards from the crew rests the second native and his mount, both riddled with bullet holes.", "The smaller native, still squirming beneath the dead native's large body, fearfully glances around at the crew. (Name1) rolls the large native's body off her, and she scrambles to her feet. She hurriedly runs to the bodies of the dead natives and begins rifling through their belongings, all the while keeping her eyes glued to the motionless crew.", "After grabbing a few things she stops. Timidly approaching the crew, she reaches out and lightly touches (Name1)'s hand. Then she turns to the woods and runs off, quickly vanishing into its tangled branches." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "reward", "medium" ], [ "reward", "small" ], [ "reward", "small" ] ]
+}, {
+  "root" : false,
+  "title" : "The Runaway",
+  "name" : "RunawayDoNothingWanderer",
+  "description" : [ "The riders circle back to the front of the ROV. For a moment they just sit, staring at each of the crew members one at a time, as if sizing them up. Finally they turn and ride off into the forest. The crew breathes a sigh of relief.", "The crew peeks under the ROV to see what has become of the remaining native. As they do, she dashes out, past the crew, and runs to the woods. Just before she enters the trees, she stops, briefly looks back at the crew with a look of fear and gratitude in her eyes, and then she's gone." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "scheduleEvent", "WanderReturn", "84", "252" ] ]
+}, {
+  "root" : true,
+  "title" : "The Runaway",
+  "name" : "Runaway",
+  "description" : [ "The ROV lurches to a sudden stop as a thin figure emerges from the sea of trees ahead. It's a scrawny native, weak and dirty, clothed only in patches of mud and miscellaneous flakes of earthy debris. She darts towards the ROV and dives underneath it.", "Just as the perplexed crew begins to emerge from the ROV, two more natives appear. Sitting atop two huge wolf-like beast, their muscular bodies clothed in thick fur robes. They boldly approach the ROV, seemingly unconcerned by the presence of the unfamiliar crew.", "They begin to slowly circle the crew, looking all around as though they are searching for something they lost. They grumble to each other in an indiscernible language." ],
+  "choices" : [ "Reveal the hidden native.", "Do nothing." ],
+  "restrictions" : [ "", "" ],
+  "outcomes" : [ [ "RunawayReveal" ], [ "RunawayDoNothing" ] ],
+  "chances" : [ [ 100.0 ], [ 100.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "The Runaway",
+  "name" : "RunawayRevealEdibles",
+  "description" : [ "She struggles, trying to escape the big natives grasp, but it's no use. He ties her arms and legs with a heavy leather cord and throws her over the back of his wolf beast.", "He climbs aboard his mount as the second large native slowly approaches the crew. He glares down at them for a moment, then he pulls a large sack from the side of his great beast and tosses at the feet of the crew. The natives let out a loud call, spur on their mounts, and ride away.", "Once the riders are out of sight the crew unties the bag's thick leather straps and opens it. The bag is full to the brim with an assortment of all kinds of edibles, some which the crew has never seen before. Together they drag the bag to their food storage and toss it inside!" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "50", "100", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "The Runaway",
@@ -130,56 +980,6 @@
   "resultingAction" : [ ]
 }, {
   "root" : false,
-  "title" : "The Runaway",
-  "name" : "RunawayDoNothingWanderer",
-  "description" : [ "The riders circle back to the front of the ROV. For a moment they just sit, staring at each of the crew members one at a time, as if sizing them up. Finally they turn and ride off into the forest. The crew breathes a sigh of relief.", "The crew peeks under the ROV to see what has become of the remaining native. As they do, she dashes out, past the crew, and runs to the woods. Just before she enters the trees, she stops, briefly looks back at the crew with a look of fear and gratitude in her eyes, and then she's gone." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "scheduleEvent", "WanderReturn", "84", "252" ] ]
-}, {
-  "root" : false,
-  "title" : "The Runaway",
-  "name" : "RunawayDoNothing",
-  "description" : [ "The crew, armed only with their sidearms, tensely watch the circling natives. " ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ [ "RunawayDoNothingWanderer", "RunawayDoNothingMinorHurt", "RunawayDoNothingMajorHurt" ] ],
-  "chances" : [ [ 0.0, 0.0, 0.0 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "The Runaway",
-  "name" : "RunawayRevealEdibles",
-  "description" : [ "She struggles, trying to escape the big natives grasp, but it's no use. He ties her arms and legs with a heavy leather cord and throws her over the back of his wolf beast.", "He climbs aboard his mount as the second large native slowly approaches the crew. He glares down at them for a moment, then he pulls a large sack from the side of his great beast and tosses at the feet of the crew. The natives let out a loud call, spur on their mounts, and ride away.", "Once the riders are out of sight the crew unties the bag's thick leather straps and opens it. The bag is full to the brim with an assortment of all kinds of edibles, some which the crew has never seen before. Together they drag the bag to their food storage and toss it inside!" ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "50", "100", "edibles", "true" ] ]
-}, {
-  "root" : false,
-  "title" : "The Runaway",
-  "name" : "RunawayRevealInjured",
-  "description" : [ "At first she struggles, but quickly stops, seemingly resigned to the fact that she can't overpower her captors. She stares hatefully into the eyes of the crew and shouts unintelligible words at them.", "As the muscular native begins to tie a rope around the hands of the thin native, she lashes out. Grabbing the natives exposed sword, she stabs (Name1) in the side and pounces on (Name2), clawing (him2) to the ground. As she turns to the rest of the crew, the second big native fires an arrow and strikes her down.", "As the crew rushes to their wounded comrades, the big native collects the body of the, now dead, native and toss it on the back of his great beast. The second big native grunts and tosses a large sack on the ground in front of the crew. The pair turn on their mounts, let out a grunt, and ride off.", "Once the riders are out of sight and the crew's injured are tended to, they untie the bag's thick leather straps and open it up to reveal an assortment of different meats and berries!" ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addAilment", "evt", "injury", "regular" ], [ "addHealth", "evt2", "-25", "-50" ], [ "addRndAmt", "50", "100", "edibles" , "true" ] ]
-}, {
-  "root" : true,
-  "title" : "The Runaway",
-  "name" : "Runaway",
-  "description" : [ "The ROV lurches to a sudden stop as a thin figure emerges from the sea of trees ahead. It's a scrawny native, weak and dirty, clothed only in patches of mud and miscellaneous flakes of earthy debris. She darts towards the ROV and dives underneath it.", "Just as the perplexed crew begins to emerge from the ROV, two more natives appear. Sitting atop two huge wolf-like beast, their muscular bodies clothed in thick fur robes. They boldly approach the ROV, seemingly unconcerned by the presence of the unfamiliar crew.", "They begin to slowly circle the crew, looking all around as though they are searching for something they lost. They grumble to each other in an indiscernible language." ],
-  "choices" : [ "Reveal the hidden native.", "Do nothing." ],
-  "restrictions" : [ "", "" ],
-  "outcomes" : [ [ "RunawayReveal" ], [ "RunawayDoNothing" ] ],
-  "chances" : [ [ 100.0 ], [ 100.0 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
   "title" : "TheGift",
   "name" : "GiftOpenFollow",
   "description" : [ "The group decides (Name1) is right, they pack their bags and head out on foot towards the first landmark indicated on the map." ],
@@ -190,74 +990,24 @@
   "resultingAction" : [ ]
 }, {
   "root" : false,
-  "title" : "TheGift",
-  "name" : "GiftOpen",
-  "description" : [ "The group decides to open the box. They carefully unravel the string latch and cautiously open the lid. Inside is a small rolled up piece of thin bark. (Name1) unrolls the bark paper and discovers a crude map has been drawn on the inside. The crew recognizes some of the more obvious land marks, such as a large arch shaped rock and the small weaving river nearby. A small path is outlined on the map that ends with an unrecognizable shape, marking something of importance. (Name1) suggests following the map to see where it leads, but (Name2) proposes the group keep the map to trade to the natives for something more practical." ],
-  "choices" : [ "Follow the map", "Keep the Map for Trade" ],
+  "title" : "Thief in the Night",
+  "name" : "ThiefRaid",
+  "description" : [ "After discussing their options, the crew decides to raid the native's encampment to attempt recover their lost supplies. (Name1) suggest an aggressive frontal assault on the camp, go in guns blazing, and carve a path to the strong house before the natives can seal themselves inside, but (Name2) has other ideas. (He1) proposes a silent infiltration, quietly sneak into the camp, and catch the natives off guard.", "The crew estimates the frontal assault has a lower chance of successfully recovering the supplies, but provides a safer extraction if things go wrong.  The silent infiltration, on the other hand, has a higher chance of supply recovery, but leaves the crew dangerously exposed of they're caught." ],
+  "choices" : [ "Frontal Assault", "Silent Infiltration" ],
   "restrictions" : [ "", "" ],
-  "outcomes" : [ [ "GiftOpenFollow" ], [ "GiftOpenKeep" ] ],
-  "chances" : [ [ 100.0 ], [ 100.0, 0.0 ] ],
+  "outcomes" : [ [ "ThiefRaidBad", "ThiefRaidFail" ], [ "ThiefRaidSilentFail", "ThiefRaidSilentBad" ] ],
+  "chances" : [ [ 60.0, 40.0 ], [ 40.0, 60.0 ] ],
   "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "TheGift",
-  "name" : "GiftOpenKeep",
-  "description" : [ "The group decides (Name2) is right, they shouldn't waste their time searching treasure. They pack the map back into its box and store it away for later." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "25", "50", "wealth" ] ]
-}, {
-  "root" : false,
-  "title" : "TheGift",
-  "name" : "GiftOpenFollowGood",
-  "description" : [ "The group spends the next few hours traveling from landmark to landmark, until at last they arrive at the location marked by the unrecognizable shape. Next to the large unrecognizable symbol on the map is smaller one, shaped like a fat lightning bolt.", "The group searches around for something that matches the description, but all they see are rocks and trees. The disheartened group turns to leave, frustrated over wasted time, when they spot a large crack in a nearby rock face. The crack is deep and narrow, widening at the base just enough for someone to squeeze in.", "(Name1) slides into the rock crevasse and disappears inside. (He1) reappears a moment later holding a large sack. Inside the sack is: a small amount of food, some simple tools, a few miscellaneous doodads, and a pair of fine fur clothes. Pleased with their discovery, (Name1) repacks the back, throws it over (his1) shoulder, and the crew begins the long journey back to the ROV." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true"  ], [ "addRndAmt", "50", "100", "wealth" ] ]
-}, {
-  "root" : true,
-  "title" : "TheGift",
-  "name" : "Gift",
-  "description" : [ "While the crew is stopped for a quick stretch break, (Name) decides to have a quick snack. After rustling through the food storage, (he1) picks out a nice ripe piece of fruit and finds a comfy log to sit on while (he1) eats. As (he1) finishes (his1) fruit (he1) turns to toss the pit into the woods and finds (him1)self face to face with a tiny impish creature holding a small wooden box. As he grabs for his pistol, the creature quickly places the box down and scampers off. ", "Perplexed, (Name1) picks up the box and examines it. The ornate wooden box is inscribed with simplistic pictures depicting tribal life. The lid of the box is held in place by a twine-like string. (Name1) brings the box back to the crew to discuss what to do with it." ],
-  "choices" : [ "Open the Box", "Don't Open the Box" ],
-  "restrictions" : [ "", "" ],
-  "outcomes" : [ [ "GiftOpen" ], [ "GiftDont" ] ],
-  "chances" : [ [ 100.0 ], [ 100.0 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "TheGift",
-  "name" : "GiftDont",
-  "description" : [ "Unsure of what lies inside, the crew is apprehensive to open the small box. They decide to keep the box to use for trade. Surely some other natives will be interested in it." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
-}, {
-  "root" : false,
-  "title" : "TheGift",
-  "name" : "GiftOpenFollowHurt",
-  "description" : [ "The group spends the next few hours traveling from landmark to landmark, until at last they arrive at the location marked by the unrecognizable shape. Next to the large unrecognizable symbol on the map is smaller one, shaped like a fat lightning bolt.", "The group searches around for something that matches the description, but all they see are rocks and trees. The disheartened group turns to leave, frustrated over wasted time, when they spot a large crack in a nearby rock face. The crack is deep and narrow, widening at the base just enough for someone to squeeze in.", "(Name1) disappears into the rock crevasse, reappearing a moment later holding a large empty sack. Disappointed by this discovery, the group turns to leave, and finds themselves surrounded by a group of tree-like natives. Caught out in the open, the crew is unable to escape the first volley of arrows. The injured crew runs for the trees, as more arrows rain down around them. They zigzag through the trees until they come to a banks of a deep river. Unable to turn back, the crew jumps into the icy water below.", "Sometime later, they wash ashore downstream, injured, tired, and cold. Using their now waterlogged bark map, they backtrack their way back to the ROV and collapse inside." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
 }, {
   "root" : false,
   "title" : "Thief in the Night",
-  "name" : "ThiefRaidBad",
-  "description" : [ "Deciding on the frontal assault the crew leaves the ROV and approaches the native's encampment at sunset. They hide and wait in a patch of trees only a few yards from the makeshift wooden walls that surround the native's encampment. As the sun sets below the horizon, they spring from the trees, and charge into the camp.", "They cut through scattered wood huts, firing at any unsuspecting native that emerges, but as they near the strong house, a horde of angry natives surround the group. As they become bogged down in a close quarter's battle, the large wooden gates of the strong room slide closed.", "Some of the natives rush the group with spears, while other rain arrows from a distance with deadly accuracy. Spotting the closed gates and badly outnumbered, the group retreats and bunkers in amongst the small wooden huts. Reluctant to leave the camp empty handed, the crew fights off one spear wielding native after another. ", "Eventually the crew repels the attacking natives, forcing them to retreat into the strong house, but they are unable to breech the strong house's study walls. Exhausted from the lengthy battle, the crew collects any scrap of supplies they can find around the camp and among the many scattered bodies and withdrawals to the ROV." ],
+  "name" : "ThiefRaidSilentFail",
+  "description" : [ "The crew decides on the plan of silent infiltration and makes their way to the native's encampment just as the sun begins to set. They watch the natives from a patch of trees only a few yards from the encampment. Small wooden huts, surrounded by a small makeshift wall, are scattered haphazardly around the sturdy walls of the strong house. Just as the sun sinks below the horizon, a small patrol of natives wander dangerously close to the hidden crew. They lie in wait until the patrol passes, then they soundlessly creep towards walls of the little camp.", "Hopping over the makeshift wall, the crew begins to make their way towards the strong house. Keeping low and sticking to the shadows, they creep ever closer. As they near the entrance of the strong house they stop. The large wooden doors are open and inside they can make out the silhouettes of the natives within, most likely helping themselves to the crew's food and drink.", "Without a sound, the crew makes their way towards open doors of the strong house. The crew is just feet from the entrance, when both doors suddenly slam shut. Arrows rain down on the crew as they dive for cover. Spearmen charge the now separated crewmembers as another volley of arrows shower over them.", "The disjointed crewmembers attempt to hold their ground, killing one spearmen after another. Some of the crew members stand firm, firing their rifles into thinning groups of archers and spearmen scattered around the camp, while others are taken to the ground, fighting hand and foot against their attackers.", "Finally, suffering too many losses, the natives pull back into the protection of the strong house. The badly injured team can't risk another engagement. Having sacrificed too much to leave empty handed, the crew grabs whatever supplies they can as they make their way through the camp and back to the shelter of the ROV." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "alterSupplies", "large", "true" ], [ "alterSupplies", "medium" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+  "resultingAction" : [ [ "alterSupplies", "large", "true" ], [ "alterSupplies", "medium" ], [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
 }, {
   "root" : false,
   "title" : "Thief in the Night",
@@ -279,26 +1029,6 @@
   "chances" : [ ],
   "resultingAction" : [ [ "alterSupplies", "large", "true" ], [ "alterSupplies", "medium" ], [ "addHealthROV", "-25", "-50" ], [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
 }, {
-  "root" : false,
-  "title" : "Thief in the Night",
-  "name" : "ThiefAbandonLoseLarge",
-  "description" : [ "Unwilling to risk their lives over some stolen supplies, the group decides to press on, leaving the supplies behind." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "alterSupplies", "large", "true" ] ]
-}, {
-  "root" : false,
-  "title" : "Thief in the Night",
-  "name" : "ThiefRaid",
-  "description" : [ "After discussing their options, the crew decides to raid the native's encampment to attempt recover their lost supplies. (Name1) suggest an aggressive frontal assault on the camp, go in guns blazing, and carve a path to the strong house before the natives can seal themselves inside, but (Name2) has other ideas. (He1) proposes a silent infiltration, quietly sneak into the camp, and catch the natives off guard.", "The crew estimates the frontal assault has a lower chance of successfully recovering the supplies, but provides a safer extraction if things go wrong.  The silent infiltration, on the other hand, has a higher chance of supply recovery, but leaves the crew dangerously exposed of they're caught." ],
-  "choices" : [ "Frontal Assault", "Silent Infiltration" ],
-  "restrictions" : [ "", "" ],
-  "outcomes" : [ [ "ThiefRaidBad", "ThiefRaidFail" ], [ "ThiefRaidSilentFail", "ThiefRaidSilentBad" ] ],
-  "chances" : [ [ 60.0, 40.0 ], [ 40.0, 60.0 ] ],
-  "resultingAction" : [ ]
-}, {
   "root" : true,
   "title" : "Thief in the Night",
   "name" : "Thief",
@@ -311,13 +1041,23 @@
 }, {
   "root" : false,
   "title" : "Thief in the Night",
-  "name" : "ThiefRaidSilentFail",
-  "description" : [ "The crew decides on the plan of silent infiltration and makes their way to the native's encampment just as the sun begins to set. They watch the natives from a patch of trees only a few yards from the encampment. Small wooden huts, surrounded by a small makeshift wall, are scattered haphazardly around the sturdy walls of the strong house. Just as the sun sinks below the horizon, a small patrol of natives wander dangerously close to the hidden crew. They lie in wait until the patrol passes, then they soundlessly creep towards walls of the little camp.", "Hopping over the makeshift wall, the crew begins to make their way towards the strong house. Keeping low and sticking to the shadows, they creep ever closer. As they near the entrance of the strong house they stop. The large wooden doors are open and inside they can make out the silhouettes of the natives within, most likely helping themselves to the crew's food and drink.", "Without a sound, the crew makes their way towards open doors of the strong house. The crew is just feet from the entrance, when both doors suddenly slam shut. Arrows rain down on the crew as they dive for cover. Spearmen charge the now separated crewmembers as another volley of arrows shower over them.", "The disjointed crewmembers attempt to hold their ground, killing one spearmen after another. Some of the crew members stand firm, firing their rifles into thinning groups of archers and spearmen scattered around the camp, while others are taken to the ground, fighting hand and foot against their attackers.", "Finally, suffering too many losses, the natives pull back into the protection of the strong house. The badly injured team can't risk another engagement. Having sacrificed too much to leave empty handed, the crew grabs whatever supplies they can as they make their way through the camp and back to the shelter of the ROV." ],
+  "name" : "ThiefAbandonLoseLarge",
+  "description" : [ "Unwilling to risk their lives over some stolen supplies, the group decides to press on, leaving the supplies behind." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "alterSupplies", "large", "true" ], [ "alterSupplies", "medium" ], [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
+  "resultingAction" : [ [ "alterSupplies", "large", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Thief in the Night",
+  "name" : "ThiefRaidBad",
+  "description" : [ "Deciding on the frontal assault the crew leaves the ROV and approaches the native's encampment at sunset. They hide and wait in a patch of trees only a few yards from the makeshift wooden walls that surround the native's encampment. As the sun sets below the horizon, they spring from the trees, and charge into the camp.", "They cut through scattered wood huts, firing at any unsuspecting native that emerges, but as they near the strong house, a horde of angry natives surround the group. As they become bogged down in a close quarter's battle, the large wooden gates of the strong room slide closed.", "Some of the natives rush the group with spears, while other rain arrows from a distance with deadly accuracy. Spotting the closed gates and badly outnumbered, the group retreats and bunkers in amongst the small wooden huts. Reluctant to leave the camp empty handed, the crew fights off one spear wielding native after another. ", "Eventually the crew repels the attacking natives, forcing them to retreat into the strong house, but they are unable to breech the strong house's study walls. Exhausted from the lengthy battle, the crew collects any scrap of supplies they can find around the camp and among the many scattered bodies and withdrawals to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "alterSupplies", "large", "true" ], [ "alterSupplies", "medium" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
 }, {
   "root" : false,
   "title" : "Thief in the Night",
@@ -328,4 +1068,164 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "alterSupplies", "large", "true" ], [ "alterSupplies", "large", "true" ], [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareGreenFail",
+  "description" : [ "The crew reaches the red army just as it finishes chopping a hole into one of the walls of the green settlement. They fire on the red raiders, gunning many of them down, but for each one they kill, two more appear. The groups exchange volley back and forth. The crew has the firepower, but the natives have the numbers and the crew is quickly overwhelmed. Their forced to make a retreat under a hail of musket fire. The injured crew limps away, looking back as the enter the tree line to see the settlement engulfed in flames." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareRedHelpFlee",
+  "description" : [ "Worried about friendly fire, the group stays close the to the red native’s leaders, serving as a makeshift body guard as they push through the streets of wood and thatch houses.", "As the marauding red soldiers fan out through the city more green soldiers appear, seemingly on the roof of every building as more overflow into the streets. The green defenders rain down fire from all directions and one of the red leads falls. As the red soldiers begin to thin, the remaining leaders bark frantic orders and the wave of soldiers begins surging slowly back out of the green controlled settlement.", "Sometime later, safely outside the walls of the settlement, the crew regroups with the leaders of the red army and they present them with a chest full of goods, most likely some form of payment for their bravery. The crew graciously accepts and tots their newly acquired loot back to the ROV for safe keeping." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ], [ "reward", "small" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareGreenHelpDefend",
+  "description" : [ "The settlement is filled with thatch and wood housed of different sizes. Green soldiers fire down on the red natives that are spread throughout the narrow streets. Many of the green natives spot the crew and, puzzled at first, begin to aim their muskets at them, but stop when they see the crew killing one red native after another as they move through the streets towards the large keep." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "WarfareGreenHelpDefendSuccess", "WarfareGreenHelpDefendFail" ] ],
+  "chances" : [ [ 70.0, 30.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareRedFail",
+  "description" : [ "As the crew approaches the natives, some of them turn, startled with guns raised. The crew holds their hands out and signal that they mean no harm, shooting up at the walls of the green stronghold and pointing aggressively.", "Somehow it seems their message works and red leaders bark unknown orders to their troops and they let the crew pass into the crowd. The red natives are simply chopping through the wall, as the green natives shoot from above. The crew joins in and with a few minutes a small gap has formed at the base of one of the walls. As the gap grows, the red natives start seeping into the settlement and, as they do, the green natives pour a large cauldron of boiling liquid all over the invading attackers.", "Many of the crew are splattered as burning liquid rains down on the natives. As the red assault falters, a wave of green natives flood out of the gap and overwhelm the scalded red warriors. As one group of green natives flood out, another fires from above, peppering the crew with gunfire. The red natives run for cover and the group follows, nearly being trampled in the process. As the red army disperses, the injured crew limp back to the ROV and slump inside." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-50", "-100", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareRedHelpAssaultGood",
+  "description" : [ "After what seems like hours, the reinforced wood door splinters open and the battle spreads into the keep. As the crew enters the innermost chamber, a small squad of green defends rush the red leads. One of the leaders is shot, but the crew manages to gun down the green soldiers before they can finish the job.", "Moments later, once the keep is securely under red control, the injured red leader summons one of his servants too him. He whispers something to the servant and he hurries off, returning moments later dragging a huge chest full of supplies over to the crew. The surprised crew looks to the injured red leader who sweeps his arm in a nods. The group scoops up the hefty chest and rushes off before he can change his mind." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "reward", "small" ], [ "reward", "medium" ], [ "reward", "large" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareRedHelp",
+  "description" : [ "As the crew approaches the natives, some of them turn, startled with guns raised. The crew holds their hands out and signal that they mean no harm, shooting up at the walls of the green stronghold and pointing aggressively.", "Somehow it seems their message works and red leaders bark unknown orders to their troops and they let the crew pass into the crowd. The red natives are simply chopping through the wall, as the green natives shoot from above. The crew joins in and with a few minutes a small gap has formed at the base of one of the walls. As the gap grows, the red natives start pouring into the settlement and the crew flows close behind." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "WarfareRedHelpAssault", "WarfareRedHelpFlee" ] ],
+  "chances" : [ [ 50.0, 0.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareNopeGreenAmbush",
+  "description" : [ "After an hour or so of sieging, the army of red natives break down the walls and flood inside. The sounds of battle rage out of sight of the crew. Within a few minutes flames start to appear above the remaining walls and groups of green natives run out as red natives chase after. On that note, crew heads back to the ROV and as they pull away, a group of bloodied and charred green natives stumble by. The crew tries not to make eye contact as they slowly drive past." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "scheduleEvent", "GreenAmbush", "84", "252" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareRedHelpAssaultOkay",
+  "description" : [ "As the red soldiers batter away at the keeps doors, large groups of green reinforcements appear to the right and left of the attackers. As they close in on the red army the leaders order a retreat and the army begins to surge outwards. As the reach the exit gap, a small band of green soldiers cut the crew and the red leaders off. The crew drives forward and into the group of green soldiers, firing as they go.", "The crew makes short work of the green soldiers and regroup outside the walls of the settlement with the remaining red leaders. One of the red leaders signal to his servant and then sends him away. He returns shortly, dragging a large chest full of loot and places it at the crew’s feet. The group cordially accepts and hauls their new loot of to their ROV for safe keeping." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ], [ "reward", "small" ], [ "reward", "medium" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareNopeRedAmbush",
+  "description" : [ "After an hour or so of sieging, the army of red natives break down the walls and flood inside. The sounds of battle rage out of sight of the crew, but within a few minutes the army of red natives run out of the city, as the green natives unload one volley after another at the retreating reds. The crew returns to the ROV and, as they are leaving, they notice a small group of red natives watching them from the trees. They fade into the trees and disappear as the ROV pulls away." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "scheduleEvent", "RedAmbush", "84", "252" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareRedHelpAssault",
+  "description" : [ "Worried about friendly fire, the group stays close the to the red native’s leaders, serving as a makeshift body guard as they push through the streets of wood and thatch houses. They make their way to the central keep as groups of red soldiers fan out, kicking open doors and fighting in the streets.", "The keep is a castle like fort made of carefully stacked stones and protected by layers of green firing down from the walled in rooftop. As the red forces reach the reinforced wooden doors of the keep, they bring forth a large tree trunk battering ram and begin smashing the door." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "WarfareRedHelpAssaultGood", "WarfareRedHelpAssaultOkay" ] ],
+  "chances" : [ [ 70.0, 30.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareGreenHelpDefendSuccess",
+  "description" : [ "The crew reaches the keep just as the remaining bulk of the now scattered red army breaks down its reinforced wooden doors. As the red marauders surge into the keep, they’re met with heavy resistance from the green defenders inside. The crew forms a firing line behind the assaulting red soldiers and starts hosing them down with rifle fire.", "As the green soldiers push out from inside the keep the crew presses in from outside. Any red soldier that doesn’t flee is gunned down as the two groups meet just outside the opening of the keep. There’s a brief moment of tense apprehension as the crew comes face to face with the leaders of the green defenders, but after some discussion amongst the green natives they relax.", "One of the well-dressed leaders of the green natives beckons for the crew to approach. She signals to one of the green soldiers. He runs off, reappearing moment later, dragging a large chest full of all kinds of supplies and treasure. The group graciously accepts. After spending some time helping the natives clean their battered town, the crew takes their loot and returns to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "reward", "small" ], [ "reward", "medium" ], [ "reward", "large" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareNope",
+  "description" : [ "The group decides it would be best if they don’t get involved where they don’t belong, instead choosing to stay and watch, mostly out of curiosity." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "WarfareNopeRedAmbush", "WarfareNopeGreenAmbush" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Tribal warfare",
+  "name" : "Warfare",
+  "description" : [ "After a quick rest, the group awoke to the unexpected sound of distant gunfire. Intrigued and concerned the group suited up, grabbed their guns, and headed towards the sound. They crosses over a small dirt path, into a patch of trees, then emerged into an open field and it didn’t take long to spot the source of the noise.", "On the far side of the field was a large native settlement surrounded by a huge army of natives. As they draw close the battlefield begins to unfold. A large militia of red-skinned natives are sieging a large settlement of green-skinned natives. Both group possess crude matchlock muskets, surprising advanced technology for natives.", "The group discussing joining the fight in hopes of reward or loot. Both teams seem equally matched. The red attackers are in the process of breaching the large wooden walls surrounding the settlement, but the green are holding their own at the moment." ],
+  "choices" : [ "Help Red Natives", "Help Green Natives", "Don’t Help" ],
+  "restrictions" : [ "", "", "" ],
+  "outcomes" : [ [ "WarfareRedHelp", "WarfareRedFail" ], [ "WarfareGreenHelp", "WarfareGreenFail" ], [ "WarfareNope" ] ],
+  "chances" : [ [ 75.0, 25.0 ], [ 75.0, 25.0 ], [ ] ],
+  "resultingAction" : [ [ ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareGreenHelpLate",
+  "description" : [ "As the crew enters the walls of the settlement, it becomes clear they are too late, as flames rise from many of the wood and thatch roofs and dark clouds of smoke fill the street. They waste no time heading for the keep, killing any stray red native they come across along the way.", "They reach the keep and rush inside to find a small group of well-dressed natives making their last stand against a band of red raiders. Just as the red natives close in for the kill the crew opens fire, cutting the natives down where they stand. The well-dressed natives stare at the crew with a look of fear and surprise.", "As the crew approaches the natives, their remaining guards ready their weapons, but the well-dressed leader natives order them to stand down. One of the green leaders steps forth and presents the group with a small chest of supplies, presumably as a reward for saving their lives. While it’s not much, the crew politely accepts, knowing the green natives just lost most of what they own. After a few hours of helping the green native try to piece things back together, the crew takes their loot and returns to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "reward", "small" ], [ "addHealth", "evt", "-25", "-50", "false", "-1", "true" ] ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareGreenHelp",
+  "description" : [ "The crew arrives just as the red natives’ army breeches the green natives’ wall. As the red natives begin to flood in the crew approaches them from behind, gunning down many of them as they enter the city though the small hole chopped into the wooden wall. The crew enter after the red natives, who are still mostly unaware of the crew’s counter attack." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "WarfareGreenHelpDefend", "WarfareGreenHelpLate" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
+}, {
+  "root" : false,
+  "title" : "Tribal warfare",
+  "name" : "WarfareGreenHelpDefendFail",
+  "description" : [ "By the time the crew reaches the keep the red army has already made its way inside. The crew enters to find much of the keep has been ransacked by the red marauders. The crew pass in the main chamber and finds a small band of red soldiers quickly advances on a small band of well-dressed green natives. The red natives draw their swords and move in for the kill, but the crew cuts them down in a burst of rifle fire. The crew looks around the keep and finds that most of the red natives have been killed in the assault.", "The well-dressed natives, cowering from the crew at first, gingerly come out as they realize the crew means them no harm. One of the natives signals to another and they run off, returning moments later dragging a sizable chest full of various supplies and place it at the crew’s feet. The crew graciously accepts the gift and, after staying a few hours to help the natives search for survivors, the crew takes it reward and returns to the ROV." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "reward", "small" ], [ "reward", "medium" ], [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
 } ]

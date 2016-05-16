@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
+import com.quickbite.rx2020.shuffle
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Reward
 import java.util.*
@@ -61,6 +62,9 @@ object DataManager{
         val startTime:Long = TimeUtils.millis()
 
         this.names = json.fromJson(NamesJson::class.java, nameFileHandle)
+        this.names.maleFirstNames= this.names.maleFirstNames.shuffle()
+        this.names.femaleFirstNames= this.names.femaleFirstNames.shuffle()
+        this.names.lastNames= this.names.lastNames.shuffle()
 
         val time:Long = TimeUtils.millis() - startTime
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
@@ -96,9 +100,9 @@ object DataManager{
         var firstName = ""
         var male = MathUtils.random(0, 100) > 50
         if(male)
-            firstName = names.maleFirstNames[MathUtils.random(0, names.maleFirstNames.size-1)]
+            firstName = names.maleFirstNames.removeAt(names.maleFirstNames.size-1)
         else
-            firstName = names.femaleFirstNames[MathUtils.random(0, names.femaleFirstNames.size-1)]
+            firstName = names.femaleFirstNames.removeAt(names.femaleFirstNames.size-1)
 
         val lastName = names.lastNames[MathUtils.random(0, names.lastNames.size - 1)]
 
@@ -140,9 +144,9 @@ object DataManager{
     }
 
     class NamesJson(){
-        lateinit var femaleFirstNames:Array<String>
-        lateinit var maleFirstNames:Array<String>
-        lateinit var lastNames:Array<String>
+        lateinit var femaleFirstNames:MutableList<String>
+        lateinit var maleFirstNames:MutableList<String>
+        lateinit var lastNames:MutableList<String>
     }
 
     class EndJSON(){

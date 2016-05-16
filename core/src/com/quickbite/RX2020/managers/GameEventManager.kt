@@ -24,7 +24,9 @@ object GameEventManager{
     private val rareRootList: MutableList<String> = mutableListOf() //For Json Events
     private val epicRootList: MutableList<String> = mutableListOf() //For Json Events
     val epicRootListOriginal: MutableList<String> = mutableListOf() //For Json Events
+    private val monthlyNativeRootList: MutableList<String> = mutableListOf() //For Json Events
     private val specialRootList: MutableList<String> = mutableListOf() //For Json Events
+    private val returnRootList: MutableList<String> = mutableListOf() //For Json Events
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
@@ -46,17 +48,19 @@ object GameEventManager{
             "common" -> return commonRootList
             "rare" -> return rareRootList
             "special" -> return specialRootList
+            "monthlyNative" -> return monthlyNativeRootList
+            "returnEvents" -> return returnRootList
             else -> return epicRootList
         }
     }
 
     fun addEvent(event:EventJson, type: String = ""){
-        val map = getEventNameList(type)
+        val list = getEventNameList(type)
         eventMap.put(event.name, event) //Add the event to the main map.
 
         //If the event is a root, add it to the right list for later use.
         if(event.root){
-            map.add(event.name) //Add it.
+            list.add(event.name) //Add it.
             if(type == "epic") //Special case since we're gonna need to remember which epic events have alreayd triggered.
                 epicRootListOriginal.add(event.name)
         }else

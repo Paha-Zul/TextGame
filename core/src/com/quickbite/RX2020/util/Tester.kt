@@ -11,9 +11,7 @@ object Tester {
     val eventMap:MutableMap<String, GameEventManager.EventJson?> = hashMapOf()
 
     fun testEvents(numTests:Int){
-        GameEventManager.getEventNameList("common").forEach { name -> eventMap.put(name, null) }
-        GameEventManager.getEventNameList("rare").forEach { name -> eventMap.put(name, null) }
-        GameEventManager.getEventNameList("epic").forEach { name -> eventMap.put(name, null) }
+        GameEventManager.eventMap.values.forEach { evt -> eventMap.put(evt.name, null) }
 
         System.out.println("---------------------")
 
@@ -37,6 +35,14 @@ object Tester {
         //We use .toList() to make a copy because of the specialness of epic events.
         for(eventName in GameEventManager.getEventNameList("epic").toList())
             func(GameEventManager.getAndSetEvent(eventName, "epic"))
+
+        //We use .toList() to make a copy because of the specialness of epic events.
+        for(eventName in GameEventManager.getEventNameList("monthlyNative").toList())
+            func(GameEventManager.getAndSetEvent(eventName, "monthlyNative"))
+
+        //We use .toList() to make a copy because of the specialness of epic events.
+        for(eventName in GameEventManager.getEventNameList("returnEvents").toList())
+            func(GameEventManager.getAndSetEvent(eventName, "returnEvents"))
 
         System.out.println("Event Testing Done!")
 

@@ -84,7 +84,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true" ] ]
 }, {
   "root" : false,
   "title" : "Break in!",
@@ -93,7 +93,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "edibles" ], [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-25", "-50", "edibles" ], [ "addHealth", "evt", "-1", "-25", "false", "-1", "true"  ] ]
 }, {
   "root" : false,
   "title" : "Break in!",
@@ -102,7 +102,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ], [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ], [ "addHealth", "evt", "-1", "-25", "false", "-1", "true"  ] ]
 }, {
   "root" : false,
   "title" : "Break in!",
@@ -111,7 +111,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ], [ "addRndAmt", "-1", "-25", "edibles" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true"  ], [ "addRndAmt", "-1", "-25", "edibles" ] ]
 }, {
   "root" : true,
   "title" : "Break in!",
@@ -129,7 +129,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ], [ "addRndAmt", "-25", "-50", "edibles" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true"  ], [ "addRndAmt", "-25", "-50", "edibles" ] ]
 }, {
   "root" : false,
   "title" : "Break in!",
@@ -138,7 +138,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "false", "-1", "true"  ] ]
 }, {
   "root" : false,
   "title" : "Crag Rock Cave",
@@ -728,52 +728,7 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ], [ "addHealthROV", "-1", "-15" ] ]
-}, {
-  "root" : false,
-  "title" : "Natives!",
-  "name" : "NativesTrade2",
-  "description" : [ "Good Trade" ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "openTrade" ] ]
-}, {
-  "root" : false,
-  "title" : "Natives!",
-  "name" : "NativesFight",
-  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The large native roars and knocks (Name1) to the ground and unsheathes his weapon. The Exomer squad draws their weapons and begin firing and retreating to the ROV under a rain of spears and arrows. Once safely inside the ROV the group makes a hasty retreat, killing most of the natives in the process." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "-10", "-35", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addAilment", "evt", "injury", "regular" ] ]
-}, {
-  "root" : true,
-  "title" : "Natives!",
-  "name" : "NativeEncounter",
-  "description" : [ "The ROV grinds to a stop. Shadowy figures dot the horizon along the path ahead. Natives no doubt, but their intentions are unclear. Upon closer inspection they seem to be quite large in stature, with rugged bark-like skin and features. They appear to be wearing simple garb most likely made from local flora and fauna." ],
-  "choices" : [ "Approach Peacefully", "Approach Hostilely", "Avoid Natives" ],
-  "outcomes" : [ [ "NativesTrade", "NativesFight" ], [ "NativesDriveOver", "NativesStuckIn" ], [ "NativeAvoidSuccess", "NativeAvoidAmbushed" ] ],
-  "chances" : [ [ 75, 25 ], [ 75, 25 ], [ 75, 25 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Natives!",
-  "name" : "NativesTrade",
-  "description" : [ "The natives and the Exomer crew cautiously approach each other, weapons holstered but ready. As each group draws together, one of the largest of the natives steps forward and %n offers a friendly greeting and holds out a handful of the group's valuables hoping for a mutual understanding between the two.", "The natives grunt and grumble to each other until the larger native settles them. The group parts to reveal a pile of treasures of their own. Thankfully, it seems they are friendlier than they look and welcome the trade!" ],
-  "choices" : [ ],
-  "outcomes" : [ [ "NativesTrade2" ] ],
-  "chances" : [ [ 100 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Natives!",
-  "name" : "NativesStuckIn",
-  "description" : [ "%n steps on the gas, accelerating the ROV to full speed. The ROV plows though the natives, but becomes lodged in some large rocks. The enraged native engulf the ROV, clawing at exterior of the ROV, tearing away anything they can and jabbing all openings with their sharp spears. The crew fires back...", "The ROV finally lurches free from the rocks and barrels out of the mass of barbaric creatures. A few of the natives cling to the sides but are dislodged by the craws' heavy fire." ],
-  "choices" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addHealthROV", "-25", "-55" ], [ "addHealth", "evt", "-1", "-15", "false", "-1", "true" ], [ "addRndAmt", "1", "25", "energy" ], [ "addRndAmt", "2", "5", "edibles", "true" ], [ "addRndAmt", "0", "2", "medkits" ], [ "addRndAmt", "1", "25", "wealth" ], [ "addRndAmt", "1", "25", "ammo" ], [ "addRndAmt", "1", "25", "parts" ] ]
-}, {
+},{
   "root" : true,
   "title" : "Poultice Test",
   "name" : "Poultice",
@@ -902,7 +857,7 @@
 }, {
   "root" : false,
   "title" : "Reworking",
-  "name" : "ReworkingFailure",
+  "name" : "ReworkingPartFailure",
   "description" : [ "Disaster strikes, both the subsystem and the existing ROV part are lost..." ],
   "choices" : [ ],
   "outcomes" : [ ],
@@ -911,7 +866,7 @@
 }, {
   "root" : false,
   "title" : "Reworking",
-  "name" : "ReworkingSuccess",
+  "name" : "ReworkingPartSuccess",
   "description" : [ "Amazingly it works! He1 restores a previously useless part to a like new condition!" ],
   "choices" : [ ],
   "outcomes" : [ ],
@@ -920,22 +875,12 @@
 }, {
   "root" : true,
   "title" : "Reworking",
-  "name" : "Reworking",
+  "name" : "ReworkingPart",
   "description" : [ "%n attempts to wire a subsystem into an existing ROV part..." ],
   "choices" : [ "Worth the Risk?" ],
-  "outcomes" : [ [ "ReworkingSuccess", "ReworkingFailure" ] ],
+  "outcomes" : [ [ "ReworkingPartSuccess", "ReworkingPartFailure" ] ],
   "chances" : [ [ 50, 50 ] ],
   "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "Riders Return",
-  "name" : "RidersReturn",
-  "description" : [ "Two large natives, riding on the backs of large wolf-like beast, suddenly appear on the path ahead. Crewmembers reach for their weapons as the natives approach, unsure of what to expect from their visit. The natives calmly ride up to the ROV and toss a pair of small brown sacks on the ground. Then they turn and ride off.", "Once the natives are out if sight, the crew cautiously disembark and inspects the bags. Finding nothing out of the ordinary, they unravel the knotted string bindings and open them up. The sacks are filled with fresh fruits, dried meats, and other such tasty edibles." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "25", "50", "edibles" ] ]
 }, {
   "root" : false,
   "title" : "Salvage",
@@ -944,7 +889,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndItem", "1", "1", "25", "panel", "track", "battery", "storage" ] ]
+  "resultingAction" : [ [ "addRndItem", "1", "1", "100", "panel", "track", "battery", "storage" ] ]
 }, {
   "root" : false,
   "title" : "Salvage",
@@ -1230,16 +1175,6 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-2", "medkits" ], [ "addRndAmt", "25", "50", "wealth" ] ]
-}, {
-  "root" : false,
-  "title" : "Wanderer's Return",
-  "name" : "WanderReturn",
-  "description" : [ "The group spots a lone native on the horizon. At first they grab for their weapons, but as the native draws near, they recognize her face. It's the small native they saved earlier. She's clothed in a tunic made of fine furs and carrying a large wooly sack. She cautiously approaches the ROV, gently sets the sack down, and then turns and runs away.", "The group emerges from the ROV. They collect the sack and tot it back inside the ROV. Then they unravel its rope knots and open the top; it's filled to the brim with all sorts of delicious looking foods. " ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "50", "100", "edibles" ] ]
 }, {
   "root" : false,
   "title" : "Watering Hole",
