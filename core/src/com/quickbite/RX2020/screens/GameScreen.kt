@@ -57,7 +57,6 @@ class GameScreen(val game: TextGame): Screen {
         get
         private set
 
-
     private val gameInput: GameScreenInput = GameScreenInput()
 
     var searchActivity:DataManager.SearchActivityJSON? = null
