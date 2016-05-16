@@ -456,7 +456,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "PathNothing2", "PathNothingFind" ] ],
-  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "chances" : [ [ 50.0, 50.0] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -506,7 +506,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "PathNothing", "PathFind" ] ],
-  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "chances" : [ [ 50.0, 50.0] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -566,7 +566,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "PathNothing2Nothing", "PathNothing2Parts" ] ],
-  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "chances" : [ [ 50.0, 50.0] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -636,7 +636,7 @@
   "choices" : [ "Choose Again" ],
   "restrictions" : [ "" ],
   "outcomes" : [ [ "PowerAutoChoose" ] ],
-  "chances" : [ [ 100.0, 0.0 ] ],
+  "chances" : [ [ 100.0] ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
 }, {
   "root" : false,
@@ -686,7 +686,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "ReworkSuccess3Okay", "ReworkSuccess3Good" ] ],
-  "chances" : [ [ 50.0, 50.0, 0.0 ] ],
+  "chances" : [ [ 50.0, 50.0] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -886,7 +886,7 @@
   "choices" : [ "Follow the map", "Keep the Map for Trade" ],
   "restrictions" : [ "", "" ],
   "outcomes" : [ [ "GiftOpenFollow" ], [ "GiftOpenKeep" ] ],
-  "chances" : [ [ 100.0 ], [ 100.0, 0.0 ] ],
+  "chances" : [ [ 100.0 ], [ 100.0] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -986,7 +986,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "GiftOpenFollowHurt", "GiftOpenFollowGood" ] ],
-  "chances" : [ [ 50.0, 50.0, 0.0, 0.0 ] ],
+  "chances" : [ [ 50.0, 50.0] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1126,7 +1126,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "WarfareRedHelpAssault", "WarfareRedHelpFlee" ] ],
-  "chances" : [ [ 50.0, 0.0 ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
