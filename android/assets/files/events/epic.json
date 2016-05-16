@@ -1072,7 +1072,7 @@
   "root" : false,
   "title" : "Tribal warfare",
   "name" : "WarfareGreenFail",
-  "description" : [ "The crew reaches the red army just as it finishes chopping a hole into one of the walls of the green settlement. They fire on the red raiders, gunning many of them down, but for each one they kill, two more appear. The groups exchange volley back and forth. The crew has the firepower, but the natives have the numbers and the crew is quickly overwhelmed. Their forced to make a retreat under a hail of musket fire. The injured crew limps away, looking back as the enter the tree line to see the settlement engulfed in flames." ],
+  "description" : [ "The crew reaches the red army just as it finishes chopping a hole into one of the walls of the green settlement. They fire on the red raiders, gunning many of them down, but for each one they kill, two more appear. The groups exchange volley back and forth. The crew has the firepower, but the natives have the numbers and the crew is quickly overwhelmed. Their forced to make a retreat under a hail of musket fire. The injured crew limps away, looking back as they enter the tree line to see the settlement engulfed in flames." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
@@ -1096,7 +1096,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "WarfareGreenHelpDefendSuccess", "WarfareGreenHelpDefendFail" ] ],
-  "chances" : [ [ 70.0, 30.0 ] ],
+  "chances" : [ [ 25.0, 75.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1166,7 +1166,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "WarfareRedHelpAssaultGood", "WarfareRedHelpAssaultOkay" ] ],
-  "chances" : [ [ 70.0, 30.0 ] ],
+  "chances" : [ [ 25.0, 75.0 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,
@@ -1192,7 +1192,7 @@
   "root" : true,
   "title" : "Tribal warfare",
   "name" : "Warfare",
-  "description" : [ "After a quick rest, the group awoke to the unexpected sound of distant gunfire. Intrigued and concerned the group suited up, grabbed their guns, and headed towards the sound. They crosses over a small dirt path, into a patch of trees, then emerged into an open field and it didn’t take long to spot the source of the noise.", "On the far side of the field was a large native settlement surrounded by a huge army of natives. As they draw close the battlefield begins to unfold. A large militia of red-skinned natives are sieging a large settlement of green-skinned natives. Both group possess crude matchlock muskets, surprising advanced technology for natives.", "The group discussing joining the fight in hopes of reward or loot. Both teams seem equally matched. The red attackers are in the process of breaching the large wooden walls surrounding the settlement, but the green are holding their own at the moment." ],
+  "description" : [ "After a quick rest, the group awoke to the unexpected sound of distant gunfire. Intrigued and concerned the group suited up, grabbed their guns, and headed towards the sound. They crosses over a small dirt path, into a patch of trees, then emerged into an open field and it didn’t take long to spot the source of the noise.", "On the far side of the field was a large native settlement surrounded by a huge army of natives. As they draw close the battlefield begins to unfold. A large militia of red-skinned natives are sieging a large settlement of green-skinned natives. Both group possess crude matchlock muskets, surprising advanced technology for natives.", "The group discusses joining the fight in hopes of reward or loot. Both teams seem equally matched. The red attackers are in the process of breaching the large wooden walls surrounding the settlement, but the green are holding their own at the moment." ],
   "choices" : [ "Help Red Natives", "Help Green Natives", "Don’t Help" ],
   "restrictions" : [ "", "", "" ],
   "outcomes" : [ [ "WarfareRedHelp", "WarfareRedFail" ], [ "WarfareGreenHelp", "WarfareGreenFail" ], [ "WarfareNope" ] ],
