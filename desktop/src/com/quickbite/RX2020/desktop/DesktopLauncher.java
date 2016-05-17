@@ -25,7 +25,7 @@ public class DesktopLauncher implements IGPGServices{
 	}
 
 	@Override
-	public void donate() {
+	public void donate(String type) {
 		Logger.log("DesktopLauncher", "Yay, we are donating!", Logger.LogLevel.Info);
 	}
 
@@ -36,6 +36,6 @@ public class DesktopLauncher implements IGPGServices{
 
 	@Override
 	public boolean isTestDevice() {
-		return true;
+		return false;
 	}
 }

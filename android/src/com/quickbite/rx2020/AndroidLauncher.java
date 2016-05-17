@@ -59,7 +59,7 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
 	}
 
     @Override
-    public void donate() {
+    public void donate(String type) {
         try {
             //Launch the purchase flow with a test SKU for now.
             mHelper.launchPurchaseFlow(this, SKU_TEST_PURCHASED, RC_REQUEST, mPurchaseFinishedListener, "HANDLE_PAYLOADS");

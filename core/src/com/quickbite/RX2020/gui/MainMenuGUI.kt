@@ -86,7 +86,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
         continueButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                ChainTask.addTaskToEveryFrameList(continueGameFade(mainTable))
+                ChainTask.addTaskToEveryFrameList(continueGameFade(mainTable, rightTable))
                 GroupManager.init()
                 SupplyManager.init()
                 ROVManager.init()
@@ -138,12 +138,23 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
         val boxTable = Table()
 
+        val textButtonStyle:TextButton.TextButtonStyle = TextButton.TextButtonStyle()
+        textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
+        textButtonStyle.fontColor = Color.WHITE
+
+        val purchaseButton = TextButton("Purchase!", textButtonStyle)
+        purchaseButton.label.setFontScale(0.2f)
+
+        val homeButton = TextButton("Home", textButtonStyle)
+        homeButton.label.setFontScale(0.2f)
+
         val box = TextureRegionDrawable(TextureRegion(TextGame.manager.get("donateBox", Texture::class.java)))
         val boxSelected = TextureRegionDrawable(TextureRegion(TextGame.manager.get("donateBoxSelected", Texture::class.java)))
 
         val amounts = listOf(1, 5, 10, 20)
         val buttonList:MutableList<ImageTextButton> = mutableListOf()
 
+        var selected:Int = 0
         for(i in 0.rangeTo(amounts.size-1)){
             val amount = amounts[i]
             val buttonStyle:ImageTextButton.ImageTextButtonStyle = ImageTextButton.ImageTextButtonStyle(box, box, boxSelected, TextGame.manager.get("spaceFont2", BitmapFont::class.java))
@@ -159,11 +170,20 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
             button.addListener(object:ClickListener(){
                 override fun clicked(event: InputEvent?, x: Float, y: Float) {
                     super.clicked(event, x, y)
-                    buttonList.forEach { b -> b.isChecked = false }
+                    buttonList.forEach { b -> if(b !== button) b.isChecked = false }
                     button.isChecked = true
+                    selected = amount
                 }
             })
         }
+
+        purchaseButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                if(selected != 0){
+                    TextGame.GPGServices.donate()
+                }
+            }
+        })
 
         boxTable.setFillParent(true)
         TextGame.stage.addActor(boxTable)
@@ -175,32 +195,16 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         return tsk
     }
 
-    private fun continueGameFade(mainTable:Table):ChainTask{
+    private fun continueGameFade(mainTable:Table, rightTable:Table):ChainTask{
         val chainTask = ChainTask({ mainTable.color.a > 0 }, {
             val value = GH.lerpValue(mainTable.color.a, 1f, 0f, 1f)
             mainTable.color.a = value
+            rightTable.color.a = value
         },{
             TextGame.stage.clear();
-
             //Load the game!
-            mainMenu.game.screen = GameScreen(mainMenu.game)
-            SaveLoad.loadGame()
-
-            TextGame.backgroundColor.a = 0f
-            TextGame.batch.color = Color(0f,0f,0f,0f)
-            val blackPixel = TextGame.smallGuiAtlas.findRegion("pixelBlack")
-
-            //Overlays a solid black rectangle and fades it out
-            val task = ChainTask({TextGame.backgroundColor.r < 1},
-                    {
-                        TextGame.batch.begin()
-                        var amt = TextGame.backgroundColor.r + 0.01f
-                        TextGame.backgroundColor.r = amt; TextGame.backgroundColor.g=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.a=amt
-                        TextGame.batch.color = Color(0f, 0f, 0f, (1-amt))
-                        TextGame.batch.draw(blackPixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
-                        TextGame.batch.end()
-                    })
-            ChainTask.addTaskToEveryFrameList(task)
+            val gameScreen = GameScreen(mainMenu.game, true)
+            mainMenu.game.screen = gameScreen
         })
 
         return chainTask

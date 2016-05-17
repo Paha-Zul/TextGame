@@ -14,8 +14,6 @@ import com.quickbite.rx2020.util.FunGameStats
  * Created by Paha on 2/3/2016.
  */
 class MainMenuScreen(val game: TextGame) : Screen {
-
-
     override fun show() {
         TextGame.backgroundColor = Color(0f,0f,0f,1f)
 

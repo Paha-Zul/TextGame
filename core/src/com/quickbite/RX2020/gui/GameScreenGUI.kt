@@ -1527,7 +1527,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         saveAndQuitButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                SaveLoad.saveGame(false)
+                SaveLoad.saveGame(false, game)
                 TextGame.stage.clear()
                 game.game.screen = MainMenuScreen(game.game)
             }
@@ -1535,7 +1535,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         saveAndExitButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                SaveLoad.saveGame(false)
+                SaveLoad.saveGame(false, game)
                 TextGame.stage.clear()
                 game.game.screen = MainMenuScreen(game.game)
                 Gdx.app.exit()

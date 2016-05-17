@@ -324,15 +324,13 @@ object GH {
             when(supply.name){
                 "panel" -> eventNameToCall = "LastPanel"
                 "track" -> {
-                    if(supply.amt <= 0 && ammo.amt > 0)
+                    if(supply.amt <= 0 && supply.currHealth <= 0)
                         eventNameToCall = "NoTrack"
-                    else
+                    else if(supply.amt <= 0)
                         eventNameToCall = "LastTrack"
                 }
                 "battery"  -> {
-                    if(supply.amt <= 0 && ammo.amt > 0)
-                        eventNameToCall = "NoBattery"
-                    else
+                    if(supply.amt <= 0)
                         eventNameToCall = "LastBattery"
                 }
                 "storage"  -> eventNameToCall = "LastStorage"

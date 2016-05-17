@@ -1356,7 +1356,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25", "100", "-1" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "1", "25", "false", "-1", "true" ] ]
 }, {
   "root" : true,
   "title" : "Traps",

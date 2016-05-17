@@ -105,15 +105,15 @@ object EventManager : IResetable{
             val type = args[1] as String
             val level = args[2] as String
 
-            var person:Person
+            val person:Person
 
             if(name == "rand") person = GroupManager.getRandomPerson()!!                     //We need to do .toString() for the .toInt() method or else it converts the character to ascii value.
             else if(name.matches("evt[0-9]".toRegex())) person = GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()]
             else if(name == "evt") person = GameEventManager.currActiveEvent!!.randomPersonList[0]
             else person = GroupManager.getPerson(name)!!
 
-            var disType:Person.Ailment.AilmentType
-            var disLevel:Person.Ailment.AilmentLevel
+            val disType:Person.Ailment.AilmentType
+            val disLevel:Person.Ailment.AilmentLevel
 
             when(type){
                 "sickness" -> disType = Person.Ailment.AilmentType.Sickness
@@ -245,7 +245,7 @@ object EventManager : IResetable{
 
             if(minHours > 0) {
                 //Add a timer to call the event later
-                CustomTimer.addGameTimer(CustomTimer(MathUtils.random(minHours, maxHours), {
+                CustomTimer.addGameTimer(CustomTimer(MathUtils.random(minHours, maxHours), true, {
                     GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
                 }))
             }else{
@@ -397,12 +397,7 @@ object EventManager : IResetable{
             val amt = args[1] as Float //The amount changed.
             val oldAmt = args[2] as Float //The amount before the change
 
-            val name = GH.checkSupplyAmount(supply, amt, oldAmt)
-            if (!name.isEmpty()) {
-                gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")!!) }
-                gameScreen.noticeEventTimer.restart()
-                gameScreen.noticeEventTimer.start()
-            }
+            GH.checkSupplyHealth(supply, amt, oldAmt)
 
 //            GH.checkSupplyHealth(supply, amt, oldAmt)
 
@@ -423,7 +418,7 @@ object EventManager : IResetable{
 
             Logger.log("EventManager", "Event $name is ending")
 
-            if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false)
+            if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false, gameScreen)
             Result.purgeEventResults()
         })
 

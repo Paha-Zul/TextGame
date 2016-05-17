@@ -7,6 +7,7 @@ import com.quickbite.rx2020.managers.GameEventManager
 import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.Logger
 
@@ -19,28 +20,28 @@ object SaveLoad{
 
     private val json:Json = Json()
 
-    fun saveGame(threaded:Boolean){
+    fun saveGame(threaded:Boolean, game: GameScreen){
         json.setIgnoreUnknownFields(false)
         json.setUsePrototypes(true)
 
-        val save = gatherGameState()
+        val save = gatherGameState(game)
 
         if(threaded)
             TextGame.threadPool.submit {
                 val start = TimeUtils.nanoTime()
-                var file = Gdx.files.local(saveName)
+                val file = Gdx.files.local(saveName)
                 file.writeString(json.toJson(save), false)
                 Logger.log("SaveLoad", "Saved game (threaded) in ${(TimeUtils.nanoTime() - start)/1000000000.0} seconds")
             }
         else{
             val start = TimeUtils.nanoTime()
-            var file = Gdx.files.local(saveName)
+            val file = Gdx.files.local(saveName)
             file.writeString(json.toJson(save), false)
             Logger.log("SaveLoad", "Saved game (non-threaded) in ${(TimeUtils.nanoTime() - start)/1000000000.0} seconds")
         }
     }
 
-    private fun gatherGameState():SaveGamePOJO{
+    private fun gatherGameState(game:GameScreen):SaveGamePOJO{
         val startTime = TimeUtils.nanoTime()
 
         val save = SaveGamePOJO()
@@ -54,19 +55,21 @@ object SaveLoad{
         FunGameStats.statsMap.toList().forEach { stat -> save.funStatList.add(arrayOf(stat.first, stat.second)) }
         FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
         save.remainingEpicEvents.addAll(GameEventManager.getEventNameList("epic"))
+        game.timerList.forEach { pair -> save.eventTimers.add(arrayOf(pair.first.toString(), pair.second.remainingTime.toString())) }
+
 
         Logger.log("SaveLoad", "Gathered game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
 
         return save
     }
 
-    fun loadGame(){
+    fun loadGame(game:GameScreen){
         json.setIgnoreUnknownFields(false)
         json.setUsePrototypes(true)
 
         val startTime = TimeUtils.nanoTime()
 
-        var file = Gdx.files.local(saveName)
+        val file = Gdx.files.local(saveName)
         val save = json.fromJson(SaveGamePOJO::class.java, file)
 
         GameStats.TimeInfo.totalTimeCounter = save.currTime
@@ -75,7 +78,7 @@ object SaveLoad{
 
         GroupManager.clearPeople()
         save.personList.forEach { jsonPerson ->
-            var names = jsonPerson.name.split(" ")
+            val names = jsonPerson.name.split(" ")
             val person = Person(names[0], names[1], jsonPerson.male, jsonPerson.gameTimeAdded) //Make a new person to add to the group.
             person.addHealth(jsonPerson.health - person.maxHealth) //We need to set the health through a bit of roundabout.
             person.ailmentList = jsonPerson.ailments
@@ -99,6 +102,10 @@ object SaveLoad{
         GameEventManager.getEventNameList("epic").clear() //Let's clear this since it was probably loaded by the game
         GameEventManager.getEventNameList("epic").addAll(save.remainingEpicEvents) //Load the remaining events in.
 
+        save.eventTimers.forEach { list ->
+            game.setTimer(list[0], list[1].toFloat())
+        }
+
         Logger.log("SaveLoad", "Loaded game in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
     }
 
@@ -115,6 +122,7 @@ object SaveLoad{
         var funStatList:MutableList<Array<String>> = mutableListOf()
         var funStatUniqueList:MutableList<Array<String>> = mutableListOf()
         var remainingEpicEvents:MutableList<String> = mutableListOf()
+        var eventTimers:MutableList<Array<String>> = mutableListOf() //Try to use either java or Gdx classes
     }
 
     private class PersonPOJO(var name:String, var health:Float, var ailments:List<Person.Ailment>, var male:Boolean, val gameTimeAdded:Long){

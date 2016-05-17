@@ -1,5 +1,6 @@
 package com.quickbite.rx2020.util
 
+import com.quickbite.rx2020.clamp
 import com.quickbite.rx2020.interfaces.IResetable
 
 /**
@@ -8,7 +9,7 @@ import com.quickbite.rx2020.interfaces.IResetable
  * @param secondsInterval The interval to be used for the timer. If no delay is defined, the interval will be used for the initial timer delay.
  * @param _callback The callback to be
  */
-class CustomTimer(private var secondsDelay: Float, private var secondsInterval: Float, private var _callback: (() -> Unit)? = null){
+class CustomTimer(private var seconds: Float, var oneShot:Boolean = false, private var _callback: (() -> Unit)? = null){
 
     companion object:IResetable{
         val gameTimerList:MutableList<CustomTimer> = mutableListOf()
@@ -38,40 +39,31 @@ class CustomTimer(private var secondsDelay: Float, private var secondsInterval: 
 
     /** If the timer is done. */
     val done:Boolean
-        get() = currTime >= secondsInterval && currTime >= secondsDelay
+        get() = currTime >= seconds
 
-    /** If the delay has been fired once */
-    private val startedDelay:Boolean
-        get() = currTime >= secondsDelay
 
     var stopped:Boolean = false
         get
         private set
 
+    val remainingTime:Float
+        get() {
+            var remaining = seconds - currTime
+            remaining = remaining.clamp(0f, seconds)
+            return remaining
+        }
+
     private var currTime:Float = 0f
-    private var intervalStarted = false
 
     init{
         callback = _callback
-    }
-
-    /**
-     * Creates the timer as repeating
-     * @param secondsDelay The delay before the first firing of the timer.
-     * @param secondsInterval The interval to be used for the timer. -1 defines no interval, which means a one shot timer.
-     */
-    constructor(secondsDelay:Float, callback:(()->Unit)? = null):this(secondsDelay, -1f, callback){
-
     }
 
     fun update(delta:Float){
         //If we're not stopped...
         if(!stopped) {
             currTime += delta   //Increment timer
-            if (!intervalStarted && startedDelay) {     //If we haven't used the delay yet...
-                intervalStarted = true                  //Set interval started to true.
-                finish()                                //Finish and restart.
-            }else if(done){     //Otherwise, if is done
+            if(done){     //Otherwise, if is done
                 finish()        //Finish the timer.
             }
         }
@@ -83,7 +75,7 @@ class CustomTimer(private var secondsDelay: Float, private var secondsInterval: 
     private fun finish(){
         callback?.invoke()
         stop()
-        if(secondsInterval >= 0)
+        if(seconds >= 0)
             restart()
     }
 
@@ -103,23 +95,13 @@ class CustomTimer(private var secondsDelay: Float, private var secondsInterval: 
     }
 
     /**
-     * Restarts the timer with the optional settings. This will not reset the timer so the seconds delay will not be used unless reset() is called.
+     * Restarts the timer with the optional settings.
      * @param secondsDelay The delay until the timer fires the first interval
      * @param secondsInterval The interval for the timer to fire at.
      */
-    fun restart(secondsDelay: Float = this.secondsDelay, secondsInterval: Float = this.secondsInterval){
+    fun restart(seconds: Float = this.seconds){
         currTime = 0f
-        this.secondsDelay = secondsDelay
-        this.secondsInterval = secondsInterval
+        this.seconds = seconds
         start()
     }
-
-    /**
-     * Resets the timer. This will start the timer new and use secondsDelay as the initial timer start delay.
-     */
-    fun reset(secondsDelay: Float = this.secondsDelay, secondsInterval: Float = this.secondsInterval){
-        intervalStarted = false
-        restart(secondsDelay, secondsInterval)
-    }
-
 }

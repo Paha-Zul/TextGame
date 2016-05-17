@@ -21,7 +21,7 @@ import java.util.*
 /**
  * Created by Paha on 2/3/2016.
  */
-class GameScreen(val game: TextGame): Screen {
+class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     enum class State{
         TRAVELING, CAMP, GAMEOVER
     }
@@ -40,14 +40,18 @@ class GameScreen(val game: TextGame): Screen {
     private var currPosOfBackground:Float = 0f
     private var currPosOfSun:Float = 0f
 
-    private val commonEventTime = object {val min=12f; val max = 36f}
-    private val rareEventTime = object {val min=84f; val max = 252f}
-    private val epicEventTime = object {val min=360f; val max = 1080f}
+    private val dailyEventTime = object {val min=12f; val max = 36f}
+    private val weeklyEventTime = object {val min=84f; val max = 252f}
+    private val MonthlyEventTime = object {val min=360f; val max = 1080f}
 
-    private val dailyEventTimer: CustomTimer = CustomTimer(MathUtils.random(commonEventTime.min, commonEventTime.max).toFloat())
-    private val weeklyEventTimer: CustomTimer = CustomTimer(MathUtils.random(rareEventTime.min, rareEventTime.max).toFloat())
-    private val MonthlyEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
-    private val MonthlyNativeEventTimer: CustomTimer = CustomTimer(MathUtils.random(epicEventTime.min, epicEventTime.max).toFloat())
+    private val dailyEventTimer: CustomTimer = CustomTimer(MathUtils.random(dailyEventTime.min, dailyEventTime.max).toFloat())
+    private val weeklyEventTimer: CustomTimer = CustomTimer(MathUtils.random(weeklyEventTime.min, weeklyEventTime.max).toFloat())
+    private val MonthlyEventTimer: CustomTimer = CustomTimer(MathUtils.random(MonthlyEventTime.min, MonthlyEventTime.max).toFloat())
+    private val MonthlyNativeEventTimer: CustomTimer = CustomTimer(MathUtils.random(MonthlyEventTime.min, MonthlyEventTime.max).toFloat())
+
+    val timerList:List<Pair<String, CustomTimer>>
+        get() = listOf(Pair("daily", dailyEventTimer), Pair("weekly", weeklyEventTimer), Pair("monthly", MonthlyEventTimer),
+                Pair("monthlyNative", MonthlyNativeEventTimer))
 
     val noticeEventTimer: CustomTimer = CustomTimer(MathUtils.random(1f, 1f)) //Used to trigger notices.
 
@@ -71,6 +75,8 @@ class GameScreen(val game: TextGame): Screen {
     }
 
     init{
+        fadeIn()
+
         gui = GameScreenGUI(this)
         GameStats.game = this
 
@@ -126,7 +132,7 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {GroupManager.getRandomPerson()!!.addAilment(Person.Ailment.AilmentLevel.Regular, Person.Ailment.AilmentType.Injury)})
+        gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("track", -100f)})
 //        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
         gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Fire", "rare")!!)})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)})
@@ -134,10 +140,10 @@ class GameScreen(val game: TextGame): Screen {
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
 
-        dailyEventTimer.callback = timerFunc("common", dailyEventTimer, commonEventTime.min, commonEventTime.max)
-        weeklyEventTimer.callback = timerFunc("rare", weeklyEventTimer, rareEventTime.min, rareEventTime.max)
-        MonthlyEventTimer.callback = timerFunc("epic", MonthlyEventTimer, epicEventTime.min, epicEventTime.max)
-        MonthlyNativeEventTimer.callback = timerFunc("monthlyNative", MonthlyEventTimer, epicEventTime.min, epicEventTime.max)
+        dailyEventTimer.callback = timerFunc("common", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
+        weeklyEventTimer.callback = timerFunc("rare", weeklyEventTimer, weeklyEventTime.min, weeklyEventTime.max)
+        MonthlyEventTimer.callback = timerFunc("epic", MonthlyEventTimer, MonthlyEventTime.min, MonthlyEventTime.max)
+        MonthlyNativeEventTimer.callback = timerFunc("monthlyNative", MonthlyEventTimer, MonthlyEventTime.min, MonthlyEventTime.max)
 
         noticeEventTimer.stop()
 
@@ -148,7 +154,34 @@ class GameScreen(val game: TextGame): Screen {
             pauseGame()
         }
 
-        Logger.log("GameScreen", "People: ${GroupManager.getPeopleList()}")
+        if(loaded)
+            loadGame()
+    }
+
+    private fun fadeIn(){
+        TextGame.backgroundColor.a = 0f
+        TextGame.batch.color = Color(0f,0f,0f,0f)
+        val blackPixel = TextGame.smallGuiAtlas.findRegion("pixelBlack")
+
+        //Overlays a solid black rectangle and fades it out
+        val task = ChainTask({TextGame.backgroundColor.r < 1},
+            {
+                TextGame.batch.begin()
+                val amt = TextGame.backgroundColor.r + 0.01f
+                TextGame.backgroundColor.r = amt; TextGame.backgroundColor.g=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.b=amt; TextGame.backgroundColor.a=amt
+                TextGame.batch.color = Color(0f, 0f, 0f, (1-amt))
+                TextGame.batch.draw(blackPixel, -TextGame.viewport.screenWidth/2f, -TextGame.viewport.screenHeight/2f, TextGame.viewport.screenWidth.toFloat(), TextGame.viewport.screenHeight.toFloat())
+                TextGame.batch.end()
+            })
+        ChainTask.addTaskToEveryFrameList(task)
+    }
+
+    private fun loadGame(){
+        SaveLoad.loadGame(this)
+    }
+
+    private fun newGame(){
+
     }
 
     override fun show() {
@@ -156,7 +189,7 @@ class GameScreen(val game: TextGame): Screen {
     }
 
     override fun hide() {
-       SaveLoad.saveGame(true)
+       SaveLoad.saveGame(true, this)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -164,7 +197,7 @@ class GameScreen(val game: TextGame): Screen {
     }
 
     override fun pause() {
-        SaveLoad.saveGame(true)
+        SaveLoad.saveGame(true, this)
     }
 
     override fun resume() {
@@ -265,7 +298,7 @@ class GameScreen(val game: TextGame): Screen {
         purgeRecentChangeTimer.update(delta)
         if(purgeRecentChangeTimer.done){
             Result.purgeRecentResults(currGameTime)
-            purgeRecentChangeTimer.reset()
+            purgeRecentChangeTimer.restart()
         }
 
         currGameTime+=delta;
@@ -346,10 +379,17 @@ class GameScreen(val game: TextGame): Screen {
 
     }
 
+    /**
+     * @param eventType The type of event, ie: "daily"
+     * @param timer The timer that we are attaching this function to. This is so we can restart it and stuff.
+     * @param min The minimum time to random
+     * @param max The maximum time to random.
+     * @return The function that was made.
+     */
     fun timerFunc(eventType:String, timer: CustomTimer, min:Float, max:Float):()->Unit{
-        var func: (()->Unit) = {
+        val func: (()->Unit) = {
             //Get the current event or a new one if we aren't on an event.
-            var currEvent = GameEventManager.setNewRandomRoot(eventType);
+            val currEvent = GameEventManager.setNewRandomRoot(eventType);
 
             Logger.log("GameScreen", "Starting event ${GameEventManager.currActiveEvent!!.name}")
 
@@ -357,10 +397,29 @@ class GameScreen(val game: TextGame): Screen {
             else //Trigger the GUI UI and send a callback to it.
                 gui.triggerEventGUI(currEvent)
 
-            timer.reset(min, max)
+            timer.restart(MathUtils.random(min, max))
         }
 
         return func
+    }
+
+    /**
+     * Used mostly for setting the timers when the game is loaded.
+     * @param eventType The type of event
+     * @param time The exact time to set the timer for.
+     */
+    fun setTimer(eventType:String, time:Float){
+        val timer:CustomTimer
+        val callback:() -> Unit
+        when(eventType){
+            "daily" -> {timer = dailyEventTimer; callback = timerFunc(eventType, timer, dailyEventTime.min, dailyEventTime.max)}
+            "weekly" -> {timer = weeklyEventTimer; callback = timerFunc(eventType, timer, weeklyEventTime.min, weeklyEventTime.max)}
+            "monthly" -> {timer = MonthlyEventTimer; callback = timerFunc(eventType, timer, MonthlyEventTime.min, MonthlyEventTime.max)}
+            else -> {timer = MonthlyNativeEventTimer; callback = timerFunc(eventType, timer, MonthlyEventTime.min, MonthlyEventTime.max)}
+        }
+
+        timer.callback = callback
+        timer.restart(time)
     }
 
 }

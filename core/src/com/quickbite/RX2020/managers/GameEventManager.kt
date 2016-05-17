@@ -20,10 +20,10 @@ object GameEventManager{
 
     var lastCurrEvent:EventJson? = null //Mainly for debugging.
 
-    private val commonRootList: MutableList<String> = mutableListOf() //For Json Events
-    private val rareRootList: MutableList<String> = mutableListOf() //For Json Events
-    private val epicRootList: MutableList<String> = mutableListOf() //For Json Events
-    val epicRootListOriginal: MutableList<String> = mutableListOf() //For Json Events
+    private val dailyRootList: MutableList<String> = mutableListOf() //For Json Events
+    private val weeklyRootList: MutableList<String> = mutableListOf() //For Json Events
+    private val monthlyRootList: MutableList<String> = mutableListOf() //For Json Events
+    val monthlyLootListOriginal: MutableList<String> = mutableListOf() //For Json Events
     private val monthlyNativeRootList: MutableList<String> = mutableListOf() //For Json Events
     private val specialRootList: MutableList<String> = mutableListOf() //For Json Events
     private val returnRootList: MutableList<String> = mutableListOf() //For Json Events
@@ -45,12 +45,12 @@ object GameEventManager{
 
     fun getEventNameList(type:String):MutableList<String>{
         when(type){
-            "common" -> return commonRootList
-            "rare" -> return rareRootList
+            "daily" -> return dailyRootList
+            "weekly" -> return weeklyRootList
             "special" -> return specialRootList
             "monthlyNative" -> return monthlyNativeRootList
             "returnEvents" -> return returnRootList
-            else -> return epicRootList
+            else -> return monthlyRootList
         }
     }
 
@@ -62,7 +62,7 @@ object GameEventManager{
         if(event.root){
             list.add(event.name) //Add it.
             if(type == "epic") //Special case since we're gonna need to remember which epic events have alreayd triggered.
-                epicRootListOriginal.add(event.name)
+                monthlyLootListOriginal.add(event.name)
         }else
             GameEventManager.eventMap.put(event.name, event)
     }
