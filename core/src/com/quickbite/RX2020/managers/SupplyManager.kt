@@ -1,9 +1,9 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
+import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.util.Logger
 import java.util.*
 
@@ -73,9 +73,40 @@ object SupplyManager : IUpdateable, IResetable{
         return supply!!
     }
 
-    fun setSupply(name:String, amt:Float):Supply{
+    fun addHealthToSupply(name:String, amt:Float):Supply{
+        val supply = supplyMap[name] //Get the supply.
+        return addHealthToSupply(supply, amt)
+    }
+
+    fun addHealthToSupply(supply:Supply?, amt:Float):Supply{
+        var _amt = amt //Let's make the passed in val mutable
+
+        //Log it if the supply is null
+        if(supply == null) Logger.log("SupplyManager", "Trying to add to supply ${supply?.name} which doesn't exist.", Logger.LogLevel.Warning)
+        else {
+            val oldAmt = supply.currHealth
+            supply.currHealth += amt //Usually health for any supply will be 100/100, but for parts that degrade it will not?
+            if (supply.currHealth < 0) supply.currHealth = 0f
+            else if (supply.currHealth >= supply.maxHealth) supply.currHealth = supply.currHealth.toFloat()
+
+            EventManager.callEvent("supplyHealthChanged", supply, _amt, oldAmt)
+        }
+
+        return supply!!
+    }
+
+    fun setSupplyAmount(name:String, amt:Float):Supply{
         val supply = supplyMap[name]!!
+        return setSupplyAmount(supply, amt)
+    }
+
+    fun setSupplyAmount(supply:Supply, amt:Float):Supply{
+        val oldAmt = supply.amt
+        val amtChanged = supply.amt
         supply.amt = amt
+
+        EventManager.callEvent("supplyChanged", supply, amtChanged, oldAmt)
+
         return supply
     }
 

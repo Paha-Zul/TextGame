@@ -39,12 +39,12 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         timeAdded = _timeAdded
     }
 
-    private var disabilities:MutableList<Disability> = mutableListOf()
-    var disabilityList:List<Disability>
-        get() = disabilities.toList()
+    private var ailments:MutableList<Ailment> = mutableListOf()
+    var ailmentList:List<Ailment>
+        get() = ailments.toList()
         set(value){
-            disabilities.clear()
-            value.forEach { injury -> addDisability(injury) }
+            ailments.clear()
+            value.forEach { injury -> addAilment(injury) }
         }
 
     val hasInjury:Boolean
@@ -68,11 +68,14 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
     operator fun component1() = firstName
     operator fun component2() = lastName
 
+    val isDead:Boolean
+        get() = healthNormal <= 0
+
     fun addHealth(amt:Float):Float{
         healthNormal += amt
         if(healthNormal >= maxHealth - healthInjury)
             healthNormal = maxHealth - healthInjury
-        if(healthNormal <= 0)
+        if(isDead)
             GroupManager.killPerson(firstName)
 
         EventManager.callEvent("healthChanged", this, amt)
@@ -86,10 +89,10 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         return addHealth(amt)
     }
 
-    fun addDisability(level: Disability.DisabilityLevel, type:Disability.DisabilityType){
-        val disability = Disability(level, type)
-        disabilities.add(disability)
-        val isInjury = disability.type == Disability.DisabilityType.Injury
+    fun addAilment(level: Ailment.AilmentLevel, type: Ailment.AilmentType){
+        val disability = Ailment(level, type)
+        ailments.add(disability)
+        val isInjury = disability.type == Ailment.AilmentType.Injury
 
         //Only shift health if it's an injury
         if(isInjury) {
@@ -102,15 +105,18 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
             true -> numInjury++
             else -> numSickness++
         }
+
+        if(isDead)
+            GroupManager.killPerson(firstName)
     }
 
-    fun removeDisability(disability: Disability):Boolean{
-        val removed = disabilities.remove(disability)
-        val isInjury = disability.type == Disability.DisabilityType.Injury
+    fun removeAilment(ailment: Ailment):Boolean{
+        val removed = ailments.remove(ailment)
+        val isInjury = ailment.type == Ailment.AilmentType.Injury
         //Only shift health if it's an injury
         if(removed && isInjury) {
-            healthNormal += disability.hpLost
-            healthInjury -= disability.hpLost
+            healthNormal += ailment.hpLost
+            healthInjury -= ailment.hpLost
         }
 
         //Decrement the right counter
@@ -122,32 +128,32 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         return removed
     }
 
-    fun removeWorstDisability():Boolean{
-        var worst: Disability? = null
+    fun removeWorstAilment():Boolean{
+        var worst: Ailment? = null
         var removed = false
 
-        disabilityList.forEach { injury ->
+        ailmentList.forEach { injury ->
             if(worst == null || worst!!.type < injury.type)
                 worst = injury
         }
 
         if(worst!=null)
-            removed = removeDisability(worst!!)
+            removed = removeAilment(worst!!)
 
         return removed
     }
 
-    fun removeLongestDisability():Boolean{
-        var longest: Disability? = null
+    fun removeLongestAilment():Boolean{
+        var longest: Ailment? = null
         var removed = false
 
-        disabilityList.forEach { injury ->
+        ailmentList.forEach { injury ->
             if(longest == null || longest!!.hoursRemaining < injury.hoursRemaining)
                 longest = injury
         }
 
         if(longest!=null)
-            removed = removeDisability(longest!!)
+            removed = removeAilment(longest!!)
 
         return removed
     }
@@ -155,13 +161,13 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
     /**
      * Used for loading in injuries from a save mostly.
      */
-    private fun addDisability(disability: Disability){
-        disabilities.add(disability)
-        val isInjury = disability.type == Disability.DisabilityType.Injury
+    private fun addAilment(ailment: Ailment){
+        ailments.add(ailment)
+        val isInjury = ailment.type == Ailment.AilmentType.Injury
 
         if(isInjury) {
-            healthNormal -= disability.hpLost
-            healthInjury += disability.hpLost
+            healthNormal -= ailment.hpLost
+            healthInjury += ailment.hpLost
         }
 
         when(isInjury){
@@ -170,14 +176,14 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         }
     }
 
-    class Disability(var level: DisabilityLevel, var type:DisabilityType): IUpdateable {
-        enum class DisabilityType{Injury, Sickness}
-        enum class DisabilityLevel {Minor, Regular, Major, Trauma}
+    class Ailment(var level: AilmentLevel, var type: AilmentType): IUpdateable {
+        enum class AilmentType {Injury, Sickness}
+        enum class AilmentLevel {Minor, Regular, Major, Trauma}
         val done:Boolean
             get() = hoursRemaining <= 0
 
         //Need this empty constructor for loading/saving to json files.
-        private constructor():this(DisabilityLevel.Minor, DisabilityType.Injury)
+        private constructor():this(AilmentLevel.Minor, AilmentType.Injury)
 
         var hoursRemaining = 0
         var hpLost = 0
@@ -185,10 +191,10 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
 
         init{
             when(level){
-                DisabilityLevel.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25); hpLostPerHour = 0.12f}
-                DisabilityLevel.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50); hpLostPerHour = 0.14f}
-                DisabilityLevel.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75); hpLostPerHour = 0.19f}
-                DisabilityLevel.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100); hpLostPerHour = 0.29f}
+                AilmentLevel.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25); hpLostPerHour = 0.12f}
+                AilmentLevel.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50); hpLostPerHour = 0.14f}
+                AilmentLevel.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75); hpLostPerHour = 0.19f}
+                AilmentLevel.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100); hpLostPerHour = 0.29f}
             }
         }
 
@@ -200,6 +206,6 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
 
 
     override fun toString(): String {
-        return firstName;
+        return "$fullName - "+(if(male){"male"}else{"female"});
     }
 }

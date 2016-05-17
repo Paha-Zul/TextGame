@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.quickbite.rx2020.interfaces.IGPGServices;
 import com.quickbite.rx2020.managers.EasyAssetManager;
 import com.quickbite.rx2020.screens.LoadingScreen;
 import com.quickbite.rx2020.util.Logger;
@@ -33,6 +34,12 @@ public class TextGame extends com.badlogic.gdx.Game {
 	public static ExecutorService threadPool;
 
 	public static Color backgroundColor = new Color(0,0,0,1);
+
+	public static IGPGServices GPGServices;
+
+	public TextGame(IGPGServices GPGServices){
+		TextGame.GPGServices = GPGServices;
+	}
 
 	@Override
 	public void create () {
@@ -69,7 +76,6 @@ public class TextGame extends com.badlogic.gdx.Game {
 		threadPool = Executors.newFixedThreadPool(cores);
 		Gdx.input.setInputProcessor(stage);
 		setScreen(new LoadingScreen(this));
-
 	}
 
 	@Override

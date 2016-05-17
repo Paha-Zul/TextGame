@@ -36,10 +36,10 @@ object GameEventManager{
         return event;
     }
 
-    fun setNewRandomRoot(type:String):EventJson{
+    fun setNewRandomRoot(type:String):EventJson?{
         val event = getAndSetEvent("", type)
         currActiveEvent = event
-        Logger.log("GameEventManager", "Picking new event ${event.name} for type $type")
+        Logger.log("GameEventManager", "Picking new event ${event?.name} for type $type")
         return event;
     }
 
@@ -73,24 +73,26 @@ object GameEventManager{
      * @param type The type of event. If left out, gets an event from the non root event map
      * @return The event retrieved from the event map.
      */
-    private fun getEvent(eventName:String="", type:String = "", randomizePeople:Boolean = false, randomizedPeopleList:List<Person>? = null):EventJson{
+    private fun getEvent(eventName:String="", type:String = "", randomizePeople:Boolean = false, randomizedPeopleList:List<Person>? = null):EventJson?{
         val list = getEventNameList(type)
 
         //Get the event either by name or randomly.
-        var event:EventJson? = if(!eventName.isEmpty()) eventMap[eventName] else eventMap[list[MathUtils.random(0, list.size-1)]]
+        var event:EventJson? = if(!eventName.isEmpty()) eventMap[eventName] else if(list.size > 0) eventMap[list[MathUtils.random(0, list.size-1)]] else null
 
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
-        if(randomizePeople) event!!.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
-        else if(randomizedPeopleList != null) event!!.randomPersonList = randomizedPeopleList
+        else {
+            if (randomizePeople) event.randomPersonList = GroupManager.getPeopleList().copyOf().shuffle().toList()
+            else if (randomizedPeopleList != null) event.randomPersonList = randomizedPeopleList
 
-        //As a special case for the game, we only want 1 occurrence of each epic event.
-        if(type == "epic") list.remove(event!!.name)
+            //As a special case for the game, we only want 1 occurrence of each epic event.
+            if (type == "epic") list.remove(event.name)
 
-        GH.replaceEventDescription(event!!) //TODO Watch this. May need to thread it.
+            GH.replaceEventDescription(event) //TODO Watch this. May need to thread it.
+        }
         return event
     }
 
-    fun getAndSetEvent(eventName:String, type:String = ""):EventJson{
+    fun getAndSetEvent(eventName:String, type:String = ""):EventJson?{
         var event = getEvent(eventName, type, true)
         currActiveEvent = event
         return event
@@ -185,6 +187,7 @@ object GameEventManager{
 
             //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
             for(i in chances!![choiceIndex].indices){
+                if(chances!![choiceIndex][i] <= 0) Logger.log("GameEventManager", "Chance for choice ${choices!![choiceIndex]} under event ${this.name} is 0. Not good", Logger.LogLevel.Warning)
                 counter += chances!![choiceIndex][i]
                 if(chance <= counter) {
                     outcomeIndex = i

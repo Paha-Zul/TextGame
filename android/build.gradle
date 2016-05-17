@@ -16,12 +16,19 @@ android {
     }
     defaultConfig {
         applicationId "com.quickbite.rx2020"
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 23
+
+        multiDexEnabled true
     }
 
     lintOptions {
         abortOnError false
+    }
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
     }
 }
 

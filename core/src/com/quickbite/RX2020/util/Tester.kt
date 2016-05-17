@@ -27,22 +27,22 @@ object Tester {
         }
 
         for(eventName in GameEventManager.getEventNameList("common"))
-            func(GameEventManager.getAndSetEvent(eventName, "common"))
+            func(GameEventManager.getAndSetEvent(eventName, "common")!!)
 
         for(eventName in GameEventManager.getEventNameList("rare"))
-            func(GameEventManager.getAndSetEvent(eventName, "rare"))
+            func(GameEventManager.getAndSetEvent(eventName, "rare")!!)
 
         //We use .toList() to make a copy because of the specialness of epic events.
         for(eventName in GameEventManager.getEventNameList("epic").toList())
-            func(GameEventManager.getAndSetEvent(eventName, "epic"))
+            func(GameEventManager.getAndSetEvent(eventName, "epic")!!)
 
         //We use .toList() to make a copy because of the specialness of epic events.
         for(eventName in GameEventManager.getEventNameList("monthlyNative").toList())
-            func(GameEventManager.getAndSetEvent(eventName, "monthlyNative"))
+            func(GameEventManager.getAndSetEvent(eventName, "monthlyNative")!!)
 
         //We use .toList() to make a copy because of the specialness of epic events.
         for(eventName in GameEventManager.getEventNameList("returnEvents").toList())
-            func(GameEventManager.getAndSetEvent(eventName, "returnEvents"))
+            func(GameEventManager.getAndSetEvent(eventName, "returnEvents")!!)
 
         System.out.println("Event Testing Done!")
 
@@ -63,7 +63,7 @@ object Tester {
             event.outcomes!!.forEachIndexed { i, list -> list.forEachIndexed { j, outcomeName ->
                 eventMap.remove(outcomeName)
 //                val _evt = GameEventManager.getEvent(outcomeName)
-                val _evt = GameEventManager.getAndSetEvent(outcomeName)
+                val _evt = GameEventManager.getAndSetEvent(outcomeName)!!
                 _evt.randomPersonList = event.randomPersonList
                 System.out.println("Testing ${_evt.name}")
                 testEvent(_evt)

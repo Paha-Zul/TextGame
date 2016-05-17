@@ -2,5 +2,9 @@
 <resources>
 
     <string name="app_name">RX-2020</string>
+    <string name="key1">uiN/mQnSYpOi+shBIQWhvYwEsk2i1F7PEPauQS1qcUJjNNpqOgd35TZjlaXxr0ZIEqOzyTfvZaXLLhSTOjaSh570X13sEGKZPV9bvrjRQqw4+at2jLmjkW4PRf</string>
+    <string name="key2">OOSfUpgmuKftLeuGL+pxeDUQcj5rrOXlErYCAUpq7OGuxbi4nIB3Lwxd+0JfMeR5ZMWQqfGm8BIMXCdpDuiwl0KVe/454hPJY93iZadPBRZBLtYH3ChXQx5H5M</string>
+    <string name="key3">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiHxpsLayalXXqVX2fK69YbW9SpxjquloIv/He37WBMPPsUF5w13Kuxi+LbYRQAAo2S3XVL1V+m+89f</string>
+    <string name="key4">eBCJcaa0L25IEr+d4pKwIDAQAB</string>
 
 </resources>

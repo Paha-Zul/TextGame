@@ -9,36 +9,18 @@
   "resultingAction" : [ [ "showDeaths" ] ]
 }, {
   "root" : true,
-  "title" : "End of the Line",
+  "title" : "Final Entry",
   "name" : "EndLose",
   "description" : [ "You have lost..." ],
-  "choices" : [ ],
-  "outcomes" : [ [ "EndLose2" ] ],
-  "chances" : [ [ 100.0 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "End of the Line",
-  "name" : "EndWin",
-  "description" : [ "The weathered ROV creaks to a stop in front of a large clearing. The weary crew opens the ROV's hatches and glances outward. Before them lies the tattered remains of huge parachutes and the worn but intact hulls of the enormous cargo crates, guided from outer space to this very spot months before Exomer751's arrival. They've made it... RX-2020." ],
-  "choices" : [ ],
-  "outcomes" : [ [ "EndWin2" ] ],
-  "chances" : [ [ 100.0 ] ],
-  "resultingAction" : [ ]
-}, {
-  "root" : false,
-  "title" : "End of the Line",
-  "name" : "EndWin2",
-  "description" : [ ],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "gameOver", "true" ] ]
-}, {
+},{
   "root" : false,
   "title" : "End of the Line",
-  "name" : "EndLose2",
-  "description" : [ ],
+  "name" : "EndWin",
+  "description" : ["The weathered ROV creaks to a stop in front of a large clearing. The weary crew opens the ROV's hatches and glances outward. Before them lies the tattered remains of huge parachutes and the worn but intact hulls of the enormous cargo crates, guided from outer space to this very spot months before Exomer751's arrival. They've made it... RX-2020."],
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],

@@ -46,14 +46,14 @@ object GroupManager : IUpdateable, IResetable {
         getPeopleList().forEach { person ->
 
             //Update their injuries. If they are done, remove them from the person.
-            person.disabilityList.forEach { disability ->
+            person.ailmentList.forEach { disability ->
                 disability.updateHourly(delta)
                 //If the disability is a sickness, remove health.
-                if(disability.type == Person.Disability.DisabilityType.Sickness)
+                if(disability.type == Person.Ailment.AilmentType.Sickness)
                     person.addHealth(-disability.hpLostPerHour)
                 //If it's done, remove the disability
                 if(disability.done)
-                    person.removeDisability(disability)
+                    person.removeAilment(disability)
             }
 
             //If we are out of food, drain the person's health

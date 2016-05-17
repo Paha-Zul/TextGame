@@ -224,7 +224,9 @@ class GameScreenGUI(val game : GameScreen) {
     private fun sliderTask():ChainTask{
         var task:ChainTask? = null
         task = ChainTask(
-                { game.numHoursToAdvance >= 0 && game.searchActivity != null },
+                {
+                    game.numHoursToAdvance >= 0 && game.searchActivity != null
+                },
                 {
                     val passed = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
 
@@ -270,14 +272,6 @@ class GameScreenGUI(val game : GameScreen) {
         activityButton.isDisabled = false
     }
 
-    fun disableCampButton(){
-        campButton.isDisabled = true
-    }
-
-    fun enableCampButton(){
-        campButton.isDisabled = false
-    }
-
     fun applyTravelTab(tableToApply: Table){
         mainTable.remove()
         mainTable.clear()
@@ -305,6 +299,8 @@ class GameScreenGUI(val game : GameScreen) {
 
         //campTable.bottom().left()
         campTable.setFillParent(true)
+
+        campButton.isDisabled = false //In the rare case that an event opens immediately before the camp.
 
         TextGame.stage.addActor(campTable)
     }
@@ -445,6 +441,8 @@ class GameScreenGUI(val game : GameScreen) {
         imageButtonStyle.disabled = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("medkitDisabled"))
 
         val hasMedkits = SupplyManager.getSupply("medkits").amt.toInt() > 0
+        val maleGenderSymbol = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("maleGender"))
+        val femaleGenderSymbol = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("femaleGender"))
 
         val list:Array<Person> = GroupManager.getPeopleList()
         for(person: Person in list.iterator()){
@@ -461,6 +459,8 @@ class GameScreenGUI(val game : GameScreen) {
             recentChangeLabel.setFontScale(normalFontScale)
             recentChangeLabel.setAlignment(Align.right)
 
+            var genderImage:Image = if(person.male) Image(maleGenderSymbol) else Image(femaleGenderSymbol)
+
             val change = Result.recentChangeMap[person.firstName]
             if(change != null){
                 var modifier = ""
@@ -476,6 +476,7 @@ class GameScreenGUI(val game : GameScreen) {
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
+            pairTable.add(genderImage).left().size(32f)
             pairTable.add(nameLabel).right().expandX().fillX().colspan(3)
             pairTable.row().right()
             pairTable.add(recentChangeLabel).right().spaceRight(5f).expandX().fillX()
@@ -642,7 +643,7 @@ class GameScreenGUI(val game : GameScreen) {
         GameEventManager.currActiveEvent = event
 
         gameEventGUIActive = true
-        if(eraseResults) Result.clearResultLists()
+        Result.clearResultLists()
 
         EventManager.callEvent("eventStarted", event.name)
 
@@ -976,19 +977,21 @@ class GameScreenGUI(val game : GameScreen) {
      * Closes the event window.
      */
     fun closeEvent(){
-        campButton.isDisabled = false;
-        gameEventGUIActive = false
-        EventManager.callEvent("eventFinished", GameEventManager.currActiveEvent!!.name)
-        GameEventManager.lastCurrEvent = GameEventManager.currActiveEvent
-        GameEventManager.currActiveEvent = null
-        EventInfo.eventContainer.remove()
+        if(GameEventManager.currActiveEvent != null) {
+            campButton.isDisabled = false;
+            gameEventGUIActive = false
+            EventManager.callEvent("eventFinished", GameEventManager.currActiveEvent!!.name)
+            GameEventManager.lastCurrEvent = GameEventManager.currActiveEvent
+            GameEventManager.currActiveEvent = null
+            EventInfo.eventContainer.remove()
 
-        //If the queue is not empty, lets call the event gui again
-        if(guiQueue.size != 0) {
-            val last = guiQueue.removeLast()
-            triggerEventGUI(last.first, last.second, last.third)
-        }else if(tradeWindowTable.parent == null)
-            game.resumeGame()
+            //If the queue is not empty, lets call the event gui again
+            if (guiQueue.size != 0) {
+                val last = guiQueue.removeLast()
+                triggerEventGUI(last.first, last.second, last.third)
+            } else if (tradeWindowTable.parent == null)
+                game.resumeGame()
+        }
     }
 
     fun buildCampTable(){
@@ -1337,7 +1340,7 @@ class GameScreenGUI(val game : GameScreen) {
                 val theirOffer = otherOfferAmtLabel.text.toString().toInt()
                 if(yourOffer >= theirOffer){
                     for(item in exomerList)
-                        SupplyManager.setSupply(item.name, item.currAmt.toFloat())
+                        SupplyManager.setSupplyAmount(item.name, item.currAmt.toFloat())
 
                     //TODO Supplies don't update?
                     updateSuppliesGUI()

@@ -14,8 +14,7 @@ object GameStats : IUpdateable, IResetable{
     var win:Boolean = false
     var gameOverStatus:String = "?"
 
-    fun init(gameScreen: GameScreen){
-        game = gameScreen
+    fun init(){
         TravelInfo.totalDistOfGame = MathUtils.random(36000, 108000)
     }
 

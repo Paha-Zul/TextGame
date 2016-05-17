@@ -179,6 +179,7 @@ object GH {
         matcher = numberPattern.matcher(_token);
         if(matcher.find()){
             number = matcher.group(1).toInt()
+            number -= 1 //We do this because array indexes start at 0. So Name1 refers to names[0]
         }
 
         var pronoun = ""                                    //The pronoun that will be changed
@@ -264,8 +265,12 @@ object GH {
     fun checkCantTravel():Boolean{
         val energy = SupplyManager.getSupply("energy")
         val tracks = ROVManager.ROVPartMap["track"]!!
+        val panels = ROVManager.ROVPartMap["panel"]!!
+        val battery = ROVManager.ROVPartMap["battery"]!!
 
-        return (tracks.amt.toInt() == 0 && tracks.currHealth <= 0) || energy.amt <= 0
+        if(battery.currHealth <= 0) SupplyManager.setSupplyAmount("energy", 0f)
+
+        return tracks.currHealth <= 0 || energy.amt <= 0
     }
 
     fun checkGameOverConditions():Pair<Boolean, String>{
@@ -275,23 +280,24 @@ object GH {
         val edibles = SupplyManager.getSupply("edibles")
         val ROV = ROVManager.ROVPartMap["ROV"]!!
         val panels = SupplyManager.getSupply("panel")
+        val battery = SupplyManager.getSupply("battery")
+        val tracks = SupplyManager.getSupply("track")
 
         val cantGetEnergy = energy.amt <= 0 && edibles.amt <= 0 && ammo.amt <= 0
         val noStorage = storage.currHealth <= 0 && storage.amt.toInt() == 0
-        val cantTravel = checkCantTravel() && ammo.amt.toInt() == 0
+        val cantTravel = checkCantTravel() && tracks.amt <= 0 && ammo.amt.toInt() == 0
+        val noEnergy = battery.currHealth <= 0 && battery.amt <= 0 && energy.amt <= 0 && ammo.amt <= 0
 
-        val lost = (cantTravel && (noStorage || cantGetEnergy)) || ROV.currHealth <= 0f || GroupManager.numPeopleAlive == 0
+        val lost = cantGetEnergy || ROV.currHealth <= 0f || GroupManager.numPeopleAlive == 0 || noStorage
 
         var reason = ""
         if(lost){
-            val tracks = SupplyManager.getSupply("track")
-            val batteries = SupplyManager.getSupply("battery")
 
             if(panels.currHealth <= 0f && panels.amt <= 0f && energy.amt <= 0f)
                 reason = "LostPanel"
             else if(tracks.currHealth <= 0f && tracks.amt <= 0f && ammo.amt <= 0f)
                 reason = "LostTrack"
-            else if(batteries.currHealth <= 0f && batteries.amt <= 0f && ammo.amt <= 0f)
+            else if(battery.currHealth <= 0f && battery.amt <= 0f && ammo.amt <= 0f)
                 reason = "LostBattery"
             else if(storage.currHealth <= 0f && storage.amt <= 0f)
                 reason = "LostStorage"
@@ -308,7 +314,7 @@ object GH {
         return Pair(lost, reason)
     }
 
-    fun checkSupply(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float):String{
+    fun checkSupplyAmount(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float):String{
         val isNewlyZero = supply.amt <= 0f && amtBefore > 0
         var eventNameToCall = ""
 
@@ -343,6 +349,15 @@ object GH {
         }
 
         return eventNameToCall
+    }
+
+    fun checkSupplyHealth(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float){
+        if(supply.currHealth <= 0f){
+            when(supply.name){
+                "battery" -> SupplyManager.setSupplyAmount(supply, 0f)
+                "track" -> EventManager.callEvent("forceCamp")
+            }
+        }
     }
 
     fun specialDeathTextReplacement(text:String, person: Person):String{

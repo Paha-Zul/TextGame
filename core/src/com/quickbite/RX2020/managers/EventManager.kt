@@ -31,7 +31,7 @@ object EventManager : IResetable{
         if(func != null)
             func(args.toList())
         else
-            Logger.log("EventSystem", "No event found for $name, is it spelled correctly?")
+            Logger.log("EventSystem", "No event found for $name, is it spelled correctly?", Logger.LogLevel.Warning)
     }
 
     fun callEvent(name:String, args:List<Any>){
@@ -39,7 +39,7 @@ object EventManager : IResetable{
         if(func != null)
             func(args)
         else
-            Logger.log("EventSystem", "No event found for $name, is it spelled correctly?")
+            Logger.log("EventSystem", "No event found for $name, is it spelled correctly?", Logger.LogLevel.Warning)
     }
 
     /**
@@ -112,22 +112,22 @@ object EventManager : IResetable{
             else if(name == "evt") person = GameEventManager.currActiveEvent!!.randomPersonList[0]
             else person = GroupManager.getPerson(name)!!
 
-            var disType:Person.Disability.DisabilityType
-            var disLevel:Person.Disability.DisabilityLevel
+            var disType:Person.Ailment.AilmentType
+            var disLevel:Person.Ailment.AilmentLevel
 
             when(type){
-                "sickness" -> disType = Person.Disability.DisabilityType.Sickness
-                else -> disType = Person.Disability.DisabilityType.Injury
+                "sickness" -> disType = Person.Ailment.AilmentType.Sickness
+                else -> disType = Person.Ailment.AilmentType.Injury
             }
 
             when(level){
-                "minor" -> disLevel = Person.Disability.DisabilityLevel.Minor
-                "regular" -> disLevel = Person.Disability.DisabilityLevel.Regular
-                "major" -> disLevel = Person.Disability.DisabilityLevel.Major
-                else -> disLevel = Person.Disability.DisabilityLevel.Trauma
+                "minor" -> disLevel = Person.Ailment.AilmentLevel.Minor
+                "regular" -> disLevel = Person.Ailment.AilmentLevel.Regular
+                "major" -> disLevel = Person.Ailment.AilmentLevel.Major
+                else -> disLevel = Person.Ailment.AilmentLevel.Trauma
             }
 
-            person.addDisability(disLevel, disType)
+            person.addAilment(disLevel, disType)
 
             FunGameStats.addFunStat("Ailments Inflicted: ", "1")
             Result.addRecentChange("$level $type for ${person.firstName}", 1f, GameScreen.currGameTime, "", true)
@@ -140,8 +140,8 @@ object EventManager : IResetable{
 
             val person = GroupManager.getPerson(name)!!;
             when(type){
-                "worst" -> person.removeWorstDisability()
-                else -> person.removeLongestDisability()
+                "worst" -> person.removeWorstAilment()
+                else -> person.removeLongestAilment()
             }
 
             FunGameStats.addFunStat("Ailments Cured: ", "1")
@@ -198,6 +198,31 @@ object EventManager : IResetable{
             }
         })
 
+        //Adds a random item to the supply.
+        EventManager.onEvent("addRndItemHealth", {args ->
+            try {
+                val min: Float = (args[0] as String).toFloat()
+                val max: Float = (args[1] as String).toFloat()
+                val chance = (args[2] as String).toFloat()
+                val supplyList: List<Any> = args.subList(3, args.size)
+
+                if(MathUtils.random(100) <= chance) {
+                    val randomSupply = supplyList[MathUtils.random(supplyList.size - 1)] as String
+                    var num = MathUtils.random(Math.abs(min), Math.abs(max))
+
+                    if (min < 0 || max < 0) num = -num
+                    SupplyManager.addHealthToSupply(randomSupply, num.toFloat())
+
+                    FunGameStats.addFunStat("$randomSupply damage", num.toInt().toString())
+                }
+
+                GameScreen.gui.updateSuppliesGUI()
+            }catch(e:NumberFormatException){
+                e.printStackTrace()
+                Logger.log("EventManager", "addRndItem has some wrong parameters, make sure they are in the order: min/max/chance/supplyNames(args)")
+            }
+        })
+
         EventManager.onEvent("alterSupplies", {args ->
             val size = args[0] as String
             val lose = if(args.size > 1) (args[1] as String).toBoolean() else false
@@ -221,10 +246,10 @@ object EventManager : IResetable{
             if(minHours > 0) {
                 //Add a timer to call the event later
                 CustomTimer.addGameTimer(CustomTimer(MathUtils.random(minHours, maxHours), {
-                    GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage)
+                    GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
                 }))
             }else{
-                GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType), evtPage, false)
+                GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
             }
         })
 
@@ -355,14 +380,33 @@ object EventManager : IResetable{
             val amt = args[1] as Float
             val oldAmt = args[2] as Float
 
-            val name = GH.checkSupply(supply, amt, oldAmt)
+            val name = GH.checkSupplyAmount(supply, amt, oldAmt)
             if (!name.isEmpty()) {
-                gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")) }
+                GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
+//                gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")!!) }
+//                gameScreen.noticeEventTimer.restart()
+//                gameScreen.noticeEventTimer.start()
+            }
+
+            Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
+        })
+
+        //Called when a supply from the SupplyManager has changed. This is called from SupplyManager usually.
+        EventManager.onEvent("supplyHealthChanged", { args ->
+            val supply = args[0] as SupplyManager.Supply
+            val amt = args[1] as Float //The amount changed.
+            val oldAmt = args[2] as Float //The amount before the change
+
+            val name = GH.checkSupplyAmount(supply, amt, oldAmt)
+            if (!name.isEmpty()) {
+                gameScreen.noticeEventTimer.callback = { GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")!!) }
                 gameScreen.noticeEventTimer.restart()
                 gameScreen.noticeEventTimer.start()
             }
 
-            Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
+//            GH.checkSupplyHealth(supply, amt, oldAmt)
+
+            Result.addRecentChange("${supply.displayName} health", amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
         })
 
         //Called when an event starts.
@@ -385,6 +429,7 @@ object EventManager : IResetable{
 
         //Called when an event finishes.
         EventManager.onEvent("forceCamp", { args ->
+            GameScreen.gui.closeEvent()
             val gameOver = GH.checkGameOverConditions()
             if(gameOver.first)
                 gameScreen.setGameOver(gameOver.second)

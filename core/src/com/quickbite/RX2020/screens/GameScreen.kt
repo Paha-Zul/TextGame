@@ -72,7 +72,7 @@ class GameScreen(val game: TextGame): Screen {
 
     init{
         gui = GameScreenGUI(this)
-        GameStats.init(this)
+        GameStats.game = this
 
         gui.init()
         EventManager.init(this)
@@ -126,9 +126,10 @@ class GameScreen(val game: TextGame): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
+        gameInput.keyEventMap.put(Input.Keys.E, {GroupManager.getRandomPerson()!!.addAilment(Person.Ailment.AilmentLevel.Regular, Person.Ailment.AilmentType.Injury)})
 //        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
-//        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Stream", "epic"))})
-//        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Path", "epic"))})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Fire", "rare")!!)})
+        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)})
 //        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
@@ -146,6 +147,8 @@ class GameScreen(val game: TextGame): Screen {
             gui.openTradeWindow()
             pauseGame()
         }
+
+        Logger.log("GameScreen", "People: ${GroupManager.getPeopleList()}")
     }
 
     override fun show() {
@@ -280,7 +283,7 @@ class GameScreen(val game: TextGame): Screen {
             setGameOver(gameOver.second)
         }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
             GameStats.gameOverStatus = "won"
-            gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special"))
+            gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
         }else {
             GameStats.updateHourly(delta)
             SupplyManager.updateHourly(delta)
@@ -288,7 +291,7 @@ class GameScreen(val game: TextGame): Screen {
             ChainTask.updateHourly(delta)
 
             if (Result.recentDeathMap.size > 0) {
-                gui.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special"))
+                gui.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
             }
 
             if (numHoursToAdvance > 0) numHoursToAdvance--
@@ -302,9 +305,12 @@ class GameScreen(val game: TextGame): Screen {
      * Changes the game state to camping mode.
      */
     fun changeToCamp(){
-        this.state = State.CAMP
-        this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
-        gui.openCampMenu()
+        if(this.state != State.CAMP) {
+            this.state = State.CAMP
+            this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
+            gui.openCampMenu()
+            this.resumeGame()
+        }
     }
 
     /**
@@ -332,7 +338,7 @@ class GameScreen(val game: TextGame): Screen {
     fun setGameOver(reason:String){
         GameStats.gameOverStatus = reason
         this.state = State.GAMEOVER
-        gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special"))
+        gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
     }
 
 
@@ -347,8 +353,9 @@ class GameScreen(val game: TextGame): Screen {
 
             Logger.log("GameScreen", "Starting event ${GameEventManager.currActiveEvent!!.name}")
 
-            //Trigger the GUI UI and send a callback to it.
-            gui.triggerEventGUI(currEvent)
+            if(currEvent == null) Logger.log("GameScreen", "Event skipped because it was null. Tried to get $eventType event.", Logger.LogLevel.Warning)
+            else //Trigger the GUI UI and send a callback to it.
+                gui.triggerEventGUI(currEvent)
 
             timer.reset(min, max)
         }

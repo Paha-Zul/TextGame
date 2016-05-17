@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx
  * Created by Paha on 3/27/2016.
  */
 object Logger {
-    var loggerEnabled = true
+    var loggerEnabled = false
     var toConsole = true
 
     private val logList:MutableList<String> = mutableListOf("Starting Logger")
