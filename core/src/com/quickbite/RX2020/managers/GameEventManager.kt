@@ -125,6 +125,9 @@ object GameEventManager{
         val hasDescriptions:Boolean
             get() = description.size > 0 && !(description.size == 1 && description[0].isEmpty())
 
+        val hasRestrictions:Boolean
+            get() = restrictions != null && restrictions!!.size > 0
+
         /**
          * Selects another Event using a choice and chance.
          * @param choice The text of the choice (ie: 'Craft a Net')

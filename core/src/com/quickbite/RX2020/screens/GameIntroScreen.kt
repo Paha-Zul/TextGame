@@ -13,6 +13,9 @@ class GameIntroScreen(val game: TextGame) : Screen {
 
     override fun show() {
         gameIntroGUI
+        TextGame.backgroundColor.r = 1f
+        TextGame.backgroundColor.g = 1f
+        TextGame.backgroundColor.b = 1f
     }
 
     override fun hide() {
@@ -28,8 +31,9 @@ class GameIntroScreen(val game: TextGame) : Screen {
         TextGame.stage.draw()
         gameIntroGUI.update(delta)
 
-        if(done)
+        if(done) {
             game.screen = GameScreen(game)
+        }
     }
 
     override fun resume() {

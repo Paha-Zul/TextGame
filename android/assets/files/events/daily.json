@@ -366,7 +366,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addHealth", "evt", "-1", "-25" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -384,7 +384,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "15", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "15", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -393,7 +393,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -402,7 +402,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "15", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "15", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -411,7 +411,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -420,7 +420,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -429,7 +429,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -438,7 +438,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -447,7 +447,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -456,7 +456,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -474,14 +474,14 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "15", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "15", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
   "name" : "ThrowSpear",
   "description" : [ "He1 spots a dark mass under some low hanging branches in a pool edge of the stream. He1 creeps over and toss the spear hard." ],
   "choices" : [ ],
-  "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf" ] ],
+  "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf", "true" ] ],
   "chances" : [ [ 30.0, 40.0, 30.0 ] ],
   "resultingAction" : [ ]
 }, {
@@ -510,7 +510,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -519,7 +519,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -528,7 +528,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -537,7 +537,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -546,7 +546,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ], [ "addHealth", "evt", "-1", "-25" ] ]
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -555,7 +555,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -573,7 +573,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -582,7 +582,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -618,7 +618,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -627,7 +627,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
 }, {
   "root" : true,
   "title" : "Fishing",
@@ -654,7 +654,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",
@@ -690,7 +690,7 @@
   "choices" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "15", "30", "edibles" ] ]
+  "resultingAction" : [ [ "addRndAmt", "15", "30", "edibles", "true" ] ]
 }, {
   "root" : false,
   "title" : "Fishing",

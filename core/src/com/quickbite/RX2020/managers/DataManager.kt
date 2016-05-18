@@ -18,6 +18,15 @@ object DataManager{
 
     private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
 
+    var eventDir:FileHandle? = null
+    var itemsDir:FileHandle? = null
+    var namesDir:FileHandle? = null
+    var activitiesDir:FileHandle? = null
+    var rewardsDir:FileHandle? = null
+    var endDir:FileHandle? = null
+
+    private var tick = 0
+
     private lateinit var names:NamesJson
     lateinit var end:EndJSON
         get
@@ -25,7 +34,25 @@ object DataManager{
 
     val json: Json = Json()
 
-    fun loadEvents(dir:FileHandle){
+    /**
+     * Updates (loads) the data queued for loading. Over separate frames.
+     * @return True when done, false otherwise.
+     */
+    fun updateLoadData():Boolean{
+        when(tick){
+            0 -> loadEnd(endDir!!)
+            1 -> loadItems(itemsDir!!)
+            2 -> loadEvents(eventDir!!)
+            3 -> loadRandomNames(namesDir!!)
+            4 -> loadRewards(rewardsDir!!)
+            5 -> {loadSearchActivities(activitiesDir!!); return true}
+        }
+
+        tick++;
+        return false
+    }
+
+    private fun loadEvents(dir:FileHandle){
         val list:Array<FileHandle> = dir.list()
         val startTime:Long = TimeUtils.millis()
 
@@ -46,7 +73,7 @@ object DataManager{
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load events.")
     }
 
-    fun loadItems(dir:FileHandle){
+    private fun loadItems(dir:FileHandle){
         val startTime:Long = TimeUtils.millis()
 
         val items: Array<ItemJson> = json.fromJson(Array<ItemJson>::class.java, dir)
@@ -58,7 +85,7 @@ object DataManager{
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load items.")
     }
 
-    fun loadRandomNames(nameFileHandle:FileHandle){
+    private fun loadRandomNames(nameFileHandle:FileHandle){
         val startTime:Long = TimeUtils.millis()
 
         this.names = json.fromJson(NamesJson::class.java, nameFileHandle)
@@ -70,7 +97,7 @@ object DataManager{
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load names.")
     }
 
-    fun loadSearchActivities(file:FileHandle){
+    private fun loadSearchActivities(file:FileHandle){
         val startTime:Long = TimeUtils.millis()
 
         val activities: Array<SearchActivityJSON> = json.fromJson(Array<SearchActivityJSON>::class.java, file)
@@ -82,7 +109,7 @@ object DataManager{
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load search activities.")
     }
 
-    fun loadRewards(nameFileHandle:FileHandle){
+    private fun loadRewards(nameFileHandle:FileHandle){
         val startTime:Long = TimeUtils.millis()
 
         val rewards = json.fromJson(Array<Reward>::class.java, nameFileHandle)
@@ -92,13 +119,13 @@ object DataManager{
         Logger.log("DataManager", "Took ${(time/1000f).toFloat()}s to load rewards.")
     }
 
-    fun loadEnd(file:FileHandle){
+    private fun loadEnd(file:FileHandle){
         this.end = json.fromJson(EndJSON::class.java, file)
     }
 
     fun pullRandomName():Triple<String, String, Boolean>{
         var firstName = ""
-        var male = MathUtils.random(0, 100) > 50
+        val male = MathUtils.random(0, 100) > 50
         if(male)
             firstName = names.maleFirstNames.removeAt(names.maleFirstNames.size-1)
         else

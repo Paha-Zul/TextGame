@@ -6,22 +6,31 @@ import com.badlogic.gdx.Gdx
  * Created by Paha on 3/27/2016.
  */
 object Logger {
-    var loggerEnabled = false
+    var loggerEnabled = true
     var toConsole = true
+
+    private val logPerm = arrayOf(true, true, true, true)
+    private val consolePerm = arrayOf(true, true, true, true)
 
     private val logList:MutableList<String> = mutableListOf("Starting Logger")
 
+    val logListArray:Array<String>
+        get() = logList.toTypedArray()
+
     enum class LogLevel{
-        Info, Warning, Error
+        Debug, Info, Warning, Error
     }
 
     @JvmStatic
     fun log(prefix:String, message:String, logLevel: LogLevel = LogLevel.Info){
         val string = "[$logLevel] [$prefix]: $message"
-        if(toConsole) Gdx.app.log(prefix, message)
+        if(toConsole && consolePerm[logLevel.ordinal]) {
+            Gdx.app.log(prefix, message)
+        }
 
-        if(loggerEnabled)
+        if(loggerEnabled && logPerm[logLevel.ordinal]) {
             logList.add(string)
+        }
     }
 
     @JvmStatic
@@ -34,6 +43,16 @@ object Logger {
                 }
             }
         }
+    }
+
+    @JvmStatic
+    fun setLogPerm(logLevel: LogLevel, value:Boolean){
+        logPerm[logLevel.ordinal] = value
+    }
+
+    @JvmStatic
+    fun setConsolePerm(logLevel: LogLevel, value:Boolean){
+        logPerm[logLevel.ordinal] = value
     }
 
 }

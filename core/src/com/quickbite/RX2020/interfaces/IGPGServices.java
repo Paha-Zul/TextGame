@@ -10,6 +10,8 @@ public interface IGPGServices extends IUrlOpener, IabInterface{
     ArrayList<String> testDevices = new ArrayList<String>(
             Arrays.asList("93c5883d462d97e9", "b32d1a323299672f"));
 
+    void displayText(final String text, String duration);
     String getCurrDeviceID();
     boolean isTestDevice();
+    void outputToLog(String fileName, String[] text);
 }

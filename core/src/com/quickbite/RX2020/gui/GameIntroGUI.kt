@@ -46,6 +46,8 @@ class GameIntroGUI(val game: GameIntroScreen) {
     }
 
     init{
+        TextGame.stage.clear()
+
         val intro = json.fromJson(Array<IntroJson>::class.java, Gdx.files.internal("files/text/intro.json"))
 
         labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.BLACK) //Black no opacity

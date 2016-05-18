@@ -722,7 +722,7 @@ class GameScreenGUI(val game : GameScreen) {
                 EventInfo.eventChoicesTable.row()
 
                 //If we don't pass the restrictions, disable this button
-                if(event.restrictions != null && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
+                if(event.hasRestrictions && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
                     button.isDisabled = true
                     button.style.fontColor = Color.GRAY
                 }

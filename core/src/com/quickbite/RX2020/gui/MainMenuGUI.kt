@@ -31,6 +31,8 @@ import com.quickbite.rx2020.util.GH
 class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
     fun showMainMenu(){
+        TextGame.stage.clear()
+
         val mainTable:Table = Table()
         val titleTable:Table = Table()
         val buttonTable:Table = Table()
@@ -39,7 +41,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         rightTable.right()
         rightTable.bottom()
 
-        var labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
+        val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val style: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         style.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -58,8 +60,6 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         val titleLabel = Label("RX-2020", labelStyle)
         titleLabel.setFontScale(0.8f)
 
-
-
         val redditButton = TextButton("Reddit", style);
         redditButton.label.setFontScale(0.2f)
 
@@ -76,7 +76,6 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
         startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                TextGame.stage.clear()
                 ChainTask.addTaskToEveryFrameList(crazyFade())
                 GroupManager.init()
                 SupplyManager.init()
@@ -120,8 +119,8 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         mainTable.row()
         mainTable.add(buttonTable).fill().expand()
 
-        mainTable.color.a = 0f
-        rightTable.color.a = 0f
+        mainTable.color.a = 1f
+        rightTable.color.a = 1f
         mainTable.setFillParent(true)
         rightTable.setFillParent(true)
 
@@ -143,10 +142,14 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         textButtonStyle.fontColor = Color.WHITE
 
         val purchaseButton = TextButton("Purchase!", textButtonStyle)
-        purchaseButton.label.setFontScale(0.2f)
+        purchaseButton.label.setFontScale(0.4f)
+        purchaseButton.setSize(100f, 50f)
+        purchaseButton.setPosition(TextGame.viewport.worldWidth.toFloat()/2f - 50f, TextGame.viewport.worldHeight.toFloat() - 50f)
 
         val homeButton = TextButton("Home", textButtonStyle)
         homeButton.label.setFontScale(0.2f)
+        homeButton.setSize(100f, 50f)
+        homeButton.setPosition(TextGame.viewport.worldWidth.toFloat() - 100f, 0f)
 
         val box = TextureRegionDrawable(TextureRegion(TextGame.manager.get("donateBox", Texture::class.java)))
         val boxSelected = TextureRegionDrawable(TextureRegion(TextGame.manager.get("donateBoxSelected", Texture::class.java)))
@@ -179,18 +182,27 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
         purchaseButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                if(selected != 0){
-                    TextGame.GPGServices.donate()
-                }
+                if(selected != 0)
+                    TextGame.GPGServices.donate(selected)
+            }
+        })
+
+        homeButton.addListener(object:ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                showMainMenu()
             }
         })
 
         boxTable.setFillParent(true)
+
         TextGame.stage.addActor(boxTable)
+        TextGame.stage.addActor(purchaseButton)
+        TextGame.stage.addActor(homeButton)
     }
 
     private fun crazyFade():ChainTask{
-        val tsk = ChainTask({TextGame.backgroundColor.r < 1f}, {TextGame.backgroundColor.r+=0.05f; TextGame.backgroundColor.g+=0.05f; TextGame.backgroundColor.b+=0.05f}, {mainMenu.game.screen = GameIntroScreen(mainMenu.game) })
+        val tsk = ChainTask({TextGame.backgroundColor.r < 1f}, {TextGame.backgroundColor.r+=0.05f; TextGame.backgroundColor.g+=0.05f; TextGame.backgroundColor.b+=0.05f},
+                {mainMenu.game.screen = GameIntroScreen(mainMenu.game) })
 
         return tsk
     }
@@ -201,7 +213,6 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
             mainTable.color.a = value
             rightTable.color.a = value
         },{
-            TextGame.stage.clear();
             //Load the game!
             val gameScreen = GameScreen(mainMenu.game, true)
             mainMenu.game.screen = gameScreen

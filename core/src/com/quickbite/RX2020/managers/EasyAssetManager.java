@@ -18,7 +18,7 @@ import java.util.HashMap;
  * Created by Paha on 2/19/2015.
  */
 public class EasyAssetManager extends AssetManager {
-    public static boolean log = false;
+    public static boolean log = true;
 
     private HashMap<String, DataReference> dataMap = new HashMap<String, DataReference>(20);
 
@@ -42,7 +42,7 @@ public class EasyAssetManager extends AssetManager {
 
             if(handle.name().endsWith(".png")) {
                 this.load(handle.path(), Texture.class, params);
-                if(log) System.out.println("Loaded "+handle.path());
+                if(log) Logger.log("EasyAssetManager", "Loaded "+handle.path(), Logger.LogLevel.Debug);
             }
         }
 
@@ -70,7 +70,7 @@ public class EasyAssetManager extends AssetManager {
 
             if(handle.name().endsWith(".fnt")) {
                 this.load(handle.path(), BitmapFont.class);
-                if(log) System.out.println("Loaded "+handle.path());
+                if(log) Logger.log("EasyAssetManager","Loaded "+handle.path(), Logger.LogLevel.Debug);
             }
         }
 
@@ -95,7 +95,7 @@ public class EasyAssetManager extends AssetManager {
             //If it's not a dir and it ends with .pack, load it!
             if(!handle.isDirectory() && handle.name().endsWith(".pack")) {
                 this.load(handle.path(), TextureAtlas.class, params);
-                if(log) System.out.println("Loaded "+handle.path());
+                if(log) Logger.log("EasyAssetManager", "Loaded "+handle.path(), Logger.LogLevel.Debug);
             }
         }
 

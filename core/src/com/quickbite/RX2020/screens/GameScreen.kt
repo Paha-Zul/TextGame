@@ -75,6 +75,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     }
 
     init{
+        TextGame.stage.clear();
         fadeIn()
 
         gui = GameScreenGUI(this)
@@ -134,7 +135,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("track", -100f)})
 //        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Fire", "rare")!!)})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("BreakIn", "weekly")!!)})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)})
 //        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})

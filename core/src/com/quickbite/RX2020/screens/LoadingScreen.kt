@@ -20,18 +20,28 @@ class LoadingScreen(val game: TextGame): Screen {
     var opacity:Float = 0f
     var counter = 0
     var done = false
+    var logoDone = false
     var trigger = false
     var scale = 1f
     var readyToLoad = false
+
 
     override fun show() {
         logo.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 
         chain = ChainTask({counter<20}, {counter++}, {counter=0})
-        chain.setChain(ChainTask({opacity < 1}, {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)}, {loadDataManager(); loadManager()})). //Fade in
-                setChain(ChainTask({counter < 60}, {counter++}, {counter=0})). //Wait
-                setChain(ChainTask({opacity > 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})). //Fade out
-                setChain(ChainTask({!done && counter < 20}, {counter++}, {game.screen = MainMenuScreen(game)})) //Wait
+        chain.setChain(ChainTask(
+                {opacity < 1},
+                {opacity = GH.lerpValue(opacity, 0f, 1f, 1f)},
+                {
+                    initDataManager();
+                    loadManager()
+                })) //Fade in
+            .setChain(ChainTask({counter < 60}, {counter++; DataManager.updateLoadData()}, {counter=0})) //Wait
+            .setChain(ChainTask({opacity > 0}, {opacity = GH.lerpValue(opacity, 1f, 0f, 0.8f)})) //Fade out
+            .setChain(ChainTask({!done && counter < 20}, {counter++}, {
+                logoDone = true
+            })) //Set the logo as done.
     }
 
     private fun loadManager(){
@@ -61,6 +71,7 @@ class LoadingScreen(val game: TextGame): Screen {
             if (done && !trigger) {
                 TextGame.smallGuiAtlas = TextGame.manager.get("smallUI", TextureAtlas::class.java)
                 trigger = true
+                game.screen = MainMenuScreen(game)
             }
         }
 
@@ -83,12 +94,12 @@ class LoadingScreen(val game: TextGame): Screen {
 
     }
 
-    private fun loadDataManager() {
-        DataManager.loadEvents(Gdx.files.internal("files/events/"))
-        DataManager.loadRandomNames(Gdx.files.internal("files/text/names.json"))
-        DataManager.loadSearchActivities(Gdx.files.internal("files/searchActivities.json"))
-        DataManager.loadRewards(Gdx.files.internal("files/rewards.json"))
-        DataManager.loadItems(Gdx.files.internal("files/items.json"))
-        DataManager.loadEnd(Gdx.files.internal("files/end.json"))
+    private fun initDataManager() {
+        DataManager.eventDir = Gdx.files.internal("files/events/")
+        DataManager.namesDir=Gdx.files.internal("files/text/names.json")
+        DataManager.activitiesDir=Gdx.files.internal("files/searchActivities.json")
+        DataManager.rewardsDir=Gdx.files.internal("files/rewards.json")
+        DataManager.itemsDir=Gdx.files.internal("files/items.json")
+        DataManager.endDir=Gdx.files.internal("files/end.json")
     }
 }
