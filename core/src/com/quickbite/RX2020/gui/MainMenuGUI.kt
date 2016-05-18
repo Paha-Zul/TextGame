@@ -76,7 +76,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
         startButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                ChainTask.addTaskToEveryFrameList(crazyFade())
+                ChainTask.addTaskToEveryFrameList(crazyFade(mainTable, rightTable))
                 GroupManager.init()
                 SupplyManager.init()
                 ROVManager.init()
@@ -119,8 +119,8 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         mainTable.row()
         mainTable.add(buttonTable).fill().expand()
 
-        mainTable.color.a = 1f
-        rightTable.color.a = 1f
+        mainTable.color.a = 0f
+        rightTable.color.a = 0f
         mainTable.setFillParent(true)
         rightTable.setFillParent(true)
 
@@ -200,8 +200,15 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         TextGame.stage.addActor(homeButton)
     }
 
-    private fun crazyFade():ChainTask{
-        val tsk = ChainTask({TextGame.backgroundColor.r < 1f}, {TextGame.backgroundColor.r+=0.05f; TextGame.backgroundColor.g+=0.05f; TextGame.backgroundColor.b+=0.05f},
+    private fun crazyFade(mainTable:Table, rightTable:Table):ChainTask{
+        val tsk = ChainTask({TextGame.backgroundColor.r < 1f}, {
+            val value = GH.lerpValue(TextGame.backgroundColor.r, 0f, 1f, 1f)
+            TextGame.backgroundColor.r=value
+            TextGame.backgroundColor.g=value
+            TextGame.backgroundColor.b=value
+            mainTable.color.a = 1-value
+            rightTable.color.a = 1-value
+        },
                 {mainMenu.game.screen = GameIntroScreen(mainMenu.game) })
 
         return tsk

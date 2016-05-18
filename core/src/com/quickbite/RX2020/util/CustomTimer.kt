@@ -75,7 +75,7 @@ class CustomTimer(private var seconds: Float, var oneShot:Boolean = false, priva
     private fun finish(){
         callback?.invoke()
         stop()
-        if(seconds >= 0)
+        if(seconds >= 0 && !oneShot)
             restart()
     }
 

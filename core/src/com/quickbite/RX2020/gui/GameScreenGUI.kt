@@ -561,7 +561,7 @@ class GameScreenGUI(val game : GameScreen) {
             if(repairButton != null) {
                 repairButton.addListener(object : ChangeListener() {
                     override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                        supply.currHealth = supply.maxHealth
+                        SupplyManager.addHealthToSupply(supply, supply.maxHealth)
                         SupplyManager.addToSupply(supply.name, -1f)
                         buildROVTable()
                     }

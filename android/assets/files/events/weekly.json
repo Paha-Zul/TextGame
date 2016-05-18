@@ -1147,7 +1147,7 @@
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-2", "-2", "medkits" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ], ["addAilment", "evt", "injury", "medium"] ]
 }, {
   "root" : false,
   "title" : "Trapper Pit",
@@ -1157,7 +1157,7 @@
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-1", "medkits" ] ]
+  "resultingAction" : [ [ "addAilment", "evt", "injury", "medium" ] ]
 }, {
   "root" : true,
   "title" : "Trapper Pit",
@@ -1207,7 +1207,7 @@
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addRndAmt", "-1", "-1", "medkits" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-25", "-50"] ]
 }, {
   "root" : false,
   "title" : "Treasure Trader",

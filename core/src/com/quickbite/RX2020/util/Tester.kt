@@ -26,15 +26,15 @@ object Tester {
             System.out.println("---------------------")
         }
 
-        for(eventName in GameEventManager.getEventNameList("common"))
-            func(GameEventManager.getAndSetEvent(eventName, "common")!!)
+        for(eventName in GameEventManager.getEventNameList("daily"))
+            func(GameEventManager.getAndSetEvent(eventName, "daily")!!)
 
-        for(eventName in GameEventManager.getEventNameList("rare"))
-            func(GameEventManager.getAndSetEvent(eventName, "rare")!!)
+        for(eventName in GameEventManager.getEventNameList("weekly"))
+            func(GameEventManager.getAndSetEvent(eventName, "weekly")!!)
 
         //We use .toList() to make a copy because of the specialness of epic events.
-        for(eventName in GameEventManager.getEventNameList("epic").toList())
-            func(GameEventManager.getAndSetEvent(eventName, "epic")!!)
+        for(eventName in GameEventManager.getEventNameList("monthly").toList())
+            func(GameEventManager.getAndSetEvent(eventName, "monthly")!!)
 
         //We use .toList() to make a copy because of the specialness of epic events.
         for(eventName in GameEventManager.getEventNameList("monthlyNative").toList())

@@ -4,6 +4,7 @@
   "name" : "ReachFoodHurtPerc",
   "description" : [ "He1 grabs onto something furry and angry. It hisses and thrashes around, biting and clawing trying to break free from %n's grasp. After a few moments %n pulls the now dead animal from the hole." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ], [ "addHealth", "evt", "-10", "-20", "true" ] ]
@@ -13,6 +14,7 @@
   "name" : "ReachFoodHurt",
   "description" : [ "He1 grabs onto something furry and angry. It hisses and thrashes around trying break free but %n holds tight. After a short struggle he1 removes the now dead critter from the hole, but the meal comes with a cost; bites and scratches cover his1 hands and lower arms." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ], [ "addHealth", "evt", "-10", "-20" ] ]
@@ -22,6 +24,7 @@
   "name" : "EmptyBurrow",
   "description" : [ "It's too dark to see anything at first, but once his1 eyes adjust he1 can make out the back wall of the small burrow. It's empty, it looks like there isn't anyone home." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -31,6 +34,7 @@
   "name" : "PassBy",
   "description" : [ "The group decides to leave it be and continues onwards." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -40,6 +44,7 @@
   "name" : "FoodBurrow",
   "description" : [ "The hole is filled with nuts and seeds, no doubt left by small critter. “Finders keepers” %n thinks as he1 scoops them up." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "5", "edibles", "true" ] ]
@@ -49,6 +54,7 @@
   "name" : "ReachFood",
   "description" : [ "He1 grabs onto something furry and angry. It hisses and thrashes around trying to break free but %n holds tight. After a short struggle he1 removes the now dead critter from the hole. " ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "3", "7", "edibles", "true" ] ]
@@ -58,6 +64,7 @@
   "name" : "CreatureHurtBurrow",
   "description" : [ "It's too dark too get a good look, so he1 leans pressing his1 face up to the opening. A small rodent like creature lunges out and scratches his1 face before retreating back into the hole. Surprised %n decides it's not worth the trouble and heads back to the ROV." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-10", "-20" ] ]
@@ -67,6 +74,7 @@
   "name" : "ReachInside",
   "description" : [ "%n crawls over to the opening of the hole and reaches in..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "ReachEmpty", "ReachFood", "ReachFoodHurt", "ReachFoodHurtPerc" ] ],
   "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
   "resultingAction" : [ ]
@@ -76,6 +84,7 @@
   "name" : "LookInside",
   "description" : [ "%n crawls over to the opening and looks inside..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "EmptyBurrow", "FoodBurrow", "CreatureHurtBurrow", "CreatureHurtFoodBurrow" ] ],
   "chances" : [ [ 25.0, 25.0, 25.0, 25.0 ] ],
   "resultingAction" : [ ]
@@ -85,6 +94,7 @@
   "name" : "Hole",
   "description" : [ "%n spots a small burrow-like hole a few feet ahead of the ROV. It's just big enough for a small animal to take shelter or for an adventurous traveler to reach their arm in..." ],
   "choices" : [ "Pass it By", "Look Inside", "Reach Inside" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "PassBy" ], [ "LookInside" ], [ "ReachInside" ] ],
   "chances" : [ [ 100.0 ], [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -94,6 +104,7 @@
   "name" : "CreatureHurtFoodBurrow",
   "description" : [ "An ugly rodent like creature peers out. Not wanting to pass up a free meal, but also not wanting to risk his1 own fingers; %n unholsters his1 side arm and fires a few shots into the hole." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "5", "edibles", "true" ], [ "addRndAmt", "-1", "-5", "ammo" ] ]
@@ -103,6 +114,7 @@
   "name" : "ReachEmpty",
   "description" : [ "He1 boldly reaches into the hole and feels around, but the hole is empty." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -112,6 +124,7 @@
   "name" : "BadCrystal",
   "description" : [ "It seems some of these crystals don't fit the weapons specifications." ],
   "choices" : [ "Who Knew?" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ] ]
@@ -121,6 +134,7 @@
   "name" : "Trees",
   "description" : [ "The group spots a patch of battered trees that indicates that something fell on them from above. Hoping to find some spare parts, the group investigates the area.", "They uncover a hunk of twisted metal no bigger than a toaster. It is unclear what it once was or how it ended up here, but it yields the group some useful sheets of metal and some stray nuts and bolts that could prove useful for ROV repairs." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
@@ -130,6 +144,7 @@
   "name" : "BatteryTrouble",
   "description" : [ "While recharging the batteries, %n noticed that the one of the batteries isn't operating at full capacity, and after watching its performance over the last few hours, he1 feels he1 has discovered the root of the problem.", "After a few minutes of tinkering, he1 is able to restore the battery to full capacity, but is unable to recover the lost power." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
@@ -139,6 +154,7 @@
   "name" : "Beetle",
   "description" : [ "While the Exomer crew was dismantling a big pile of rocks in search of crystals, they accidently unearth a nest of large angry beetles.", "The beetles, about the size of an adult horseshoe crab and just as ugly, start emerging all around the crew." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "BeetleGood", "BeetleBad" ] ],
   "chances" : [ [ 50.0, 50.0, 0.0 ] ],
   "resultingAction" : [ ]
@@ -148,6 +164,7 @@
   "name" : "BeetleGood",
   "description" : [ "They engage the bugs with their side arms and it doesn't take long before the ground is littered with bug remains and eventually the beetle uprising is quelled. The crew scoops up what crystal they or the beetles unearthed and return to the ROV." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
@@ -157,6 +174,7 @@
   "name" : "BeetleBad",
   "description" : [ "They engage the bugs with their side arms and it doesn't take long before the ground is littered with bug remains, but the bugs keep coming. Not wanting to waste anymore ammo, the crew makes a tactical retreat back to the ROV. " ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ] ]
@@ -166,6 +184,7 @@
   "name" : "Berry",
   "description" : [ "While searching for food, %n uncovers a thicket of unusual dark red berries. They're plump, juicy, and look very tasty, but looks can be deceiving...", "He1 pops one of the berries into his1 mouth..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "BerryBad", "BerryGood" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -175,6 +194,7 @@
   "name" : "BerryGood",
   "description" : [ "It's tart and sappy, but he1 feels immediately invigorated." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -184,6 +204,7 @@
   "name" : "BerryBad",
   "description" : [ "It's bitter and sour, leaving him1 with a soapy feeling in his1 mouth. He1 spits out the remaining berry, but he1 can feel an upset stomach setting in." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -193,6 +214,7 @@
   "name" : "Cut",
   "description" : [ "%n cut open his1 hand while moving around supplies." ],
   "choices" : [ "Ouch" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-15" ] ]
@@ -202,6 +224,7 @@
   "name" : "Carver",
   "description" : [ "While carving a wooden figurine %n's knife slips and he1 cuts his1 hand.", "Although it bleeds a lot, it isn't too deep; a tightly wrapped bandage and a few day's rest should be all it needs." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -211,6 +234,7 @@
   "name" : "CatRock",
   "description" : [ "While out looking for something of value %n finds a little cat shaped rock.", "It reminds him1 of his1 cat, which always makes him1 feel better. The others say it just looks like a rock, but he1 likes it, so he1 keeps it." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -220,6 +244,7 @@
   "name" : "CatEye",
   "description" : [ "While digging though rocks in search of ammunition crystals, %n uncovers a beautiful gemstone. When he1 holds it up to the light he1 feels like he1 can see a little galaxy inside.", "He1 keeps the stone for him1self, looking into it from time to time, he1 finds it strangely comforting." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -229,6 +254,7 @@
   "name" : "Chips",
   "description" : [ "The group spots a small crater just up the road and decides to check for space junk, and in it they find a small piece of space debris. Most of it is just too damaged to be of any use, but the team is able to extract a tiny chip from the part's circuitry. Hoping to gain some insight into its function, the crew tries to plug it into the ROV's computer.", "This causes the computer to blue screen immediately and forces the crew to spend the next few hours tinkering to repair the damage." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
@@ -238,6 +264,7 @@
   "name" : "Cleaner",
   "description" : [ "%n notices the ROV has really taken a beating lately and is starting to show its age. He1 decides it's time to give it a good cleaning", "So the crew spends the afternoon patching holes, smoothing dents, and cleaning dirt out of cracks." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
@@ -247,6 +274,7 @@
   "name" : "HerdWait",
   "description" : [ ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "wait", "5", "10" ] ]
@@ -256,6 +284,7 @@
   "name" : "HerdHit",
   "description" : [ "The ROV eases into the stream, but the herd panics. Lurching forward the herd thunders around the ROV. Many of the creatures, unable to see what head of them, slamming into the ROV at full speed. The thuds and thumbs of the massive creatures sounds like ROV is caught in a landslide, until at last the ROV emerges from the herd, beaten but otherwise okay." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "-10", "-30" ] ]
@@ -265,6 +294,7 @@
   "name" : "HerdCrossing",
   "description" : [ "A herd of cow-like creatures are lumbering across the path head. They're too vast to easily go around." ],
   "choices" : [ "Go Through", "Wait" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "HerdHit", "HerdMiss" ], [ "HerdWait" ] ],
   "chances" : [ [ 50.0, 50.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -274,6 +304,7 @@
   "name" : "HerdMiss",
   "description" : [ "The ROV ease into the stream. The creatures surge around the vehicle, snorting and huffing, but otherwise uninterested in this new development. Eventually, the ROV emerges from the herd and resumes its slow and steady pace." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -283,6 +314,7 @@
   "name" : "CrystalBad",
   "description" : [ "%n swears it makes it feel weaker when he1 holds it." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -292,6 +324,7 @@
   "name" : "CrystalGood",
   "description" : [ "%n swears it makes him1 feel stronger when he1 holds it." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -301,6 +334,7 @@
   "name" : "Crystal",
   "description" : [ "%n is sorting through the group's ammunition crystals, when he1 comes something unusual.", "One of the crystals is abnormally warm compared to the rest..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "CrystalGood", "CrystalBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -310,6 +344,7 @@
   "name" : "FoundCrystals",
   "description" : [ "%n tests some newly discovered Crystals into the group's firearms." ],
   "choices" : [ "They Work!" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
@@ -319,6 +354,7 @@
   "name" : "BrokenROV",
   "description" : [ "The ROV makes noises that it shouldn't..." ],
   "choices" : [ "That's not good" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
@@ -328,6 +364,7 @@
   "name" : "MoreEdibles",
   "description" : [ "He1 uncovers some misplaced food!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "2", "5", "edibles", "true" ] ]
@@ -337,6 +374,7 @@
   "name" : "FishermanFish",
   "description" : [ "It doesn't take long before he1 snags a fish!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ] ]
@@ -346,6 +384,7 @@
   "name" : "FishermanLost",
   "description" : [ "After a few minutes he1 feels a bite and pulls in the line. Unfortunately the bait is gone, but there's no fish." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
@@ -355,6 +394,7 @@
   "name" : "Fisherman",
   "description" : [ "%n discovers a small pond while searching for food. After a few minutes of scrounging manages to piece together a temporary fishing pole and baits it with some of the food he1 brought." ],
   "choices" : [ "(He1) cast out the line..." ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "FishermanFish", "FishermanLost" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -364,6 +404,7 @@
   "name" : "SpearStabHurtSelf",
   "description" : [ "When he1 pulls the spear back the fish spurts some fowl smelling juice into his1 eyes. Eyes burning %n drops the spear and splashes some water into his1 eyes. After a few minutes he1 gets most of the liquid out of his1 eyes. Squinting, eyes watering, he1 locates the spear and miraculously the fish is still attached. He1 scoops it up and heads back home, runny nosed and watery eyed but fish in hand." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addHealth", "evt", "-1", "-25" ] ]
@@ -373,6 +414,7 @@
   "name" : "UseBug",
   "description" : [ "Finding nothing of use in his1 back %n decides to try and find a bug in the brush around the water's edge and after few minutes kicking around some of the tall grass a small bug hops out. He1 chases it down and places it on the makeshift hook. Then he1 tosses his1 line out and waits." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "LostFishBug", "SmallFishBug", "MidFishBug", "BigFishBug" ] ],
   "chances" : [ [ 20.0, 20.0, 20.0, 40.0 ] ],
   "resultingAction" : [ ]
@@ -382,6 +424,7 @@
   "name" : "NetLargeFish",
   "description" : [ "Scooping the net up reveals a large gray fish with his1 ugly head stuck between the weave of the net. It's more than enough for %n and the Exomer crew to have a full meal." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "15", "30", "edibles", "true" ] ]
@@ -391,6 +434,7 @@
   "name" : "BigFish",
   "description" : [ "Within a few minutes he1 feels a strong tug. He1 grabs the line in both hands and starts fighting back, but the fish isn't going down easy. Straining he1 reels harder. It feels like he1's dragging a rock to shore. Eventually after much wrestling he1 pulls a large ugly fish ashore. " ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
@@ -400,6 +444,7 @@
   "name" : "SpearStabSmall",
   "description" : [ "He1 pulls the spear back to reveal a small blueish fish stuck on the point of the spear. It's not much but it's enough for a small meal." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "15", "edibles", "true" ] ]
@@ -409,6 +454,7 @@
   "name" : "SmallFishJerky",
   "description" : [ "Within a few minutes he1 feels a weak tug and he1 starts to gentle pull the line in. He1 reels the line in with little resistance to reveal a silvery fish. Not the best catch but enough for a good meal." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles", "true" ] ]
@@ -418,6 +464,7 @@
   "name" : "SmallFishBread",
   "description" : [ "Within a few minutes he1 feels a weak tug on his1 line and over enthusiastically pulls the small fish clean out of the water. Somehow it hangs on and he1 pulls it ashore." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles", "true" ] ]
@@ -427,6 +474,7 @@
   "name" : "LostFishBread",
   "description" : [ "Within a few minutes he1 feels a tug and reels the line in, but once the line reaches the shore it's just a lot of muck on the other end and the bait has disappointingly fallen off." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
@@ -436,6 +484,7 @@
   "name" : "SpearLargeFish",
   "description" : [ "The spear lands and %n rushes over and snatches it up. There's a hefty fish on the spear's receiving end. It's more than enough for the entire Exomer crew to enjoy!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
@@ -445,6 +494,7 @@
   "name" : "LostFishBug",
   "description" : [ "Within a few minutes he1 feels a strong tug and he1 pulls back but the line gets wedged into some rocks and the pole quickly snaps. Cursing %n throws the broken pole into the stream and storms off." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
@@ -454,6 +504,7 @@
   "name" : "SmallFishBug",
   "description" : [ "Within a few minutes he1 feels a tug on the line and after a minute or so of steady reeling he1 pulls up the line with a small greenish fish on the other end. It's not much, but it will make a nice meal for one." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles", "true" ] ]
@@ -463,6 +514,7 @@
   "name" : "NoFishing",
   "description" : [ "There's no time for fishing." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -472,6 +524,7 @@
   "name" : "NetSmallFish",
   "description" : [ "He1 sees most of the fish dart out of the way of the net, but some become entangled in the vine grid. He1 plucks them out and heads for home." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "15", "edibles", "true" ] ]
@@ -481,7 +534,8 @@
   "name" : "ThrowSpear",
   "description" : [ "He1 spots a dark mass under some low hanging branches in a pool edge of the stream. He1 creeps over and toss the spear hard." ],
   "choices" : [ ],
-  "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf", "true" ] ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf"] ],
   "chances" : [ [ 30.0, 40.0, 30.0 ] ],
   "resultingAction" : [ ]
 }, {
@@ -490,6 +544,7 @@
   "name" : "TryCatchFish",
   "description" : [ "He1 looks around for something useful to help him1 catch some fish. His1 eyes scan the ground around him1 for anything useful. A few dead branches lay long the stream's edge and some loose vine dangles from the trees..." ],
   "choices" : [ "Craft Fishing Pole", "Craft Net", "Craft Spear" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "CraftPole" ], [ "CraftNet" ], [ "CraftSpear" ] ],
   "chances" : [ [ 100.0 ], [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -499,6 +554,7 @@
   "name" : "SmallFish",
   "description" : [ "Within a few minutes he1 feels a slight tug and he1 tugs back. The line pulls in easily to reveal a very petite fish. It's not much, but it's better than nothing." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "10", "edibles" ] ]
@@ -508,6 +564,7 @@
   "name" : "BigFishBread",
   "description" : [ "Within a few minutes he1 feels a jerk on the line and the battle begins. He1 pulls the line hard but the fish pulls back harder, but after many minutes of this tug-of-war %n is triumphant and reels in a large scaly fish, large enough for the entire crew to enjoy!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
@@ -517,6 +574,7 @@
   "name" : "NetFish",
   "description" : [ "It lands right on target and quickly sinks to the bottom. He1 runs to retrieve it and to his1 surprise there's quite a few fish with their heads lodged between the weave of the vines. Plenty of fish for him1 and his1 crew to have a nice meal." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
@@ -526,6 +584,7 @@
   "name" : "MidFishBug",
   "description" : [ "Within a few minutes he1 feels a slight pulling on the line and he1 begins to pull the vine line in, but the line catches on some fallen branches. Cursing %n tries to wrangle it free from the trap, nearly snapping the pole in the process. Eventually he1 becomes untangles from the branch prison and is able to reel the fish in. It's a nice medium sized fish, plenty for him1 to eat and have some leftover for the rest of the crew!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
@@ -535,6 +594,7 @@
   "name" : "MidFishBread",
   "description" : [ "Within a few minutes he1 feels a strong tug and he1 starts to carefully pull the line in. Suddenly the line snaps and %n dives after it. After a few seconds of panic and splashing he1 regains control of the line and pulls it in to reveal a sizable fish on the other end." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
@@ -544,6 +604,7 @@
   "name" : "SpearHurtSelf",
   "description" : [ "The spear lands and %n rushes over and snatches it up. There's a hefty fish trashing on the other end, but when %n tries to free the fish it jabs his1 hands with hidden barbs on its fins causing %n to recoil in pain. He1 drops the fish but luckily it stays speared on the end of the branch. Swearing %n picks up the spear and fish and head for home." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ], [ "addHealth", "evt", "-1", "-25" ] ]
@@ -553,6 +614,7 @@
   "name" : "BigFishJerky",
   "description" : [ "Within a few minutes he1 feels a weak tug and he1 starts to gentle pull the line in. There's a hefty tug on the other end so he1 picks up the tension and reels harder, pushing the vines strength to its limits and in a few minutes he1 reels in a beefy fish. It's more than enough for one person!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
@@ -562,6 +624,7 @@
   "name" : "DragNet",
   "description" : [ "%n decides to drag the net through the deepest part of the stream and hope for the best. He1 wades out into the water and gives the net a quick sweep." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "NetSmallFish", "NetLargeFish" ] ],
   "chances" : [ [ 60.0, 40.0 ] ],
   "resultingAction" : [ ]
@@ -571,6 +634,7 @@
   "name" : "MidFishJerky",
   "description" : [ "Within a few minutes he1 feels a weak tug and he1 starts to gentle pull the line in. There's a formidable tug on the other end so he1 picks up the tension and reels harder and after a minor struggle he1 reels a nice fish ashore. A nice meal for one with some leftovers!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
@@ -580,6 +644,7 @@
   "name" : "MidFish",
   "description" : [ "Within a few minutes he1 feels a strong tug on the line and he1 starts to reel the line in. There's a lot of splashing and struggling but he1 hangs on and pulls in a nice mid-sized fish." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "10", "25", "edibles", "true" ] ]
@@ -589,6 +654,7 @@
   "name" : "UseBread",
   "description" : [ "At the bottom of his1 bag he1 finds a few hard pieces of bread. He1 can't remember the last time he1 had bread but he1 assumes the fish won't mind and baits the hook and tosses out the line." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "LostFishBread", "SmallFishBread", "MidFishBread", "BigFishBread" ] ],
   "chances" : [ [ 20.0, 20.0, 40.0, 20.0 ] ],
   "resultingAction" : [ ]
@@ -598,6 +664,7 @@
   "name" : "ThrowNet",
   "description" : [ "%n decides try and throw the net on some unsuspecting fish. He1 waits near the deeper pools around the edges of the stream until he1 sees some movement under the surface, then he1 gives the net a toss." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "LostNet", "NetFish" ] ],
   "chances" : [ [ 40.0, 60.0 ] ],
   "resultingAction" : [ ]
@@ -607,6 +674,7 @@
   "name" : "CraftNet",
   "description" : [ "He1 decides to craft small net from some of the vines he1 sees hanging from the nearby trees. It takes quite some time to weave together the smaller vines but it's eventually completed. He1 ponders how best to put the net to use." ],
   "choices" : [ "Throw the Net", "Drag the Net" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "ThrowNet" ], [ "DragNet" ] ],
   "chances" : [ [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -616,6 +684,7 @@
   "name" : "LostFishJerky",
   "description" : [ "Within a few minutes he1 feels a tug on the line and starts reeling, but quickly the resistance is gone. He1 reels in the line to reveal an empty hook." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
@@ -625,6 +694,7 @@
   "name" : "BigFishBug",
   "description" : [ "Within a few minutes he1 feels a strong tug on the line. He1 takes the vine line in both hands and starts pulling, but the fish won't budge. Carefully %n pulls the line in and until it feels like it might snap and then gives it some slack before pulling it back in. Eventually he1 wears the fish down and pulls the tired fish ashore. It's a large hearty fish, more than enough food for one person!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "20", "30", "edibles", "true" ] ]
@@ -634,6 +704,7 @@
   "name" : "Fishing",
   "description" : [ "While searching for food %n hears the faint trickle of water and following the sound soon leads him1 to a small gently flowing stream. He1 can see the occasional splash of a fish darting around beneath the surface." ],
   "choices" : [ "Try and catch some fish?", "Leave" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "TryCatchFish" ], [ "NoFishing" ] ],
   "chances" : [ [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -643,6 +714,7 @@
   "name" : "CraftSpear",
   "description" : [ "He1 grabs a sturdy stick from shore line and uses his1 knife to carve the tip into a sharp point, but he1 wonders what the best way to spear a fish is." ],
   "choices" : [ "Throw the spear", "Stab with the Spear" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "ThrowSpear" ], [ "StabSpear" ] ],
   "chances" : [ [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -652,6 +724,7 @@
   "name" : "LostFish",
   "description" : [ "Within a few minutes he1 feels a strong tug and he1 quickly pulls the pole back, but the line comes back with no bait, no fish, and no hook..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles", "true" ] ]
@@ -661,6 +734,7 @@
   "name" : "UseJerky",
   "description" : [ "Luckily he1 brought a few pieces of jerky along with him1 for a snack. He1 baits his1 makeshift hook with the jerky and out the line." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "LostFishJerky", "SmallFishJerky", "MidFishJerky", "BigFishJerky" ] ],
   "chances" : [ [ 20.0, 40.0, 20.0, 20.0 ] ],
   "resultingAction" : [ ]
@@ -670,6 +744,7 @@
   "name" : "CraftPole",
   "description" : [ "He1 grabs a suitable branch and the thinnest vines he1 can find and after a few minutes has a somewhat working fishing pole. He1 rummages through his1 bags for some food for bait." ],
   "choices" : [ "Use Strange Berries", "Use Jerky ", "Use Bread", "Try to Find a Bug" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "UseBerries" ], [ "UseJerky" ], [ "UseBread" ], [ "UseBug" ] ],
   "chances" : [ [ 100.0 ], [ 100.0 ], [ 100.0 ], [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -679,6 +754,7 @@
   "name" : "SpearMissFish",
   "description" : [ "The spear over shoots the target and lands in the swift waters of the streams and floats away. %n cases it but quickly gives up in frustration and heads home." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -688,6 +764,7 @@
   "name" : "SpearStabLarge",
   "description" : [ "He1 pulls the spear back to reveal a large brownish fish flopping on the end. He1 takes the fish off the end of the spear and heads home, eager to show off his1 fishing skills to the rest of the crew." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "15", "30", "edibles", "true" ] ]
@@ -697,6 +774,7 @@
   "name" : "StabSpear",
   "description" : [ "He1 spots a dark mass under some low hanging branches in a pool edge of the stream. He1 sneaks over to it and thrust the spear wildly at the fish." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "SpearStabSmall", "SpearStabLarge", "SpearStabHurtSelf" ] ],
   "chances" : [ [ 40.0, 30.0, 30.0 ] ],
   "resultingAction" : [ ]
@@ -706,6 +784,7 @@
   "name" : "UseBerries",
   "description" : [ "%n remembers he1 has some small berries he1 pick earlier in his1 pocket. They didn't taste great but maybe the fish will like them. He1 baits his1 makeshift hook and cast the line out." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "LostFish", "SmallFish", "MidFish", "BigFish" ] ],
   "chances" : [ [ 40.0, 20.0, 20.0, 20.0 ] ],
   "resultingAction" : [ ]
@@ -715,6 +794,7 @@
   "name" : "LostNet",
   "description" : [ "The net sails high and lands up in tree. It's much too high to reach. He1 tries to climb to reach it but it's no use. The net is lost and he1 leaves the stream empty handed." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -724,6 +804,7 @@
   "name" : "Flute",
   "description" : [ "%n is putting the finishing touches on a simple flute he1 has been making.", "He1's carved it out of a hard branch he1 found lying around. He1 makes his1 last cut and gives the flute a blow..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "FluteGood", "FluteBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -733,6 +814,7 @@
   "name" : "FluteBad",
   "description" : [ "Loose chips of wood fly out into his1 eyes. In his1 haste to try the flute he1 forgot to blow it out first. He1 can't decide what's worse, his1 hurting eyes or his1 damaged ego." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -742,6 +824,7 @@
   "name" : "FluteGood",
   "description" : [ "It sounds great! Music can really help lighten the mood of any situation." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -751,6 +834,7 @@
   "name" : "Footloose",
   "description" : [ "While digging through piles of rocks in search of ammunition crystals a huge rock rolls over %n's foot.", "It makes a gross crunching noise, but somehow nothing is broken." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -760,24 +844,47 @@
   "name" : "FreshAir",
   "description" : [ "%n spends a couple hours searching for any signs of space junk, hoping to find some spare parts.", "And while he1 doesn't turn up anything of value, the weather was really nice and he1 enjoyed the fresh air and serene landscape." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
 }, {
-  "root" : true,
+  "root" : false,
   "title" : "Fruity",
-  "name" : "Fruity",
-  "description" : [ "While out searching for food, %n spots a piece of fruit hanging high up on a tree. He1 jumps up and manages to snag it with his1 fingertips. It snaps free, showering him1 with leaves and twigs...", "...unfortunately also showering him1 in angry stinging wasp-like creatures. He1 feels them fall onto his1 arms and down the back of his1 shirt. He1 screams, dropping the fruit, and runs, wafting his1 clothes and swatting the air around him1! By the time he1 reaches the ROV he1's lost the swarm and most of his1 clothes." ],
+  "name" : "FruityBad",
+  "description" : [ "…unfortunately also showering (him1) in angry stinging wasp-like creatures. (He1) feels them fall onto (his1) arms and down the back of (his1) shirt. (He1) screams, dropping the fruit, and runs, wafting (his1) clothes and swatting the air around (him1)! By the time (he1) reaches the ROV (he1)’s lost the swarm and most of (his1) clothes." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
+}, {
+  "root" : false,
+  "title" : "Fruity",
+  "name" : "FruityGood",
+  "description" : [ "As (he1) heads back to the ROV, (he1) finds a few more fruit trees. (He1) picks some of the ripened fruit. Their smaller than an apple, but what they lack in size, they make up for in taste. The fruit is very sweet and juicy. Anxious to share with the rest of the crew, (Name1) heads back to the ROV with (his1) bag of fruit." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles", "true" ] ]
+}, {
+  "root" : true,
+  "title" : "Fruity",
+  "name" : "Fruity",
+  "description" : [ "While out searching for food, (Name1) spots a piece of fruit hanging high up on a tree. (He1) jumps up and manages to snag it with (his1) fingertips. It snaps free, showering (him1) with leaves and twigs…" ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "FruityBad", "FruityGood" ] ],
+  "chances" : [ [ 50.0, 50.0 ] ],
+  "resultingAction" : [ ]
 }, {
   "root" : true,
   "title" : "Fruity!",
   "name" : "FoundEdibles",
   "description" : [ "%n picks some edible fruit from the road side!" ],
   "choices" : [ "Yum!" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "2", "5", "edibles", "true" ] ]
@@ -787,6 +894,7 @@
   "name" : "Gems",
   "description" : [ "%n finds a nice gemstone in a roadside dirt clump!" ],
   "choices" : [ "Nice!" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ 0.0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
@@ -796,6 +904,7 @@
   "name" : "GemsMaybe",
   "description" : [ "%n reexamines the group's gemstones." ],
   "choices" : [ "Okay" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "MoreGems", "LessGems" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -805,6 +914,7 @@
   "name" : "LessGems",
   "description" : [ "Some “gemstones” are just colorful rocks." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "wealth" ] ]
@@ -814,6 +924,7 @@
   "name" : "MoreGems",
   "description" : [ "Some of the gemstones are much nicer when properly cleaned." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
@@ -823,6 +934,7 @@
   "name" : "Handy",
   "description" : [ "%n finds him1self with some spare time, so he1 decides to put it to good use." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
@@ -832,6 +944,7 @@
   "name" : "LessEdibles",
   "description" : [ "He1 discovers some food has gone missing!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-2", "-5", "edibles", "true" ] ]
@@ -841,6 +954,7 @@
   "name" : "BadBatteries",
   "description" : [ "The batteries are running a little hot." ],
   "choices" : [ "Darn" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
@@ -850,6 +964,7 @@
   "name" : "RockShardBad",
   "description" : [ "...beads of sweat crop up on his1 forehead and he1 stops and repositions his1 hands. Taking a deep breath, he1 pulls hard. There's a loud crack and %n tumbles to the ground. The crew moans and laughs as they see the rock shard has snapped right at the edge of the plate, without enough exposed rock to get a grip on. The removal will have to wait until later." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
@@ -859,6 +974,7 @@
   "name" : "RockShardGood",
   "description" : [ "...beads of sweat crop up on his1 forehead and he1 stops and repositions his1 hands. Taking a deep breath, he1 pulls hard. The rock spear snaps loose and %n tumbles to the ground, shard in hand. Laughing and cheering, the crew pulls him1 to his1 feet!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
@@ -868,6 +984,7 @@
   "name" : "RockShard",
   "description" : [ "A large shard of rock has somehow become lodged like a thorn between one of the large armor panels coating the outside of the ROV. The crew all takes turns trying to pry it loose but it won't budge.", "%n steps up telling everyone to stand aside, exaggeratedly flexing like a strongman and boasting about his1 feats of strength. He1 grabs on tight and starts prying..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "RockShardGood", "RockShardBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -877,6 +994,7 @@
   "name" : "MoreEnergy",
   "description" : [ "It seems to have helped!" ],
   "choices" : [ "Yea!" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
@@ -886,6 +1004,7 @@
   "name" : "JunkSorter",
   "description" : [ "%n sorts through some piles of space junk the group has collected.", "He1's trying to clean and test the parts to see if they will be any good, because just because you find space debris doesn't mean it's going to be useable after all the grime is cleaned off." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "JunkSorterGood", "JunkSorterBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -895,6 +1014,7 @@
   "name" : "JunkSorterGood",
   "description" : [ "Today he1 does pretty well, once the parts are cleaned and sorted, it seems most are in working order." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
@@ -904,6 +1024,7 @@
   "name" : "JunkSorterBad",
   "description" : [ "He1 finds that, once the dirt and debris is removed, most of the pieces just are just too damaged to be of any use." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
@@ -913,6 +1034,7 @@
   "name" : "KnockGood",
   "description" : [ "It seems that did the trick, all the noise is gone and it's running better ever!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
@@ -922,6 +1044,7 @@
   "name" : "KnockBad",
   "description" : [ "At first it's nice and quiet, but then the knocking starts again, this time louder than before!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "1", "25" ] ]
@@ -931,6 +1054,7 @@
   "name" : "Knock",
   "description" : [ "The crew notices the ROV has been making a strange knocking sound and running poorly the last few days so they pull over to check things out. %n opens the engine hatches and peers around, but doesn't see anything obviously wrong.", "He1 spends the next few hours taking things apart, cleaning things down, and reassembling them back where they belong. %n cranks up the ROV and it hums to life. The rest of the crew hops aboard and they pull back onto the trail." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "KnockGood", "KnockBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ [ ] ]
@@ -940,6 +1064,7 @@
   "name" : "OrganizeFood",
   "description" : [ "%n organizes the food storage." ],
   "choices" : [ "Continue" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "MoreEdibles", "LessEdibles" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -949,6 +1074,7 @@
   "name" : "Moss",
   "description" : [ "While out looking for new medical plants %n slips on a slimy log and falls on his1 elbow pretty hard.", "It just so happens that a patch of little mushrooms were growing under that log, mushrooms that work great as a poultice for bumps and bruises." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -958,6 +1084,7 @@
   "name" : "Maintenance",
   "description" : [ "While performing routine maintenance on the ROV %n notices some of the external armor plating is starting to wear really thin in places.", "He1 does his1 best to patch them up, but with limited time and limited supplies it's just not enough." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
@@ -967,6 +1094,7 @@
   "name" : "LessAmmo",
   "description" : [ "The numbers come up shorter than expected." ],
   "choices" : [ "Alright" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ] ]
@@ -976,6 +1104,7 @@
   "name" : "MixologyGood",
   "description" : [ "It doesn't have much taste, which is good for an herbal remedy, and he1 feels much livelier." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -985,6 +1114,7 @@
   "name" : "Mixology",
   "description" : [ "%n has been busy combining different herbs in an attempt to create a new tonic to stock some empty medical kits.", "He1's just about finished; all that's left to do is try it out." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "MixologyGood", "MixologyBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -994,6 +1124,7 @@
   "name" : "MixologyBad",
   "description" : [ "It smells bad, tastes bad, and he1 feels bad. Getting mixtures right is tricky business." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1003,6 +1134,7 @@
   "name" : "ExtraAmmo",
   "description" : [ "He1 finds some extra Ammo" ],
   "choices" : [ "Good" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
@@ -1012,6 +1144,7 @@
   "name" : "Nap",
   "description" : [ "%n sneaks in a quick nap." ],
   "choices" : [ "It was very refreshing!" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -1021,6 +1154,7 @@
   "name" : "Necklace",
   "description" : [ "%n was wearing a necklace made of rocks and string, but now he1 can't find it.", "The string must have gotten snagged on something and broke off. That's the trouble with homemade vine string." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "wealth" ] ]
@@ -1030,6 +1164,7 @@
   "name" : "Oops",
   "description" : [ "%n accidentally crushed a small trinket while moving supplies around..." ],
   "choices" : [ "Disappointing" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ 0.0, 0.0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
@@ -1039,6 +1174,7 @@
   "name" : "PowerDrain",
   "description" : [ "%n notices some of the ROV's more luxury applications aren't currently being used but are still draining the batteries' power.", "So he1 reroutes the power away from the wasted applications and diverts the energy back into the battery, providing the batteries with a temporary boost of energy." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
@@ -1048,6 +1184,7 @@
   "name" : "Precaution",
   "description" : [ "While working on the batteries, the crew often needs to shut off any ROV subsystems. This time work required the temperature regulator subsystem to be shut down as a precaution to prevent accidental damage occurring to the batteries or the subsystem during the repairs.", "Secturn is a frigid planet and even with extra blankets the cold leaves everyone feeling downtrodden." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25", "100", "-1", "true" ] ]
@@ -1057,6 +1194,7 @@
   "name" : "Wildebeast",
   "description" : [ "%n is driving the ROV along a narrow path winding between long rows of lumbering evergreens. As the path narrows even further he1 slows down, carefully inching forward to avoid being lodged in the thicket of trees. He1 hears a loud bang as the entire ROV rocks slightly. Cursing he1 peers though the window slots, but sees nothing. He1 unlatches the drivers hatch and cautiously sticks his1 head out.", "A large bloodied creature resembling a wildebeest lies next to the dented side of the ROV. The crew laughs about free food and they start to disembark to haul in their reward, but the creature lets out a tremendous bellow and trashes to life. The crew dives for cover as the beast charges off back into the tree line with a crash. The bewildered crew looks at each other, then they burst out in laughter." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealthROV", "-1", "-25" ] ]
@@ -1066,6 +1204,7 @@
   "name" : "EnergyBranch",
   "description" : [ "%n tries rearranging the batteries' wiring." ],
   "choices" : [ "Careful!" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "MoreEnergy", "LessEnergy" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1075,6 +1214,7 @@
   "name" : "RefreshBerry",
   "description" : [ "While out looking for space debris, %n decides to sit down for a rest.", "He1 spots a patch of small berries growing from between some nearby rocks. He1 knows they are safe to eat, so he1 picks a few and tosses them into his1 mouth." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "RefreshBerryGood", "RefreshBerryBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1084,6 +1224,7 @@
   "name" : "RefreshBerryGood",
   "description" : [ "They are sweet and juicy, just what he1 needs to replenish his1 energy for the walk back." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -1093,6 +1234,7 @@
   "name" : "RefreshBerryBad",
   "description" : [ "They are sweet and juicy, but also rotten. He1 feels a little sick, but not from the berries themselves as much as from the thought of eating the rotten berries." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1102,6 +1244,7 @@
   "name" : "Shortcut",
   "description" : [ "%n sticks his1 head out of the ROV and takes a look around. After some consideration he1 suggest a shortcut to save some time." ],
   "choices" : [ "Try it", "Don't Try it" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "ShortcutGood", "ShortcutBad" ], [ ] ],
   "chances" : [ [ 50.0, 50.0 ], [ 0.0 ] ],
   "resultingAction" : [ ]
@@ -1111,6 +1254,7 @@
   "name" : "ShortcutGood",
   "description" : [ "The shortcut proves to be just that!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "cutMiles", "120", "360" ] ]
@@ -1120,6 +1264,7 @@
   "name" : "ShortcutBad",
   "description" : [ "The shortcut turns out to be a dead end and the crew has to turn back." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "cutMiles", "-120", "-360" ] ]
@@ -1129,6 +1274,7 @@
   "name" : "ReworkingBad",
   "description" : [ "He1 thought wrong, the batteries are worse than before." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
@@ -1138,6 +1284,7 @@
   "name" : "Reworking",
   "description" : [ "%n has some ideas about how to increase the batteries' efficiency.", "After some reworking he1 thinks he1's got it all working..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "ReworkingGood", "ReworkingBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1147,6 +1294,7 @@
   "name" : "ReworkingGood",
   "description" : [ "It seems he1 was right; the batteries are working better than ever!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
@@ -1156,6 +1304,7 @@
   "name" : "RoadRash",
   "description" : [ "%n slipped while trying to climb an embankment for a better view of the path ahead. He1 scratched his1 hands and knees during the fall." ],
   "choices" : [ "Ouch" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-15" ] ]
@@ -1165,6 +1314,7 @@
   "name" : "Collector",
   "description" : [ "While out on a walk, %n collects a few interesting rocks he1 comes across. He1 then arranges them in a simple pattern and laces them to some cordage to make a necklace.", "He1 puts the necklace on. Not only is it a nice souvenir, but it might be useful for trade value." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
@@ -1174,6 +1324,7 @@
   "name" : "Sap",
   "description" : [ "While searching for food %n notices a thick oozy sap dripping from some of the trees. He1 touches the tip of his1 finger to the sap..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "SapGood" ] ],
   "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -1183,6 +1334,7 @@
   "name" : "SapGood",
   "description" : [ "It's sticky but soothing on the small cuts his1 fingers." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -1192,6 +1344,7 @@
   "name" : "Shindig",
   "description" : [ "While out searching for space trash, %n slips climbing down a rocky ridge and cuts his1 shin.", "It bleeds a lot, but after a few tightly wrapped bandages he1 gets things under control; nevertheless, he1's forced to return to the ROV empty handed." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1201,6 +1354,7 @@
   "name" : "FlyHurt",
   "description" : [ "The bite leaves his1 neck feeling pretty sore and it takes quite some time for the itching to go away." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1210,6 +1364,7 @@
   "name" : "Fly",
   "description" : [ "While %n is resting and having a snack, something buzzes around him1. It's a little fly; he1 shoos it away, but it comes back. He1 shoos it again, but once again it buzzes back and lands on the back of his1 neck. He1 swats it, this time killing it. A few minutes later he1 finds him1self scratching that same spot.", "He1 feels a little welt on his1 neck. The persistent fly managed to bite him1 before dying; he1 hadn't even noticed." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "FlyHurt", "FlyHeal" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1219,6 +1374,7 @@
   "name" : "FlyHeal",
   "description" : [ "The bite leaves him1 feeling strangely energized. You never know what to expect when on a strange planet." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -1228,6 +1384,7 @@
   "name" : "Slide",
   "description" : [ "While out walking to stretch his1 legs %n slips some mossy rocks and falls hard on his1 back.", "It feels really terrible and he1 scrapes his1 elbows in the fall." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -1237,6 +1394,7 @@
   "name" : "Slipper",
   "description" : [ "As the ROV ascends the crest of a large hilltop it loses traction and slips rearward. Gaining speed it slides down the cliff face toward the rocks below. Fortunately, it becomes entangled in a patch of trees before plummeting further." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "SlipperBad" ] ],
   "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ ]
@@ -1246,6 +1404,7 @@
   "name" : "SlipperBad",
   "description" : [ "The ROV and the crew are shaken but otherwise okay." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "addHealthROV", "-1", "-10" ] ]
@@ -1255,6 +1414,7 @@
   "name" : "GoodBatteries",
   "description" : [ "It seems the batteries are working well today!" ],
   "choices" : [ "POWER!" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "energy" ] ]
@@ -1264,6 +1424,7 @@
   "name" : "SplitPea",
   "description" : [ "The ROV comes to a stop because %n needs to pee and can't hold it anymore. He1 hops out of the ROV and rushes off, but quickly trips on a thick root and falls.", "Fortunately he1 didn't pee his1 pants, but unfortunately he1 split his1 toe nail painfully." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1273,6 +1434,7 @@
   "name" : "Spooked",
   "description" : [ "While the crew is out searching for ammo, they begin to feel as if they are being followed. The sun is starting to set and they have a long journey back to the ROV. They spot shapes shifting around behind the trees ahead.", "Not wanting to be trapped in the dark against an unknown adversary, they shoot some warning shots into air and make a hasty retreat back to the ROV." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "ammo" ] ]
@@ -1282,6 +1444,7 @@
   "name" : "Test",
   "description" : [ "%n, tired from the night before, runs some test on the batteries", "He1 accidentally touches something he1 shouldn't and sparks fly!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "TextGood", "TextBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1291,6 +1454,7 @@
   "name" : "TextGood",
   "description" : [ "A crack of bright blue light leaps into his1 fingers. He1 jumps back, flailing his1 hand around. He1 sticks his1 stinging fingers into his1 mouth. The experience leaves him1 wide awake and strangely energized, he1 decides not to tell the crew about what he1 did." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
@@ -1300,6 +1464,7 @@
   "name" : "TextBad",
   "description" : [ "A crack of bright blue light leaps into his1 fingers. He1 retracts his1 hand, waving it around, while cursing about his1 own carelessness. " ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1309,6 +1474,7 @@
   "name" : "CheckAmmo",
   "description" : [ "%n checks the groups Ammo storage." ],
   "choices" : [ "Continue" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "ExtraAmmo", "LessAmmo" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1318,6 +1484,7 @@
   "name" : "Thorny",
   "description" : [ "While scavenging for new medicinal plants, %n becomes entangled in thorny vines.", "Thorny vines are a rare sight in the boreal biome, but somehow he1 found them!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1327,6 +1494,7 @@
   "name" : "TinkeringROV",
   "description" : [ "%n tinkers with the ROV." ],
   "choices" : [ "Careful" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "MoreParts", "LessParts" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1336,6 +1504,7 @@
   "name" : "LessParts",
   "description" : [ "He1 finds some weathered parts in need of repair." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "parts" ] ]
@@ -1345,6 +1514,7 @@
   "name" : "MoreParts",
   "description" : [ "He1 reconfigures a few systems to save some parts." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
@@ -1354,6 +1524,7 @@
   "name" : "Toasty",
   "description" : [ "While working on the batteries the crew often needs to shut off any ROV subsystems, but this time they were able to leave on the temperature regulator while they worked.", "Secturn is a frigid planet, so the crew welcomes the warmth. " ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25", "false", "-1", "true" ] ]
@@ -1363,6 +1534,7 @@
   "name" : "TrapsBad",
   "description" : [ "%n decided to use some of the crew's food for traps, but all they caught was spoiled food." ],
   "choices" : [ "Oh Well" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "edibles" ] ]
@@ -1372,6 +1544,7 @@
   "name" : "Traps",
   "description" : [ "%n decided to set some traps which caught some extra food for the crew." ],
   "choices" : [ "Good Job" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ 100.0 ] ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ] ]
@@ -1381,6 +1554,7 @@
   "name" : "FoundTrash",
   "description" : [ "The crew stumbles upon a pile of space trash." ],
   "choices" : [ "One man's trash..." ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "parts" ] ]
@@ -1390,6 +1564,7 @@
   "name" : "Uprooted",
   "description" : [ "While out looking for crystals structures to fuel their firearms, %n suggest digging under an uprooted tree. He1 claims he1 read somewhere that crystals can sometimes be found in the undisturbed dirt beneath the tree.", "It seems like a dumb idea, but after a few hours of digging and cracking rocks they find some geodes!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "ammo" ] ]
@@ -1399,6 +1574,7 @@
   "name" : "Bump",
   "description" : [ "The ROV hits an unexpected dip in the road; it was pretty jarring." ],
   "choices" : [ "Whoa!" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ ] ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-10", "false", "-1", "true" ], [ "addHealthROV", "-1", "-10" ] ]
@@ -1408,6 +1584,7 @@
   "name" : "LessEnergy",
   "description" : [ "I don't think that sparked before!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "energy" ] ]
@@ -1417,6 +1594,7 @@
   "name" : "RottenEdibles",
   "description" : [ "%n discovers some rotten food in your storage." ],
   "choices" : [ "That's a Shame..." ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-2", "-5", "edibles", "true" ] ]
@@ -1426,6 +1604,7 @@
   "name" : "PassBag",
   "description" : [ "The group decides to pass it by." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -1435,6 +1614,7 @@
   "name" : "BugNothing",
   "description" : [ "A huge bug is grasping his1 thigh! He1 screams and jumps out of his1 sleeping bag so hard he1 hits his1 head on the low ceiling. Chaos ensues as everyone else in the ROV panics, some out of confusion and some because they see the bug darting off. After a few minutes of thrashing, stomping and shouting the bug lies vanquished." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
@@ -1454,6 +1634,7 @@
   "name" : "Bug",
   "description" : [ "%n is sound asleep in this sleeping bag in the back of the ROV, dreaming home when the thought of something crawling on him1 interrupts his1 pleasant dreams. He1 jumps awake, but doesn't feel anything. Assuming he1 was just dreaming he1 considers going back to sleep, but then he1 feels it again... ", "He1 decides to bite the bullet and yanks back the flap on his1 sleeping bag!" ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "BugNothing", "BugHurt" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1463,6 +1644,7 @@
   "name" : "CreatureBag",
   "description" : [ "%n cautiously approaches the bag. He1 peels back the opening and peers inside...", "Something darts out at him1. Startled he1 falls back and for a brief moment is entangled with the small creature that called the bag home. The creature burst free and scampers into the shrubs. Scratched, bruised, and embarrassed, %n sulks back to the group. " ],
   "choices" : [ "Whoa!" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "-10", "-20" ] ]
@@ -1472,6 +1654,7 @@
   "name" : "FoundStuff",
   "description" : [ "%n cautiously approaches the bag. He1 peels back the opening and peers inside...", "It seems the pouch is filled with a few supplies. Not wanting to find out who left them the group hurries on. " ],
   "choices" : [ "Works for Me" ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "edibles" ] ]
@@ -1481,6 +1664,7 @@
   "name" : "EmptyBag",
   "description" : [ "%n cautiously approaches the bag. He1 peels back the opening and peers inside...", "Just dust and dirt, whatever was inside the bag is long gone." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
@@ -1490,6 +1674,7 @@
   "name" : "FoundObject",
   "description" : [ "The group spots a small dark object nestled in some tall grass. Upon closer inspection it seems to be a small brownish sack..." ],
   "choices" : [ "Leave it", "Open it" ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "PassBag" ], [ "FoundStuff", "EmptyBag", "CreatureBag" ] ],
   "chances" : [ [ 100.0 ], [ 45.0, 45.0, 10.0 ] ],
   "resultingAction" : [ ]
@@ -1499,6 +1684,7 @@
   "name" : "FigurineGood",
   "description" : [ "Later while washing his1 spare pants and finds the little figurine in the pocket. He1 must left it in there the last time he1 was wearing them." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
@@ -1508,6 +1694,7 @@
   "name" : "FigurineBad",
   "description" : [ "He1 does one last sweep of the area before he1 gives up, but he1 finds nothing." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addRndAmt", "-1", "-25", "wealth" ] ]
@@ -1517,6 +1704,7 @@
   "name" : "Figurine",
   "description" : [ "(Name1) was carving a little wooden figurine out of a chuck of wood (he1) picked up earlier, but now (he1) can't find it anywhere.", "He1 checks where he1 last remembers having it, he1 digs though piles of supplies, and he1 looks under tables, but it's nowhere to be found." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ [ "FigurineGood", "FigurineBad" ] ],
   "chances" : [ [ 50.0, 50.0 ] ],
   "resultingAction" : [ ]
@@ -1526,6 +1714,7 @@
   "name" : "Woozy",
   "description" : [ "%n is feeling a little lightheaded. He1 decides to take a quick break and get some rest. He1 sits down and has a snack and sips on some water...", "...and a few minutes rest he1 is feeling much better and ready to get back on his1 feet." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]

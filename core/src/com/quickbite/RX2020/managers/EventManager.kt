@@ -122,7 +122,7 @@ object EventManager : IResetable{
 
             when(level){
                 "minor" -> disLevel = Person.Ailment.AilmentLevel.Minor
-                "regular" -> disLevel = Person.Ailment.AilmentLevel.Regular
+                "medium" -> disLevel = Person.Ailment.AilmentLevel.Regular
                 "major" -> disLevel = Person.Ailment.AilmentLevel.Major
                 else -> disLevel = Person.Ailment.AilmentLevel.Trauma
             }
@@ -435,6 +435,8 @@ object EventManager : IResetable{
         //Called when the game is over. Shows the game over screen.
         EventManager.onEvent("gameOver", {args ->
             val win = (args[0] as String).toBoolean()
+
+            SaveLoad.deleteSave()
 
             for(person in GroupManager.getPeopleList())
                 FunGameStats.addFunStat(person.fullName, "alive", true)

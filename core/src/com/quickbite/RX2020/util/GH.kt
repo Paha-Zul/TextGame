@@ -288,14 +288,14 @@ object GH {
         val cantTravel = checkCantTravel() && tracks.amt <= 0 && ammo.amt.toInt() == 0
         val noEnergy = battery.currHealth <= 0 && battery.amt <= 0 && energy.amt <= 0 && ammo.amt <= 0
 
-        val lost = cantGetEnergy || ROV.currHealth <= 0f || GroupManager.numPeopleAlive == 0 || noStorage
+        val lost = cantGetEnergy || ROV.currHealth <= 0f || cantTravel || GroupManager.numPeopleAlive == 0 || noStorage
 
         var reason = ""
         if(lost){
 
             if(panels.currHealth <= 0f && panels.amt <= 0f && energy.amt <= 0f)
                 reason = "LostPanel"
-            else if(tracks.currHealth <= 0f && tracks.amt <= 0f && ammo.amt <= 0f)
+            else if(cantTravel)
                 reason = "LostTrack"
             else if(battery.currHealth <= 0f && battery.amt <= 0f && ammo.amt <= 0f)
                 reason = "LostBattery"
@@ -350,10 +350,20 @@ object GH {
     }
 
     fun checkSupplyHealth(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float){
-        if(supply.currHealth <= 0f){
+        if(supply.currHealth <= 0f && amtBefore > 0){
             when(supply.name){
-                "battery" -> SupplyManager.setSupplyAmount(supply, 0f)
-                "track" -> EventManager.callEvent("forceCamp")
+                "battery" -> {
+                    SupplyManager.setSupplyAmount(supply, 0f)
+                    EventManager.callEvent("scheduleEvent", "BatteryBreak", "1", "1")
+                }
+                "track" -> {
+                    if(supply.amt <= 0)
+                        EventManager.callEvent("scheduleEvent", "NoTrack", "1", "1")
+                    else
+                        EventManager.callEvent("scheduleEvent", "TrackBreak", "1", "1")
+                }
+                "storage" -> EventManager.callEvent("scheduleEvent", "StorageBreak", "1", "1")
+                "panel" -> EventManager.callEvent("scheduleEvent", "PanelTrack", "1", "1")
             }
         }
     }

@@ -45,7 +45,8 @@ object DataManager{
             2 -> loadEvents(eventDir!!)
             3 -> loadRandomNames(namesDir!!)
             4 -> loadRewards(rewardsDir!!)
-            5 -> {loadSearchActivities(activitiesDir!!); return true}
+            5 -> {loadSearchActivities(activitiesDir!!)}
+            6 -> return true;
         }
 
         tick++;

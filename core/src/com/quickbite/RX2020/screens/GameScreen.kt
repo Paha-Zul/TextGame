@@ -141,9 +141,9 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
 
-        dailyEventTimer.callback = timerFunc("common", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
-        weeklyEventTimer.callback = timerFunc("rare", weeklyEventTimer, weeklyEventTime.min, weeklyEventTime.max)
-        MonthlyEventTimer.callback = timerFunc("epic", MonthlyEventTimer, MonthlyEventTime.min, MonthlyEventTime.max)
+        dailyEventTimer.callback = timerFunc("daily", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
+        weeklyEventTimer.callback = timerFunc("weekly", weeklyEventTimer, weeklyEventTime.min, weeklyEventTime.max)
+        MonthlyEventTimer.callback = timerFunc("monthly", MonthlyEventTimer, MonthlyEventTime.min, MonthlyEventTime.max)
         MonthlyNativeEventTimer.callback = timerFunc("monthlyNative", MonthlyEventTimer, MonthlyEventTime.min, MonthlyEventTime.max)
 
         noticeEventTimer.stop()

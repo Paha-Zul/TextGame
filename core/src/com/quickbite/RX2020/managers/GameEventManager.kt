@@ -31,7 +31,7 @@ object GameEventManager{
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     fun getRandomRoot(type:String):EventJson{
-        var list = getEventNameList(type)
+        val list = getEventNameList(type)
         val event = eventMap[list.toTypedArray()[MathUtils.random(list.size-1)]]!!
         return event;
     }

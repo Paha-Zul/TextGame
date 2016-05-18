@@ -71,8 +71,10 @@ class LoadingScreen(val game: TextGame): Screen {
             if (done && !trigger) {
                 TextGame.smallGuiAtlas = TextGame.manager.get("smallUI", TextureAtlas::class.java)
                 trigger = true
-                game.screen = MainMenuScreen(game)
             }
+
+            if(done && logoDone)
+                game.screen = MainMenuScreen(game)
         }
 
         val color = TextGame.batch.color

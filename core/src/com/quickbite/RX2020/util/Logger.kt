@@ -1,6 +1,7 @@
 package com.quickbite.rx2020.util
 
 import com.badlogic.gdx.Gdx
+import com.quickbite.rx2020.TextGame
 
 /**
  * Created by Paha on 3/27/2016.
@@ -36,12 +37,7 @@ object Logger {
     @JvmStatic
     fun writeLog(fileName:String){
         if(loggerEnabled) {
-            val handle = Gdx.files.internal("$fileName")
-            handle.file().printWriter().use { out ->
-                logList.forEach {
-                    out.println("$it")
-                }
-            }
+            TextGame.GPGServices.outputToLog("log.txt", logListArray)
         }
     }
 

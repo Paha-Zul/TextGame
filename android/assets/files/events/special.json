@@ -4,27 +4,40 @@
   "name" : "Death",
   "description" : [ ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "showDeaths" ] ]
+}, {
+  "root" : false,
+  "title" : "End of the Line",
+  "name" : "EndWin",
+  "description" : [ "The weathered ROV creaks to a stop in front of a large clearing. The weary crew opens the ROV's hatches and glances outward. Before them lies the tattered remains of huge parachutes and the worn but intact hulls of the enormous cargo crates, guided from outer space to this very spot months before Exomer751's arrival. They've made it... RX-2020." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "gameOver", "false" ] ]
 }, {
   "root" : true,
   "title" : "Final Entry",
   "name" : "EndLose",
   "description" : [ "You have lost..." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ [ "gameOver", "true" ] ]
-},{
-  "root" : false,
-  "title" : "End of the Line",
-  "name" : "EndWin",
-  "description" : ["The weathered ROV creaks to a stop in front of a large clearing. The weary crew opens the ROV's hatches and glances outward. Before them lies the tattered remains of huge parachutes and the worn but intact hulls of the enormous cargo crates, guided from outer space to this very spot months before Exomer751's arrival. They've made it... RX-2020."],
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "PanelBreak",
+  "description" : [ "The crew’s solar panels have been badly damaged and is no longer capable of restoring energy. The crew can travel until the remaining batteries’ energy reaches 0. Luckily the group has the spare parts to fix the broken subsystem. It might be wise if they stop and fix it before the power runs dry." ],
   "choices" : [ ],
+  "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "gameOver", "false" ] ]
+  "resultingAction" : [ [ ] ]
 }, {
   "root" : true,
   "title" : "Notice",
@@ -35,46 +48,6 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "Notice",
-  "name" : "LastBattery",
-  "description" : [ "The crew strings together the last batteries they have. Fortunately they are able to transfer the existing energy from the remaining batteries into the new ones without any power loss. Without any spare batteries, the crew risk losing all their power and becoming immobile. It might be wise to search for spare battery parts before then." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ ]
-}, {
-  "root" : true,
-  "title" : "Notice",
-  "name" : "NoTrack",
-  "description" : [ "The tracks are broken. The crew tries to scrape together enough parts to piece them back together, but it just isn't enough. Unable to repair the tracks, their last hope lies in the slim chance of searching for spare track parts that may be nestle a nearby wreckage." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ [ "ForceCamp" ] ],
-  "chances" : [ [ 100.0 ] ],
-  "resultingAction" : [ [ ] ]
-}, {
-  "root" : false,
-  "title" : "Notice",
-  "name" : "ForceCamp",
-  "description" : [ ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ ],
-  "chances" : [ ],
-  "resultingAction" : [ [ "forceCamp" ] ]
-}, {
-  "root" : true,
-  "title" : "Notice",
-  "name" : "NoBattery",
-  "description" : [ "The batteries have broken and the ROV's control panel grows dark. The crew's last hope lies in the slim chance of finding spare batteries in a nearby wreckage. With limited ammo, they load their weapons and prepare for the journey." ],
-  "choices" : [ ],
-  "restrictions" : [ ],
-  "outcomes" : [ [ "ForceCamp" ] ],
-  "chances" : [ [ 100.0 ] ],
-  "resultingAction" : [ [ ] ]
 }, {
   "root" : true,
   "title" : "Notice",
@@ -98,6 +71,36 @@
 }, {
   "root" : true,
   "title" : "Notice",
+  "name" : "StorageBreak",
+  "description" : [ "The crew’s storage has been badly damaged. Unable travel without losing all their supplies, they are forced to make camp to make emergency repairs to the storage subsystem. Luckily, the crew has enough spare bits and pieces to restore the storage’s functionality." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "forceCamp" ] ]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "LastBattery",
+  "description" : [ "The crew strings together the last batteries they have. Fortunately they are able to transfer the existing energy from the remaining batteries into the new ones without any power loss. Without any spare batteries, the crew risk losing all their power and becoming immobile. It might be wise to search for spare battery parts before then." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ ]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "NoTrack",
+  "description" : [ "The tracks are broken. The crew tries to scrape together enough parts to piece them back together, but it just isn't enough. Unable to repair the tracks, their last hope lies in the slim chance of searching for spare track parts that may be nestled in a nearby wreckage." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ForceCamp" ] ],
+  "chances" : [ [ 100.0 ] ],
+  "resultingAction" : [ [ ] ]
+}, {
+  "root" : true,
+  "title" : "Notice",
   "name" : "LastEnergy",
   "description" : [ "Only 5% of the batteries power remains. When the energy reaches 0%, the ROV's subsystems will be shutdown and the crew may not have the resources to restart and recharge the batteries. If possible, it may be a good idea to charge the batteries now." ],
   "choices" : [ ],
@@ -108,6 +111,26 @@
 }, {
   "root" : true,
   "title" : "Notice",
+  "name" : "TrackBreak",
+  "description" : [ "The crew’s tracks has been badly damaged. Unable travel, they are forced to make camp to perform emergency repairs. Luckily, the crew has enough spare bits and pieces to restore the tracks to working order." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "forceCamp" ] ]
+}, {
+  "root" : false,
+  "title" : "Notice",
+  "name" : "ForceCamp",
+  "description" : [ ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "forceCamp" ] ]
+}, {
+  "root" : true,
+  "title" : "Notice",
   "name" : "LastPanel",
   "description" : [ "The crew has used up all its spare solar panel parts, if something happens to their last solar panel they won't be able to charge the batteries anymore. It might be a good idea to search for more solar panel parts before it's too late." ],
   "choices" : [ ],
@@ -115,5 +138,24 @@
   "outcomes" : [ ],
   "chances" : [ ],
   "resultingAction" : [ ]
-}
-]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "NoBattery",
+  "description" : [ "The batteries have broken and the ROV's control panel grows dark. The crew's last hope lies in the slim chance of finding spare batteries in a nearby wreckage. With limited ammo, they load their weapons and prepare for the journey." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ [ "ForceCamp" ] ],
+  "chances" : [ [ 100.0 ] ],
+  "resultingAction" : [ [ ] ]
+}, {
+  "root" : true,
+  "title" : "Notice",
+  "name" : "BatteryBreak",
+  "description" : [ "The crew’s batteries have been badly damaged. Unwilling to risk losing all their existing power stores, they are forced to make camp to perform emergency repairs to the battery subsystem. Luckily, the crew has enough spare bits and pieces to complete the necessary fixes." ],
+  "choices" : [ ],
+  "restrictions" : [ ],
+  "outcomes" : [ ],
+  "chances" : [ ],
+  "resultingAction" : [ [ "forceCamp" ] ]
+} ]

@@ -99,8 +99,8 @@ object SaveLoad{
             FunGameStats.addFunStat(stat[0], stat[1], true)
         }
 
-        GameEventManager.getEventNameList("epic").clear() //Let's clear this since it was probably loaded by the game
-        GameEventManager.getEventNameList("epic").addAll(save.remainingEpicEvents) //Load the remaining events in.
+        GameEventManager.getEventNameList("monthly").clear() //Let's clear this since it was probably loaded by the game
+        GameEventManager.getEventNameList("monthly").addAll(save.remainingEpicEvents) //Load the remaining events in.
 
         save.eventTimers.forEach { list ->
             game.setTimer(list[0], list[1].toFloat())

@@ -39,21 +39,8 @@ object SupplyManager : IUpdateable, IResetable{
     }
 
     fun addToSupply(name:String, amt:Float):Supply{
-        var _amt = amt //Let's make the passed in val mutable
         val supply = supplyMap[name] //Get the supply.
-
-        //Log it if the supply is null
-        if(supply == null) Logger.log("SupplyManager", "Trying to add to supply $name which doesn't exist.", Logger.LogLevel.Warning)
-        else {
-            val oldAmt = supply.amt
-            supply.amt += amt //Usually health for any supply will be 100/100, but for parts that degrade it will not?
-            if (supply.amt < 0) supply.amt = 0f
-            else if (supply.amt >= supply.maxAmount) supply.amt = supply.maxAmount.toFloat()
-
-            EventManager.callEvent("supplyChanged", supply, _amt, oldAmt)
-        }
-
-        return supply!!
+        return addToSupply(supply, amt)
     }
 
     fun addToSupply(supply:Supply?, amt:Float):Supply{
