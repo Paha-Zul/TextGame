@@ -37,8 +37,12 @@ object Logger {
     @JvmStatic
     fun writeLog(fileName:String){
         if(loggerEnabled) {
-            TextGame.GPGServices.outputToLog("log.txt", logListArray)
+
+            TextGame.threadPool.submit {
+                TextGame.platformSpecific.outputToLog(fileName, logListArray)
+            }
         }
+
     }
 
     @JvmStatic

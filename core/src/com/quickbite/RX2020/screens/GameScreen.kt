@@ -75,6 +75,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     }
 
     init{
+        Logger.writeLog("log.txt")
+
         TextGame.stage.clear();
         fadeIn()
 
@@ -135,8 +137,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("track", -100f)})
 //        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("BreakIn", "weekly")!!)})
-        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("HerdCrossing", "daily")!!)})
+        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
 //        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
@@ -197,12 +199,39 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         TextGame.viewport.update(width, height)
     }
 
+    /**
+     * Called when the game is paused either by code or by an event (minimized game on android etc...)
+     */
     override fun pause() {
-        SaveLoad.saveGame(true, this)
+        if(this.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false, this)
+        Logger.writeLog("log.txt")
     }
 
+    /**
+     * Called when the game resumes.
+     */
     override fun resume() {
+        if(this.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false, this)
+        Logger.writeLog("log.txt")
+    }
 
+
+    /**
+     * Called to pause the game.
+     */
+    fun pauseGame(){
+        this.paused = true
+        this.pause()
+    }
+
+    /**
+     * Called to resume the game. We separate this call from resume() because we don't want the
+     * game necessarily resuming when the system decides to resume the game (like when you open the
+     * tab again on android)
+     */
+    fun resumeGame(){
+        this.paused = false;
+        this.resume()
     }
 
     override fun render(delta: Float) {
@@ -353,20 +382,6 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     fun changeToTravel(){
         this.state = State.TRAVELING
         this.ROV = TextGame.manager.get("Exomer751ROV", Texture::class.java)
-    }
-
-    /**
-     * Pauses the game.
-     */
-    fun pauseGame(){
-        this.paused = true
-    }
-
-    /**
-     * Resumes the game.
-     */
-    fun resumeGame(){
-        this.paused = false;
     }
 
     fun setGameOver(reason:String){

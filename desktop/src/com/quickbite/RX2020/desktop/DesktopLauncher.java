@@ -5,7 +5,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.quickbite.rx2020.TextGame;
-import com.quickbite.rx2020.interfaces.IGPGServices;
+import com.quickbite.rx2020.interfaces.IPlatformSpecific;
 import com.quickbite.rx2020.util.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class DesktopLauncher implements IGPGServices{
+public class DesktopLauncher implements IPlatformSpecific {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 800;
@@ -50,7 +50,7 @@ public class DesktopLauncher implements IGPGServices{
 	}
 
     @Override
-    public void outputToLog(String fileName, String[] text) {
+    public synchronized void outputToLog(String fileName, String[] text) {
         FileHandle handle = Gdx.files.internal(fileName);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(handle.file()));

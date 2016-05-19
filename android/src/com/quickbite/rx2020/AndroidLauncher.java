@@ -7,7 +7,7 @@ import android.widget.Toast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.quickbite.rx2020.interfaces.IGPGServices;
+import com.quickbite.rx2020.interfaces.IPlatformSpecific;
 import com.quickbite.rx2020.util.IabHelper;
 import com.quickbite.rx2020.util.IabResult;
 import com.quickbite.rx2020.util.Inventory;
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-public class AndroidLauncher extends AndroidApplication implements IGPGServices {
+public class AndroidLauncher extends AndroidApplication implements IPlatformSpecific {
 	IabHelper mHelper;
 
 	@Override
@@ -70,18 +70,36 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
     public void donate(int amount) {
 		if(amount != 0) {
 			//Don't do anything right now.
+			String sku = "";
+			String payload = "";
+			if(amount == 1) {
+				sku = SKU_DONATE_SMALL;
+				payload = "DON_SMALL";
+			}else if(amount == 5) {
+				sku = SKU_DONATE_MEDIUM;
+				payload = "DON_MEDIUM";
+			}else if(amount == 10) {
+				sku = SKU_DONATE_LARGE;
+				payload = "DON_LARGE";
+			}else if(amount == 20) {
+				sku = SKU_DONATE_HUGE;
+				payload = "DON_HUGE";
+			}else {
+				sku = SKU_DONATE_ERROR;
+				payload = "DON_ERROR";
+			}
 
-//			try {
-//				//Launch the purchase flow with a test SKU for now.
-//				mHelper.launchPurchaseFlow(this, SKU_TEST_PURCHASED, RC_REQUEST, mPurchaseFinishedListener, "HANDLE_PAYLOADS");
-//			} catch (IabHelper.IabAsyncInProgressException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				//Launch the purchase flow with a test SKU for now.
+				mHelper.launchPurchaseFlow(this, sku, RC_REQUEST, mPurchaseFinishedListener, payload);
+			} catch (IabHelper.IabAsyncInProgressException e) {
+				e.printStackTrace();
+			}
 		}
     }
 
     // Callback for when a purchase is finished
-    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+	private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if ( purchase == null) return;
             Logger.log("IAB", "Purchase finished: " + result + ", purchase: " + purchase, Logger.LogLevel.Info);
@@ -93,6 +111,7 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
                 Logger.log("Android", "Error purchasing: "+result, Logger.LogLevel.Error);
                 //complain("Error purchasing: " + result);
                 //setWaitScreen(false);
+				Logger.writeLog("log.txt");
                 return;
             }
 //            if (!verifyDeveloperPayload(purchase)) {
@@ -103,39 +122,39 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
 
             Logger.log("IAB", "Purchase successful.", Logger.LogLevel.Info);
 
+            if (purchase.getSku().equals(SKU_DONATE_SMALL) || purchase.getSku().equals(SKU_DONATE_MEDIUM) || purchase.getSku().equals(SKU_DONATE_LARGE) || purchase.getSku().equals(SKU_DONATE_HUGE)) {
+                Logger.log("IAB", "Purchased a donation: "+purchase.getSku(), Logger.LogLevel.Info);
+				try {
+					mHelper.consumeAsync(purchase, mConsumeFinishedListener);
+				} catch (IabHelper.IabAsyncInProgressException e) {
+					e.printStackTrace();
+				}
 
-//            if (purchase.getSku().equals(SKU_TEST_PURCHASED)) {
-//                // bought the premium upgrade!
-//                Logger.log("IAB", "Purchase is premium upgrade. Congratulating user.", Logger.LogLevel.Info);
-//				try {
-//					mHelper.consumeAsync(purchase, mConsumeFinishedListener);
-//				} catch (IabHelper.IabAsyncInProgressException e) {
-//					e.printStackTrace();
-//				}
-//
-//				// Do what you want here maybe call your game to do some update
-//                //
-//                // Maybe set a flag to indicate that ads shouldn't show anymore
-////                mAdsRemoved = true;
-//
-//            }
+				// Do what you want here maybe call your game to do some update
+                //
+                // Maybe set a flag to indicate that ads shouldn't show anymore
+//                mAdsRemoved = true;
+
+            }
         }
     };
 
-	IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
+	private IabHelper.OnConsumeFinishedListener mConsumeFinishedListener =
 		new IabHelper.OnConsumeFinishedListener() {
 			public void onConsumeFinished(Purchase purchase, IabResult result) {
 				if (result.isSuccess()) {
+					Logger.log("Android","Consume success on "+purchase.getSku(), Logger.LogLevel.Info);
 					// provision the in-app purchase to the user
 					// (for example, credit 50 gold coins to player's character)
 				}
 				else {
+					Logger.log("Android","Consume failed on "+purchase.getSku(), Logger.LogLevel.Info);
 					// handle error
 				}
 			}
 		};
 
-	IabHelper.QueryInventoryFinishedListener mGotInventoryListener
+	private IabHelper.QueryInventoryFinishedListener mGotInventoryListener
 			= new IabHelper.QueryInventoryFinishedListener() {
 		public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 
@@ -157,7 +176,12 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
 		}
 	};
 
-    @Override
+	@Override
+	public void exit() {
+		super.exit();
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		if (mHelper != null) try {
@@ -194,10 +218,12 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
 	}
 
     @Override
-    public void outputToLog(String fileName, String[] text) {
+    public synchronized void outputToLog(String fileName, String[] text) {
         boolean mExternalStorageAvailable = false;
         boolean mExternalStorageWriteable = false;
         String state = Environment.getExternalStorageState();
+
+		System.out.println("Writing to output log.");
 
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             // We can read and write the media
@@ -237,4 +263,6 @@ public class AndroidLauncher extends AndroidApplication implements IGPGServices 
             displayText(sw.toString(), "long");
         }
     }
+
+
 }

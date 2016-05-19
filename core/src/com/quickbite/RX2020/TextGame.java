@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.quickbite.rx2020.interfaces.IGPGServices;
+import com.quickbite.rx2020.interfaces.IPlatformSpecific;
 import com.quickbite.rx2020.managers.EasyAssetManager;
 import com.quickbite.rx2020.screens.LoadingScreen;
 import com.quickbite.rx2020.util.Logger;
@@ -35,10 +35,10 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 	public static Color backgroundColor = new Color(0,0,0,1);
 
-	public static IGPGServices GPGServices;
+	public static IPlatformSpecific platformSpecific;
 
-	public TextGame(IGPGServices GPGServices){
-		TextGame.GPGServices = GPGServices;
+	public TextGame(IPlatformSpecific platformSpecific){
+		TextGame.platformSpecific = platformSpecific;
 	}
 
 	@Override
@@ -58,16 +58,17 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
+				StackTraceElement[] list = mainThread.getStackTrace();
+				for(StackTraceElement element : list)
+					Logger.log("Shutting Down", element.toString(), Logger.LogLevel.Warning);
+				Logger.writeLog("log.txt");
 				try {
 					threadPool.shutdown();
 					threadPool.awaitTermination(10, TimeUnit.SECONDS);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				StackTraceElement[] list = mainThread.getStackTrace();
-				for(StackTraceElement element : list)
-					Logger.log("Crash", element.toString(), Logger.LogLevel.Warning);
-				Logger.writeLog("log.txt");
+
 			}
 		}));
 

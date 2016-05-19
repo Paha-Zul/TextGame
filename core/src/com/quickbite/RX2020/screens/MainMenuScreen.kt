@@ -9,6 +9,7 @@ import com.quickbite.rx2020.gui.MainMenuGUI
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.util.CustomTimer
 import com.quickbite.rx2020.util.FunGameStats
+import com.quickbite.rx2020.util.Logger
 
 /**
  * Created by Paha on 2/3/2016.
@@ -32,6 +33,8 @@ class MainMenuScreen(val game: TextGame) : Screen {
         GameStats.init()
 
         MainMenuGUI(this).showMainMenu()
+
+        Logger.writeLog("log.txt")
     }
 
     override fun hide() {

@@ -418,7 +418,6 @@ object EventManager : IResetable{
 
             Logger.log("EventManager", "Event $name is ending")
 
-            if(gameScreen.state != GameScreen.State.GAMEOVER) SaveLoad.saveGame(false, gameScreen)
             Result.purgeEventResults()
         })
 

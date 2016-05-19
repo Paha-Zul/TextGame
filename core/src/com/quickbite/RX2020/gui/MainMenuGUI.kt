@@ -70,7 +70,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         rightTable.row()
 
         //For now, only add the donate button on tester devices.
-        if(TextGame.GPGServices.isTestDevice) rightTable.add(donateButton).minHeight(40f)
+        if(TextGame.platformSpecific.isTestDevice) rightTable.add(donateButton).minHeight(40f)
 
         rightTable.pad(0f, 0f, 20f, 20f)
 
@@ -94,7 +94,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
         redditButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                TextGame.GPGServices.openURL("https://www.reddit.com/r/rx2020")
+                TextGame.platformSpecific.openURL("https://www.reddit.com/r/rx2020")
             }
         })
 
@@ -141,7 +141,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
         textButtonStyle.fontColor = Color.WHITE
 
-        val purchaseButton = TextButton("Purchase!", textButtonStyle)
+        val purchaseButton = TextButton("Donate!", textButtonStyle)
         purchaseButton.label.setFontScale(0.4f)
         purchaseButton.setSize(100f, 50f)
         purchaseButton.setPosition(TextGame.viewport.worldWidth.toFloat()/2f - 50f, TextGame.viewport.worldHeight.toFloat() - 50f)
@@ -183,7 +183,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         purchaseButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 if(selected != 0)
-                    TextGame.GPGServices.donate(selected)
+                    TextGame.platformSpecific.donate(selected)
             }
         })
 

@@ -73,8 +73,9 @@ class LoadingScreen(val game: TextGame): Screen {
                 trigger = true
             }
 
-            if(done && logoDone)
+            if(done && logoDone) {
                 game.screen = MainMenuScreen(game)
+            }
         }
 
         val color = TextGame.batch.color
