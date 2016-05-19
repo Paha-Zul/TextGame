@@ -1167,7 +1167,7 @@
   "restrictions" : [ ],
   "outcomes" : [ [ ] ],
   "chances" : [ [ 0.0, 0.0 ] ],
-  "resultingAction" : [ [ "addRndAmt", "1", "25", "wealth" ] ]
+  "resultingAction" : [ [ "addRndAmt", "-1", "-25", "wealth" ] ]
 }, {
   "root" : true,
   "title" : "Powerful",
@@ -1382,12 +1382,12 @@
   "root" : true,
   "title" : "Slip Slide",
   "name" : "Slide",
-  "description" : [ "While out walking to stretch his1 legs %n slips some mossy rocks and falls hard on his1 back.", "It feels really terrible and he1 scrapes his1 elbows in the fall." ],
+  "description" : [ "While out walking to stretch his1 legs %n slips on some mossy rocks and falls hard on his1 back.", "It feels really terrible and he1 scrapes his1 elbows in the fall." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
   "chances" : [ ],
-  "resultingAction" : [ [ "addHealth", "evt", "1", "25" ] ]
+  "resultingAction" : [ [ "addHealth", "evt", "-1", "-25" ] ]
 }, {
   "root" : true,
   "title" : "Slipper",

@@ -137,7 +137,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("track", -100f)})
 //        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("HerdCrossing", "daily")!!)})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Hole", "daily")!!)})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
 //        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
@@ -192,6 +192,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     }
 
     override fun hide() {
+        Logger.writeLog("log.txt")
        SaveLoad.saveGame(true, this)
     }
 

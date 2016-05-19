@@ -1,5 +1,6 @@
 package com.quickbite.rx2020;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -20,6 +21,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AndroidLauncher extends AndroidApplication implements IPlatformSpecific {
 	IabHelper mHelper;
@@ -46,7 +49,8 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 
 					//Let's then query the inventory...
 					try {
-						mHelper.queryInventoryAsync(mGotInventoryListener);
+                        Logger.log("AndroidLauncher", "Trying to query the inventory", Logger.LogLevel.Info);
+                        mHelper.queryInventoryAsync(mGotInventoryListener);
 					} catch (IabHelper.IabAsyncInProgressException e) {
 						e.printStackTrace();
 					}
@@ -54,8 +58,6 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 			}
 
 		});
-
-
 	}
 
 	@Override
@@ -68,6 +70,7 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 
     @Override
     public void donate(int amount) {
+        Logger.log("IAB", "Trying to donate $"+amount, Logger.LogLevel.Info);
 		if(amount != 0) {
 			//Don't do anything right now.
 			String sku = "";
@@ -89,6 +92,8 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 				payload = "DON_ERROR";
 			}
 
+			Logger.log("IAB", "Trying to purchase sku: "+sku+" with payload: "+payload, Logger.LogLevel.Info);
+
 			try {
 				//Launch the purchase flow with a test SKU for now.
 				mHelper.launchPurchaseFlow(this, sku, RC_REQUEST, mPurchaseFinishedListener, payload);
@@ -101,7 +106,11 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
     // Callback for when a purchase is finished
 	private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
-            if ( purchase == null) return;
+            if ( purchase == null) {
+				Logger.log("IAB", "Purchase is null apparently, result: " + result, Logger.LogLevel.Info);
+				Logger.writeLog("log.txt");
+				return;
+			}
             Logger.log("IAB", "Purchase finished: " + result + ", purchase: " + purchase, Logger.LogLevel.Info);
 
             // if we were disposed of in the meantime, quit.
@@ -161,20 +170,52 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 			if (result.isFailure()) {
 				// handle error here
 				Logger.log("Android", "Query inventory failed: "+result, Logger.LogLevel.Error);
-			}
-			else {
-				// does the user have the premium upgrade?
-//				if(inventory.hasPurchase(SKU_TEST_PURCHASED))
-//					try {
-//						mHelper.consumeAsync(inventory.getPurchase(SKU_TEST_PURCHASED), mConsumeFinishedListener);
-//					} catch (IabHelper.IabAsyncInProgressException e) {
-//						e.printStackTrace();
-//					}
+			}else {
+                List<Purchase> list = new ArrayList<Purchase>();
+				if(inventory.hasPurchase(SKU_DONATE_SMALL)) {
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_SMALL, Logger.LogLevel.Info);
+                    list.add(inventory.getPurchase(SKU_DONATE_SMALL));
+                }
+                if(inventory.hasPurchase(SKU_DONATE_MEDIUM)) {
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_MEDIUM, Logger.LogLevel.Info);
+                    list.add(inventory.getPurchase(SKU_DONATE_MEDIUM));
+                }
+                if(inventory.hasPurchase(SKU_DONATE_LARGE)) {
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_LARGE, Logger.LogLevel.Info);
+                    list.add(inventory.getPurchase(SKU_DONATE_LARGE));
+                }
+                if(inventory.hasPurchase(SKU_DONATE_HUGE)) {
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_HUGE, Logger.LogLevel.Info);
+                    list.add(inventory.getPurchase(SKU_DONATE_HUGE));
+                }
 
-				// update UI accordingly
+                if(list.size() > 0)
+                    try {
+                        Logger.log("Android", "Calling multi consume.", Logger.LogLevel.Info);
+                        mHelper.consumeAsync(list, mConsumedMultiListener);
+                    } catch (IabHelper.IabAsyncInProgressException e) {
+                        e.printStackTrace();
+                    }
+
+                // update UI accordingly
 			}
 		}
 	};
+
+    private IabHelper.OnConsumeMultiFinishedListener mConsumedMultiListener = new IabHelper.OnConsumeMultiFinishedListener() {
+        @Override
+        public void onConsumeMultiFinished(List<Purchase> purchases, List<IabResult> results) {
+            for(int i = 0; i < results.size(); i++){
+                IabResult result = results.get(i);
+                Purchase purchase = purchases.get(i);
+                if(result.isFailure()){
+                    Logger.log("Android", "Consume failed on purchase: "+purchase.getSku()+", result: "+result, Logger.LogLevel.Error);
+                }else{
+                    Logger.log("Android", "Consume success on purchase: "+purchase.getSku(), Logger.LogLevel.Info);
+                }
+            }
+        }
+    };
 
 	@Override
 	public void exit() {
@@ -264,5 +305,16 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        //Apparently we really need this or we can't buy anything else until the game is restarted.
+        if (mHelper != null) {
+            // Pass on the activity result to the helper for handling
+            if (mHelper.handleActivityResult(requestCode, resultCode, data)) {
+                Logger.log("IAB", "onActivityResult handled by IABUtil.", Logger.LogLevel.Info);
+            }
+        }
+    }
 }
