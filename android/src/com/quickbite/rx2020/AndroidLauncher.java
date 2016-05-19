@@ -45,11 +45,11 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 					// Oh noes, there was a problem.
 					Logger.log("AndroidLauncher", "Problem setting up In-app Billing: " + result, Logger.LogLevel.Error);
 				}else {
-					Logger.log("AndroidLauncher", "Billing success:: " + result, Logger.LogLevel.Info);
+					Logger.log("AndroidLauncher", "Billing success:: " + result, Logger.LogLevel.Debug);
 
 					//Let's then query the inventory...
 					try {
-                        Logger.log("AndroidLauncher", "Trying to query the inventory", Logger.LogLevel.Info);
+                        Logger.log("AndroidLauncher", "Trying to query the inventory", Logger.LogLevel.Debug);
                         mHelper.queryInventoryAsync(mGotInventoryListener);
 					} catch (IabHelper.IabAsyncInProgressException e) {
 						e.printStackTrace();
@@ -70,7 +70,7 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 
     @Override
     public void donate(int amount) {
-        Logger.log("IAB", "Trying to donate $"+amount, Logger.LogLevel.Info);
+        Logger.log("IAB", "Trying to donate $"+amount, Logger.LogLevel.Debug);
 		if(amount != 0) {
 			//Don't do anything right now.
 			String sku = "";
@@ -92,7 +92,7 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 				payload = "DON_ERROR";
 			}
 
-			Logger.log("IAB", "Trying to purchase sku: "+sku+" with payload: "+payload, Logger.LogLevel.Info);
+			Logger.log("IAB", "Trying to purchase sku: "+sku+" with payload: "+payload, Logger.LogLevel.Debug);
 
 			try {
 				//Launch the purchase flow with a test SKU for now.
@@ -107,11 +107,11 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 	private IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if ( purchase == null) {
-				Logger.log("IAB", "Purchase is null apparently, result: " + result, Logger.LogLevel.Info);
+				Logger.log("IAB", "Purchase is null apparently, result: " + result, Logger.LogLevel.Debug);
 				Logger.writeLog("log.txt");
 				return;
 			}
-            Logger.log("IAB", "Purchase finished: " + result + ", purchase: " + purchase, Logger.LogLevel.Info);
+            Logger.log("IAB", "Purchase finished: " + result + ", purchase: " + purchase, Logger.LogLevel.Debug);
 
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) return;
@@ -129,10 +129,10 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 //                return;
 //            }
 
-            Logger.log("IAB", "Purchase successful.", Logger.LogLevel.Info);
+            Logger.log("IAB", "Purchase successful.", Logger.LogLevel.Debug);
 
             if (purchase.getSku().equals(SKU_DONATE_SMALL) || purchase.getSku().equals(SKU_DONATE_MEDIUM) || purchase.getSku().equals(SKU_DONATE_LARGE) || purchase.getSku().equals(SKU_DONATE_HUGE)) {
-                Logger.log("IAB", "Purchased a donation: "+purchase.getSku(), Logger.LogLevel.Info);
+                Logger.log("IAB", "Purchased a donation: "+purchase.getSku(), Logger.LogLevel.Debug);
 				try {
 					mHelper.consumeAsync(purchase, mConsumeFinishedListener);
 				} catch (IabHelper.IabAsyncInProgressException e) {
@@ -152,12 +152,12 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 		new IabHelper.OnConsumeFinishedListener() {
 			public void onConsumeFinished(Purchase purchase, IabResult result) {
 				if (result.isSuccess()) {
-					Logger.log("Android","Consume success on "+purchase.getSku(), Logger.LogLevel.Info);
+					Logger.log("Android","Consume success on "+purchase.getSku(), Logger.LogLevel.Debug);
 					// provision the in-app purchase to the user
 					// (for example, credit 50 gold coins to player's character)
 				}
 				else {
-					Logger.log("Android","Consume failed on "+purchase.getSku(), Logger.LogLevel.Info);
+					Logger.log("Android","Consume failed on "+purchase.getSku(), Logger.LogLevel.Debug);
 					// handle error
 				}
 			}
@@ -173,25 +173,25 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 			}else {
                 List<Purchase> list = new ArrayList<Purchase>();
 				if(inventory.hasPurchase(SKU_DONATE_SMALL)) {
-                    Logger.log("Android", "Trying to consume " + SKU_DONATE_SMALL, Logger.LogLevel.Info);
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_SMALL, Logger.LogLevel.Debug);
                     list.add(inventory.getPurchase(SKU_DONATE_SMALL));
                 }
                 if(inventory.hasPurchase(SKU_DONATE_MEDIUM)) {
-                    Logger.log("Android", "Trying to consume " + SKU_DONATE_MEDIUM, Logger.LogLevel.Info);
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_MEDIUM, Logger.LogLevel.Debug);
                     list.add(inventory.getPurchase(SKU_DONATE_MEDIUM));
                 }
                 if(inventory.hasPurchase(SKU_DONATE_LARGE)) {
-                    Logger.log("Android", "Trying to consume " + SKU_DONATE_LARGE, Logger.LogLevel.Info);
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_LARGE, Logger.LogLevel.Debug);
                     list.add(inventory.getPurchase(SKU_DONATE_LARGE));
                 }
                 if(inventory.hasPurchase(SKU_DONATE_HUGE)) {
-                    Logger.log("Android", "Trying to consume " + SKU_DONATE_HUGE, Logger.LogLevel.Info);
+                    Logger.log("Android", "Trying to consume " + SKU_DONATE_HUGE, Logger.LogLevel.Debug);
                     list.add(inventory.getPurchase(SKU_DONATE_HUGE));
                 }
 
                 if(list.size() > 0)
                     try {
-                        Logger.log("Android", "Calling multi consume.", Logger.LogLevel.Info);
+                        Logger.log("Android", "Calling multi consume.", Logger.LogLevel.Debug);
                         mHelper.consumeAsync(list, mConsumedMultiListener);
                     } catch (IabHelper.IabAsyncInProgressException e) {
                         e.printStackTrace();
@@ -211,7 +211,7 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
                 if(result.isFailure()){
                     Logger.log("Android", "Consume failed on purchase: "+purchase.getSku()+", result: "+result, Logger.LogLevel.Error);
                 }else{
-                    Logger.log("Android", "Consume success on purchase: "+purchase.getSku(), Logger.LogLevel.Info);
+                    Logger.log("Android", "Consume success on purchase: "+purchase.getSku(), Logger.LogLevel.Debug);
                 }
             }
         }
@@ -313,7 +313,7 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
         if (mHelper != null) {
             // Pass on the activity result to the helper for handling
             if (mHelper.handleActivityResult(requestCode, resultCode, data)) {
-                Logger.log("IAB", "onActivityResult handled by IABUtil.", Logger.LogLevel.Info);
+                Logger.log("IAB", "onActivityResult handled by IABUtil.", Logger.LogLevel.Debug);
             }
         }
     }
