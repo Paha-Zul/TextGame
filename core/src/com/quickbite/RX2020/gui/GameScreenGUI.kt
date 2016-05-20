@@ -64,12 +64,6 @@ class GameScreenGUI(val game : GameScreen) {
     private lateinit var groupButton: TextButton
     private lateinit var campButton: TextButton
 
-    /* Camp specific stuff */
-    private lateinit var activityHourLabel: Label
-    private lateinit var activityHourSlider: Slider
-    private lateinit var activityButton: TextButton
-
-    private lateinit var selectBox: SelectBox<Label>
 
     private lateinit var distProgressBar: ProgressBar
 
@@ -174,36 +168,36 @@ class GameScreenGUI(val game : GameScreen) {
             }
         })
 
-        activityHourSlider.addListener(object: ChangeListener(){
-            override fun changed(event: ChangeEvent?, actor: Actor?) {
-                activityHourLabel.setText(activityHourSlider.value.toInt().toString())
-            }
-        })
-
-        selectBox.addListener(object: ChangeListener(){
-            override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
-                val passed = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
-                if(!passed)
-                    disableActivityButtonError()
-                else
-                    enableActivityButton()
-            }
-        })
-
         settingsButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 openSettings()
             }
         })
 
-        activityButton.addListener(object: ChangeListener(){
+        CampMenuInfo.activityHourSlider.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                if(activityHourSlider.value <= 0f)
+                CampMenuInfo.activityHourLabel.setText(CampMenuInfo.activityHourSlider.value.toInt().toString())
+            }
+        })
+
+        CampMenuInfo.selectBox.addListener(object: ChangeListener(){
+            override fun changed(p0: ChangeEvent?, p1: Actor?) {
+                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(CampMenuInfo.selectBox.selected.text.toString())
+                val result = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
+                if(!result.first)
+                    disableActivityButtonError(GH.getRestrictionFailReason(result.second, result.third))
+                else
+                    enableActivityButton()
+            }
+        })
+
+        CampMenuInfo.activityButton.addListener(object: ChangeListener(){
+            override fun changed(event: ChangeEvent?, actor: Actor?) {
+                if(CampMenuInfo.activityHourSlider.value <= 0f)
                     return
 
-                game.numHoursToAdvance = activityHourSlider.value.toInt()
-                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())
+                game.numHoursToAdvance = CampMenuInfo.activityHourSlider.value.toInt()
+                game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(CampMenuInfo.selectBox.selected.text.toString())
                 //If not null, get the action.
                 val actionList = game.searchActivity!!.action!! //Get the action list
                 game.searchFunc = Array(actionList.size, {i->null}) //Initialize an array to hold the events.
@@ -228,11 +222,11 @@ class GameScreenGUI(val game : GameScreen) {
                     game.numHoursToAdvance >= 0 && game.searchActivity != null
                 },
                 {
-                    val passed = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
+                    val result = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
 
-                    //If our list is 0, that means all the restrictions passed. We are good to proceed.
-                    if (passed) {
-                        activityHourSlider.value = game.numHoursToAdvance.toFloat() - 1
+                    //If our list is 0, that means all the restrictions result. We are good to proceed.
+                    if (result.first) {
+                        CampMenuInfo.activityHourSlider.value = game.numHoursToAdvance.toFloat() - 1
                         game.searchFunc?.forEach { func -> func?.invoke() }
 
                     //Otherwise, stop such.
@@ -240,14 +234,14 @@ class GameScreenGUI(val game : GameScreen) {
                         game.searchActivity = null
                         game.searchFunc = null
                         game.numHoursToAdvance = 0
-                        disableActivityButtonError()
+                        disableActivityButtonError(GH.getRestrictionFailReason(result.second, result.third))
                         task!!.setDone()
                     }
 
                     //If the slider value made it to 0, set this task as done and enable the button if able.
-                    if(activityHourSlider.value.toInt() == 0) {
+                    if(CampMenuInfo.activityHourSlider.value.toInt() == 0) {
                         task!!.setDone()
-                        if(passed)
+                        if(result.first) //Enable the button as long as the restrictions were passed.
                             enableActivityButton()
                     }
                 },
@@ -257,19 +251,21 @@ class GameScreenGUI(val game : GameScreen) {
         return task
     }
 
-    private fun disableActivityButtonError(){
-        activityButton.label.color = Color.RED
-        activityButton.isDisabled = true
+    private fun disableActivityButtonError(reason:String){
+        CampMenuInfo.activityButton.label.color = Color.RED
+        CampMenuInfo.activityButton.isDisabled = true
+        CampMenuInfo.denyReason.setText(reason)
     }
 
     private fun disableActivityButtonActive(){
-        activityButton.label.color.a = 0.5f
-        activityButton.isDisabled = true
+        CampMenuInfo.activityButton.label.color.a = 0.5f
+        CampMenuInfo.activityButton.isDisabled = true
     }
 
     private fun enableActivityButton(){
-        activityButton.label.color = Color.WHITE
-        activityButton.isDisabled = false
+        CampMenuInfo.activityButton.label.color = Color.WHITE
+        CampMenuInfo.activityButton.isDisabled = false
+        CampMenuInfo.denyReason.setText("")
     }
 
     fun applyTravelTab(tableToApply: Table){
@@ -722,7 +718,7 @@ class GameScreenGUI(val game : GameScreen) {
                 EventInfo.eventChoicesTable.row()
 
                 //If we don't pass the restrictions, disable this button
-                if(event.hasRestrictions && !GH.parseAndCheckRestrictions(event.restrictions!![i])){
+                if(event.hasRestrictions && !GH.parseAndCheckRestrictions(event.restrictions!![i]).first){
                     button.isDisabled = true
                     button.style.fontColor = Color.GRAY
                 }
@@ -999,6 +995,11 @@ class GameScreenGUI(val game : GameScreen) {
         campTable.remove()
         campTable.setFillParent(true)
 
+        val descTable = Table()
+        val hourGroup = HorizontalGroup()
+
+        descTable.top()
+
         val slider = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderLight"))
         val knob = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("sliderKnobWhite"))
 
@@ -1013,43 +1014,95 @@ class GameScreenGUI(val game : GameScreen) {
         campLabel.setFontScale((normalFontScale))
         campLabel.setAlignment(Align.center)
 
-        val descLabel = Label("", labelStyle)
-        descLabel.setFontScale((normalFontScale))
-        descLabel.setAlignment(Align.center)
-        descLabel.setWrap(true)
+        CampMenuInfo.denyReason = Label("", labelStyle)
+        CampMenuInfo.denyReason.setFontScale(0.1f)
+        CampMenuInfo.denyReason.color = Color.RED
+        CampMenuInfo.denyReason.setAlignment(Align.bottom)
 
-        activityHourLabel = Label("0", labelStyle)
-        activityHourLabel.setFontScale(normalFontScale)
+        CampMenuInfo.activityHourLabel = Label("0", labelStyle)
+        CampMenuInfo.activityHourLabel.setFontScale(normalFontScale)
 
         val hourLabel = Label("Hours", labelStyle)
         hourLabel.setFontScale((normalFontScale))
         hourLabel.setAlignment(Align.center)
 
-        activityHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
+        CampMenuInfo.activityHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
 
-        activityButton = TextButton("Accept!", buttonStyle)
-        activityButton.label.setFontScale(0.15f)
+        CampMenuInfo.activityButton = TextButton("Accept!", buttonStyle)
+        CampMenuInfo.activityButton.label.setFontScale(0.15f)
 
         val innerTable: Table = Table()
         innerTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("log2", Texture::class.java)))
 
         val func = {searchAct: DataManager.SearchActivityJSON ->
-            descLabel.setText(searchAct.description)
+            descTable.clear()
+            val titleLabel = Label("Per Hour", labelStyle)
+            titleLabel.setFontScale(0.2f)
+            titleLabel.setAlignment(Align.center)
+
+            val whitePixel = TextGame.smallGuiAtlas.findRegion("pixelWhite")
+
+            descTable.add(titleLabel).colspan(3)
+            descTable.row()
+
+            val descList = searchAct.description
+            descList.forEachIndexed { i, params ->
+                if(params.size >= 3) {
+
+                    val nameLabel = Label(params[0], labelStyle)
+                    nameLabel.setFontScale((normalFontScale))
+                    nameLabel.setAlignment(Align.center)
+
+                    val chanceLabel = Label(params[1], labelStyle)
+                    chanceLabel.setFontScale((normalFontScale))
+                    chanceLabel.setAlignment(Align.center)
+
+                    val amountLabel = Label(params[2], labelStyle)
+                    amountLabel.setFontScale((normalFontScale))
+                    amountLabel.setAlignment(Align.center)
+
+                    val divider = Image(whitePixel)
+                    divider.color = Color.GRAY
+
+                    descTable.add(nameLabel).width(100f)
+                    descTable.add(chanceLabel).fillX().width(100f)
+                    descTable.add(amountLabel).fillX().width(100f)
+                    descTable.row()
+                    if(i < descList.size-1) {
+                        descTable.add(divider).fillX().colspan(3).pad(5f, 0f, 5f, 0f)
+                        descTable.row()
+                    }
+                }else{
+                    val label = Label(params[0], labelStyle)
+                    label.setFontScale((normalFontScale))
+                    label.setAlignment(Align.center)
+
+                    descTable.add(label).colspan(3)
+                    descTable.row()
+                }
+
+
+            }
+
         }
+
+        hourGroup.addActor(CampMenuInfo.activityHourLabel)
+        hourGroup.addActor(hourLabel)
+        hourGroup.space(10f)
 
         innerTable.add(campLabel).fillX().padTop(10f).height(40f)
         innerTable.row().spaceTop(25f)
         innerTable.add(buildDropdownList(func)).width(300f).height(25f)
+        innerTable.row().padTop(10f)
+        innerTable.add(descTable).width(300f).fillY().expandY().top()
         innerTable.row().padTop(20f)
-        innerTable.add(descLabel).width(300f)
-        innerTable.row().padTop(20f)
-        innerTable.add(hourLabel)
+        innerTable.add(hourGroup)
         innerTable.row()
-        innerTable.add(activityHourLabel)
+        innerTable.add(CampMenuInfo.activityHourSlider).width(150f).height(25f)
         innerTable.row()
-        innerTable.add(activityHourSlider).width(150f).height(25f)
+        innerTable.add(CampMenuInfo.denyReason).bottom().fillX().expandX().padBottom(5f)
         innerTable.row()
-        innerTable.add(activityButton).width(85f).height(37.5f).bottom().fill().expand().padBottom(20f)
+        innerTable.add(CampMenuInfo.activityButton).width(85f).height(37.5f).bottom().padBottom(10f)
 
         innerTable.top()
         campTable.add(innerTable).top()
@@ -1079,7 +1132,7 @@ class GameScreenGUI(val game : GameScreen) {
         selectBoxStyle.font = newFont
         selectBoxStyle.fontColor = Color.WHITE
 
-        selectBox = SelectBox(selectBoxStyle)
+        CampMenuInfo.selectBox = SelectBox(selectBoxStyle)
 
         val list:com.badlogic.gdx.utils.Array<Label> = com.badlogic.gdx.utils.Array()
         for(sa in DataManager.getSearchActiviesList()){
@@ -1088,18 +1141,18 @@ class GameScreenGUI(val game : GameScreen) {
             list.add(label)
         }
 
-        selectBox.addListener(object: ChangeListener(){
+        CampMenuInfo.selectBox.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                func(DataManager.SearchActivityJSON.getSearchActivity(selectBox.selected.text.toString())!!)
+                func(DataManager.SearchActivityJSON.getSearchActivity(CampMenuInfo.selectBox.selected.text.toString())!!)
             }
         })
 
-        selectBox.items = list
-        selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
+        CampMenuInfo.selectBox.items = list
+        CampMenuInfo.selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
 
-        selectBox.setSelectedAlignment(Align.center)
-        selectBox.list.setListAlignment(Align.center)
-        return selectBox
+        CampMenuInfo.selectBox.setSelectedAlignment(Align.center)
+        CampMenuInfo.selectBox.list.setListAlignment(Align.center)
+        return CampMenuInfo.selectBox
     }
 
     fun buildTradeWindow(){
@@ -1563,6 +1616,15 @@ class GameScreenGUI(val game : GameScreen) {
         val eventChoicesTable: Table = Table()
         val eventContainer: Table = Table()
         var titleLabel: Label? = null
+    }
+
+    private object CampMenuInfo{
+        /* Camp specific stuff */
+        lateinit var activityHourLabel: Label
+        lateinit var activityHourSlider: Slider
+        lateinit var activityButton: TextButton
+        lateinit var selectBox: SelectBox<Label>
+        lateinit var denyReason: Label
     }
 
     private class CustomLabel(text: CharSequence?, style: LabelStyle?): Label(text, style) {

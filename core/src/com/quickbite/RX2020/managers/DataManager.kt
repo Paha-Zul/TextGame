@@ -156,7 +156,7 @@ object DataManager{
 
     class SearchActivityJSON(){
         var name:String = "def"
-        var description:String = "def"
+        var description:Array<Array<String>> = arrayOf()
         var buttonTitle:String = "fixme"
         var action:Array<Array<String>>? = null
         var restrictions:Array<Array<String>>? = null

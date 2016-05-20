@@ -50,15 +50,15 @@ object GH {
      * @param restrictionList A double array that contains a list of separate tokens which make up the restriction, ie: ["edibles", "<", "10"]
      * @return True if the restrictions were passed, false otherwise.
      */
-    fun parseAndCheckRestrictions(restrictionList:Array<Array<String>>):Boolean{
-        var passed = true
+    fun parseAndCheckRestrictions(restrictionList:Array<Array<String>>):Triple<Boolean, String, String>{
+        var triple = Triple(true, "", "")
         restrictionList.forEach { params ->
-            passed = parseAndCheckRestrictions(params)
-            if(passed)
+            triple = parseAndCheckRestrictions(params)
+            if(!triple.first) //If we *didn't* pass the restriction test, return out of the lambda and return the pair.
                 return@forEach
         }
 
-        return passed
+        return triple
     }
 
     /**
@@ -66,14 +66,14 @@ object GH {
      * @param restriction The restriction to pass.
      * @return True if the restriction passed, false otherwise.
      */
-    fun parseAndCheckRestrictions(restriction:String):Boolean{
+    fun parseAndCheckRestrictions(restriction:String):Triple<Boolean, String, String>{
         return parseAndCheckRestrictions(restriction.split(" ").toTypedArray())
     }
 
-    private fun parseAndCheckRestrictions(restrictions:Array<String>):Boolean{
+    private fun parseAndCheckRestrictions(restrictions:Array<String>):Triple<Boolean, String, String>{
         //If there's nothing to check, return true
         if(restrictions.size == 0 || restrictions[0].isEmpty())
-            return true
+            return Triple(true, "", "")
 
         var passed = true
 
@@ -97,7 +97,24 @@ object GH {
             passed =  amtToCheck >= amount
         }
 
-        return passed
+        return Triple(passed, name, operation)
+    }
+
+    fun getRestrictionFailReason(reason:String, operator:String):String{
+        var text:String
+        when(operator){
+            "<" -> text = "Too much "
+            "<=" -> text = "Too much "
+            ">" -> text = "Not enough "
+            ">=" -> text = "Not enough "
+            else -> text = "operator? "
+        }
+        when(reason){
+            "ROV" -> text += "ROV health!"
+            else -> text += "$reason!"
+        }
+
+        return text
     }
 
     fun replaceEventDescription(event:GameEventManager.EventJson){
