@@ -2,7 +2,7 @@
   "name" : "rest",
   "buttonTitle" : "Rest",
   "action" : [ [ "rest", "8.3", "25" ], [ "addRndAmt", "-1", "-25", "edibles", "false", "50" ] ],
-  "description" : [["HP", "25%", "+8.3"], ["Edibles", "50%", "-1 to -25"], ["Requires Edibles"]],
+  "description" : [["Person HP", "25%", "+8.3"], ["Edibles", "50%", "-1 to -25"], ["Requires Edibles"]],
   "restrictions" : [ ["edibles", ">", "0"] ]
 }, {
   "name" : "repair",
@@ -22,7 +22,7 @@
   "action" : [ [ "addRndAmt", "1", "25", "edibles", "true", "25" ], [ "addRndAmt", "-1", "-25", "ammo", "false", "50" ] ],
   "description" : [["Edibles", "25%", "+1 to +25"], ["Ammo", "50%", "-1 to -25"], ["Requires Ammo"]],
   "restrictions" : [ ["ammo", ">", "0"] ]
-} , {
+}, {
   "name" : "searchWealth",
   "buttonTitle" : "Search For Wealth",
   "action" : [ [ "addRndAmt", "1", "50", "wealth", "false", "25" ], [ "addRndAmt", "-1", "-25", "ammo", "false", "50" ] ],
@@ -56,7 +56,7 @@
   "name" : "searchMeds",
   "buttonTitle" : "Search For Med-kits",
   "action" : [ [ "addRndAmt", "1", "1", "medkits", "false", "5", "" ], [ "addRndAmt", "-1", "-25", "ammo", "false", "50", "50" ] ],
-  "description" : [["Med-kit", "1%", "+1 to +1"], ["Ammo", "50%", "-1 to -25"], ["Requires Ammo"]],
+  "description" : [["Med-kit", "1%", "+1"], ["Ammo", "50%", "-1 to -25"], ["Requires Ammo"]],
   "restrictions" : [ ["ammo", ">", "0"] ]
 }, {
   "name" : "searchTracks",

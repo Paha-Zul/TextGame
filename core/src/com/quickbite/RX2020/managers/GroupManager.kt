@@ -1,10 +1,10 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
+import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.util.Logger
 
 /**

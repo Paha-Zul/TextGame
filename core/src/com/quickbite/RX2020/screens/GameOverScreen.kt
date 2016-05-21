@@ -1,7 +1,7 @@
 package com.quickbite.rx2020.screens
 
 import com.badlogic.gdx.Screen
-import com.quickbite.rx2020.SaveLoad
+import com.quickbite.rx2020.util.SaveLoad
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.gui.GameOverGUI
 

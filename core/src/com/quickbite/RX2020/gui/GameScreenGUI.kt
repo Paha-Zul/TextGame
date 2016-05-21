@@ -13,11 +13,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Queue
-import com.quickbite.rx2020.*
+import com.quickbite.rx2020.ChainTask
+import com.quickbite.rx2020.Person
+import com.quickbite.rx2020.Result
+import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.screens.MainMenuScreen
 import com.quickbite.rx2020.util.GH
+import com.quickbite.rx2020.util.SaveLoad
 
 /**
  * Created by Paha on 2/5/2016.
@@ -446,7 +450,7 @@ class GameScreenGUI(val game : GameScreen) {
 
             val nameLabel = Label(person.fullName, labelStyle)
             nameLabel.setFontScale(normalFontScale)
-            nameLabel.setAlignment(Align.right)
+            nameLabel.setAlignment(Align.center)
 
             val medkitButton = ImageButton(imageButtonStyle)
             medkitButton.isDisabled = !hasMedkits || (!person.hasInjury && person.healthNormal >= person.maxHealth)
@@ -472,14 +476,20 @@ class GameScreenGUI(val game : GameScreen) {
             val healthBar: CustomHealthBar = CustomHealthBar(person, TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("bar"))),
                     TextureRegionDrawable(TextureRegion(TextGame.smallGuiAtlas.findRegion("pixelWhite"))))
 
-            pairTable.add(genderImage).left().size(32f)
-            pairTable.add(nameLabel).right().expandX().fillX().colspan(3)
-            pairTable.row().right()
-            pairTable.add(recentChangeLabel).right().spaceRight(5f).expandX().fillX()
-            pairTable.add(medkitButton).size(16f).spaceRight(10f).right()
-            pairTable.add(healthBar).right().height(15f).width(100f)
+            val nameTable = Table()
+            nameTable.add(genderImage).size(26f).right()
+            nameTable.add(nameLabel).expandX().fillX().right()
 
-            groupTable.add(pairTable).right().expandX().fillX()
+            val healthTable = Table()
+            healthTable.add(recentChangeLabel).spaceRight(5f).expandX().fillX().right()
+            healthTable.add(medkitButton).size(20f).center().spaceRight(5f)
+            healthTable.add(healthBar).fillX().width(100f).height(15f).right()
+
+            pairTable.add(nameTable).expandX().fillX().right()
+            pairTable.row()
+            pairTable.add(healthTable).expandX().fillX().right()
+
+            groupTable.add(pairTable).expandX().fillX().right()
             groupTable.row().spaceTop(5f).right()
 
             medkitButton.addListener(object:ChangeListener(){
@@ -1042,7 +1052,7 @@ class GameScreenGUI(val game : GameScreen) {
 
             val whitePixel = TextGame.smallGuiAtlas.findRegion("pixelWhite")
 
-            descTable.add(titleLabel).colspan(3)
+            descTable.add(titleLabel).colspan(3).spaceBottom(10f)
             descTable.row()
 
             val descList = searchAct.description
@@ -1050,15 +1060,15 @@ class GameScreenGUI(val game : GameScreen) {
                 if(params.size >= 3) {
 
                     val nameLabel = Label(params[0], labelStyle)
-                    nameLabel.setFontScale((normalFontScale))
+                    nameLabel.setFontScale((0.15f))
                     nameLabel.setAlignment(Align.center)
 
                     val chanceLabel = Label(params[1], labelStyle)
-                    chanceLabel.setFontScale((normalFontScale))
+                    chanceLabel.setFontScale((0.15f))
                     chanceLabel.setAlignment(Align.center)
 
                     val amountLabel = Label(params[2], labelStyle)
-                    amountLabel.setFontScale((normalFontScale))
+                    amountLabel.setFontScale((0.15f))
                     amountLabel.setAlignment(Align.center)
 
                     val divider = Image(whitePixel)

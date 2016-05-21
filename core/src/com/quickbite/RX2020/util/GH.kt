@@ -302,17 +302,17 @@ object GH {
 
         val cantGetEnergy = energy.amt <= 0 && edibles.amt <= 0 && ammo.amt <= 0
         val noStorage = storage.currHealth <= 0 && storage.amt.toInt() == 0
-        val cantTravel = checkCantTravel() && tracks.amt <= 0 && ammo.amt.toInt() == 0
+        val noTracks =  tracks.currHealth <= 0 && tracks.amt <= 0 && ammo.amt.toInt() == 0
         val noEnergy = battery.currHealth <= 0 && battery.amt <= 0 && energy.amt <= 0 && ammo.amt <= 0
 
-        val lost = cantGetEnergy || ROV.currHealth <= 0f || cantTravel || GroupManager.numPeopleAlive == 0 || noStorage
+        val lost = (checkCantTravel() && cantGetEnergy) || ROV.currHealth <= 0f || noTracks || GroupManager.numPeopleAlive == 0 || noStorage
 
         var reason = ""
         if(lost){
 
             if(panels.currHealth <= 0f && panels.amt <= 0f && energy.amt <= 0f)
                 reason = "LostPanel"
-            else if(cantTravel)
+            else if(noTracks)
                 reason = "LostTrack"
             else if(battery.currHealth <= 0f && battery.amt <= 0f && ammo.amt <= 0f)
                 reason = "LostBattery"

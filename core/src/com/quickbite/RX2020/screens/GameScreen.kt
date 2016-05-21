@@ -12,10 +12,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.*
 import com.quickbite.rx2020.gui.GameScreenGUI
 import com.quickbite.rx2020.managers.*
-import com.quickbite.rx2020.util.CustomTimer
-import com.quickbite.rx2020.util.GH
-import com.quickbite.rx2020.util.Logger
-import com.quickbite.rx2020.util.Tester
+import com.quickbite.rx2020.util.*
 import java.util.*
 
 /**

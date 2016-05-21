@@ -297,11 +297,9 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
-            displayText("There was an error writing to the file " + fileName+". Tried to write to "+logFile.getAbsolutePath()+" and mdDir was "+mkDir, "short");
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            displayText(sw.toString(), "long");
         }
     }
 

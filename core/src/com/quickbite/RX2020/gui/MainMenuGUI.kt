@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.quickbite.rx2020.ChainTask
-import com.quickbite.rx2020.SaveLoad
+import com.quickbite.rx2020.util.SaveLoad
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.ROVManager
@@ -128,8 +128,8 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
         TextGame.stage.addActor(rightTable)
 
         //I like to fade almost everything
-        mainTable.addAction(Actions.fadeIn(1f))
-        rightTable.addAction(Actions.fadeIn(1f))
+        mainTable.addAction(Actions.fadeIn(0.5f))
+        rightTable.addAction(Actions.fadeIn(0.5f))
     }
 
     private fun showDonationPage(){
@@ -202,7 +202,7 @@ class MainMenuGUI(val mainMenu:MainMenuScreen) {
 
     private fun crazyFade(mainTable:Table, rightTable:Table):ChainTask{
         val tsk = ChainTask({TextGame.backgroundColor.r < 1f}, {
-            val value = GH.lerpValue(TextGame.backgroundColor.r, 0f, 1f, 1f)
+            val value = GH.lerpValue(TextGame.backgroundColor.r, 0f, 1f, 0.5f)
             TextGame.backgroundColor.r=value
             TextGame.backgroundColor.g=value
             TextGame.backgroundColor.b=value
