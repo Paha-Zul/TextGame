@@ -11,25 +11,11 @@ import com.quickbite.rx2020.interfaces.IResetable
  */
 class CustomTimer(private var seconds: Float, var oneShot:Boolean = false, private var _callback: (() -> Unit)? = null){
 
+    var userData:Any? = null
+
     companion object:IResetable{
-        val gameTimerList:MutableList<CustomTimer> = mutableListOf()
-
-        fun updateGameTimerList(delta:Float){
-            val iter = gameTimerList.iterator()
-            while(iter.hasNext()){
-                val next = iter.next()
-                next.update(delta)
-                if(next.done)
-                    iter.remove()
-            }
-        }
-
-        fun addGameTimer(timer:CustomTimer){
-            gameTimerList.add(timer)
-        }
-
         override fun reset() {
-            gameTimerList.clear()
+
         }
     }
 

@@ -134,8 +134,9 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("track", -100f)})
 //        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Hole", "daily")!!)})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("ShipwreckValley", "weekly")!!)})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
+        gameInput.keyEventMap.put(Input.Keys.Y, {GameEventManager.addDelayedEvent("Hole", "daily", MathUtils.random(1, 5).toFloat())})
 //        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
 //        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
@@ -302,7 +303,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
      */
     private fun travelUpdate(delta:Float){
         GameStats.update(delta)
-        CustomTimer.updateGameTimerList(delta)
+        GameEventManager.update(delta) //Used for event timers and such.
         dailyEventTimer.update(delta)
         weeklyEventTimer.update(delta)
         MonthlyEventTimer.update(delta)

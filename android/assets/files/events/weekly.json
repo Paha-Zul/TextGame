@@ -1056,7 +1056,7 @@
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ [ "ShipwreckValley2Good", "ShipwreckValley2Okay", "ShipwreckValley2Nothing" ] ],
-  "chances" : [ [ 0.0, 0.0, 0.0 ] ],
+  "chances" : [ [ 33.34, 33.34, 33.34 ] ],
   "resultingAction" : [ ]
 }, {
   "root" : false,

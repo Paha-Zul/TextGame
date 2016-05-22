@@ -10,8 +10,6 @@ import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
 import com.quickbite.rx2020.screens.GameScreen
-import com.quickbite.rx2020.util.FunGameStats
-import com.quickbite.rx2020.util.Logger
 
 /**
  * Created by Paha on 4/7/2016.
@@ -58,6 +56,10 @@ object SaveLoad{
         FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
         save.remainingEpicEvents.addAll(GameEventManager.getEventNameList("epic"))
         game.timerList.forEach { pair -> save.eventTimers.add(arrayOf(pair.first.toString(), pair.second.remainingTime.toString())) }
+        GameEventManager.delayedEventTimerList.forEach { timer ->
+            val data:Array<String> = timer.userData as Array<String>
+            save.delayedEventTimers.add(arrayOf(data[0], data[1], timer.remainingTime.toString(), data[2]))
+        }
 
 
         Logger.log("SaveLoad", "Gathered game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
@@ -108,6 +110,11 @@ object SaveLoad{
             game.setTimer(list[0], list[1].toFloat())
         }
 
+        GameEventManager.delayedEventTimerList.clear() //Might as well clear this first. Just in case?
+        save.delayedEventTimers.forEach { list ->
+            GameEventManager.addDelayedEvent(list[0], list[1], list[2].toFloat(), list[3].toInt())
+        }
+
         Logger.log("SaveLoad", "Loaded game in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
     }
 
@@ -124,7 +131,8 @@ object SaveLoad{
         var funStatList:MutableList<Array<String>> = mutableListOf()
         var funStatUniqueList:MutableList<Array<String>> = mutableListOf()
         var remainingEpicEvents:MutableList<String> = mutableListOf()
-        var eventTimers:MutableList<Array<String>> = mutableListOf() //Try to use either java or Gdx classes
+        var eventTimers:MutableList<Array<String>> = mutableListOf()        // [evtType, remainingTime]
+        var delayedEventTimers:MutableList<Array<String>> = mutableListOf() // [evtName, evtType, remainingTime, pageNumber]
     }
 
     private class PersonPOJO(var name:String, var health:Float, var ailments:List<Person.Ailment>, var male:Boolean, val gameTimeAdded:Long){

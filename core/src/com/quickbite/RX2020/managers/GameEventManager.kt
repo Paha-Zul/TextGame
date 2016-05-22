@@ -2,7 +2,11 @@ package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
+import com.quickbite.rx2020.interfaces.IResetable
+import com.quickbite.rx2020.interfaces.IUpdateable
+import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.shuffle
+import com.quickbite.rx2020.util.CustomTimer
 import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import java.util.*
@@ -11,7 +15,7 @@ import java.util.*
  * Created by Paha on 4/4/2016.
  */
 
-object GameEventManager{
+object GameEventManager : IUpdateable, IResetable{
     var currActiveEvent:EventJson? = null
         get
         set(value){
@@ -30,10 +34,18 @@ object GameEventManager{
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
-    fun getRandomRoot(type:String):EventJson{
-        val list = getEventNameList(type)
-        val event = eventMap[list.toTypedArray()[MathUtils.random(list.size-1)]]!!
-        return event;
+    val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf()
+
+    override fun update(delta: Float) {
+        for(i in (delayedEventTimerList.size - 1) downTo 0){
+            delayedEventTimerList[i].update(delta)
+            if(delayedEventTimerList[i].done)
+                delayedEventTimerList.removeAt(i)
+        }
+    }
+
+    override fun updateHourly(delta: Float) {
+
     }
 
     fun setNewRandomRoot(type:String):EventJson?{
@@ -65,6 +77,18 @@ object GameEventManager{
                 monthlyLootListOriginal.add(event.name)
         }else
             GameEventManager.eventMap.put(event.name, event)
+    }
+
+    /**
+     * Adds a one shot timer to fire a delayed event.
+     * @param name The name of the event to call
+     * @param type The type of the event to call. Leave as "" if it's not a root event.
+     * @param seconds The seconds to wait until the event is fire.
+     */
+    fun addDelayedEvent(name:String, type:String, seconds:Float, page:Int = 0){
+        val timer = CustomTimer(seconds, true, { GameScreen.gui.triggerEventGUI(this.getAndSetEvent(name, type)!!, page)})
+        timer.userData = arrayOf(name, type, page.toString())
+        delayedEventTimerList += timer
     }
 
     /**
@@ -186,11 +210,12 @@ object GameEventManager{
                 return -1;
 
             if(chances!!.size != outcomes!!.size)
-                Logger.log("GameEventManager", "The number of outcomes don't match the number of chances. This could be a problem.")
+                Logger.log("GameEventManager", "The number of outcomes don't match the number of chances. This could be a problem.", Logger.LogLevel.Warning)
 
             //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
             for(i in chances!![choiceIndex].indices){
-                if(chances!![choiceIndex][i] <= 0) Logger.log("GameEventManager", "Chance for choice ${choices!![choiceIndex]} under event ${this.name} is 0. Not good", Logger.LogLevel.Warning)
+                if(chances!![choiceIndex][i] <= 0)
+                    Logger.log("GameEventManager", "Chance for choice ${if(choices == null || choices!!.size == 0) "(no choice)" else choices!![choiceIndex]} under event ${this.name} is 0. Not good", Logger.LogLevel.Warning)
                 counter += chances!![choiceIndex][i]
                 if(chance <= counter) {
                     outcomeIndex = i
@@ -200,5 +225,9 @@ object GameEventManager{
 
             return outcomeIndex
         }
+    }
+
+    override fun reset() {
+        delayedEventTimerList.clear()
     }
 }

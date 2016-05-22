@@ -6,7 +6,10 @@ import com.quickbite.rx2020.*
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.screens.GameOverScreen
 import com.quickbite.rx2020.screens.GameScreen
-import com.quickbite.rx2020.util.*
+import com.quickbite.rx2020.util.FunGameStats
+import com.quickbite.rx2020.util.GH
+import com.quickbite.rx2020.util.Logger
+import com.quickbite.rx2020.util.SaveLoad
 import java.util.*
 
 /**
@@ -242,9 +245,7 @@ object EventManager : IResetable{
 
             if(minHours > 0) {
                 //Add a timer to call the event later
-                CustomTimer.addGameTimer(CustomTimer(MathUtils.random(minHours, maxHours), true, {
-                    GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
-                }))
+                GameEventManager.addDelayedEvent(evtName, evtType, MathUtils.random(minHours, maxHours), evtPage)
             }else{
                 GameScreen.gui.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
             }

@@ -21,6 +21,7 @@ import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.screens.MainMenuScreen
 import com.quickbite.rx2020.util.GH
+import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.SaveLoad
 
 /**
@@ -680,6 +681,9 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     private fun handleEvent(event:GameEventManager.EventJson?, startPage:Int = 0){
+        if(event != null)
+            Logger.log("GameScreenGUI", "Handling event ${event.name} starting at page $startPage", Logger.LogLevel.Debug)
+
         if(event != null && !event.hasDescriptions && !event.hasOutcomes)
             GH.executeEventActions(event)
 
@@ -700,6 +704,8 @@ class GameScreenGUI(val game : GameScreen) {
      * Shows an individual event page
      */
     private fun showEventPage(event: GameEventManager.EventJson, pageNumber:Int){
+        Logger.log("GameScreenGUI", "Handling page $pageNumber of event ${event.name}", Logger.LogLevel.Debug)
+
         //Clear the tables
         EventInfo.eventInnerTable.clear()
         EventInfo.eventChoicesTable.clear()
