@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.NinePatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.badlogic.gdx.scenes.scene2d.InputEvent
 import com.badlogic.gdx.scenes.scene2d.ui.*
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
+import com.badlogic.gdx.scenes.scene2d.utils.*
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Queue
 import com.quickbite.rx2020.ChainTask
@@ -75,8 +74,12 @@ class GameScreenGUI(val game : GameScreen) {
     private var gameEventGUIActive = false
     private val guiQueue:Queue<Triple<GameEventManager.EventJson, Int, Boolean>> = Queue()
 
+
+    private lateinit var transparentBackground: Drawable
+
     init{
         instance = this
+        transparentBackground = NinePatchDrawable(NinePatch(TextGame.manager.get("GUIBackground", Texture::class.java), 4, 4, 4, 4))
     }
 
     fun init(){
@@ -329,7 +332,7 @@ class GameScreenGUI(val game : GameScreen) {
 
         distProgressBar = ProgressBar(0f, GameStats.TravelInfo.totalDistOfGame.toFloat(), 20f, false, barStyle)
 
-        campButton = TextButton("Camp", textButtonStyle)
+        campButton = TextButton("Camp", TextButton.TextButtonStyle(transparentBackground, transparentBackground, transparentBackground, TextGame.manager.get("spaceFont2", BitmapFont::class.java)))
         campButton.setSize(100f, 40f)
         campButton.setOrigin(Align.center)
         campButton.setPosition(TextGame.viewport.worldWidth/2f - campButton.width/2f, 0f)
@@ -349,7 +352,7 @@ class GameScreenGUI(val game : GameScreen) {
         centerInfoTable.setFillParent(true)
 
         val innerTable = Table()
-        innerTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
+        innerTable.background = transparentBackground
 
         val style: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -378,7 +381,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildLeftTable(){
         buildSupplyTable()
 
-        val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
+        val drawable = transparentBackground
 
         val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -402,7 +405,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildRightTable(){
         rightTable.clear()
 
-        val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
+        val drawable = transparentBackground
 
         val buttonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
         buttonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
@@ -432,7 +435,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildGroupTable(){
         groupTable.clear()
 
-        groupTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
+        groupTable.background = transparentBackground
         groupTable.padRight(10f)
 
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
@@ -512,7 +515,7 @@ class GameScreenGUI(val game : GameScreen) {
     fun buildROVTable(){
         ROVTable.clear()
 
-        ROVTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
+        ROVTable.background = transparentBackground
         ROVTable.padRight(10f)
 
         val medkit = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("repair"))
@@ -586,7 +589,7 @@ class GameScreenGUI(val game : GameScreen) {
         supplyChangeList.clear()
 
         supplyTable.padLeft(10f)
-        supplyTable.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("darkPixel"))
+        supplyTable.background = transparentBackground
 
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
