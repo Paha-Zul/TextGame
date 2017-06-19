@@ -31,16 +31,23 @@ object GH {
         return curr
     }
 
+    /**
+     * Executes an events resulting actions
+     * @param event The EventJson object to get the actions from
+     */
     fun executeEventActions(event: GameEventManager.EventJson) {
         val list = event.resultingAction
-        if (list != null) {
-            for (params in list) {
-                if (params.size > 0)
-                    EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1)))
-            }
-        }
+            list?.filter { it.isNotEmpty() } //For each set (list) of parameters that is not empty
+                    //Call the EventManager using it[0] as the name and it[1-size-1] as the parameters
+                    ?.forEach { EventManager.callEvent(it[0], it.slice(1.rangeTo(it.size - 1))) }
     }
 
+    /**
+     * Returns an event from the choice of another event
+     * @param currEvent The event to get the next event (child) from
+     * @param choiceText The choice text selected and used to get the next event
+     * @return Another event if found (is a child of the event), null otherwise
+     */
     fun getEventFromChoice(currEvent:GameEventManager.EventJson, choiceText:String):GameEventManager.EventJson?{
         return currEvent.selectChildEvent(choiceText)
     }

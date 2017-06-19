@@ -12,10 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*
 import com.badlogic.gdx.scenes.scene2d.utils.*
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Queue
-import com.quickbite.rx2020.ChainTask
-import com.quickbite.rx2020.Person
-import com.quickbite.rx2020.Result
-import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.*
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.screens.MainMenuScreen
@@ -117,7 +114,7 @@ class GameScreenGUI(val game : GameScreen) {
 
             //Update the change list
             supplyChangeList[i].setText("")
-            val supplyChanged = Result.recentChangeMap[list[i].displayName]
+            val supplyChanged = ResultManager.recentChangeMap[list[i].displayName]
             if(supplyChanged != null) {
                 supplyChangeList[i].setText(supplyChanged.amt.toInt().toString())
                 if(supplyChanged.amt > 0)  supplyChangeList[i].color = Color.GREEN
@@ -134,6 +131,10 @@ class GameScreenGUI(val game : GameScreen) {
                 if(supplyTable.parent == null) {
                     leftTable.add(supplyTable)
                 }else{
+                    //Clear the table and re-add the supply button. Don't forget the row!
+                    leftTable.clear()
+                    leftTable.add(supplyButton).left().size(130f, 40f)
+                    leftTable.row()
                     supplyTable.remove()
                 }
             }
@@ -143,16 +144,21 @@ class GameScreenGUI(val game : GameScreen) {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
 
+                //If neither the ROVTable or groupTable are showing (null parent), add the group table
                 if(ROVTable.parent == null && groupTable.parent == null) {
-                    buildGroupTable()
-                    rightTable.add(groupTable)
-                }else if(ROVTable.parent == null){
-                    rightTable.clear()
-                    addGroupButton()
-                    buildROVTable()
-                    rightTable.add(ROVTable)
+                    rightTable.clear() //Clear the table
+                    addGroupButton() //Add the group button back in
+                    buildGroupTable() //Build the group table
+                    rightTable.add(groupTable) //Add it to the table
 
-                //TODO This is freaking broken. I guess I bypassed it by recreating the button every time
+                //If are not on the ROVTable, switch to the ROVTable
+                }else if(ROVTable.parent == null){
+                    rightTable.clear() //Clear the table
+                    addGroupButton() //Add the group button back in
+                    buildROVTable() //Build the ROV table
+                    rightTable.add(ROVTable) //Add the table
+
+                //Otherwise if we are on the ROVTable (has a parent), remove both
                 }else{
                     ROVTable.remove()
                     groupTable.remove()
@@ -191,9 +197,9 @@ class GameScreenGUI(val game : GameScreen) {
         CampMenuInfo.selectBox.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(CampMenuInfo.selectBox.selected.text.toString())
-                val result = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
-                if(!result.first)
-                    disableActivityButtonError(GH.getRestrictionFailReason(result.second, result.third))
+                val ResultManager = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
+                if(!ResultManager.first)
+                    disableActivityButtonError(GH.getRestrictionFailReason(ResultManager.second, ResultManager.third))
                 else
                     enableActivityButton()
             }
@@ -230,10 +236,10 @@ class GameScreenGUI(val game : GameScreen) {
                     game.numHoursToAdvance >= 0 && game.searchActivity != null
                 },
                 {
-                    val result = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
+                    val ResultManager = GH.parseAndCheckRestrictions(game.searchActivity!!.restrictions!!)
 
-                    //If our list is 0, that means all the restrictions result. We are good to proceed.
-                    if (result.first) {
+                    //If our list is 0, that means all the restrictions ResultManager. We are good to proceed.
+                    if (ResultManager.first) {
                         CampMenuInfo.activityHourSlider.value = game.numHoursToAdvance.toFloat() - 1
                         game.searchFunc?.forEach { func -> func?.invoke() }
 
@@ -242,14 +248,14 @@ class GameScreenGUI(val game : GameScreen) {
                         game.searchActivity = null
                         game.searchFunc = null
                         game.numHoursToAdvance = 0
-                        disableActivityButtonError(GH.getRestrictionFailReason(result.second, result.third))
+                        disableActivityButtonError(GH.getRestrictionFailReason(ResultManager.second, ResultManager.third))
                         task!!.setDone()
                     }
 
                     //If the slider value made it to 0, set this task as done and enable the button if able.
                     if(CampMenuInfo.activityHourSlider.value.toInt() == 0) {
                         task!!.setDone()
-                        if(result.first) //Enable the button as long as the restrictions were passed.
+                        if(ResultManager.first) //Enable the button as long as the restrictions were passed.
                             enableActivityButton()
                     }
                 },
@@ -396,7 +402,6 @@ class GameScreenGUI(val game : GameScreen) {
 
         leftTable.top().left()
         leftTable.setFillParent(true)
-
     }
 
     /**
@@ -463,9 +468,9 @@ class GameScreenGUI(val game : GameScreen) {
             recentChangeLabel.setFontScale(normalFontScale)
             recentChangeLabel.setAlignment(Align.right)
 
-            var genderImage:Image = if(person.male) Image(maleGenderSymbol) else Image(femaleGenderSymbol)
+            val genderImage:Image = if(person.male) Image(maleGenderSymbol) else Image(femaleGenderSymbol)
 
-            val change = Result.recentChangeMap[person.firstName]
+            val change = ResultManager.recentChangeMap[person.firstName]
             if(change != null){
                 var modifier = ""
                 if(change.amt > 0) {
@@ -546,17 +551,17 @@ class GameScreenGUI(val game : GameScreen) {
             val changeLabel: Label = Label("", labelStyle)
             changeLabel.setFontScale(normalFontScale)
 
-            val result = Result.recentChangeMap["${supply.name} health"]
-            if(result != null){
+            val ResultManager = ResultManager.recentChangeMap["${supply.name} health"]
+            if(ResultManager != null){
                 var modifier = ""
-                if(result.amt > 0) {
+                if(ResultManager.amt > 0) {
                     changeLabel.color = Color.GREEN
                     modifier = "+"
-                }else if(result.amt < 0) {
+                }else if(ResultManager.amt < 0) {
                     changeLabel.color = Color.RED
                     modifier = "-"
                 }
-                changeLabel.setText("$modifier${result.amt.toInt().toString()}")
+                changeLabel.setText("$modifier${ResultManager.amt.toInt().toString()}")
             }
 
             val healthBar: CustomHealthBar = CustomHealthBar(supply, bg, pixel)
@@ -612,7 +617,7 @@ class GameScreenGUI(val game : GameScreen) {
             changeLabel.setFontScale(normalFontScale)
             changeLabel.setAlignment(Align.center)
 
-            val supply = Result.recentChangeMap[list[i].displayName]
+            val supply = ResultManager.recentChangeMap[list[i].displayName]
             if(supply!=null){
                 changeLabel.setText(supply.amt.toInt().toString())
                 if(supply.amt > 0) changeLabel.color = Color.GREEN
@@ -636,24 +641,23 @@ class GameScreenGUI(val game : GameScreen) {
 
     /**
      * Initially starts the event GUI
+     * @param event The EventJson object to start the event
+     * @param startPage The page to start the event, or recursively call the triggerEventGUI function
+     * @param eraseResultManagers True to erase the accumulated results of the event, false to keep them
      */
-    fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResults:Boolean = true){
+    fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResultManagers:Boolean = true){
         //If the GUI is already active, lets add it to the queue instead of going further.
         if(gameEventGUIActive) {
-            guiQueue.addLast(Triple(event, startPage, eraseResults))
+            guiQueue.addLast(Triple(event, startPage, eraseResultManagers))
             return
         }
-
-//        //Don't start any more events if game over.
-//        if(game.state == GameScreen.State.GAMEOVER)
-//            return
 
         //We do this to ensure that the currActiveEvent is not null. Sometimes when overlapping events happen
         //the currActiveEvent can become null after being set.
         GameEventManager.currActiveEvent = event
 
         gameEventGUIActive = true
-        Result.clearResultLists()
+        ResultManager.clearResultLists()
 
         EventManager.callEvent("eventStarted", event.name)
 
@@ -683,17 +687,25 @@ class GameScreenGUI(val game : GameScreen) {
         handleEvent(event, startPage)
     }
 
+    /**
+     * Where the end of an event gets handled. This is where we decide to show results, show outcomes, or continue onto another event piece
+     * @param event The EventJson object to handle
+     * @param startPage The starting page. This is useful for recursively handling multiple paged events
+     */
     private fun handleEvent(event:GameEventManager.EventJson?, startPage:Int = 0){
+        //Some debug info
         if(event != null)
             Logger.log("GameScreenGUI", "Handling event ${event.name} starting at page $startPage", Logger.LogLevel.Debug)
 
+        //If the event has no description and no outcomes, we are on the action part. Execute the event actions!
         if(event != null && !event.hasDescriptions && !event.hasOutcomes)
             GH.executeEventActions(event)
 
-        if((event == null || !event.hasDescriptions) && Result.hasEventResults){
+        //If the event is null or has no description and we have event ResultManagers to show (stuff accumulated during the event), show the ResultManagers!
+        if((event == null || !event.hasDescriptions) && ResultManager.hasEventResults){
             //Using some trickery for the recent death.
-            showEventResults(Result.eventChangeMap.values.toList(), listOf(Result.recentDeathResult ?: null), {closeEvent()})
-            Result.recentDeathResult = null
+            showEventResultManagers(ResultManager.eventChangeMap.values.toList(), listOf(ResultManager.recentDeathResult), {closeEvent()})
+            ResultManager.recentDeathResult = null
             return
         }else if(event == null || !event.hasDescriptions){
             closeEvent()
@@ -795,7 +807,8 @@ class GameScreenGUI(val game : GameScreen) {
             EventInfo.eventInnerTable.row()
 
             val hasAnotherPage = event.description.size - 1 > pageNumber
-            val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1) || event.hasOutcomes || event.hasActions || Result.hasEventResults
+            val hasAnotherSomething = event.description.size - 1 > pageNumber || (event.hasChoices && event.choices!!.size > 1)
+                    || event.hasOutcomes || event.hasActions || ResultManager.hasEventResults
             var toNext = hasAnotherSomething || event.hasChoices && event.choices!!.size == 1
 
             val setNextPageButton = {
@@ -841,7 +854,7 @@ class GameScreenGUI(val game : GameScreen) {
                     }
 
                     //Otherwise, we only have outcomes or actions. Deal with it!
-                    else if (hasOnlyOutcomes || Result.hasEventResults) {
+                    else if (hasOnlyOutcomes || ResultManager.hasEventResults) {
                         GH.executeEventActions(event)
                         handleEvent(GH.getEventFromChoice(event, ""))
 
@@ -890,9 +903,12 @@ class GameScreenGUI(val game : GameScreen) {
     }
 
     /**
-     * Shows the event results
+     * Shows the event ResultManagers
+     * @param list The list of ResultManagers to show
+     * @param deathList The list of recent deaths (during the event) to show
+     * @param onDoneCallback The function to call when finished
      */
-    fun showEventResults(list: List<Result>, deathList: List<Result?>, onDoneCallback:()->Unit){
+    fun showEventResultManagers(list: List<Result>, deathList: List<Result?>, onDoneCallback:()->Unit){
         EventInfo.eventInnerTable.clear()
 
         /* Styles */
@@ -911,11 +927,11 @@ class GameScreenGUI(val game : GameScreen) {
         val closeButton: TextButton = TextButton("- Close -", textButtonStyle)
         closeButton.label.setFontScale(buttonFontScale)
 
-        val resultsTable = Table()
+        val ResultManagersTable = Table()
 
-        //Display the results of the event.
+        //Display the ResultManagers of the event.
         for (item in list) {
-            val nameLabel = Label(item.name + item.desc.toString(), labelStyle)
+            val nameLabel = Label(item.name + item.desc, labelStyle)
             var amtLabel: Label?
             amtLabel = Label("", labelStyle)
             if (item.amt != 0f) {
@@ -931,9 +947,9 @@ class GameScreenGUI(val game : GameScreen) {
             nameLabel.setFontScale(normalFontScale)
             amtLabel.setFontScale(normalFontScale)
 
-            resultsTable.add(amtLabel).padRight(10f)
-            resultsTable.add(nameLabel)
-            resultsTable.row()
+            ResultManagersTable.add(amtLabel).padRight(10f)
+            ResultManagersTable.add(nameLabel)
+            ResultManagersTable.row()
         }
 
         for (death in deathList) {
@@ -944,11 +960,11 @@ class GameScreenGUI(val game : GameScreen) {
             label.setWrap(true)
             label.setAlignment(Align.center)
 
-            resultsTable.add(label).expand().fill()
-            resultsTable.row()
+            ResultManagersTable.add(label).expand().fill()
+            ResultManagersTable.row()
         }
 
-        val container = Container<Table>(resultsTable).fill().pad(10f, 10f, 0f, 10f)
+        val container = Container<Table>(ResultManagersTable).fill().pad(10f, 10f, 0f, 10f)
         container.padTop(10f)
 
         //Put it into a scrollpane

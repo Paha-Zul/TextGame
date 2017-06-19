@@ -34,7 +34,7 @@ object GameEventManager : IUpdateable, IResetable{
 
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
-    val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf()
+    val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf() //A list of timers for delayed events
 
     override fun update(delta: Float) {
         for(i in (delayedEventTimerList.size - 1) downTo 0){
@@ -73,7 +73,7 @@ object GameEventManager : IUpdateable, IResetable{
         //If the event is a root, add it to the right list for later use.
         if(event.root){
             list.add(event.name) //Add it.
-            if(type == "epic") //Special case since we're gonna need to remember which epic events have alreayd triggered.
+            if(type == "epic") //Special case since we're gonna need to remember which epic events have already triggered.
                 monthlyLootListOriginal.add(event.name)
         }else
             GameEventManager.eventMap.put(event.name, event)
@@ -132,25 +132,27 @@ object GameEventManager : IUpdateable, IResetable{
         var restrictions:Array<String>? = null //The restrictions on the choices.
         var outcomes:Array<Array<String>>? = null //The possible outcomes for each choice, ie: 'He died', 'He killed you first!'
         var chances:Array<FloatArray>? = null //The chances of each outcome happening
-        var resultingAction:Array<Array<String>>? = null //The resulting action. This can be null on events that lead to other events. Not null if the event is a result and ends there.
+        /** The resulting actions. This can be null on events that lead to other events. Not null if the event is a result and ends there.*/
+        var resultingAction:Array<Array<String>>? = null
 
         //Each time a root event is retrieved to start and event, this should be randomed to use for future events.
         var randomPersonList:List<Person> = listOf()
 
         val hasChoices:Boolean
-            get() = choices != null && choices!!.size > 0
+            get() = choices != null && choices!!.isNotEmpty()
 
+        /** If the event has outcomes (like a choice text but it's the end of the event, ie: "You died" */
         val hasOutcomes:Boolean
-            get() = outcomes != null && outcomes!!.size > 0 && outcomes!![0].size > 0
+            get() = outcomes != null && outcomes!!.isNotEmpty() && outcomes!![0].isNotEmpty()
 
         val hasActions:Boolean
-            get() = resultingAction != null && resultingAction!!.size > 0 && resultingAction!![0].size > 0
+            get() = resultingAction != null && resultingAction!!.isNotEmpty() && resultingAction!![0].isNotEmpty()
 
         val hasDescriptions:Boolean
-            get() = description.size > 0 && !(description.size == 1 && description[0].isEmpty())
+            get() = description.isNotEmpty() && !(description.size == 1 && description[0].isEmpty())
 
         val hasRestrictions:Boolean
-            get() = restrictions != null && restrictions!!.size > 0
+            get() = restrictions != null && restrictions!!.isNotEmpty()
 
         /**
          * Selects another Event using a choice and chance.

@@ -52,7 +52,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
     val noticeEventTimer: CustomTimer = CustomTimer(MathUtils.random(1f, 1f)) //Used to trigger notices.
 
-    private val purgeRecentChangeTimer: CustomTimer = CustomTimer(3f)
+    private val purgeRecentChangeTimer: CustomTimer = CustomTimer(3f, true)
 
     var paused = false
         get
@@ -74,7 +74,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     init{
         Logger.writeLog("log.txt")
 
-        TextGame.stage.clear();
+        TextGame.stage.clear()
         fadeIn()
 
         gui = GameScreenGUI(this)
@@ -132,14 +132,10 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         scrollingBackgroundList.add(sc2)
         scrollingBackgroundList.add(sc1)
 
-        gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("track", -100f)})
-//        gameInput.keyEventMap.put(Input.Keys.E, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("WarfareNopeRedAmbush", "epic"))})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("ShipwreckValley", "weekly")!!)})
+        gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("energy", -25f)})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("PowerLeakAttempt", "weekly")!!)})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
         gameInput.keyEventMap.put(Input.Keys.Y, {GameEventManager.addDelayedEvent("Hole", "daily", MathUtils.random(1, 5).toFloat())})
-//        gameInput.keyEventMap.put(Input.Keys.Y, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Warfare", "epic"))})
-//        gameInput.keyEventMap.put(Input.Keys.U, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Rework", "epic"))})
-//        gameInput.keyEventMap.put(Input.Keys.I, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("NativeEncounter", "monthlyNative"))})
 
         dailyEventTimer.callback = timerFunc("daily", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
         weeklyEventTimer.callback = timerFunc("weekly", weeklyEventTimer, weeklyEventTime.min, weeklyEventTime.max)
@@ -326,11 +322,11 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         purgeRecentChangeTimer.update(delta)
         if(purgeRecentChangeTimer.done){
-            Result.purgeRecentResults(currGameTime)
+            ResultManager.purgeRecentResults(currGameTime)
             purgeRecentChangeTimer.restart()
         }
 
-        currGameTime+=delta;
+        currGameTime+=delta
     }
 
     /**
@@ -352,7 +348,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
             GroupManager.updateHourly(delta)
             ChainTask.updateHourly(delta)
 
-            if (Result.recentDeathMap.size > 0) {
+            if (ResultManager.recentDeathMap.size > 0) {
                 gui.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
             }
 
