@@ -282,7 +282,7 @@
   "root" : false,
   "title" : "Crossing",
   "name" : "HerdHit",
-  "description" : [ "The ROV eases into the stream, but the herd panics. Lurching forward the herd thunders around the ROV. Many of the creatures, unable to see what head of them, slamming into the ROV at full speed. The thuds and thumbs of the massive creatures sounds like ROV is caught in a landslide, until at last the ROV emerges from the herd, beaten but otherwise okay." ],
+  "description" : [ "The ROV eases into the stream, but the herd panics. Lurching forward, the herd thunders around the ROV. Many of the creatures, unable to see what's ahead of them, slam into the ROV at full speed. The thuds and thumps of the massive creatures sounds like the ROV is caught in a landslide, until at last the ROV emerges from the herd, beaten but otherwise okay." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],
@@ -535,7 +535,7 @@
   "description" : [ "He1 spots a dark mass under some low hanging branches in a pool edge of the stream. He1 creeps over and toss the spear hard." ],
   "choices" : [ ],
   "restrictions" : [ ],
-  "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf"] ],
+  "outcomes" : [ [ "SpearMissFish", "SpearLargeFish", "SpearHurtSelf" ] ],
   "chances" : [ [ 30.0, 40.0, 30.0 ] ],
   "resultingAction" : [ ]
 }, {
@@ -852,7 +852,7 @@
   "root" : false,
   "title" : "Fruity",
   "name" : "FruityBad",
-  "description" : [ "…unfortunately also showering (him1) in angry stinging wasp-like creatures. (He1) feels them fall onto (his1) arms and down the back of (his1) shirt. (He1) screams, dropping the fruit, and runs, wafting (his1) clothes and swatting the air around (him1)! By the time (he1) reaches the ROV (he1)’s lost the swarm and most of (his1) clothes." ],
+  "description" : [ "...unfortunately also showering (him1) are angry stinging wasp-like creatures. (He1) feels them fall onto (his1) arms and down the back of (his1) shirt. (He1) screams, dropping the fruit, and runs, wafting (his1) clothes and swatting the air around (him1)! By the time (he1) reaches the ROV (he1)’s lost the swarm and most of (his1) clothes." ],
   "choices" : [ ],
   "restrictions" : [ ],
   "outcomes" : [ ],

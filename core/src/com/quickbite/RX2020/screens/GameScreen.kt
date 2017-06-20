@@ -6,12 +6,15 @@ import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.*
+import com.quickbite.rx2020.ChainTask
+import com.quickbite.rx2020.GameScreenInput
+import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.clamp
 import com.quickbite.rx2020.gui.GameScreenGUI
 import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.managers.ScrollingBackgroundManager.scrollingBackgroundList
 import com.quickbite.rx2020.util.*
 import java.util.*
 
@@ -29,8 +32,6 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
     private val backgroundSky = TextGame.manager.get("backgroundSky", Texture::class.java)
     private val sunMoon = TextGame.manager.get("sunMoon", Texture::class.java)
-
-    private val scrollingBackgroundList:MutableList<ScrollingBackground> = arrayListOf()
 
     private var ROV: Texture = TextGame.manager.get("Exomer751ROV", Texture::class.java)
 
@@ -90,50 +91,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         multi.addProcessor(gameInput)
         Gdx.input.inputProcessor = multi
 
-        //The foreground.
-        val sc1: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("ForegroundTreeLayer", Texture::class.java)), 3f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc2: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("ForegroundTreeLayer", Texture::class.java)), 3f, 800f, -TextGame.camera.viewportHeight / 2f)
-        sc1.following = sc2
-        sc2.following = sc1
-        sc1.resetCallback = {if(MathUtils.random(1, 100) < 75) sc1.invisible = true else sc1.invisible = false}
-        sc2.resetCallback = {if(MathUtils.random(1, 100) < 75) sc2.invisible = true else sc2.invisible = false}
-        sc1.invisible = true
-        sc2.invisible = true
-
-        //The back-mid ground? We actually want this on top of our midground (ground) cause they are trees
-        val sc3: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2.6f)
-        val sc4: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("BackgroundTreeLayer", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2.6f)
-        sc3.following = sc4
-        sc4.following = sc3
-        sc3.resetCallback = {if(MathUtils.random(1, 100) < 75) sc3.invisible = true else sc3.invisible = false}
-        sc4.resetCallback = {if(MathUtils.random(1, 100) < 75) sc4.invisible = true else sc4.invisible = false}
-        sc3.invisible = true
-        sc4.invisible = true
-
-        //The midground.
-        val sc5: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc6: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Midground2", Texture::class.java)), 2f, 800f, -TextGame.camera.viewportHeight / 2f)
-        sc5.following = sc6
-        sc6.following = sc5
-
-        //The background.
-        val sc7: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, -100f, -TextGame.camera.viewportHeight / 2f)
-        val sc8: ScrollingBackground = ScrollingBackground(Sprite(TextGame.manager.get("Background2", Texture::class.java)), 0.2f, 800f, -TextGame.camera.viewportHeight / 2f)
-        sc7.following = sc8
-        sc8.following = sc7
-
-        //Add these in reverse for drawing order.
-        scrollingBackgroundList.add(sc8)
-        scrollingBackgroundList.add(sc7)
-        scrollingBackgroundList.add(sc6)
-        scrollingBackgroundList.add(sc5)
-        scrollingBackgroundList.add(sc4)
-        scrollingBackgroundList.add(sc3)
-        scrollingBackgroundList.add(sc2)
-        scrollingBackgroundList.add(sc1)
-
-        gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addHealthToSupply("energy", -25f)})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("PowerLeakAttempt", "weekly")!!)})
+        gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addToSupply("energy", -25f)})
+        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)})
         gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
         gameInput.keyEventMap.put(Input.Keys.Y, {GameEventManager.addDelayedEvent("Hole", "daily", MathUtils.random(1, 5).toFloat())})
 
@@ -270,8 +229,9 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         val color = Color(value, value, value, 1f)
         batch.color = color
 
-        for(i in scrollingBackgroundList.indices) {
-            val background = scrollingBackgroundList[i]
+        //We do the drawing for the background here (in GameScreen) because we have to mix in the vehicle drawing
+        for(i in ScrollingBackgroundManager.scrollingBackgroundList.indices) {
+            val background = ScrollingBackgroundManager.scrollingBackgroundList[i]
             background.draw(batch, color)
 
             //To draw the ROV in the right area, we have to draw when i == 3 (after both the midgrounds). This lets it be
@@ -337,18 +297,23 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         //TODO Need to implement when you can't travel and need to camp.
 
         val gameOver = GH.checkGameOverConditions()
+        //If gameOver is true, set the game as over
         if(gameOver.first) {
             setGameOver(gameOver.second)
+
+        //If we made it to the end, we've won!
         }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
             GameStats.gameOverStatus = "won"
             gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
+
+        //Otherwise, update everything as normal
         }else {
             GameStats.updateHourly(delta)
             SupplyManager.updateHourly(delta)
             GroupManager.updateHourly(delta)
             ChainTask.updateHourly(delta)
 
-            if (ResultManager.recentDeathMap.size > 0) {
+            if (ResultManager.recentDeathMap.isNotEmpty()) {
                 gui.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
             }
 

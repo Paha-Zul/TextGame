@@ -55,14 +55,14 @@ object EventManager : IResetable{
             val max = if(args.count() >= 3) ((args[2]) as String).toInt() else min
             val perc = if(args.count() >= 4) ((args[3]) as String).toBoolean() else false
             var numPeople = if(args.count() >= 5) ((args[4]) as String).toInt() else 1
-            var randomPerPerson = if(args.count() >= 6) ((args[5]) as String).toBoolean() else false
+            val randomPerPerson = if(args.count() >= 6) ((args[5]) as String).toBoolean() else false
 
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
             //If our name is supposed to be an event person, get it from the current event.
             if(name.matches("evt[0-9]".toRegex())) name = GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()].firstName
-            else if(name.equals("evt")) name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
+            else if(name == "evt") name = GameEventManager.currActiveEvent!!.randomPersonList[0].firstName
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
@@ -130,7 +130,7 @@ object EventManager : IResetable{
             person.addAilment(disLevel, disType)
 
             FunGameStats.addFunStat("Ailments Inflicted: ", "1")
-            Result.addRecentChange("$level $type for ${person.firstName}", 1f, GameScreen.currGameTime, "", true)
+            ResultManager.addRecentChange("$level $type for ${person.firstName}", 1f, GameScreen.currGameTime, "", true)
         })
 
         //Called to remove and injury from a person.
@@ -322,7 +322,7 @@ object EventManager : IResetable{
 
             GameStats.TravelInfo.totalDistTraveled += amt
 
-            Result.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
+            ResultManager.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
             FunGameStats.addFunStat("Total Miles Net", amt.toInt().toString())
         })
 
@@ -331,11 +331,11 @@ object EventManager : IResetable{
             val min = (args[0] as String).toInt()
             val max = if(args.count() >= 2) (args[1] as String).toInt() else min
 
-            var amt = MathUtils.random(Math.abs(min), Math.abs(max))
+            val amt = MathUtils.random(Math.abs(min), Math.abs(max))
 
             GameStats.TimeInfo.totalTimeCounter += amt
 
-            Result.addRecentChange("hours waited", amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
+            ResultManager.addRecentChange("hours waited", amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
             FunGameStats.addFunStat("Hours Waited", amt.toInt().toString())
         })
 
@@ -351,15 +351,15 @@ object EventManager : IResetable{
 
             GameScreen.gui.buildGroupTable()
 
-            Result.addRecentDeath(person)
+            ResultManager.addRecentDeath(person)
             FunGameStats.addFunStat(person.fullName, "dead", true)
         })
 
         //Takes the recent deaths and puts them into the event deaths for displaying.
         EventManager.onEvent("showDeaths", {args->
-            val pair = Result.recentDeathMap.toList()[0]
-            Result.recentDeathResult = pair.second      //Store the first death result.
-            Result.recentDeathMap.remove(pair.first)    //Remove it from the map.
+            val pair = ResultManager.recentDeathMap.toList()[0]
+            ResultManager.recentDeathResult = pair.second      //Store the first death ResultManager.
+            ResultManager.recentDeathMap.remove(pair.first)    //Remove it from the map.
         })
 
         //Called when a person's health changed.
@@ -369,7 +369,7 @@ object EventManager : IResetable{
 
             GameScreen.gui.buildGroupTable()
 
-            Result.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameEventManager.currActiveEvent != null)
+            ResultManager.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameEventManager.currActiveEvent != null)
         })
 
         //Called when a supply from the SupplyManager has changed. This is called from SupplyManager usually.
@@ -386,7 +386,7 @@ object EventManager : IResetable{
 //                gameScreen.noticeEventTimer.start()
             }
 
-            Result.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
+            ResultManager.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
         })
 
         //Called when a supply from the SupplyManager has changed. This is called from SupplyManager usually.
@@ -399,7 +399,7 @@ object EventManager : IResetable{
 
 //            GH.checkSupplyHealth(supply, amt, oldAmt)
 
-            Result.addRecentChange("${supply.displayName} health", amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
+            ResultManager.addRecentChange("${supply.displayName} health", amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
         })
 
         //Called when an event starts.
@@ -416,7 +416,7 @@ object EventManager : IResetable{
 
             Logger.log("EventManager", "Event $name is ending")
 
-            Result.purgeEventResults()
+            ResultManager.purgeEventResults()
         })
 
         //Called when an event finishes.

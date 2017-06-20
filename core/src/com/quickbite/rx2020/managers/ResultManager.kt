@@ -42,17 +42,22 @@ object ResultManager : IResetable{
      * @param name The name to use for the map key. Usually display name for supply, first name for people.
      * @param amt The amount the change was. For instance, someone losing 50 health is -50, gaining 50 energy is simply 50.
      * @param currTime The time the change happened (which is the current time.) This will be used to update the recent supply and health changes.
-     * @param gui The GameScreenGUI to update if needed on change.
      * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
      */
     fun addRecentChange(name: String, amt: Float, currTime: Double, desc: String = "", isEventRelated: Boolean){
         //TODO A little bit of a hack until I figure out where to better put the values.
         if(isEventRelated) {
             val result = eventChangeMap.getOrPut(name, { Result(name, 0f, desc) })
-            result.amt += amt
+            if(result.amt<0 != amt<0) //If both are not the same sign, simply assign the new amt to the result
+                result.amt = amt
+            else //Otherwise, add on to it
+                result.amt += amt
         }else{
             val result = recentChangeMap.getOrPut(name, { Result(name, 0f, desc) })
-            result.amt += amt
+            if(result.amt<0 != amt<0) //If both are not the same sign, simply assign the new amt to the result
+                result.amt = amt
+            else //Otherwise, add on to it
+                result.amt += amt
             result.timeLastUpdated = currTime
         }
     }
@@ -60,7 +65,6 @@ object ResultManager : IResetable{
     /**
      * Adds a recent death.
      * @param person The person to add. First name for map key, full name for displaying.
-     * @param isEventRelated True if this has to do with an event, false if it's only for recent non-event changes.
      */
     fun addRecentDeath(person: Person){
         val text = GH.specialDeathTextReplacement(" has died. (He1) survived for %t before (his1) untimely demise.", person)

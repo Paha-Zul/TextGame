@@ -3,7 +3,6 @@ package com.quickbite.rx2020.screens
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.Color
 import com.quickbite.rx2020.ChainTask
-import com.quickbite.rx2020.Result
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.gui.MainMenuGUI
 import com.quickbite.rx2020.managers.*
@@ -26,7 +25,7 @@ class MainMenuScreen(val game: TextGame) : Screen {
         GameStats.reset()
         SupplyManager.reset()
         ROVManager.reset()
-        Result.reset()
+        ResultManager.reset()
         CustomTimer.reset()
         ChainTask.reset()
 
