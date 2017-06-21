@@ -77,31 +77,41 @@ object GH {
         return parseAndCheckRestrictions(restriction.split(" ").toTypedArray())
     }
 
+    //TODO Fix this javadoc
+    /**
+     * Parses an array of strings into a check of restrictions (ex: 'food' '>' '0' will be converted into food>0)
+     * @param restrictions An array of strings (usually 3) to indicate a check.
+     * @return A Triple that holds the following:
+     * <ul>
+     *     <li> true/false if the check passed </li>
+     *     <li> the name of the thing we're checking (like 'food') </li>
+     *     <li> the operation used (<,<=, etc...) </li>
+     * </ul>
+     */
     private fun parseAndCheckRestrictions(restrictions:Array<String>):Triple<Boolean, String, String>{
         //If there's nothing to check, return true
-        if(restrictions.size == 0 || restrictions[0].isEmpty())
+        if(restrictions.isEmpty() || restrictions[0].isEmpty())
             return Triple(true, "", "")
 
         var passed = true
 
-        var name:String = restrictions[0]
-        var operation:String = restrictions[1]
-        var amount:Int = restrictions[2].toInt()
+        val name:String = restrictions[0]
+        val operation:String = restrictions[1]
+        val amount:Int = restrictions[2].toInt()
 
         var amtToCheck = 0
-        if(name.equals("ROV"))
+        if(name == "ROV")
             amtToCheck = ROVManager.ROVPartMap["ROV"]!!.currHealth.toInt()
         else
             amtToCheck = SupplyManager.getSupply(name).amt.toInt()
 
-        if(operation.equals("<")){
-            passed = amtToCheck < amount
-        }else if(operation.equals("<=")){
-            passed =  amtToCheck <= amount
-        }else if(operation.equals(">")){
-            passed =  amtToCheck > amount
-        }else{
-            passed =  amtToCheck >= amount
+        //Perform the operation
+        when(operation){
+            "<" -> passed = amtToCheck < amount
+            "<=" -> passed =  amtToCheck <= amount
+            ">" -> passed =  amtToCheck > amount
+            ">=" -> passed =  amtToCheck >= amount
+            else -> IllegalArgumentException("Must be one of the following strings: \"<\" \"<=\" \">\" \">=\"")
         }
 
         return Triple(passed, name, operation)
@@ -147,7 +157,7 @@ object GH {
         val pronounPattern = Pattern.compile("((H|h)(is|im|e)[0-9])");
         val numberPattern = Pattern.compile("([0-9])");
 
-        //For each token....
+        //For each token.... (which is each word in the text)
         for(token in tokens){
             var newToken = token
 
@@ -236,21 +246,21 @@ object GH {
         var _token = ""
 
         //First, find the he/him/his [0-9] token.
-        var matcher = pronounPattern.matcher(token);
+        val matcher = pronounPattern.matcher(token);
         if(matcher.find()){
             _token = matcher.group(1)
         }
 
         var pronoun = ""        //The pronoun that will be changed
-        var male = person.male  //If it is of the male gender
+        val male = person.male  //If it is of the male gender
 
-        if(_token.matches("((H|h)is[0-9])".toRegex())){
+        if(_token.matches("(([Hh])is[0-9])".toRegex())){
             if(male) pronoun = "his"
             else pronoun = "her"
-        }else if(_token.matches("((H|h)e[0-9])".toRegex())){
+        }else if(_token.matches("(([Hh])e[0-9])".toRegex())){
             if(male) pronoun = "he"
             else pronoun = "she"
-        }else if(_token.matches("((H|h)im[0-9])".toRegex())){
+        }else if(_token.matches("(([Hh])im[0-9])".toRegex())){
             if(male) pronoun = "him"
             else pronoun = "her"
         }
@@ -261,7 +271,7 @@ object GH {
 
         //Basically, if we have a situation like "I want his3!" the pronoun might only be "her" after stripping anything else, so we take the pronoun
         //and replace the token "his3!" with "her!" and assign it back to the pronoun. Return this!
-        pronoun = token.replace("(\\(?(H|h)(is|im|e)[0-9]\\)?)".toRegex(), pronoun)
+        pronoun = token.replace("(\\(?([Hh])(is|im|e)[0-9]\\)?)".toRegex(), pronoun)
 
         return pronoun
     }
@@ -271,8 +281,8 @@ object GH {
         var number:Int = 0
 
         //First, find the he/him/his [0-9] token.
-        var pattern = Pattern.compile("([0-9])");
-        var matcher = pattern.matcher(token);
+        val pattern = Pattern.compile("([0-9])")
+        val matcher = pattern.matcher(token)
         if(matcher.find()){
             number = matcher.group(1).toInt()
             number -= 1
@@ -281,7 +291,7 @@ object GH {
         if(number > 9 || number < 0) number = 0 //If the character at the end is something higher than
         val person = if(number >= event.randomPersonList.size) null else event.randomPersonList[number] //The person to base the pronoun off of
         if(person != null)
-            return token.replace("((%n[0-9]?\\S*)|(\\(?(N|n)ame[0-9]\\)?))".toRegex(), person.firstName) //Return the replaced token.
+            return token.replace("((%n[0-9]?\\S*)|(\\(?([Nn])ame[0-9]\\)?))".toRegex(), person.firstName) //Return the replaced token.
         else
             return "A Mysterious Stranger"
     }
@@ -297,6 +307,10 @@ object GH {
         return tracks.currHealth <= 0 || energy.amt <= 0
     }
 
+    /**
+     * Checks for the conditions of game over
+     * @return A pair that holds: True/false if we lost/didn't lose, and the reason we lost.
+     */
     fun checkGameOverConditions():Pair<Boolean, String>{
         val storage = ROVManager.ROVPartMap["storage"]!!
         val ammo = SupplyManager.getSupply("ammo")
@@ -490,7 +504,7 @@ object GH {
         }
 
         //For parts...
-        if(reward.parts.size > 0){
+        if(reward.parts.isNotEmpty()){
             val partName = reward.parts[MathUtils.random(0, reward.parts.size-1)]
             SupplyManager.addToSupply(partName, 1f)
         }

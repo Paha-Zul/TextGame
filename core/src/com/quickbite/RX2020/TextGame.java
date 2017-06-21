@@ -29,7 +29,7 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 	public static TextureAtlas smallGuiAtlas;
 
-	public static Boolean testMode = false;
+	public static Boolean testMode = true;
 
 	public static ExecutorService threadPool;
 

@@ -9,13 +9,15 @@ import java.util.*
 
 /**
  * Created by Paha on 2/8/2016.
+ *
+ * A Manager for supplies.
  */
 object SupplyManager : IUpdateable, IResetable{
     private val supplyMap:LinkedHashMap<String, Supply> = linkedMapOf()
 
     fun init(){
         supplyMap.clear()
-        var list = DataManager.getItemList()
+        val list = DataManager.getItemList()
         for(item in list){
             var randStart = MathUtils.random(item.randStartAmt!![0], item.randStartAmt!![1]).toFloat()
             if(item.perMember) randStart *= GroupManager.numPeopleAlive
@@ -44,7 +46,7 @@ object SupplyManager : IUpdateable, IResetable{
     }
 
     fun addToSupply(supply:Supply?, amt:Float):Supply{
-        var _amt = amt //Let's make the passed in val mutable
+        val _amt = amt //Let's make the passed in val mutable
 
         //Log it if the supply is null
         if(supply == null) Logger.log("SupplyManager", "Trying to add to supply ${supply?.name} which doesn't exist.", Logger.LogLevel.Warning)
@@ -60,13 +62,16 @@ object SupplyManager : IUpdateable, IResetable{
         return supply!!
     }
 
+    /**
+     * Adds health to a certain
+     */
     fun addHealthToSupply(name:String, amt:Float):Supply{
         val supply = supplyMap[name] //Get the supply.
         return addHealthToSupply(supply, amt)
     }
 
     fun addHealthToSupply(supply:Supply?, amt:Float):Supply{
-        var _amt = amt //Let's make the passed in val mutable
+        val _amt = amt //Let's make the passed in val mutable
 
         //Log it if the supply is null
         if(supply == null) Logger.log("SupplyManager", "Trying to add to supply ${supply?.name} which doesn't exist.", Logger.LogLevel.Warning)
@@ -123,6 +128,17 @@ object SupplyManager : IUpdateable, IResetable{
         supplyMap.clear()
     }
 
+    /**
+     * Generic supply class that holds info for supplies
+     * @param name The name of the supply
+     * @param abbrName The abbreviated name of the supply
+     * @param displayName The display name of the supply
+     * @param amt The initial amount of the supply
+     * @param maxAmount The max amount the supply can stack to
+     * @param currHealth The initial and current health of the supply
+     * @param maxHealth The max health of the supply
+     * @param affectedByHealth True if the supply's function is affected by the health of the supply (ex: energy gain from broken solar panels)
+     */
     class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f, val affectedByHealth:Boolean){
         var consumePerDay:Float = 0f
 

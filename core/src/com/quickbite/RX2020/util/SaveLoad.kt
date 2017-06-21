@@ -54,8 +54,8 @@ object SaveLoad{
         SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
         FunGameStats.statsMap.toList().forEach { stat -> save.funStatList.add(arrayOf(stat.first, stat.second)) }
         FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
-        save.remainingEpicEvents.addAll(GameEventManager.getEventNameList("epic"))
-        game.timerList.forEach { pair -> save.eventTimers.add(arrayOf(pair.first.toString(), pair.second.remainingTime.toString())) }
+        save.remainingEpicEvents.addAll(GameEventManager.getEventNameList("monthly"))
+        game.timerList.forEach { pair -> save.eventTimers.add(arrayOf(pair.first, pair.second.remainingTime.toString())) }
         GameEventManager.delayedEventTimerList.forEach { timer ->
             val data:Array<String> = timer.userData as Array<String>
             save.delayedEventTimers.add(arrayOf(data[0], data[1], timer.remainingTime.toString(), data[2]))

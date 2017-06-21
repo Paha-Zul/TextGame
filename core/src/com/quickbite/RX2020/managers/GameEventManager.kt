@@ -24,14 +24,7 @@ object GameEventManager : IUpdateable, IResetable{
 
     var lastCurrEvent:EventJson? = null //Mainly for debugging.
 
-    private val dailyRootList: MutableList<String> = mutableListOf() //For Json Events
-    private val weeklyRootList: MutableList<String> = mutableListOf() //For Json Events
-    private val monthlyRootList: MutableList<String> = mutableListOf() //For Json Events
-    val monthlyLootListOriginal: MutableList<String> = mutableListOf() //For Json Events
-    private val monthlyNativeRootList: MutableList<String> = mutableListOf() //For Json Events
-    private val specialRootList: MutableList<String> = mutableListOf() //For Json Events
-    private val returnRootList: MutableList<String> = mutableListOf() //For Json Events
-
+    private val rootMap:HashMap<String, MutableList<String>> = hashMapOf() //For Event roots!
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf() //A list of timers for delayed events
@@ -52,29 +45,21 @@ object GameEventManager : IUpdateable, IResetable{
         val event = getAndSetEvent("", type)
         currActiveEvent = event
         Logger.log("GameEventManager", "Picking new event ${event?.name} for type $type")
-        return event;
+        return event
     }
 
     fun getEventNameList(type:String):MutableList<String>{
-        when(type){
-            "daily" -> return dailyRootList
-            "weekly" -> return weeklyRootList
-            "special" -> return specialRootList
-            "monthlyNative" -> return monthlyNativeRootList
-            "returnEvents" -> return returnRootList
-            else -> return monthlyRootList
-        }
+        return rootMap.getOrDefault(type, mutableListOf())
     }
 
     fun addEvent(event:EventJson, type: String = ""){
-        val list = getEventNameList(type)
         eventMap.put(event.name, event) //Add the event to the main map.
 
         //If the event is a root, add it to the right list for later use.
         if(event.root){
-            list.add(event.name) //Add it.
-            if(type == "epic") //Special case since we're gonna need to remember which epic events have already triggered.
-                monthlyLootListOriginal.add(event.name)
+            rootMap.getOrPut(type, { mutableListOf()}).add(event.name)
+
+        //Otherwise, add all non root events to the general use map
         }else
             GameEventManager.eventMap.put(event.name, event)
     }
