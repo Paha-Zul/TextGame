@@ -5,6 +5,7 @@ import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.util.Logger
+import com.quickbite.rx2020.util.Tester
 import java.util.*
 
 /**
@@ -23,7 +24,7 @@ object SupplyManager : IUpdateable, IResetable{
             if(item.perMember) randStart *= GroupManager.numPeopleAlive
             val maxAmount = if(item.perMember) item.max*GroupManager.numPeopleAlive else item.max
 
-            if(!TextGame.testMode)
+            if(!Tester.TESTING)
                 addNewSupply(item.name, item.abbrName, item.displayName, randStart, maxAmount, item.affectedByHealth)
             else
                 addNewSupply(item.name, item.abbrName, item.displayName, 10000000f, 10000000, item.affectedByHealth)

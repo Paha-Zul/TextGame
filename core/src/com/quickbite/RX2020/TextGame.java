@@ -29,8 +29,6 @@ public class TextGame extends com.badlogic.gdx.Game {
 
 	public static TextureAtlas smallGuiAtlas;
 
-	public static Boolean testMode = true;
-
 	public static ExecutorService threadPool;
 
 	public static Color backgroundColor = new Color(0,0,0,1);

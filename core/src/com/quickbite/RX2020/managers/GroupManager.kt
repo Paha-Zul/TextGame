@@ -6,6 +6,7 @@ import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.util.Logger
+import com.quickbite.rx2020.util.Tester
 
 /**
  * Created by Paha on 2/8/2016.
@@ -24,7 +25,7 @@ object GroupManager : IUpdateable, IResetable {
 
     fun init(){
         list.clear()
-        val maxHealth = if(TextGame.testMode) 1000000f else 100f
+        val maxHealth = if(Tester.TESTING) 1000000f else 100f
         val range = MathUtils.random(0,4) + 4 //4 - 8
 
         initialGroupSize = range

@@ -61,7 +61,9 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
     private val gameInput: GameScreenInput = GameScreenInput()
 
+    /** The SearchActivity that will be performed every hour*/
     var searchActivity:DataManager.SearchActivityJSON? = null
+    /** The actual function of searching that will be performed every hour*/
     var searchFunc:Array<(()->Unit)?>? = null
 
     var numHoursToAdvance:Int = 0
@@ -69,7 +71,6 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
     companion object{
         var currGameTime:Double = 0.0
-        lateinit var gui: GameScreenGUI
     }
 
     init{
@@ -78,10 +79,9 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         TextGame.stage.clear()
         fadeIn()
 
-        gui = GameScreenGUI(this)
         GameStats.game = this
 
-        gui.init()
+        GameScreenGUI.init(this)
         EventManager.init(this)
 
         sunMoon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
@@ -92,8 +92,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         Gdx.input.inputProcessor = multi
 
         gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addToSupply("energy", -25f)})
-        gameInput.keyEventMap.put(Input.Keys.R, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)})
-        gameInput.keyEventMap.put(Input.Keys.T, {gui.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
+        gameInput.keyEventMap.put(Input.Keys.R, { GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)})
+        gameInput.keyEventMap.put(Input.Keys.T, {GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
         gameInput.keyEventMap.put(Input.Keys.Y, {GameEventManager.addDelayedEvent("Hole", "daily", MathUtils.random(1, 5).toFloat())})
 
         dailyEventTimer.callback = timerFunc("daily", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
@@ -103,10 +103,11 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         noticeEventTimer.stop()
 
-        if(TextGame.testMode) {
+        //If we are testing, run the tests!
+        if(Tester.TESTING) {
             Tester.testEvents(50)
-            gui.buildTradeWindow()
-            gui.openTradeWindow()
+            GameScreenGUI.buildTradeWindow()
+            GameScreenGUI.openTradeWindow()
             pauseGame()
         }
 
@@ -200,7 +201,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         draw(TextGame.batch)
         TextGame.batch.end()
 
-        gui.update(delta)
+        GameScreenGUI.update(delta)
         TextGame.stage.draw()
     }
 
@@ -304,7 +305,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         //If we made it to the end, we've won!
         }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
             GameStats.gameOverStatus = "won"
-            gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
+            GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
 
         //Otherwise, update everything as normal
         }else {
@@ -314,13 +315,13 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
             ChainTask.updateHourly(delta)
 
             if (ResultManager.recentDeathMap.isNotEmpty()) {
-                gui.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
+                GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
             }
 
             if (numHoursToAdvance > 0) numHoursToAdvance--
             timeTickEventList.forEach { evt -> evt.update() }
 
-            gui.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
+            GameScreenGUI.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
         }
     }
 
@@ -331,7 +332,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         if(this.state != State.CAMP) {
             this.state = State.CAMP
             this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
-            gui.openCampMenu()
+            GameScreenGUI.openCampMenu()
             this.resumeGame()
         }
     }
@@ -347,7 +348,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     fun setGameOver(reason:String){
         GameStats.gameOverStatus = reason
         this.state = State.GAMEOVER
-        gui.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
+        GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
     }
 
 
@@ -371,7 +372,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
             if(currEvent == null) Logger.log("GameScreen", "Event skipped because it was null. Tried to get $eventType event.", Logger.LogLevel.Warning)
             else //Trigger the GUI UI and send a callback to it.
-                gui.triggerEventGUI(currEvent)
+                GameScreenGUI.triggerEventGUI(currEvent)
 
             timer.restart(MathUtils.random(min, max))
         }
