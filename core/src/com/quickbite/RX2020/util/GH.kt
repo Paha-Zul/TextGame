@@ -54,7 +54,7 @@ object GH {
 
     /**
      * Takes a double array of restrictions, mainly those used in the search activities, and parses/checks them.
-     * @param restrictionList A double array that contains a list of separate tokens which make up the restriction, ie: ["edibles", "<", "10"]
+     * @param restrictionList A double array that contains a list of separate tokens which make up the restriction, ie: ("edibles", "<", "10")
      * @return True if the restrictions were passed, false otherwise.
      */
     fun parseAndCheckRestrictions(restrictionList:Array<Array<String>>):Triple<Boolean, String, String>{
@@ -154,19 +154,19 @@ object GH {
         val tokens = text.split(" ") //Split by spaces
         val newTokens:MutableList<String> = mutableListOf()
 
-        val pronounPattern = Pattern.compile("((H|h)(is|im|e)[0-9])");
-        val numberPattern = Pattern.compile("([0-9])");
+        val pronounPattern = Pattern.compile("(([Hh])(is|im|e)[0-9])")
+        val numberPattern = Pattern.compile("([0-9])")
 
         //For each token.... (which is each word in the text)
         for(token in tokens){
             var newToken = token
 
             //If the token matches this pattern, let's send it to the gender changes!
-            if(token.matches("(\\S*\\(?(H|h)(is|im|e)[0-9]\\(?\\S*)".toRegex()))
+            if(token.matches("(\\S*\\(?([Hh])(is|im|e)[0-9]\\(?\\S*)".toRegex()))
                 newToken = replaceGender(token, event, pronounPattern, numberPattern)
 
             //If it matches a name, replace it.
-            if(token.matches("((%n[0-9]?)|(\\(?(N|n)ame[0-9]\\)?))\\S*".toRegex()))
+            if(token.matches("((%n[0-9]?)|(\\(?([Nn])ame[0-9]\\)?))\\S*".toRegex()))
                 newToken = replaceName(token, event)
 
             //Add it to the new token list.
@@ -181,14 +181,14 @@ object GH {
         val tokens = text.split(" ") //Split by spaces
         val newTokens:MutableList<String> = mutableListOf()
 
-        val pronounPattern = Pattern.compile("((H|h)(is|im|e)[0-9])");
+        val pronounPattern = Pattern.compile("(([Hh])(is|im|e)[0-9])")
 
         //For each token....
         for(token in tokens){
             var newToken = token
 
             //If the token matches this pattern, let's send it to the gender changes!
-            if(token.matches("(\\S*\\(?(H|h)(is|im|e)[0-9]\\(?\\S*)".toRegex()))
+            if(token.matches("(\\S*\\(?([Hh])(is|im|e)[0-9]\\(?\\S*)".toRegex()))
                 newToken = replaceGender(token, person, pronounPattern)
 
             //Add it to the new token list.
@@ -203,14 +203,14 @@ object GH {
         var _token = ""
 
         //First, find the he/him/his [0-9] token.
-        var matcher = pronounPattern.matcher(token);
+        var matcher = pronounPattern.matcher(token)
         if(matcher.find()){
             _token = matcher.group(1)
         }
 
         var number:Int = 0
 
-        matcher = numberPattern.matcher(_token);
+        matcher = numberPattern.matcher(_token)
         if(matcher.find()){
             number = matcher.group(1).toInt()
             number -= 1 //We do this because array indexes start at 0. So Name1 refers to names[0]
@@ -218,15 +218,15 @@ object GH {
 
         var pronoun = ""                                    //The pronoun that will be changed
         val person = if(number >= event.randomPersonList.size) null else event.randomPersonList[number] //The person to base the pronoun off of
-        var male = if(person!=null) person.male else true   //If it is of the male gender
+        val male = person?.male ?: true   //If it is of the male gender
 
-        if(_token.matches("((H|h)is[0-9])".toRegex())){
+        if(_token.matches("(([Hh])is[0-9])".toRegex())){
             if(male) pronoun = "his"
             else pronoun = "her"
-        }else if(_token.matches("((H|h)e[0-9])".toRegex())){
+        }else if(_token.matches("(([Hh])e[0-9])".toRegex())){
             if(male) pronoun = "he"
             else pronoun = "she"
-        }else if(_token.matches("((H|h)im[0-9])".toRegex())){
+        }else if(_token.matches("(([Hh])im[0-9])".toRegex())){
             if(male) pronoun = "him"
             else pronoun = "her"
         }
@@ -237,7 +237,7 @@ object GH {
 
         //Basically, if we have a situation like "I want his3!" the pronoun might only be "her" after stripping anything else, so we take the pronoun
         //and replace the token "his3!" with "her!" and assign it back to the pronoun. Return this!
-        pronoun = token.replace("(\\(?(H|h)(is|im|e)[0-9]\\)?)".toRegex(), pronoun)
+        pronoun = token.replace("(\\(?([Hh])(is|im|e)[0-9]\\)?)".toRegex(), pronoun)
 
         return pronoun
     }
@@ -246,7 +246,7 @@ object GH {
         var _token = ""
 
         //First, find the he/him/his [0-9] token.
-        val matcher = pronounPattern.matcher(token);
+        val matcher = pronounPattern.matcher(token)
         if(matcher.find()){
             _token = matcher.group(1)
         }
@@ -277,7 +277,6 @@ object GH {
     }
 
     private fun replaceName(token:String, event:GameEventManager.EventJson):String{
-        val _token = token.replace("[^a-zA-Z0-9]","")       //Strip anything like periods
         var number:Int = 0
 
         //First, find the he/him/his [0-9] token.
@@ -424,8 +423,8 @@ object GH {
      * Uses passed in time to return a formatted time.
      */
     fun formatTime(hours:Int):Triple<Int, Int, Int>{
-        val totalMonths = ( hours/(24*30)).toInt()
-        val totalDays = ((hours - totalMonths*(24*30))/24).toInt()
+        val totalMonths = ( hours/(24*30))
+        val totalDays = ((hours - totalMonths*(24*30))/24)
         val totalHours =  (hours - (totalDays*24) - totalMonths*(24*30)).toInt()
 
         return Triple(totalMonths, totalDays, totalHours)

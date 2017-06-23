@@ -2,9 +2,9 @@ package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
+import com.quickbite.rx2020.gui.GameScreenGUI
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
-import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.shuffle
 import com.quickbite.rx2020.util.CustomTimer
 import com.quickbite.rx2020.util.GH
@@ -24,7 +24,7 @@ object GameEventManager : IUpdateable, IResetable{
 
     var lastCurrEvent:EventJson? = null //Mainly for debugging.
 
-    private val rootMap:HashMap<String, MutableList<String>> = hashMapOf() //For Event roots!
+    private val rootMap:Map<String, MutableList<String>> = hashMapOf() //For Event roots!
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf() //A list of timers for delayed events
@@ -49,7 +49,7 @@ object GameEventManager : IUpdateable, IResetable{
     }
 
     fun getEventNameList(type:String):MutableList<String>{
-        return rootMap.getOrDefault(type, mutableListOf())
+        return rootMap.getOrElse(type, {mutableListOf()})
     }
 
     fun addEvent(event:EventJson, type: String = ""){
@@ -57,7 +57,7 @@ object GameEventManager : IUpdateable, IResetable{
 
         //If the event is a root, add it to the right list for later use.
         if(event.root){
-            rootMap.getOrPut(type, { mutableListOf()}).add(event.name)
+            rootMap.getOrElse(type, { mutableListOf()}).add(event.name)
 
         //Otherwise, add all non root events to the general use map
         }else
@@ -71,7 +71,7 @@ object GameEventManager : IUpdateable, IResetable{
      * @param seconds The seconds to wait until the event is fire.
      */
     fun addDelayedEvent(name:String, type:String, seconds:Float, page:Int = 0){
-        val timer = CustomTimer(seconds, true, { GameScreen.gui.triggerEventGUI(this.getAndSetEvent(name, type)!!, page)})
+        val timer = CustomTimer(seconds, true, { GameScreenGUI.triggerEventGUI(this.getAndSetEvent(name, type)!!, page)})
         timer.userData = arrayOf(name, type, page.toString())
         delayedEventTimerList += timer
     }
@@ -86,7 +86,7 @@ object GameEventManager : IUpdateable, IResetable{
         val list = getEventNameList(type)
 
         //Get the event either by name or randomly.
-        var event:EventJson? = if(!eventName.isEmpty()) eventMap[eventName] else if(list.size > 0) eventMap[list[MathUtils.random(0, list.size-1)]] else null
+        val event:EventJson? = if(!eventName.isEmpty()) eventMap[eventName] else if(list.size > 0) eventMap[list[MathUtils.random(0, list.size-1)]] else null
 
         if(event == null) Logger.log("GameEventManager", "Event with name $eventName wasn't found in the $type map. Is it accidentally not marked as root? Does it even exist?")
         else {
@@ -102,7 +102,7 @@ object GameEventManager : IUpdateable, IResetable{
     }
 
     fun getAndSetEvent(eventName:String, type:String = ""):EventJson?{
-        var event = getEvent(eventName, type, true)
+        val event = getEvent(eventName, type, true)
         currActiveEvent = event
         return event
     }
@@ -146,7 +146,7 @@ object GameEventManager : IUpdateable, IResetable{
          */
         fun selectChildEvent(choice:String): EventJson?{
             var outcomeIndex:Int = -1
-            var chance = MathUtils.random(100)
+            val chance = MathUtils.random(100)
 
             val choiceIndex:Int = getChoiceIndex(choice)
             //If our result is valid, find the outcome that is a result of it.
@@ -177,10 +177,10 @@ object GameEventManager : IUpdateable, IResetable{
          * @return The index of the choice text in the event, 0 if there are no choices but there are outcomes, and -1 if there are no choices or outcomes.
          */
         private fun getChoiceIndex(choice:String):Int{
-            var choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
+            val choiceIndex:Int = choices!!.indexOf(choice) //Get the index of the choice
 
             //If the result is -1 but we have outcomes, this is a special case. Return 0!
-            if(choiceIndex == -1 && outcomes != null && outcomes!!.size > 0)
+            if(choiceIndex == -1 && outcomes != null && outcomes!!.isNotEmpty())
                 return 0
 
             return choiceIndex //Otherwise, return the choice index.
@@ -193,8 +193,8 @@ object GameEventManager : IUpdateable, IResetable{
             var counter:Float = 0f
             var outcomeIndex = -1
 
-            if((outcomes!!.size == 1 && (outcomes!![0].size == 0 || outcomes!![0][0].isEmpty())))
-                return -1;
+            if((outcomes!!.size == 1 && (outcomes!![0].isEmpty() || outcomes!![0][0].isEmpty())))
+                return -1
 
             if(chances!!.size != outcomes!!.size)
                 Logger.log("GameEventManager", "The number of outcomes don't match the number of chances. This could be a problem.", Logger.LogLevel.Warning)
@@ -202,7 +202,7 @@ object GameEventManager : IUpdateable, IResetable{
             //For each outcome chance, increment counter. If the chance is less than the counter, that is our outcome.
             for(i in chances!![choiceIndex].indices){
                 if(chances!![choiceIndex][i] <= 0)
-                    Logger.log("GameEventManager", "Chance for choice ${if(choices == null || choices!!.size == 0) "(no choice)" else choices!![choiceIndex]} under event ${this.name} is 0. Not good", Logger.LogLevel.Warning)
+                    Logger.log("GameEventManager", "Chance for choice ${if(choices == null || choices!!.isEmpty()) "(no choice)" else choices!![choiceIndex]} under event ${this.name} is 0. Not good", Logger.LogLevel.Warning)
                 counter += chances!![choiceIndex][i]
                 if(chance <= counter) {
                     outcomeIndex = i

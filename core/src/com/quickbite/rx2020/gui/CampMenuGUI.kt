@@ -113,6 +113,14 @@ class CampMenuGUI {
         return mainTable
     }
 
+    /**
+     * Used to reset some stuff, not for deleting anything. We want to keep this
+     * table cached...
+     */
+    fun closeTable(){
+        activityHourSlider.value = 0f
+    }
+
     private fun setupListeners(){
         acceptButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
@@ -127,8 +135,11 @@ class CampMenuGUI {
 
                 ChainTask.addTaskToHourlyList(sliderTask())
                 disableButton(acceptButton)
+                disableButton(uncampButton)
 
                 var i =0
+                //For each set of parameters in the action list, set the search function to perform the action
+                //ex: resting increase health but takes food so... i=0 -> raise health, i=1 -> remove food
                 for(params in actionList.iterator()) {
                     //If not null, set up the search function
                     GameStats.game.searchFunc!![i] = { EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size - 1))) }
@@ -157,6 +168,9 @@ class CampMenuGUI {
                 //Otherwise, enable it
                 else
                     enableButton(acceptButton)
+
+                if(GameStats.game.numHoursToAdvance <= 1)
+                    enableButton(uncampButton)
             }
         })
 
@@ -166,8 +180,13 @@ class CampMenuGUI {
                 val ResultManager = GH.parseAndCheckRestrictions(GameStats.game.searchActivity!!.restrictions!!)
                 if(!ResultManager.first)
                     disableAcceptButtonError(GH.getRestrictionFailReason(ResultManager.second, ResultManager.third))
-                else
-                    enableAcceptButton()
+                else {
+                    enableAcceptButton() //This will clear the red button text and error text
+                    //Then, if we don't meet these conditions, disable it again
+                    if (activityHourSlider.value.toInt() <= 0 || GameStats.game.numHoursToAdvance > 0)
+                        disableButton(acceptButton)
+                }
+
             }
         })
     }

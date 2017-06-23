@@ -6,8 +6,13 @@ import java.util.*
 
 /**
  * Created by Paha on 2/10/2016.
+ *
  * A fun little chain task class where a predicate and function is supplied. When the predicate is true, the chain task
  * will try to go to the next task. If null, nothing is called within update()
+ *
+ * @param predicate The predicate used to proceed to the next task
+ * @param func The main function to call for logic
+ * @param finish The finishing func to call right as this task ends
  */
 class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, var finish:(()->Unit)? = null){
 
@@ -87,6 +92,7 @@ class ChainTask(var predicate:(() -> Boolean)? , var func:(()->Unit)? = null, va
                 //If the predicate didn't pass, get the next chain.
                 }else{
                     currChain?.finish?.invoke()
+                    //TODO Possibility of null?
                     currChain = currChain!!.chain
                 }
 
