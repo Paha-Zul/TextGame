@@ -108,7 +108,7 @@ class CampMenuGUI {
         setupListeners()
 
         //When we first set up the table, disable the accept button since we are on 0 hours initially
-        disableButton(acceptButton)
+        GameScreenGUI.disableButton(acceptButton)
 
         return mainTable
     }
@@ -134,8 +134,8 @@ class CampMenuGUI {
                 GameStats.game.searchFunc = Array(actionList.size, { i->null}) //Initialize an array to hold the events.
 
                 ChainTask.addTaskToHourlyList(sliderTask())
-                disableButton(acceptButton)
-                disableButton(uncampButton)
+                GameScreenGUI.disableButton(acceptButton)
+                GameScreenGUI.disableButton(uncampButton)
 
                 var i =0
                 //For each set of parameters in the action list, set the search function to perform the action
@@ -163,14 +163,14 @@ class CampMenuGUI {
                 activityHourLabel.setText(activityHourSlider.value.toInt().toString())
                 //If our hour is at or below 0 -OR- our search activity is not null, disable the accept button
                 if(activityHourSlider.value.toInt() <= 0 || GameStats.game.numHoursToAdvance > 0)
-                    disableButton(acceptButton)
+                    GameScreenGUI.disableButton(acceptButton)
 
                 //Otherwise, enable it
                 else
-                    enableButton(acceptButton)
+                    GameScreenGUI.enableButton(acceptButton)
 
                 if(GameStats.game.numHoursToAdvance <= 1)
-                    enableButton(uncampButton)
+                    GameScreenGUI.enableButton(uncampButton)
             }
         })
 
@@ -184,21 +184,11 @@ class CampMenuGUI {
                     enableAcceptButton() //This will clear the red button text and error text
                     //Then, if we don't meet these conditions, disable it again
                     if (activityHourSlider.value.toInt() <= 0 || GameStats.game.numHoursToAdvance > 0)
-                        disableButton(acceptButton)
+                        GameScreenGUI.disableButton(acceptButton)
                 }
 
             }
         })
-    }
-
-    private fun enableButton(button:TextButton){
-        button.label.color.a = 1f
-        button.isDisabled = false
-    }
-
-    private fun disableButton(button:TextButton){
-        button.label.color.a = 0.5f
-        button.isDisabled = true
     }
 
     private fun enableAcceptButton(){

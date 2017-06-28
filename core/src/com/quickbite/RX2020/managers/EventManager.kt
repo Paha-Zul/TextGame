@@ -251,7 +251,7 @@ object EventManager : IResetable{
                 //Add a timer to call the event later
                 GameEventManager.addDelayedEvent(evtName, evtType, MathUtils.random(minHours, maxHours), evtPage)
             }else{
-                GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
+                GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
             }
         })
 
@@ -384,7 +384,7 @@ object EventManager : IResetable{
 
             val name = GH.checkSupplyAmount(supply, amt, oldAmt)
             if (!name.isEmpty()) {
-                GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
+                GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
 //                gameScreen.noticeEventTimer.callback = { GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent(name, "special")!!) }
 //                gameScreen.noticeEventTimer.restart()
 //                gameScreen.noticeEventTimer.start()
@@ -425,7 +425,7 @@ object EventManager : IResetable{
 
         //Called when an event finishes.
         EventManager.onEvent("forceCamp", { args ->
-            GameScreenGUI.closeEvent()
+            GameScreenGUI.closeEventGUI(false, true)
             val gameOver = GH.checkGameOverConditions()
             if(gameOver.first)
                 gameScreen.setGameOver(gameOver.second)

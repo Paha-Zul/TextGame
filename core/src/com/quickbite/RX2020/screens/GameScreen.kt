@@ -92,8 +92,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         Gdx.input.inputProcessor = multi
 
         gameInput.keyEventMap.put(Input.Keys.E, {SupplyManager.addToSupply("energy", -25f)})
-        gameInput.keyEventMap.put(Input.Keys.R, { GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)})
-        gameInput.keyEventMap.put(Input.Keys.T, {GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
+        gameInput.keyEventMap.put(Input.Keys.R, { GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)})
+        gameInput.keyEventMap.put(Input.Keys.T, {GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)})
         gameInput.keyEventMap.put(Input.Keys.Y, {GameEventManager.addDelayedEvent("Hole", "daily", MathUtils.random(1, 5).toFloat())})
 
         dailyEventTimer.callback = timerFunc("daily", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
@@ -305,7 +305,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         //If we made it to the end, we've won!
         }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
             GameStats.gameOverStatus = "won"
-            GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
+            GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
 
         //Otherwise, update everything as normal
         }else {
@@ -315,7 +315,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
             ChainTask.updateHourly(delta)
 
             if (ResultManager.recentDeathMap.isNotEmpty()) {
-                GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
+                GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
             }
 
             if (numHoursToAdvance > 0) numHoursToAdvance--
@@ -348,7 +348,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     fun setGameOver(reason:String){
         GameStats.gameOverStatus = reason
         this.state = State.GAMEOVER
-        GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
+        GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
     }
 
 
@@ -372,7 +372,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
             if(currEvent == null) Logger.log("GameScreen", "Event skipped because it was null. Tried to get $eventType event.", Logger.LogLevel.Warning)
             else //Trigger the GUI UI and send a callback to it.
-                GameScreenGUI.beginEventGUI(currEvent)
+                GameScreenGUI.openEventGUI(currEvent)
 
             timer.restart(MathUtils.random(min, max))
         }
