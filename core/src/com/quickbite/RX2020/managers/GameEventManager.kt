@@ -24,7 +24,7 @@ object GameEventManager : IUpdateable, IResetable{
 
     var lastCurrEvent:EventJson? = null //Mainly for debugging.
 
-    private val rootMap:Map<String, MutableList<String>> = hashMapOf() //For Event roots!
+    private val rootMap:MutableMap<String, MutableList<String>> = hashMapOf() //For Event roots!
     val eventMap: HashMap<String, EventJson> = HashMap() //For Json Events
 
     val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf() //A list of timers for delayed events
@@ -57,7 +57,7 @@ object GameEventManager : IUpdateable, IResetable{
 
         //If the event is a root, add it to the right list for later use.
         if(event.root){
-            rootMap.getOrElse(type, { mutableListOf()}).add(event.name)
+            rootMap.getOrPut(type, { mutableListOf()}).add(event.name)
 
         //Otherwise, add all non root events to the general use map
         }else
@@ -71,7 +71,7 @@ object GameEventManager : IUpdateable, IResetable{
      * @param seconds The seconds to wait until the event is fire.
      */
     fun addDelayedEvent(name:String, type:String, seconds:Float, page:Int = 0){
-        val timer = CustomTimer(seconds, true, { GameScreenGUI.triggerEventGUI(this.getAndSetEvent(name, type)!!, page)})
+        val timer = CustomTimer(seconds, true, { GameScreenGUI.beginEventGUI(this.getAndSetEvent(name, type)!!, page)})
         timer.userData = arrayOf(name, type, page.toString())
         delayedEventTimerList += timer
     }

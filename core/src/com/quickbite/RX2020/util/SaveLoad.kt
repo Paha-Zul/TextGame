@@ -61,7 +61,6 @@ object SaveLoad{
             save.delayedEventTimers.add(arrayOf(data[0], data[1], timer.remainingTime.toString(), data[2]))
         }
 
-
         Logger.log("SaveLoad", "Gathered game data in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
 
         return save

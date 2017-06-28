@@ -251,7 +251,7 @@ object EventManager : IResetable{
                 //Add a timer to call the event later
                 GameEventManager.addDelayedEvent(evtName, evtType, MathUtils.random(minHours, maxHours), evtPage)
             }else{
-                GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
+                GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
             }
         })
 
@@ -384,8 +384,8 @@ object EventManager : IResetable{
 
             val name = GH.checkSupplyAmount(supply, amt, oldAmt)
             if (!name.isEmpty()) {
-                GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
-//                gameScreen.noticeEventTimer.callback = { GameScreenGUI.triggerEventGUI(GameEventManager.getAndSetEvent(name, "special")!!) }
+                GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
+//                gameScreen.noticeEventTimer.callback = { GameScreenGUI.beginEventGUI(GameEventManager.getAndSetEvent(name, "special")!!) }
 //                gameScreen.noticeEventTimer.restart()
 //                gameScreen.noticeEventTimer.start()
             }

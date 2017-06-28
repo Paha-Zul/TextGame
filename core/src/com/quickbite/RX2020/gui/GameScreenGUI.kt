@@ -215,6 +215,7 @@ object GameScreenGUI{
     }
 
     fun closeCampMenu(){
+        campMenu.closeTable()
         campTable.remove()
         addCampButton()
     }
@@ -550,10 +551,10 @@ object GameScreenGUI{
     /**
      * Initially starts the event GUI
      * @param event The EventJson object to start the event
-     * @param startPage The page to start the event, or recursively call the triggerEventGUI function
+     * @param startPage The page to start the event, or recursively call the beginEventGUI function
      * @param eraseResultManagers True to erase the accumulated results of the event, false to keep them
      */
-    fun triggerEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResultManagers:Boolean = true){
+    fun beginEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResultManagers:Boolean = true){
         //If the GUI is already active, lets add it to the queue instead of going further.
         if(gameEventGUIActive) {
             guiQueue.addLast(Triple(event, startPage, eraseResultManagers))
@@ -571,7 +572,7 @@ object GameScreenGUI{
 
         game.pauseGame()
         EventInfo.eventTable.clear()
-        campButton.isDisabled = true;
+        campButton.isDisabled = true
         EventInfo.eventContainer.remove()
         EventInfo.eventContainer.clear()
         EventInfo.eventContainer.setSize(300f, 350f)
@@ -927,7 +928,7 @@ object GameScreenGUI{
             //If the queue is not empty, lets call the event gui again
             if (guiQueue.size != 0) {
                 val last = guiQueue.removeLast()
-                triggerEventGUI(last.first, last.second, last.third)
+                beginEventGUI(last.first, last.second, last.third)
             } else if (tradeWindowTable.parent == null)
                 game.resumeGame()
         }
@@ -1365,7 +1366,7 @@ object GameScreenGUI{
         saveAndQuitButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 SaveLoad.saveGame(false, game)
-                TextGame.stage.clear()
+                clear()
                 game.game.screen = MainMenuScreen(game.game)
             }
         })
@@ -1373,7 +1374,7 @@ object GameScreenGUI{
         saveAndExitButton.addListener(object:ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 SaveLoad.saveGame(false, game)
-                TextGame.stage.clear()
+                clear()
                 game.game.screen = MainMenuScreen(game.game)
                 Gdx.app.exit()
             }
@@ -1386,6 +1387,13 @@ object GameScreenGUI{
         })
 
         TextGame.stage.addActor(settingsTable)
+    }
+
+    fun clear(){
+        TextGame.stage.clear()
+        this.leftTable.clear()
+        this.rightTable.clear()
+        this.centerInfoTable.clear()
     }
 
     fun closeSettings(){
