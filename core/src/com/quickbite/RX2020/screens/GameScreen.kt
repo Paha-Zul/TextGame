@@ -20,6 +20,8 @@ import java.util.*
 
 /**
  * Created by Paha on 2/3/2016.
+ *
+ * The main game screen
  */
 class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     enum class State{
