@@ -61,6 +61,21 @@ public class AndroidLauncher extends AndroidApplication implements IPlatformSpec
 	}
 
 	@Override
+	public void setApplicationLogger(ApplicationLogger applicationLogger) {
+
+	}
+
+	@Override
+	public ApplicationLogger getApplicationLogger() {
+		return null;
+	}
+
+	@Override
+	public void onPointerCaptureChanged(boolean hasCapture) {
+
+	}
+
+	@Override
 	public void openURL(@NotNull String link) {
 //		Intent i = new Intent(Intent.ACTION_VIEW);
 //		i.setData(Uri.parse("https://play.google.com/whateveryoururlis"));

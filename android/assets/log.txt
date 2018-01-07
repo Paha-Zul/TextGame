@@ -1,0 +1,27 @@
+Starting Logger
+[Info] [AssetManager]: Took 0.01s to load art.
+[Info] [AssetManager]: Took 0.002s to load fonts.
+[Info] [AssetManager]: Took 0.0s to load texture atlases..
+[Info] [DataManager]: Took 0.01s to load items.
+[Info] [DataManager]: Took 0.132s to load events.
+[Info] [DataManager]: Took 0.01s to load names.
+[Info] [DataManager]: Took 0.008s to load rewards.
+[Info] [DataManager]: Took 0.007s to load search activities.
+[Info] [SaveLoad]: Gathered game data in 0.001602685 seconds
+[Info] [SaveLoad]: Saved game (non-threaded) in 0.015692462 seconds
+[Info] [SaveLoad]: Gathered game data in 2.46221E-4 seconds
+[Info] [SaveLoad]: Saved game (non-threaded) in 0.010262441 seconds
+[Info] [SaveLoad]: Gathered game data in 1.41064E-4 seconds
+[Info] [SaveLoad]: Saved game (threaded) in 0.010922559 seconds
+[Warning] [Shutting Down]: java.lang.Object.wait(Native Method)
+[Warning] [Shutting Down]: java.lang.Thread.join(Thread.java:1252)
+[Warning] [Shutting Down]: java.lang.Thread.join(Thread.java:1326)
+[Warning] [Shutting Down]: java.lang.ApplicationShutdownHooks.runHooks(ApplicationShutdownHooks.java:106)
+[Warning] [Shutting Down]: java.lang.ApplicationShutdownHooks$1.run(ApplicationShutdownHooks.java:46)
+[Warning] [Shutting Down]: java.lang.Shutdown.runHooks(Shutdown.java:123)
+[Warning] [Shutting Down]: java.lang.Shutdown.sequence(Shutdown.java:167)
+[Warning] [Shutting Down]: java.lang.Shutdown.exit(Shutdown.java:212)
+[Warning] [Shutting Down]: java.lang.Runtime.exit(Runtime.java:109)
+[Warning] [Shutting Down]: java.lang.System.exit(System.java:971)
+[Warning] [Shutting Down]: com.badlogic.gdx.backends.lwjgl.LwjglApplication.mainLoop(LwjglApplication.java:248)
+[Warning] [Shutting Down]: com.badlogic.gdx.backends.lwjgl.LwjglApplication$1.run(LwjglApplication.java:126)

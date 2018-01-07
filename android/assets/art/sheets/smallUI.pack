@@ -1,0 +1,187 @@
+
+smallUI.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+dropdownBackground
+  rotate: false
+  xy: 1, 213
+  size: 300, 25
+  orig: 300, 25
+  offset: 0, 0
+  index: -1
+nextButton
+  rotate: false
+  xy: 1, 83
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+nextButtonWhite
+  rotate: false
+  xy: 131, 83
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+slider
+  rotate: false
+  xy: 1, 31
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+sliderLight
+  rotate: false
+  xy: 303, 188
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+sliderWhite
+  rotate: false
+  xy: 505, 188
+  size: 200, 50
+  orig: 200, 50
+  offset: 0, 0
+  index: -1
+nextButtonWhiteLeft
+  rotate: false
+  xy: 261, 58
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 391, 58
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 521, 58
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+bar
+  rotate: false
+  xy: 1, 4
+  size: 150, 25
+  orig: 150, 25
+  offset: 0, 0
+  index: -1
+buttonBackground
+  rotate: false
+  xy: 707, 188
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+femaleGender
+  rotate: false
+  xy: 651, 122
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+maleGender
+  rotate: false
+  xy: 717, 122
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+medkit
+  rotate: false
+  xy: 651, 56
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+medkitDisabled
+  rotate: false
+  xy: 717, 56
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+numPadButton
+  rotate: false
+  xy: 809, 174
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+repair
+  rotate: false
+  xy: 875, 174
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+repairDisabled
+  rotate: false
+  xy: 941, 174
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+scrollKnob
+  rotate: false
+  xy: 1007, 206
+  size: 16, 32
+  orig: 16, 32
+  offset: 0, 0
+  index: -1
+pixel
+  rotate: false
+  xy: 261, 188
+  size: 23, 23
+  orig: 23, 23
+  offset: 0, 0
+  index: -1
+scrollBar
+  rotate: false
+  xy: 203, 49
+  size: 8, 32
+  orig: 8, 32
+  offset: 0, 0
+  index: -1
+sliderKnob
+  rotate: false
+  xy: 153, 5
+  size: 4, 24
+  orig: 4, 24
+  offset: 0, 0
+  index: -1
+sliderKnobWhite
+  rotate: false
+  xy: 783, 162
+  size: 4, 24
+  orig: 4, 24
+  offset: 0, 0
+  index: -1
+darkPixel
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+pixelBlack
+  rotate: false
+  xy: 1007, 203
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+pixelWhite
+  rotate: false
+  xy: 286, 210
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

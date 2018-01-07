@@ -1,14 +1,15 @@
 buildscript {
-    ext.kotlin_version = '1.0.0'
+    ext.kotlin_version = '1.2.10'
 
     repositories {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
+//        google()
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-        classpath 'com.android.tools.build:gradle:1.5.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'org.robovm:robovm-gradle-plugin:1.12.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
@@ -21,12 +22,11 @@ allprojects {
     version = '1.0'
     ext {
         appName = "RX-2020"
-        gdxVersion = '1.9.2'
+        gdxVersion = '1.9.8'
         roboVMVersion = '1.12.0'
         box2DLightsVersion = '1.4'
         ashleyVersion = '1.7.0'
         aiVersion = '1.7.0'
-        kotlin_version = '1.0.0'
         lib_version = '1.5'
     }
 
@@ -45,10 +45,10 @@ project(":desktop") {
         compile project(":core")
 //        compile files('../libs/gdx-backend-jglfw.jar')
 //        compile files('../libs/gdx-tools.jar')
-        compile files('../libs/gdx.jar')
+//        compile files('../libs/gdx.jar')
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-//        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }
@@ -62,9 +62,9 @@ project(":android") {
     dependencies {
         compile project(":core")
         compile project(":BaseGameUtils")
-        compile files('../libs/gdx.jar')
-        compile files('../libs/gdx-backend-android.jar')
-//        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+//        compile files('../libs/gdx.jar')
+//        compile files('../libs/gdx-backend-android.jar')
+        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
@@ -75,7 +75,6 @@ project(":ios") {
     apply plugin: "java"
     apply plugin: "robovm"
 
-
     dependencies {
         compile project(":core")
         compile "org.robovm:robovm-rt:$roboVMVersion"
@@ -85,39 +84,39 @@ project(":ios") {
     }
 }
 
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-        //This crap below apparently breaks everything
-//        compile "com.kotcrab.vis:vis-ui:0.9.4:sources"
-//        compile "com.kotcrab.vis:vis-runtime-gwt:0.3.0"
-//        compile "com.kotcrab.vis:vis-runtime-gwt:0.3.0:sources"
-//        compile "com.kotcrab.vis:vis-runtime:0.3.0:sources"
-        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2:sources"
-        compile "com.github.czyzby:gdx-kiwi:$lib_version.$gdxVersion"
-        compile "com.github.czyzby:gdx-lml-vis:$lib_version.$gdxVersion"
-        compile "net.onedaybeard.artemis:artemis-odb-gwt:1.3.1"
-        compile "net.onedaybeard.artemis:artemis-odb-gwt:1.3.1:sources"
-        compile "net.onedaybeard.artemis:artemis-odb:1.3.1:sources"
-    }
-}
+//project(":html") {
+//    apply plugin: "gwt"
+//    apply plugin: "war"
+//
+//    dependencies {
+//        compile project(":core")
+//        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
+//        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
+//        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
+//        //This crap below apparently breaks everything
+////        compile "com.kotcrab.vis:vis-ui:0.9.4:sources"
+////        compile "com.kotcrab.vis:vis-runtime-gwt:0.3.0"
+////        compile "com.kotcrab.vis:vis-runtime-gwt:0.3.0:sources"
+////        compile "com.kotcrab.vis:vis-runtime:0.3.0:sources"
+//        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2:sources"
+//        compile "com.github.czyzby:gdx-kiwi:$lib_version.$gdxVersion"
+//        compile "com.github.czyzby:gdx-lml-vis:$lib_version.$gdxVersion"
+//        compile "net.onedaybeard.artemis:artemis-odb-gwt:1.3.1"
+//        compile "net.onedaybeard.artemis:artemis-odb-gwt:1.3.1:sources"
+//        compile "net.onedaybeard.artemis:artemis-odb:1.3.1:sources"
+//    }
+//}
 
 project(":core") {
     apply plugin: "java"
     apply plugin: 'kotlin'
 
     dependencies {
-        compile files('../libs/gdx.jar')
-//        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+//        compile files('../libs/gdx.jar')
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.kotcrab.vis:vis-ui:0.9.4"
         compile "com.kotcrab.vis:vis-runtime:0.3.0"
-//        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
+        compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     }
 }

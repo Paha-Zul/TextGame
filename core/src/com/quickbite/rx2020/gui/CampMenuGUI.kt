@@ -298,8 +298,8 @@ class CampMenuGUI {
         GameScreenGUI.campMenu.selectBox.items = list
         GameScreenGUI.campMenu.selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
 
-        GameScreenGUI.campMenu.selectBox.setSelectedAlignment(Align.center)
-        GameScreenGUI.campMenu.selectBox.list.setListAlignment(Align.center)
+        GameScreenGUI.campMenu.selectBox.setAlignment(Align.center)
+        GameScreenGUI.campMenu.selectBox.list.setAlignment(Align.center)
         return GameScreenGUI.campMenu.selectBox
     }
 
