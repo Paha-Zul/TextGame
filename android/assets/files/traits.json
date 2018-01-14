@@ -57,17 +57,50 @@
     },
     {
       "name": "1",
-      "affects": "ROV max health",
+      "affects": "travel speed",
       "amount": "5"
     },
     {
       "name": "1",
-      "affects": "ROV max health",
+      "affects": "damage done to survivor health",
       "amount": "5"
     },
     {
       "name": "1",
-      "affects": "ROV max health",
+      "affects": "damage done to ROV health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "damage done to ROV health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "effects": [{
+        "affects": "damage done to ROV health",
+        "amount": "5"
+      }]
+      
+    },
+    {
+      "name": "1",
+      "affects": "damage done to ROV spare parts health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "damage done to ROV health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "damage done to ROV health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "damage done to ROV health",
       "amount": "5"
     }
   ]
