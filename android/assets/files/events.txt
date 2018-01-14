@@ -1,0 +1,25 @@
+addHealth - name min max perc numpeople randomPerPerson
+addAilment - name type level
+removeAilment -name type
+addRndAmt - min max supplyName perPerson chance
+addRndItem - min max chance list
+addRndItemHealth - min max chance supplyList
+alterSupplies - size lose
+reward - size
+scheduleEvent - evtName minHours maxHours evtType evtPage
+rest - amt chance
+addHealthRov - min max chance
+damageRov - min max chance
+repairROV - min max chance
+cutMiles - min max
+wait - min max
+openTrade - 
+death - person
+showDeaths - 
+healthChanged - person amt
+supplyChanged - supply amt oldAmt
+supplyHealthChanged - supply amt oldAmt
+eventStarted - name
+eventFinished - name
+forceCamp - 
+gameOver - win
