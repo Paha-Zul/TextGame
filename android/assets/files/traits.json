@@ -1,0 +1,74 @@
+{
+  "professions": [
+    {
+      "name": "1",
+      "affects": "energy",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "edibles",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "parts",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "crystals",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "medkits",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "wealth",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "ROV parts",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "survivor max health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "ROV max health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "ROV part max health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "distance lost",
+      "amount": "-5"
+    },
+    {
+      "name": "1",
+      "affects": "ROV max health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "ROV max health",
+      "amount": "5"
+    },
+    {
+      "name": "1",
+      "affects": "ROV max health",
+      "amount": "5"
+    }
+  ]
+}
