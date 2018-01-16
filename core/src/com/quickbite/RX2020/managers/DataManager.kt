@@ -147,11 +147,27 @@ object DataManager{
         var name:String = ""
         var abbrName:String = ""
         var displayName:String = ""
+        var type:String = ""
         var max:Int = 0
         var worth:Array<Int>? = null
         var perMember:Boolean = false
         var randStartAmt:Array<Int>? = null
         var affectedByHealth:Boolean = false
+    }
+
+    class TraitJson{
+        var name:String = ""
+        lateinit var effects:Array<TraitEffectJson>
+    }
+
+    class TraitEffectJson{
+        var affects:String = ""
+        var scope:String = ""
+        var subType:String = ""
+        var subName:String = ""
+        var subCommand:String = ""
+        var amount:Float = 0.0f
+        var percent = true
     }
 
     class SearchActivityJSON(){

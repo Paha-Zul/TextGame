@@ -151,7 +151,7 @@ object EventManager : IResetable{
             FunGameStats.addFunStat("Ailments Cured: ", "1")
         })
 
-        //Adds a random amount of an item.
+        //Adds a random amount of an item. This specifically chooses from all items that are available
         EventManager.onEvent("addRndAmt", {args ->
             try{
                 val min:Float = (args[0] as String).toFloat() //The min amt
@@ -162,12 +162,11 @@ object EventManager : IResetable{
 
                 val rand = MathUtils.random(100)
                 if(rand <= chance) {
-                    var num = MathUtils.random(Math.abs(min), Math.abs(max))
-                    if (min < 0 || max < 0) num = -num
-                    if(perPerson) num *= GroupManager.numPeopleAlive
+                    var amount = MathUtils.random(Math.abs(min), Math.abs(max))
+                    if (min < 0 || max < 0) amount = -amount
+                    if(perPerson) amount *= GroupManager.numPeopleAlive
 
-                    SupplyManager.addToSupply(supplyName, num.toFloat())
-                    FunGameStats.addFunStat("$supplyName", num.toInt().toString())
+                    addItemAmount(supplyName, amount, "")
                 }
 
                 GameScreenGUI.updateSuppliesGUI()
@@ -177,7 +176,7 @@ object EventManager : IResetable{
             }
         })
 
-        //Adds a random item to the supply.
+        //Adds a random item to the supply. This specifically chooses from a list of items passed in
         EventManager.onEvent("addRndItem", {args ->
             try {
                 val min: Float = (args[0] as String).toFloat()
@@ -187,12 +186,11 @@ object EventManager : IResetable{
 
                 if(MathUtils.random(100) <= chance) {
                     val randomSupply = list[MathUtils.random(list.size - 1)] as String
-                    var num = MathUtils.random(Math.abs(min), Math.abs(max))
+                    var amount = MathUtils.random(Math.abs(min), Math.abs(max))
 
-                    if (min < 0 || max < 0) num = -num
-                    SupplyManager.addToSupply(randomSupply, num.toFloat())
+                    if (min < 0 || max < 0) amount = -amount
 
-                    FunGameStats.addFunStat("$randomSupply", num.toInt().toString())
+                    addItemAmount(randomSupply, amount, "")
                 }
 
                 GameScreenGUI.updateSuppliesGUI()
@@ -472,6 +470,19 @@ object EventManager : IResetable{
 
             ChainTask.addTaskToEveryFrameList(task)
         })
+    }
+
+    /**
+     * Any adding or removing of any type of item through events is done through here.
+     * @param itemName The name of the item
+     * @param amount The amount of the item
+     * @param person The name of the person that found the item (for any modifiers). Optional
+     */
+    private fun addItemAmount(itemName:String, amount:Float, person:String = ""){
+        val itemDef = DataManager.getItem(itemName)
+
+        SupplyManager.addToSupply(itemName, amount)
+        FunGameStats.addFunStat(itemName, amount.toString())
     }
 
     override fun reset() {

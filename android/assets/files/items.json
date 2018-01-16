@@ -1,12 +1,12 @@
 [
-  {"name": "energy", "abbrName": "Energy", "displayName":"Energy", "max":200, "worth": [1, 10], "randStartAmt": [1, 100]},
-  {"name": "edibles", "abbrName": "Edibles","displayName":"Edibles", "max":250, "perMember": true, "worth": [1, 10], "randStartAmt": [75, 225]},
-  {"name": "parts", "abbrName": "Parts","displayName":"Parts", "max":250, "worth": [1, 10], "randStartAmt": [50, 150]},
-  {"name": "medkits", "abbrName": "Med-kits", "displayName":"Med-kits", "max":10, "worth": [1, 10], "randStartAmt": [0, 5]},
-  {"name": "wealth", "abbrName": "Wealth", "displayName":"Wealth", "max":250, "worth": [1, 10], "randStartAmt": [1, 100]},
-  {"name": "ammo", "abbrName": "Ammo", "displayName":"Ammo", "max":250, "worth": [1, 10], "randStartAmt": [50, 150]},
-  {"name": "panel", "abbrName": "Sol. Pan.", "displayName":"Solar Panels", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
-  {"name": "track", "abbrName": "Tracks", "displayName":"Tracks", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
-  {"name": "battery", "abbrName": "Batt.", "displayName":"Battery", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
-  {"name": "storage", "abbrName": "Storage", "displayName":"Storage", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]}
+  {"name": "energy", "abbrName": "Energy", "displayName":"Energy", "type": "supply", "max":200, "worth": [1, 10], "randStartAmt": [1, 100]},
+  {"name": "edibles", "abbrName": "Edibles","displayName":"Edibles", "type": "supply", "max":250, "perMember": true, "worth": [1, 10], "randStartAmt": [75, 225]},
+  {"name": "parts", "abbrName": "Parts","displayName":"Parts", "type": "supply", "max":250, "worth": [1, 10], "randStartAmt": [50, 150]},
+  {"name": "medkits", "abbrName": "Med-kits", "displayName":"Med-kits", "type": "supply", "max":10, "worth": [1, 10], "randStartAmt": [0, 5]},
+  {"name": "wealth", "abbrName": "Wealth", "displayName":"Wealth", "type": "supply", "max":250, "worth": [1, 10], "randStartAmt": [1, 100]},
+  {"name": "ammo", "abbrName": "Ammo", "displayName":"Ammo", "type": "supply", "max":250, "worth": [1, 10], "randStartAmt": [50, 150]},
+  {"name": "panel", "abbrName": "Sol. Pan.", "displayName":"Solar Panels", "type": "ROVPart", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
+  {"name": "track", "abbrName": "Tracks", "displayName":"Tracks", "type": "ROVPart", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
+  {"name": "battery", "abbrName": "Batt.", "displayName":"Battery", "type": "ROVPart", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]},
+  {"name": "storage", "abbrName": "Storage", "displayName":"Storage", "type": "ROVPart", "max":5, "worth": [25, 75], "randStartAmt": [0, 2]}
 ]
