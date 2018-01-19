@@ -479,10 +479,32 @@ object EventManager : IResetable{
      * @param person The name of the person that found the item (for any modifiers). Optional
      */
     private fun addItemAmount(itemName:String, amount:Float, person:String = ""){
-        val itemDef = DataManager.getItem(itemName)
+        var amount = amount //Make this mutable
+        val itemDef = DataManager.getItem(itemName)!!
+
+        if(itemDef.type != "ROVPart")
+            TraitManager.getTraitModifier("addRndAmt", itemName)
+        else
+            TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type)
 
         SupplyManager.addToSupply(itemName, amount)
         FunGameStats.addFunStat(itemName, amount.toString())
+    }
+
+    private fun getModifierAmount(name:String, personName:String = ""):Float{
+        val peopleList = GroupManager.getPeopleList()
+        var modifier = 0f
+
+        //TODO Might want a better way to do this...
+        peopleList.forEach { it.traitList.forEach { t ->
+            t.traitDef.effects.forEach { e ->
+                if(e.affects == name){
+                    modifier += e.amount
+                }
+            }
+        } }
+
+        return 0f
     }
 
     override fun reset() {

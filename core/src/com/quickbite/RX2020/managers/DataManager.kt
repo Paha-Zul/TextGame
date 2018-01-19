@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
 import com.quickbite.rx2020.shuffle
+import com.quickbite.rx2020.tests.TraitTest
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Reward
 import java.util.*
@@ -18,12 +19,16 @@ object DataManager{
 
     private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
 
+    lateinit var traitList:TraitList
+        private set
+
     var eventDir:FileHandle? = null
     var itemsDir:FileHandle? = null
     var namesDir:FileHandle? = null
     var activitiesDir:FileHandle? = null
     var rewardsDir:FileHandle? = null
     var endDir:FileHandle? = null
+    var traitsDir:FileHandle? = null
 
     private var tick = 0
 
@@ -46,11 +51,18 @@ object DataManager{
             3 -> loadRandomNames(namesDir!!)
             4 -> loadRewards(rewardsDir!!)
             5 -> {loadSearchActivities(activitiesDir!!)}
-            6 -> return true;
+            6 -> loadTraits(traitsDir!!)
+            7-> runTests()
+            8 -> return true
         }
 
         tick++;
         return false
+    }
+
+    private fun runTests(){
+        println("Testing")
+        TraitTest.test()
     }
 
     private fun loadEvents(dir:FileHandle){
@@ -124,6 +136,10 @@ object DataManager{
         this.end = json.fromJson(EndJSON::class.java, file)
     }
 
+    private fun loadTraits(file:FileHandle){
+        this.traitList = json.fromJson(TraitList::class.java, file)
+    }
+
     fun pullRandomName():Triple<String, String, Boolean>{
         var firstName = ""
         val male = MathUtils.random(0, 100) > 50
@@ -155,17 +171,25 @@ object DataManager{
         var affectedByHealth:Boolean = false
     }
 
+    class TraitList{
+        var professions:Array<TraitJson> = arrayOf()
+    }
+
     class TraitJson{
         var name:String = ""
-        lateinit var effects:Array<TraitEffectJson>
+        var effects:Array<TraitEffectJson> = arrayOf()
+
+        override fun toString(): String {
+            return name
+        }
     }
 
     class TraitEffectJson{
-        var affects:String = ""
-        var scope:String = ""
-        var subType:String = ""
-        var subName:String = ""
-        var subCommand:String = ""
+        var affects:String? = null
+        var scope:String? = null
+        var subType:String? = null
+        var subName:String? = null
+        var subCommand:String? = null
         var amount:Float = 0.0f
         var percent = true
     }

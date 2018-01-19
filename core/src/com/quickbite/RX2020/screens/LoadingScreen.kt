@@ -104,5 +104,6 @@ class LoadingScreen(val game: TextGame): Screen {
         DataManager.rewardsDir=Gdx.files.internal("files/rewards.json")
         DataManager.itemsDir=Gdx.files.internal("files/items.json")
         DataManager.endDir=Gdx.files.internal("files/end.json")
+        DataManager.traitsDir=Gdx.files.internal("files/traits.json")
     }
 }

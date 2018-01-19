@@ -63,6 +63,9 @@ object GroupManager : IUpdateable, IResetable {
         }
     }
 
+    /**
+     * Returns a list of people (makes a copy of the list)
+     */
     fun getPeopleList():Array<Person> = list.toTypedArray()
 
     fun getPerson(name:String): Person?{

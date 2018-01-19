@@ -6,201 +6,319 @@
         "affects": "addRndAmt",
         "scope": "global",
         "subName": "energy",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "2",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "global",
         "subName": "edibles",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "3",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "global",
         "subName": "parts",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "4",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "global",
         "subName": "crystals",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "5",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "global",
         "subName": "medkits",
-        "amount": ".5",
+        "amount": 0.5,
         "percent": false
       }]
     },
     {
-      "name": "1",
+      "name": "6",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "global",
         "subName": "wealth",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "7",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "global",
         "subType": "ROVParts",
-        "amount": ".5",
+        "amount": 0.5,
         "percent": false
       }]
     },
     {
-      "name": "1",
+      "name": "8",
       "effects": [{
         "affects": "survivorMaxHP",
         "scope": "global",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "9",
       "effects": [{
         "affects": "ROVMaxHP",
         "scope": "global",
-        "amount": "5"
+        "amount": 5
       }]
     },
     {
-      "name": "1",
+      "name": "10",
       "effects": [{
         "affects": "cutMiles",
         "scope": "global",
-        "amount": "-5"
+        "amount": -5
       }]
 
     },
     {
-      "name": "1",
+      "name": "11",
       "effects": [{
         "affects": "travelSpeed",
         "scope": "global",
-        "amount": ".5",
+        "amount": 0.5,
         "percent": false
       }]
 
     },
     {
-      "name": "1",
+      "name": "12",
       "effects": [{
         "affects": "addHealth",
         "scope": "global",
         "subCommand":"remove",
-        "amount": "-5"
+        "amount": -5
       }]
 
     },
     {
-      "name": "1",
+      "name": "13",
       "effects": [{
         "affects": "damageROV",
         "scope": "global",
-        "amount": "-5"
+        "amount": -5
       }]
 
     },
     {
-      "name": "1",
+      "name": "14",
       "effects": [{
         "affects": "addRndItemHealth",
         "scope": "global",
         "subType": "ROVPart",
         "subCommand":"remove",
-        "amount": "-5"
+        "amount": -5
       }]
 
     },
     {
-      "name": "1",
+      "name": "15",
       "effects": [{
         "affects": "addAilment",
         "scope": "global",
         "subCommand": "duration",
-        "amount": "-5"
+        "amount": -5
       }]
     },
     {
-      "name": "1",
+      "name": "16",
       "effects": [{
         "affects": "addAilment",
         "scope": "global",
         "subCommand": "damage",
-        "amount": "-5"
+        "amount": -5
       }]
     },
     {
-      "name": "1",
+      "name": "17",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "individual",
         "subName": "energy",
-        "amount": "10"
+        "amount": 10
       }]
     },
     {
-      "name": "1",
+      "name": "18",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "individual",
         "subName": "parts",
-        "amount": "10"
+        "amount": 10
       }]
     },
     {
-      "name": "1",
+      "name": "19",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "individual",
         "subName": "crystals",
-        "amount": "10"
+        "amount": 10
       }]
     },
     {
-      "name": "1",
+      "name": "20",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "individual",
         "subName": "medkits",
-        "amount": "10"
+        "amount": 1,
+        "percent": false
       }]
     },
     {
-      "name": "1",
+      "name": "21",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "individual",
         "subName": "wealth",
-        "amount": "10"
+        "amount": 10
       }]
     },
     {
-      "name": "1",
+      "name": "22",
       "effects": [{
         "affects": "addRndAmt",
         "scope": "individual",
         "subType": "ROVPart",
-        "amount": "1",
+        "amount": 1,
         "percent": false
+      }]
+    },
+    {
+      "name": "23",
+      "effects": [{
+        "affects": "survivorMaxHP",
+        "scope": "individual",
+        "amount": 10
+      }]
+    },
+    {
+      "name": "24",
+      "effects": [{
+        "affects": "ROVMaxHP",
+        "scope": "individual",
+        "amount": 10
+      }]
+    },
+    {
+      "name": "25",
+      "effects": [{
+        "affects": "ROVPartsMaxHP",
+        "scope": "individual",
+        "amount": 10
+      }]
+    },
+    {
+      "name": "26",
+      "effects": [{
+        "affects": "cutMiles",
+        "scope": "individual",
+        "amount": -10
+      }]
+    },
+    {
+      "name": "27",
+      "effects": [{
+        "affects": "travelSpeed",
+        "scope": "individual",
+        "amount": 1,
+        "percent": false
+      }]
+    },
+    {
+      "name": "28",
+      "effects": [{
+        "affects": "addHealth",
+        "scope": "individual",
+        "subCommand": "remove",
+        "amount": 10
+      }]
+    },
+    {
+      "name": "29",
+      "effects": [{
+        "affects": "addRndItemHealth",
+        "scope": "individual",
+        "subType": "ROVPart",
+        "subCommand":"remove",
+        "amount": -10
+      }]
+    },
+    {
+      "name": "30",
+      "effects": [{
+        "affects": "addAilment",
+        "scope": "individual",
+        "subCommand":"duration",
+        "amount": -10
+      }]
+    },
+    {
+      "name": "31",
+      "effects": [{
+        "affects": "addAilment",
+        "scope": "individual",
+        "subCommand":"damage",
+        "amount": -10
+      }]
+    },
+    {
+      "name": "Lone Survivor",
+      "effects": [{
+        "affects": "addRndAmt",
+        "subName": "energy",
+        "scope": "individual",
+        "amount": 5
+      },{
+        "affects": "addRndAmt",
+        "subName": "edibles",
+        "scope": "individual",
+        "amount": 5
+      },{
+        "affects": "addRndAmt",
+        "subName": "parts",
+        "scope": "individual",
+        "amount": 5
+      },{
+        "affects": "addRndAmt",
+        "subName": "crystals",
+        "scope": "individual",
+        "amount": 5
+      },{
+        "affects": "addRndAmt",
+        "subName": "wealth",
+        "scope": "individual",
+        "amount": 5
+      },{
+        "affects": "addRndAmt",
+        "subName": "medkits",
+        "scope": "individual",
+        "amount": 0.5
+      },{
+        "affects": "addRndAmt",
+        "subType": "ROVParts",
+        "scope": "individual",
+        "amount": 0.5
       }]
     }
   ]
