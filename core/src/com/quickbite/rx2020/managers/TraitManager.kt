@@ -47,6 +47,15 @@ object TraitManager {
         }
     }
 
+    /**
+     * Gets the modifier amount from a trait retrieved by the input parameter
+     * @param affects
+     * @param subName
+     * @param subType
+     * @param subCommand
+     * @param person
+     * @return Returns a pair with the
+     */
     fun getTraitModifier(affects:String, subName:String? = null, subType:String? = null, subCommand:String? = null, person:String? = null):Pair<Float, Boolean>{
         val key2 = subName ?: subType ?: subCommand ?: affects
 

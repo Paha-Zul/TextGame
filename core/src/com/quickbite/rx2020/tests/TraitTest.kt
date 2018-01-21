@@ -33,6 +33,10 @@ object TraitTest {
         printDataFromMaps()
 
         System.out.println("-- Done Testing Traits --")
+
+        //Clear these both to make sure nothing gets stuck in here after testing
+        TraitManager.individualTraitMap.clear()
+        TraitManager.globalTraitMap.clear()
     }
 
     private fun printDataFromMaps(){

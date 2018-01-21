@@ -482,10 +482,13 @@ object EventManager : IResetable{
         var amount = amount //Make this mutable
         val itemDef = DataManager.getItem(itemName)!!
 
-        if(itemDef.type != "ROVPart")
+        var modifier = if(itemDef.type != "ROVPart")
             TraitManager.getTraitModifier("addRndAmt", itemName)
         else
             TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type)
+
+        if(modifier.second)
+
 
         SupplyManager.addToSupply(itemName, amount)
         FunGameStats.addFunStat(itemName, amount.toString())
