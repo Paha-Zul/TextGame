@@ -478,16 +478,19 @@ object EventManager : IResetable{
      * @param amount The amount of the item
      * @param person The name of the person that found the item (for any modifiers). Optional
      */
-    private fun addItemAmount(itemName:String, amount:Float, person:String = ""){
+    private fun addItemAmount(itemName:String, amount:Float, person:String? = null){
         var amount = amount //Make this mutable
         val itemDef = DataManager.getItem(itemName)!!
 
         var modifier = if(itemDef.type != "ROVPart")
-            TraitManager.getTraitModifier("addRndAmt", itemName)
+            TraitManager.getTraitModifier("addRndAmt", itemName, person)
         else
-            TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type)
+            TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type, person)
 
         if(modifier.second)
+            amount += amount*(modifier/100f)
+        else
+            amount += modifier
 
 
         SupplyManager.addToSupply(itemName, amount)
