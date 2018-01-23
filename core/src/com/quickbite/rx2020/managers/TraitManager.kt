@@ -40,7 +40,7 @@ object TraitManager {
 
             //Call a listener here when removing a trait. If we have a trait that affects maxHP or something
             //then we need to modify the values here.
-            callListener(t.affects+key2)
+            callListener(traitEffect.affects+key2)
 
             //Get the value from the inner map
             var value = innerMap.getOrElse(key2, {MutablePair(0f, trait)})
@@ -60,7 +60,7 @@ object TraitManager {
     }
 
     private fun callListener(key:String){
-        listeners.get(key)?.forEach{it.invoke()}
+        listeners[key]?.forEach{it.invoke()}
     }
 
     /**
@@ -88,7 +88,7 @@ object TraitManager {
     }
 
     fun addListener(name:String, subName:String, listener:()->Unit):()->Unit{
-        listeners.getOrPut(name+subName, listeners)
+        listeners.getOrPut(name+subName, { mutableListOf(listener)})
         return listener
     }
 }
