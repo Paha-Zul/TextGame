@@ -294,9 +294,7 @@ object EventManager : IResetable{
             val rand = MathUtils.random(1, 100)
             if(rand <= chance) {
                 val amt = -MathUtils.random(min, max)
-                ROVManager.addHealthROV(amt)
-
-                FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
+                changeHealthROV("damageROV", amt)
             }
         })
 
@@ -309,8 +307,7 @@ object EventManager : IResetable{
             if(MathUtils.random(100) <= chance) {
                 val amt = MathUtils.random(min, max)
 
-                ROVManager.addHealthROV(amt)
-                FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
+                changeHealthROV("repairROV", amt)
             }
         })
 
@@ -497,20 +494,10 @@ object EventManager : IResetable{
         FunGameStats.addFunStat(itemName, amount.toString())
     }
 
-    private fun getModifierAmount(name:String, personName:String = ""):Float{
-        val peopleList = GroupManager.getPeopleList()
-        var modifier = 0f
-
-        //TODO Might want a better way to do this...
-        peopleList.forEach { it.traitList.forEach { t ->
-            t.traitDef.effects.forEach { e ->
-                if(e.affects == name){
-                    modifier += e.amount
-                }
-            }
-        } }
-
-        return 0f
+    fun changeHealthROV(command:String, amt:Float){
+        val modifier = TraitManager.getTraitModifier(command)
+        ROVManager.addHealthROV(amt + amt*(modifier.first/100f))
+        FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
     }
 
     override fun reset() {
