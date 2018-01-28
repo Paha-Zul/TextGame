@@ -24,6 +24,7 @@ object GroupManager : IUpdateable, IResetable {
         get() = list.size
 
     fun init(){
+        //TODO Should this logic really be in the init function? Maybe move it to a more main area?
         list.clear()
         val maxHealth = if(Tester.TESTING) 1000000f else 100f
         val range = MathUtils.random(0,4) + 4 //4 - 8
@@ -32,7 +33,13 @@ object GroupManager : IUpdateable, IResetable {
 
         for(i in 0.rangeTo(range-1)) {
             val triple = DataManager.pullRandomName()
-            list.add(Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third, 0))
+            //Make a person
+            val person = Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third, 0)
+            //Get a random profession
+            val randomProfession = Datamanager.traitList[MathUtils.random(DataManager.traitList.size-1)]
+            person.traitList += Trait(ranfomProfession, 0f, 0f) //Add a random profession
+            TraitManager.addTrait(randomProfession, person.name) //Add it into the trait manager
+            list.add(person) //Add the person
         }
     }
 

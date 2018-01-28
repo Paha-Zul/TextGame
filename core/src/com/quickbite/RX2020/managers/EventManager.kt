@@ -349,6 +349,11 @@ object EventManager : IResetable{
             val person = args[0] as Person
 
             GameScreenGUI.buildGroupTable()
+            
+            //Remove all the traits from the manager when a person dies
+            person.traitList.foreach { trait ->
+                TraitManager.removeTrait(trait.traitDef, person.name)
+            }
 
             ResultManager.addRecentDeath(person)
             FunGameStats.addFunStat(person.fullName, "dead", true)
