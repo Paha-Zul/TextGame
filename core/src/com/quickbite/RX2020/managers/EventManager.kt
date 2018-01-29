@@ -351,8 +351,8 @@ object EventManager : IResetable{
             GameScreenGUI.buildGroupTable()
             
             //Remove all the traits from the manager when a person dies
-            person.traitList.foreach { trait ->
-                TraitManager.removeTrait(trait.traitDef, person.name)
+            person.traitList.forEach { trait ->
+                TraitManager.removeTrait(trait.traitDef, person.firstName)
             }
 
             ResultManager.addRecentDeath(person)
@@ -487,12 +487,12 @@ object EventManager : IResetable{
         var modifier = if(itemDef.type != "ROVPart")
             TraitManager.getTraitModifier("addRndAmt", itemName, person)
         else
-            TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type, person)
+            TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type, person = person)
 
-        if(modifier.second)
-            amount += amount*(modifier/100f)
+        amount += if(modifier.second)
+            amount*(modifier.first/100f)
         else
-            amount += modifier
+            modifier.first
 
 
         SupplyManager.addToSupply(itemName, amount)

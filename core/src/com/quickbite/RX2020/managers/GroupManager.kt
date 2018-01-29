@@ -7,6 +7,7 @@ import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Tester
+import com.quickbite.rx2020.util.Trait
 
 /**
  * Created by Paha on 2/8/2016.
@@ -36,9 +37,10 @@ object GroupManager : IUpdateable, IResetable {
             //Make a person
             val person = Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third, 0)
             //Get a random profession
-            val randomProfession = Datamanager.traitList[MathUtils.random(DataManager.traitList.size-1)]
-            person.traitList += Trait(ranfomProfession, 0f, 0f) //Add a random profession
-            TraitManager.addTrait(randomProfession, person.name) //Add it into the trait manager
+            val professions = DataManager.traitList.professions
+            val randomProfession = professions[MathUtils.random(professions.size-1)]
+            person.traitList += Trait(randomProfession, 0f, 0f) //Add a random profession
+            TraitManager.addTrait(randomProfession, person.firstName) //Add it into the trait manager
             list.add(person) //Add the person
         }
     }
