@@ -78,10 +78,14 @@ object EventManager : IResetable{
                         amt = MathUtils.random(Math.abs(min), Math.abs(max))
                         if (min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
                     }
+
+                    val modifier = TraitManager.getTraitModifier("addHealth", subCommand = "remove")
+                    val multiplier = modifier.first/100f
+
                     if (perc)
-                        person.addPercentHealth(amt.toFloat()).toInt()
+                        person.addPercentHealth(amt.toFloat() + multiplier).toInt()
                     else
-                        person.addHealth(amt.toFloat()).toInt()
+                        person.addHealth(amt.toFloat() + amt.toFloat()*multiplier).toInt()
 
                     FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
                 }
@@ -306,7 +310,6 @@ object EventManager : IResetable{
 
             if(MathUtils.random(100) <= chance) {
                 val amt = MathUtils.random(min, max)
-
                 changeHealthROV("repairROV", amt)
             }
         })
@@ -491,16 +494,15 @@ object EventManager : IResetable{
 
         amount += if(modifier.second)
             amount*(modifier.first/100f)
-        else
-            modifier.first
-
-
-        SupplyManager.addToSupply(itemName, amount)
-        FunGameStats.addFunStat(itemName, amount.toString())
+        elsent.toString())
     }
 
     fun changeHealthROV(command:String, amt:Float){
-        val modifier = TraitManager.getTraitModifier(command)
+        val modifier = TraitManager.getTraitModifier
+            modifier.first
+
+        SupplyManager.addToSupply(itemName, amount)
+        FunGameStats.addFunStat(itemName, amou(command)
         ROVManager.addHealthROV(amt + amt*(modifier.first/100f))
         FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
     }
