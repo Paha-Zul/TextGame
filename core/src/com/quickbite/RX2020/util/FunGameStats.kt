@@ -27,7 +27,7 @@ object FunGameStats : IResetable{
         //Otherwise, get the stat and increment it.
         else {
             var stat = statsMap.getOrPut(desc, { "0" })
-            stat = (stat.toInt() + value.toInt()).toString()
+            stat = (stat.toFloat() + value.toFloat()).toString()
             statsMap.put(desc, stat)
         }
     }

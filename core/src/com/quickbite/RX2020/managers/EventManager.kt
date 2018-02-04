@@ -61,6 +61,7 @@ object EventManager : IResetable{
             var numPeople = if(args.count() >= 5) ((args[4]) as String).toInt() else 1
             val randomPerPerson = if(args.count() >= 6) ((args[5]) as String).toBoolean() else false
 
+            //Set how many people to affect. If -1, affect all people
             if(numPeople == -1) numPeople = GroupManager.numPeopleAlive
             numPeople.clamp(0, GroupManager.numPeopleAlive)
 
@@ -492,17 +493,25 @@ object EventManager : IResetable{
         else
             TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type, person = person)
 
-        amount += if(modifier.second)
-            amount*(modifier.first/100f)
-        elsent.toString())
-    }
+        System.out.println("Base amount $amount")
 
-    fun changeHealthROV(command:String, amt:Float){
-        val modifier = TraitManager.getTraitModifier
-            modifier.first
+        //TODO Maybe in the future allow things to REDUCE items LOST. Right now it's just bonus to getting items
+        //Only apply the modifier if we are GAINING. Traits
+        if(amount > 0) {
+            amount += if (modifier.second)
+                amount * (modifier.first / 100f)
+            else
+                modifier.first
+        }
+
+        System.out.println("Modified amount $amount")
 
         SupplyManager.addToSupply(itemName, amount)
-        FunGameStats.addFunStat(itemName, amou(command)
+        FunGameStats.addFunStat(itemName, amount.toString())
+    }
+
+    private fun changeHealthROV(command:String, amt:Float){
+        val modifier = TraitManager.getTraitModifier(command)
         ROVManager.addHealthROV(amt + amt*(modifier.first/100f))
         FunGameStats.addFunStat("Total ROV Health Net", amt.toInt().toString())
     }
