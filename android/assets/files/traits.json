@@ -86,7 +86,7 @@
       "effects": [{
         "affects": "cutMiles",
         "scope": "global",
-        "amount": -5
+        "amount": 5
       }]
 
     },
