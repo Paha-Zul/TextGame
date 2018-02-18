@@ -1,8 +1,6 @@
 package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.managers.DataManager
-import com.quickbite.rx2020.managers.SupplyManager
 
 /**
  * Created by Paha on 3/10/2016.

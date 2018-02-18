@@ -14,15 +14,14 @@ import com.quickbite.rx2020.util.FunGameStats
 import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.SaveLoad
-import java.util.*
 
 /**
  * Created by Paha on 2/8/2016.
  */
-object EventManager : IResetable{
+object EventManager : IResetable {
     private var eventMap: HashMap<String, (args: List<Any>) -> Unit> = hashMapOf()
 
-    fun init(gameScreen:GameScreen){
+    fun init(gameScreen: GameScreen){
         makeEvents(gameScreen)
     }
 
@@ -91,11 +90,11 @@ object EventManager : IResetable{
                     FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
                 }
 
-            //If we are doing it to multiple people...
+                //If we are doing it to multiple people...
             }else if(numPeople > 1){
                 //TODO no use for it yet...
 
-            //For only one person...
+                //For only one person...
             }else{
                 var amt = MathUtils.random(Math.abs(min), Math.abs(max))
                 if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
@@ -105,7 +104,7 @@ object EventManager : IResetable{
                 else
                     person.addHealth(amt.toFloat()).toInt()
 
-                FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
+                FunGameStats.addFunStat("Total Health Net", amt.toString())
             }
         })
 
@@ -215,10 +214,8 @@ object EventManager : IResetable{
 
                 if(MathUtils.random(100) <= chance) {
                     val randomSupply = supplyList[MathUtils.random(supplyList.size - 1)] as String
-                    var amt = MathUtils.random(Math.abs(min), Math.abs(max))
-
-                    if (min < 0 || max < 0) amt = -amt
-                    addRandItemhealth(randomSupply, num)
+                    val amt = MathUtils.random(min, max)
+                    addItemHealth(randomSupply, amt)
                 }
 
                 GameScreenGUI.updateSuppliesGUI()
@@ -232,7 +229,8 @@ object EventManager : IResetable{
             val size = args[0] as String
             val lose = if(args.size > 1) (args[1] as String).toBoolean() else false
 
-            GH.alterSupplies(size, lose)
+            //TODO Should applying these rewards be boosted by traits?
+            GH.applyReward(size, lose)
         })
 
         EventManager.onEvent("reward", {args ->
@@ -279,8 +277,7 @@ object EventManager : IResetable{
 
             val rand = MathUtils.random(1, 100)
             if(rand <= chance) {
-                var amt = MathUtils.random(Math.abs(min), Math.abs(max))
-                if(min < 0) amt = -amt
+                val amt = MathUtils.random(min, max)
 
                 ROVManager.addHealthROV(amt)
 
@@ -321,7 +318,7 @@ object EventManager : IResetable{
             var amt = MathUtils.random(Math.abs(min), Math.abs(max))
             if(min < 0 || max < 0) amt = -amt
 
-            cutMiles(amt)
+            cutMiles(amt.toFloat())
         })
 
         //Called when the game should 'wait' or progress some amount of time.
@@ -348,7 +345,7 @@ object EventManager : IResetable{
             val person = args[0] as Person
 
             GameScreenGUI.buildGroupTable()
-            
+
             //Remove all the traits from the manager when a person dies
             person.traitList.forEach { trait ->
                 TraitManager.removeTrait(trait.traitDef, person.firstName)
@@ -512,26 +509,33 @@ object EventManager : IResetable{
     }
 
     /**
-    * @param amt The amount to cut. Expected to be negative
-    **/
-    private fun cutMiles(amt:Int){
+     * Cuts miles from the trip.
+     * @param amt The amount to cut. Expected to be negative
+     **/
+    private fun cutMiles(amt:Float){
         var amt = amt //Shadow this to make it mutable
         var modifier = TraitManager.getTraitModifier("cutMiles")
         amt += (modifier.first/100f)*amt //Subtract the modified amount
 
-        GameStats.TravelInfo.totalDistTraveled += amt //Add it to the distance traveled (which is really subtracting)
+        GameStats.TravelInfo.totalDistTraveled += amt.toInt() //Add it to the distance traveled (which is really subtracting)
 
         //Add it to the recent changes and fun game stats
-        ResultManager.addRecentChange("miles", -amt.toFloat(), GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
+        ResultManager.addRecentChange("miles", -amt, GameScreen.currGameTime, isEventRelated = GameEventManager.currActiveEvent != null)
         FunGameStats.addFunStat("Total Miles Net", amt.toInt().toString())
     }
 
-    private addRandomItemHealth(randomItemName:String, amt:Float){
+    /**
+     * Adds health to an item.
+     * @param itemName The name of the item (to find in the supply manager)
+     * @param amt The amount of health to add
+     */
+    private fun addItemHealth(itemName:String, amt:Float){
         var amt = amt //Shadow to make mutable
-        val item = DataManager.getItem(randomItemName) //Get the item from the manager
-        val modifier = TraitManager.getTraitModifier("addRndItemHealth", subType = item.subType)
-        SupplyManager.addHealthToSupply(randomItemName, num.toFloat())
-        FunGameStats.addFunStat("$randomItemName damage", num.toInt().toString())
+        val item = DataManager.getItem(itemName)!! //Get the item from the manager
+        val modifier = TraitManager.getTraitModifier("addRndItemHealth", subType = item.type)
+        amt += amt*(modifier.first/100f) //Increase by the modifier amount
+        SupplyManager.addHealthToSupply(itemName, amt)
+        FunGameStats.addFunStat("$itemName damage", amt.toInt().toString())
     }
 
     override fun reset() {

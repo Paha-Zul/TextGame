@@ -96,7 +96,7 @@ object Tester {
         val list = event.resultingAction;
         if(list != null) {
             for (params in list.iterator()) {
-                if (params.size > 0) {
+                if (params.isNotEmpty()) {
                     System.out.println("Calling action ${params[0]}")
                     EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size-1)))
                 }

@@ -2,7 +2,6 @@ package com.quickbite.rx2020
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.interfaces.IUpdateable
-import com.quickbite.rx2020.managers.DataManager
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.util.Trait
@@ -20,18 +19,14 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
     var fullName:String = ""
         get() = "$firstName $lastName"
     var timeAdded:Long = 0
-        get
 
     var healthNormal:Float = 100f
-        get
         private set
 
     var healthInjury:Float = 0f
-        get
         private set
 
     var maxHealth = 100f
-        get
         private set
 
     var numInjury = 0

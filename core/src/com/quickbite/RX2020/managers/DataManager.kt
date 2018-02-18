@@ -56,7 +56,7 @@ object DataManager{
             8 -> return true
         }
 
-        tick++;
+        tick++
         return false
     }
 
@@ -166,32 +166,6 @@ object DataManager{
         var type:String = ""
         var max:Int = 0
         var worth:Array<Int>? = null
-    var eventDir:FileHandle? = null
-    var itemsDir:FileHandle? = null
-    var namesDir:FileHandle? = null
-    var activitiesDir:FileHandle? = null
-    var rewardsDir:FileHandle? = null
-    var endDir:FileHandle? = null
-    var traitsDir:FileHandle? = null
-
-    private var tick = 0
-
-    private lateinit var names:NamesJson
-    lateinit var end:EndJSON
-        get
-        private set
-
-    val json: Json = Json()
-
-    /**
-     * Updates (loads) the data queued for loading. Over separate frames.
-     * @return True when done, false otherwise.
-     */
-    fun updateLoadData():Boolean{
-        when(tick){
-            0 -> loadEnd(endDir!!)
-            1 -> loadItems(itemsDir!!)
-            2 -> loadEvents(even
         var perMember:Boolean = false
         var randStartAmt:Array<Int>? = null
         var affectedByHealth:Boolean = false

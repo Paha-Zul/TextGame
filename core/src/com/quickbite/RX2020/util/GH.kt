@@ -464,34 +464,16 @@ object GH {
         return text
     }
 
-    fun alterSupplies(size:String, lose:Boolean = false){
-//        val supplyList = listOf(SupplyManager.getSupply("energy"), SupplyManager.getSupply("edibles"), SupplyManager.getSupply("parts"), SupplyManager.getSupply("medkits"),
-//                SupplyManager.getSupply("wealth"), SupplyManager.getSupply("ammo"))
-//
-//        val rndAmt:Pair<Float, Float> = if(size == "small") Pair(1f, 25f) else if(size == "medium") Pair(25f, 50f) else Pair(50f, 100f)
-//        val medkitAmount:Pair<Float, Float> = if(size == "small") Pair(0f, 0f) else if(size == "medium") Pair(1f, 2f) else Pair(2f, 4f)
-//
-//        for(i in 0.rangeTo(supplyList.size-1)){
-//            val supply = supplyList[i]
-//
-//            var amt = 0f
-//            if(i == 3) amt = MathUtils.random(medkitAmount.first, medkitAmount.second)
-//            else amt = MathUtils.random(rndAmt.first, rndAmt.second)
-//
-//            if(lose) amt = -amt
-//
-//            SupplyManager.addToSupply(supply, amt)
-//        }
-
-        //Let's just reuse this since it's the same exact thing anyways?
-        applyReward(size, lose)
-    }
-
+    /**
+     * Applies a preset reward base on the reward name. Can also be used to lose a certain reward
+     * @param rewardName The name of the reward to give. These are defined in rewards.json
+     * @param lose False (default) if we should gain the reward, True if we should lose the reward
+     */
     fun applyReward(rewardName:String, lose:Boolean = false){
         val reward = Reward.rewardMap[rewardName]!!
 
         //For supplies
-        for(i in 0.rangeTo(reward.supplies.size-1)){
+        for(i in 0 until reward.supplies.size){
             val supplyName = reward.supplies[i]
             val mult = if(supplyName == "edibles") GroupManager.numPeopleAlive else 1
             val pair = Pair(reward.supplyAmounts[i][0]*mult, reward.supplyAmounts[i][1]*mult)
