@@ -70,41 +70,20 @@ object EventManager : IResetable {
 
             //If we are applying to all the people...
             if(numPeople == GroupManager.numPeopleAlive){
-                var amt = MathUtils.random(Math.abs(min), Math.abs(max))
-                if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
+                var amt = MathUtils.random(min, max)
                 val list = GroupManager.getPeopleList()
-                list.forEach { person ->
-                    if(randomPerPerson) {
-                        amt = MathUtils.random(Math.abs(min), Math.abs(max))
-                        if (min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
-                    }
+                addHealthToPerson(list, amt, min, max, perc)
 
-                    val modifier = TraitManager.getTraitModifier("addHealth", subCommand = "remove")
-                    val multiplier = modifier.first/100f
-
-                    if (perc)
-                        person.addPercentHealth(amt.toFloat() + multiplier).toInt()
-                    else
-                        person.addHealth(amt.toFloat() + amt.toFloat()*multiplier).toInt()
-
-                    FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
-                }
-
-                //If we are doing it to multiple people...
+            //If we are doing it to multiple people...
             }else if(numPeople > 1){
                 //TODO no use for it yet...
 
-                //For only one person...
+            //For only one person...
             }else{
                 var amt = MathUtils.random(Math.abs(min), Math.abs(max))
                 if(min < 0) amt = -amt //If we are dealing with negative numbers, negatize it!
                 val person = GroupManager.getPerson(name)!!
-                if(perc)
-                    person.addPercentHealth(amt.toFloat()).toInt()
-                else
-                    person.addHealth(amt.toFloat()).toInt()
-
-                FunGameStats.addFunStat("Total Health Net", amt.toString())
+                addHealthToPerson(toList(person), amt, min, max, perc)
             }
         })
 
@@ -536,6 +515,24 @@ object EventManager : IResetable {
         amt += amt*(modifier.first/100f) //Increase by the modifier amount
         SupplyManager.addHealthToSupply(itemName, amt)
         FunGameStats.addFunStat("$itemName damage", amt.toInt().toString())
+    }
+
+    private fun addHealthToPerson(list:List<Person>, amt:Int, min:Int, max:Int, perc:Boolean){
+        var amt = amt
+        list.forEach { person ->
+            if(randomPerPerson)
+                amt = MathUtils.random(Math.abs(min), Math.abs(max))
+
+            val modifier = TraitManager.getTraitModifier("addHealth", subCommand = "remove")
+            val multiplier = modifier.first/100f
+
+            if (perc)
+                person.addPercentHealth(amt.toFloat() + multiplier).toInt()
+            else
+                person.addHealth(amt.toFloat() + amt.toFloat()*multiplier).toInt()
+
+            FunGameStats.addFunStat("Total Health Net", amt.toInt().toString())
+        }
     }
 
     override fun reset() {

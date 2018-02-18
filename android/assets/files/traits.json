@@ -106,7 +106,7 @@
         "affects": "addHealth",
         "scope": "global",
         "subCommand":"remove",
-        "amount": -5
+        "amount": 5
       }]
 
     },
