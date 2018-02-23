@@ -366,7 +366,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
      * @return The function that was made.
      */
     fun timerFunc(eventType:String, timer: CustomTimer, min:Float, max:Float):()->Unit{
-        val func: (()->Unit) = {
+
+        return {
             //Get the current event or a new one if we aren't on an event.
             val currEvent = GameEventManager.setNewRandomRoot(eventType)
 
@@ -378,8 +379,6 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
             timer.restart(MathUtils.random(min, max))
         }
-
-        return func
     }
 
     /**

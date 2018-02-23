@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
+import com.quickbite.rx2020.objects.Ailment
 import com.quickbite.rx2020.util.Trait
 
 /**
@@ -13,9 +14,7 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
     val traitList:MutableList<Trait> = mutableListOf()
 
     var firstName:String = ""
-        get
     var lastName:String = ""
-        get
     var fullName:String = ""
         get() = "$firstName $lastName"
     var timeAdded:Long = 0
@@ -26,8 +25,10 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
     var healthInjury:Float = 0f
         private set
 
-    var maxHealth = 100f
-        private set
+    var baseMaxHealth = Globals.maxSurvivorHP
+    var bonusMaxHealth = Globals.maxSurvivorHP
+    val totalMaxHealth:Float
+        get() = baseMaxHealth + bonusMaxHealth
 
     var numInjury = 0
     var numSickness = 0
@@ -54,13 +55,11 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
 
     constructor(name:Pair<String, String>, male:Boolean, _timeAdded: Long):this(name.first, name.second, male, _timeAdded)
 
-    constructor(firstName:String, lastName:String, currHealth:Float, maxHealth:Float, male:Boolean, _timeAdded: Long):this(firstName, lastName, male, _timeAdded){
-        this.maxHealth = maxHealth
+    constructor(firstName:String, lastName:String, currHealth:Float, male:Boolean, _timeAdded: Long):this(firstName, lastName, male, _timeAdded){
         this.healthNormal = currHealth
     }
 
-    constructor(name:Pair<String, String>, currHealth:Float, maxHealth:Float, male:Boolean, _timeAdded: Long):this(name.first, name.second, male, _timeAdded){
-        this.maxHealth = maxHealth
+    constructor(name:Pair<String, String>, currHealth:Float, male:Boolean, _timeAdded: Long):this(name.first, name.second, male, _timeAdded){
         this.healthNormal = currHealth
     }
 
@@ -72,19 +71,19 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
 
     fun addHealth(amt:Float):Float{
         healthNormal += amt
-        if(healthNormal >= maxHealth - healthInjury)
-            healthNormal = maxHealth - healthInjury
+        if(healthNormal >= totalMaxHealth - healthInjury)
+            healthNormal = totalMaxHealth - healthInjury
         if(isDead)
             GroupManager.killPerson(firstName)
 
-        EventManager.callEvent("healthChanged", this, amt)
+        EventManager.callEvent("healthChanged", listOf(fullName), amt)
         return amt
     }
 
     fun addPercentHealth(perc:Float):Float{
-        val amt = maxHealth*(perc/100f)
+        val amt = totalMaxHealth*(perc/100f)
 
-        EventManager.callEvent("healthChanged", this, amt)
+        EventManager.callEvent("healthChanged", listOf(fullName), amt)
         return addHealth(amt)
     }
 
@@ -174,35 +173,6 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
             else -> numSickness++
         }
     }
-
-    class Ailment(var level: AilmentLevel, var type: AilmentType): IUpdateable {
-        enum class AilmentType {Injury, Sickness}
-        enum class AilmentLevel {Minor, Regular, Major, Trauma}
-        val done:Boolean
-            get() = hoursRemaining <= 0
-
-        //Need this empty constructor for loading/saving to json files.
-        private constructor():this(AilmentLevel.Minor, AilmentType.Injury)
-
-        var hoursRemaining = 0
-        var hpLost = 0
-        var hpLostPerHour = 0f
-
-        init{
-            when(level){
-                AilmentLevel.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25); hpLostPerHour = 0.12f}
-                AilmentLevel.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50); hpLostPerHour = 0.14f}
-                AilmentLevel.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75); hpLostPerHour = 0.19f}
-                AilmentLevel.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100); hpLostPerHour = 0.29f}
-            }
-        }
-
-        override fun update(delta: Float) {}
-        override fun updateHourly(delta: Float) {
-            this.hoursRemaining--
-        }
-    }
-
 
     override fun toString(): String {
         return "$fullName - "+(if(male){"male"}else{"female"});

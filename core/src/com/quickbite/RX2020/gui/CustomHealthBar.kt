@@ -7,18 +7,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.Disableable
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.objects.Supply
 
 /**
  * Created by Paha on 3/29/2016.
  * A specialized health bar for my game!
  */
 class CustomHealthBar(val person: Person?, val background: TextureRegionDrawable, val whitePixel: TextureRegionDrawable) : Widget(), Disableable {
-    var supply: SupplyManager.Supply? = null
+    var supply: Supply? = null
     var currAmt:Float = 0f
     var maxAmt:Float = 0f
     var injuredAmt:Float = 0f
 
-    constructor(supply: SupplyManager.Supply, background: TextureRegionDrawable, whitePixel: TextureRegionDrawable):this(null, background, whitePixel){
+    constructor(supply: Supply, background: TextureRegionDrawable, whitePixel: TextureRegionDrawable):this(null, background, whitePixel){
         this.supply = supply
     }
 
@@ -39,15 +40,15 @@ class CustomHealthBar(val person: Person?, val background: TextureRegionDrawable
 
         //If we are displaying the health bar based on a person....
         if(batch != null && person != null){
-            val missingHealth = width*((person.maxHealth.toFloat() - (person.healthInjury.toFloat()+person.healthNormal.toFloat()))/person.maxHealth.toFloat())
+            val missingHealth = width*((person.totalMaxHealth - (person.healthInjury+person.healthNormal))/person.totalMaxHealth)
             val color = batch.color
             val healthColor = if(person.hasSickness) Color.YELLOW else Color.GREEN
 
-            var injuryHealthBar = width*(person.healthInjury.toFloat()/person.maxHealth.toFloat())
+            var injuryHealthBar = width*(person.healthInjury/person.totalMaxHealth)
             batch.color = Color.RED
             whitePixel.draw(batch, x + missingHealth, y, injuryHealthBar, height) //Go from the right to the left to posX
 
-            var normalHealthBar = width*(person.healthNormal.toFloat()/person.maxHealth.toFloat())
+            var normalHealthBar = width*(person.healthNormal/person.totalMaxHealth)
             batch.color = healthColor
             whitePixel.draw(batch, x + missingHealth + injuryHealthBar, y, normalHealthBar, height)
 
@@ -77,8 +78,6 @@ class CustomHealthBar(val person: Person?, val background: TextureRegionDrawable
         return false
     }
 
-    class CustomHealthBarStyle{
-
-    }
+    class CustomHealthBarStyle
 
 }

@@ -32,10 +32,10 @@ object GroupManager : IUpdateable, IResetable {
 
         initialGroupSize = range
 
-        for(i in 0.rangeTo(range-1)) {
+        for(i in 0 until range) {
             val triple = DataManager.pullRandomName()
             //Make a person
-            val person = Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), maxHealth, triple.third, 0)
+            val person = Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), triple.third, 0)
             //Get a random profession
             val professions = DataManager.traitList.professions
             val randomProfession = professions[MathUtils.random(professions.size-1)]
@@ -78,7 +78,7 @@ object GroupManager : IUpdateable, IResetable {
     fun getPeopleList():Array<Person> = list.toTypedArray()
 
     fun getPerson(name:String): Person?{
-        val person = list.find {person -> person.firstName.equals(name)}
+        val person = list.find {person -> person.firstName == name }
         if(person == null) Logger.log("GroupManager", "Trying to find person with name $name and it doesn't exist. People: ${list.toString()}")
         return person;
     }
@@ -100,7 +100,7 @@ object GroupManager : IUpdateable, IResetable {
         val person = getPerson(name)
         if(person!=null) {
             list.remove(person)
-            EventManager.callEvent("death", person)
+            EventManager.callEvent("death", listOf(person))
         }
     }
 

@@ -22,12 +22,12 @@ fun Int.clamp(min:Int, max:Int):Int{
 }
 
 fun <T> Array<T>.shuffle() : Array<T>{
-    val rg : Random = Random();
-    for (i in 0..this.size - 1) {
+    val rg = Random()
+    for (i in 0 until this.size) {
         val randomPosition = rg.nextInt(this.size);
         swap(this, i, randomPosition);
     }
-    return this;
+    return this
 }
 
 fun <T> MutableList<T>.shuffle() : MutableList<T>{

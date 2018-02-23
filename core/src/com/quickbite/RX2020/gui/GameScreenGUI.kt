@@ -377,7 +377,7 @@ object GameScreenGUI{
             nameLabel.setAlignment(Align.center)
 
             val medkitButton = ImageButton(imageButtonStyle)
-            medkitButton.isDisabled = !hasMedkits || (!person.hasInjury && person.healthNormal >= person.maxHealth)
+            medkitButton.isDisabled = !hasMedkits || (!person.hasInjury && person.healthNormal >= person.totalMaxHealth)
 
             val recentChangeLabel = Label("", labelStyle)
             recentChangeLabel.setFontScale(normalFontScale)
@@ -418,7 +418,7 @@ object GameScreenGUI{
 
             medkitButton.addListener(object:ChangeListener(){
                 override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                    if(person.hasInjury || person.healthNormal < person.maxHealth){
+                    if(person.hasInjury || person.healthNormal < person.totalMaxHealth){
                         EventManager.callEvent("removeAilment", person.firstName, "worst")
                         EventManager.callEvent("addHealth", person.firstName, "100")
                         EventManager.callEvent("addRndAmt", "-1", "-1", "medkits")

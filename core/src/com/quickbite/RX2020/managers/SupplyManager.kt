@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
+import com.quickbite.rx2020.objects.Supply
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Tester
 import java.util.*
@@ -35,8 +36,9 @@ object SupplyManager : IUpdateable, IResetable{
         supplyMap["energy"]?.consumePerDay = 3.3f
     }
 
-    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int, affectByHealth:Boolean):Supply{
-        val supply = Supply(name, abbrName, displayName, amt, maxAmount, 100f, 100f, affectByHealth)
+    fun addNewSupply(name:String, abbrName:String, displayName:String, amt:Float, maxAmount:Int = 100000000, affectByHealth:Boolean):Supply{
+        val supply = Supply(name, abbrName, displayName, amt, affectByHealth)
+        supply.apply { this.maxAmount = maxAmount }
         supplyMap.put(name, supply)
         return supply
     }
@@ -121,30 +123,11 @@ object SupplyManager : IUpdateable, IResetable{
         return supplyMap.values.toTypedArray()
     }
 
-    fun getSupply(name:String):Supply = supplyMap[name]!!
+    fun getSupply(name:String): Supply = supplyMap[name]!!
 
     fun clearSupplies() = supplyMap.clear()
 
     override fun reset() {
         supplyMap.clear()
-    }
-
-    /**
-     * Generic supply class that holds info for supplies
-     * @param name The name of the supply
-     * @param abbrName The abbreviated name of the supply
-     * @param displayName The display name of the supply
-     * @param amt The initial amount of the supply
-     * @param maxAmount The max amount the supply can stack to
-     * @param currHealth The initial and current health of the supply
-     * @param maxHealth The max health of the supply
-     * @param affectedByHealth True if the supply's function is affected by the health of the supply (ex: energy gain from broken solar panels)
-     */
-    class Supply(val name:String, val abbrName:String, val displayName:String, var amt:Float, var maxAmount:Int, var maxHealth:Float = 100f, var currHealth:Float = 100f, val affectedByHealth:Boolean){
-        var consumePerDay:Float = 0f
-
-        operator fun component1() = displayName
-        operator fun component2() = amt
-        operator fun component3() = maxAmount
     }
 }

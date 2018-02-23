@@ -3,6 +3,7 @@ package com.quickbite.rx2020.util
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.managers.*
+import com.quickbite.rx2020.objects.Supply
 import java.util.regex.Pattern
 
 /**
@@ -221,14 +222,14 @@ object GH {
         val male = person?.male ?: true   //If it is of the male gender
 
         if(_token.matches("(([Hh])is[0-9])".toRegex())){
-            if(male) pronoun = "his"
-            else pronoun = "her"
+            pronoun = if(male) "his"
+            else "her"
         }else if(_token.matches("(([Hh])e[0-9])".toRegex())){
-            if(male) pronoun = "he"
-            else pronoun = "she"
+            pronoun = if(male) "he"
+            else "she"
         }else if(_token.matches("(([Hh])im[0-9])".toRegex())){
-            if(male) pronoun = "him"
-            else pronoun = "her"
+            pronoun = if(male) "him"
+            else "her"
         }
 
         //Change to uppercase if needed
@@ -255,14 +256,14 @@ object GH {
         val male = person.male  //If it is of the male gender
 
         if(_token.matches("(([Hh])is[0-9])".toRegex())){
-            if(male) pronoun = "his"
-            else pronoun = "her"
+            pronoun = if(male) "his"
+            else "her"
         }else if(_token.matches("(([Hh])e[0-9])".toRegex())){
-            if(male) pronoun = "he"
-            else pronoun = "she"
+            pronoun = if(male) "he"
+            else "she"
         }else if(_token.matches("(([Hh])im[0-9])".toRegex())){
-            if(male) pronoun = "him"
-            else pronoun = "her"
+            pronoun = if(male) "him"
+            else "her"
         }
 
         //Change to uppercase if needed
@@ -276,18 +277,25 @@ object GH {
         return pronoun
     }
 
+    /**
+     * Replaces a token with a name from the event
+     * @param token The token to parse
+     * @param event The GameEvent to use for text displaying and stuff
+     * @return Returns a new token with the replaced name
+     */
     private fun replaceName(token:String, event:GameEventManager.EventJson):String{
-        var number:Int = 0
+        var number = 0
 
         //First, find the he/him/his [0-9] token.
         val pattern = Pattern.compile("([0-9])")
         val matcher = pattern.matcher(token)
         if(matcher.find()){
-            number = matcher.group(1).toInt()
-            number -= 1
+            number = matcher.group(1).toInt() //This grabs the number in the brackets, for example [1]
+            number -= 1 //Since our text starts with [1] but code uses [0] as a start, subtract one to get code friendly numbers
         }
 
         if(number > 9 || number < 0) number = 0 //If the character at the end is something higher than
+        event.numOfPeopleInEvent = Math.max(event.numOfPeopleInEvent, number) //Take the greater of the two and store it in the numOfPeopleInEvent
         val person = if(number >= event.randomPersonList.size) null else event.randomPersonList[number] //The person to base the pronoun off of
         if(person != null)
             return token.replace("((%n[0-9]?\\S*)|(\\(?([Nn])ame[0-9]\\)?))".toRegex(), person.firstName) //Return the replaced token.
@@ -351,7 +359,7 @@ object GH {
         return Pair(lost, reason)
     }
 
-    fun checkSupplyAmount(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float):String{
+    fun checkSupplyAmount(supply: Supply, amtChanged:Float, amtBefore:Float):String{
         val isNewlyZero = supply.amt <= 0f && amtBefore > 0
         var eventNameToCall = ""
 
@@ -386,7 +394,7 @@ object GH {
         return eventNameToCall
     }
 
-    fun checkSupplyHealth(supply:SupplyManager.Supply, amtChanged:Float, amtBefore:Float){
+    fun checkSupplyHealth(supply:Supply, amtChanged:Float, amtBefore:Float){
         if(supply.currHealth <= 0f && amtBefore > 0){
             when(supply.name){
                 "battery" -> {

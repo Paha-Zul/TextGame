@@ -115,7 +115,7 @@
       "effects": [{
         "affects": "damageROV",
         "scope": "global",
-        "amount": -5
+        "amount": 5
       }]
 
     },

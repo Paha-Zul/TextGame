@@ -98,7 +98,7 @@ object Tester {
             for (params in list.iterator()) {
                 if (params.isNotEmpty()) {
                     System.out.println("Calling action ${params[0]}")
-                    EventManager.callEvent(params[0], params.slice(1.rangeTo(params.size-1)))
+                    EventManager.callEvent(params[0], params.slice(1 until params.size))
                 }
             }
         }
@@ -107,11 +107,11 @@ object Tester {
     private fun getRandom():String{
         val rand = MathUtils.random(1, 100)
 
-        when{
-            //TODO Don't forget epic events when they are actually implemented
-            rand >= 50 -> return "common"
+        return when{
+        //TODO Don't forget epic events when they are actually implemented
+            rand >= 50 -> "common"
 //            rand >= 66 -> return "rare"
-            else -> return "rare"
+            else -> "rare"
         }
     }
 }

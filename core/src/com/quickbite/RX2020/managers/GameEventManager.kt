@@ -13,14 +13,13 @@ import java.util.*
 
 /**
  * Created by Paha on 4/4/2016.
+ * Game Events are the events in game that display text and a series of choices. These are all generated from
+ * json files in the assets folder. This manager is responsible for holding roots and children events,
+ * as well as delayed events and the current ongoing event.
  */
 
 object GameEventManager : IUpdateable, IResetable{
     var currActiveEvent:EventJson? = null
-        get
-        set(value){
-            field = value
-        }
 
     var lastCurrEvent:EventJson? = null //Mainly for debugging.
 
@@ -30,6 +29,7 @@ object GameEventManager : IUpdateable, IResetable{
     val delayedEventTimerList:MutableList<CustomTimer> = mutableListOf() //A list of timers for delayed events
 
     override fun update(delta: Float) {
+        //This keeps updates and keeps track of the delayed events
         for(i in (delayedEventTimerList.size - 1) downTo 0){
             delayedEventTimerList[i].update(delta)
             if(delayedEventTimerList[i].done)
@@ -41,6 +41,10 @@ object GameEventManager : IUpdateable, IResetable{
 
     }
 
+    /**
+     * Sets a new random root event
+     * @param type The type of event root to set
+     */
     fun setNewRandomRoot(type:String):EventJson?{
         val event = getAndSetEvent("", type)
         currActiveEvent = event
@@ -48,10 +52,19 @@ object GameEventManager : IUpdateable, IResetable{
         return event
     }
 
+    /**
+     * Gets a list of events using the type
+     * @param type The type of event list to get
+     */
     fun getEventNameList(type:String):MutableList<String>{
         return rootMap.getOrElse(type, {mutableListOf()})
     }
 
+    /**
+     * Adds an event to the event map using the type
+     * @param event The EventJson to add
+     * @param type The type of event
+     */
     fun addEvent(event:EventJson, type: String = ""){
         eventMap.put(event.name, event) //Add the event to the main map.
 
@@ -101,6 +114,12 @@ object GameEventManager : IUpdateable, IResetable{
         return event
     }
 
+    /**
+     * Gets an event from the map and sets it as the current event
+     * @param eventName The name of the event
+     * @param type The type of event
+     * @return Returns the EventJson object that was found, or null if nothing was found
+     */
     fun getAndSetEvent(eventName:String, type:String = ""):EventJson?{
         val event = getEvent(eventName, type, true)
         currActiveEvent = event
@@ -119,8 +138,12 @@ object GameEventManager : IUpdateable, IResetable{
         var chances:Array<FloatArray>? = null //The chances of each outcome happening
         /** The resulting actions. This can be null on events that lead to other events. Not null if the event is a result and ends there.*/
         var resultingAction:Array<Array<String>>? = null
+        var numOfPeopleInEvent = 0
 
-        //Each time a root event is retrieved to start and event, this should be randomed to use for future events.
+        /**
+         * Each time a root event is retrieved to start and event, this should be random'd to use for future events.
+         * This is stored here because we might have delayed events that need to keep the list of people
+         */
         var randomPersonList:List<Person> = listOf()
 
         val hasChoices:Boolean

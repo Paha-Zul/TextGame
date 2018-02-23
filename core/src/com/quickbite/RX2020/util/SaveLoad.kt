@@ -83,7 +83,7 @@ object SaveLoad{
         save.personList.forEach { jsonPerson ->
             val names = jsonPerson.name.split(" ")
             val person = Person(names[0], names[1], jsonPerson.male, jsonPerson.gameTimeAdded) //Make a new person to add to the group.
-            person.addHealth(jsonPerson.health - person.maxHealth) //We need to set the health through a bit of roundabout.
+            person.addHealth(jsonPerson.health - person.totalMaxHealth) //We need to set the health through a bit of roundabout.
             person.ailmentList = jsonPerson.ailments
             GroupManager.addPerson(person)
         }
