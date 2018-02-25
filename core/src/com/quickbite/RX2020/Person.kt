@@ -87,15 +87,23 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         return addHealth(amt)
     }
 
-    fun addAilment(level: Ailment.AilmentLevel, type: Ailment.AilmentType){
-        val disability = Ailment(level, type)
-        ailments.add(disability)
-        val isInjury = disability.type == Ailment.AilmentType.Injury
+    /**
+     * Adds an ailment to this person. This will deal with setting up health changes.
+     * @param level The level of the ailment
+     * @param type The type of the ailment
+     * @param damageModifier The modifier for the ailment's damage which is altered by traits
+     * @param durationModifier The modifier for the ailment's duration which is altered by traits
+     */
+    fun addAilment(level: Ailment.AilmentLevel, type: Ailment.AilmentType, damageModifier:Float = 0f, durationModifier:Float = 0f){
+        val ailment = Ailment(level, type)
+        ailments.add(ailment) //Add the ailment
+        val isInjury = ailment.type == Ailment.AilmentType.Injury //Store whether it's an injury or sickness
 
         //Only shift health if it's an injury
         if(isInjury) {
-            healthNormal -= disability.hpLost
-            healthInjury += disability.hpLost
+            val amount = ailment.hpLost - ailment.hpLost*(damageModifier/100f) //We reduce by the modifier amount
+            healthNormal -= amount //Reduce normal health
+            healthInjury += amount //Add injury health
         }
 
         //Increment the right counter
@@ -103,6 +111,9 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
             true -> numInjury++
             else -> numSickness++
         }
+
+        //Subtract the modified amount if any
+        ailment.hoursRemaining -= (ailment.totalDuration*(damageModifier/100f)).toInt()
 
         if(isDead)
             GroupManager.killPerson(firstName)

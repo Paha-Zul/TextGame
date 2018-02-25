@@ -1,5 +1,6 @@
 package com.quickbite.rx2020
 
+import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.TraitManager
 
 object Globals {
@@ -44,6 +45,82 @@ object Globals {
 
             ROVTravelSpeed += amt
             ROVTravelSpeed.clamp(baseROVTravelSpeed, 100f) //100 is some arbitrary high number
+        })
+
+        //When someone gets an "addAilment" trait, we need to modify existing ailments
+        //This doesn't really affect a global variable, but since it can apply to ALL ailments it's gotta go here
+        TraitManager.addListener("addAilment", "duration", {traitEffect, removing, personWithTrait ->
+            //If the scope is global, we need to add or remove the bonuses from ALL people
+            if(traitEffect.scope == "global") {
+                //If not removing (adding), subtract the duration amount from all ailments of all people
+                if (!removing) {
+                    GroupManager.getPeopleList().forEach { person ->
+                        person.ailmentList.forEach { ailment ->
+                            //We add here because traitEffect.amount will be negative
+                            ailment.hoursRemaining += (ailment.totalDuration * (traitEffect.amount / 100f)).toInt()
+                        }
+                    }
+                //If we are removing, add the duration back on to all ailments on all people
+                } else {
+                    GroupManager.getPeopleList().forEach { person ->
+                        person.ailmentList.forEach { ailment ->
+                            //We subtract here because traitEffect.amount will be negative
+                            ailment.hoursRemaining -= (ailment.totalDuration * (traitEffect.amount / 100f)).toInt()
+                        }
+                    }
+                }
+
+            //If the scope is individual, we simply modify the person with the trait passed in.
+            }else if(traitEffect.scope == "individual"){
+                //If not removing (adding), remove the duration amount from the trait person passed in
+                if (!removing)
+                     //We add here because traitEffect.amount will be negative
+                    personWithTrait!!.ailmentList.forEach { it.hoursRemaining += (it.totalDuration*traitEffect.amount/100f).toInt() }
+
+                //If we are removing, add the duration back on to the person with the trait
+                else
+                    //We subtract here because traitEffect.amount will be negative
+                    personWithTrait!!.ailmentList.forEach { it.hoursRemaining -= (it.totalDuration*traitEffect.amount/100f).toInt() }
+
+            }
+        })
+
+        //When someone gets an "addAilment" trait, we need to modify existing ailments
+        //This doesn't really affect a global variable, but since it can apply to ALL ailments it's gotta go here
+        TraitManager.addListener("addAilment", "damage", {traitEffect, removing, personWithTrait ->
+            //If the scope is global, we need to add or remove the bonuses from ALL people
+            if(traitEffect.scope == "global") {
+                //If not removing (adding), subtract the duration amount from all ailments of all people
+                if (!removing) {
+                    GroupManager.getPeopleList().forEach { person ->
+                        person.ailmentList.forEach { ailment ->
+                            //We add here because traitEffect.amount will be negative
+                            ailment.hpLostPerHour += (ailment.baseHpLostPerHour * (traitEffect.amount / 100f))
+                        }
+                    }
+                    //If we are removing, add the duration back on to all ailments on all people
+                } else {
+                    GroupManager.getPeopleList().forEach { person ->
+                        person.ailmentList.forEach { ailment ->
+                            //We add here because traitEffect.amount will be negative
+                            ailment.hpLostPerHour += (ailment.baseHpLostPerHour * (traitEffect.amount / 100f)).toInt()
+                        }
+                    }
+                }
+
+            //If the scope is individual, we simply modify the person with the trait passed in.
+            }else if(traitEffect.scope == "individual"){
+                //If not removing (adding), remove the duration amount from the trait person passed in
+                if (!removing)
+                    //We add here because traitEffect.amount will be negative
+                    personWithTrait!!.ailmentList.forEach { it.hpLostPerHour += (it.baseHpLostPerHour*traitEffect.amount/100f).toInt() }
+
+                //If we are removing, add the duration back on to the person with the trait
+                else
+                    //We add here because traitEffect.amount will be negative
+                    personWithTrait!!.ailmentList.forEach { it.hpLostPerHour += (it.baseHpLostPerHour*traitEffect.amount/100f).toInt() }
+
+            }
         })
     }
 }

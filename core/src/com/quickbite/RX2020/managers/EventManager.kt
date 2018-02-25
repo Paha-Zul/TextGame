@@ -120,30 +120,26 @@ object EventManager : IResetable {
 
             val person: Person
 
-            if (name == "rand") person = GroupManager.getRandomPerson()!!                     //We need to do .toString() for the .toInt() method or else it converts the character to ascii value.
-            else if (name.matches("evt[0-9]".toRegex())) person = GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()]
-            else if (name == "evt") person = GameEventManager.currActiveEvent!!.randomPersonList[0]
-            else person = GroupManager.getPerson(name)!!
+            person = when {
+                name == "rand" -> GroupManager.getRandomPerson()!!  //If the name is "rand", get a random person
+                name.matches("evt[0-9]".toRegex()) -> GameEventManager.currActiveEvent!!.randomPersonList[name.last().toString().toInt()] //Otherwise, get the person from the random person list of the event
+                name == "evt" -> GameEventManager.currActiveEvent!!.randomPersonList[0] //Otherwise if it's just "evt", get the first person in the event people list
+                else -> GroupManager.getPerson(name)!! //Otherwise it's a specific name, get it from the group manager
+            }
 
-            val disType: Ailment.AilmentType
-            val disLevel: Ailment.AilmentLevel
-
-            disType = when (type) {
+            val ailmentType = when (type) {
                 "sickness" -> Ailment.AilmentType.Sickness
                 else -> Ailment.AilmentType.Injury
             }
 
-            disLevel = when (level) {
+            val ailmentLevel = when (level) {
                 "minor" -> Ailment.AilmentLevel.Minor
                 "medium" -> Ailment.AilmentLevel.Regular
                 "major" -> Ailment.AilmentLevel.Major
                 else -> Ailment.AilmentLevel.Trauma
             }
 
-            person.addAilment(disLevel, disType)
-
-            FunGameStats.addFunStat("Ailments Inflicted: ", "1")
-            ResultManager.addRecentChange("$level $type for ${person.firstName}", 1f, GameScreen.currGameTime, "", true)
+            addRemoveAilment("addAilment", person, ailmentType, ailmentLevel)
         })
 
         //Called to remove and injury from a person.
@@ -152,12 +148,8 @@ object EventManager : IResetable {
             val type = args[1] as String
 
             val person = GroupManager.getPerson(name)!!
-            when (type) {
-                "worst" -> person.removeWorstAilment()
-                else -> person.removeLongestAilment()
-            }
-
-            FunGameStats.addFunStat("Ailments Cured: ", "1")
+            //Call the addRemoveAilment. Ailment type and ailment level don't really matter here.
+            addRemoveAilment("removeAilment", person, Ailment.AilmentType.Injury, Ailment.AilmentLevel.Minor, type)
         })
 
         //Adds a random amount of an item. This specifically chooses from all items that are available
@@ -564,6 +556,28 @@ object EventManager : IResetable {
                 person.addHealth(amt.toFloat() + amt.toFloat() * multiplier).toInt()
 
             FunGameStats.addFunStat("Total Health Net", amt.toString())
+        }
+    }
+
+    /**
+     * Handles adding or removing an ailment to/from a person
+     * @param command The command, either addAilment or removeAilment
+     * @param person The person to apply this change to
+     * @param ailmentType The type of ailment
+     * @param ailmentLevel The level of ailment
+     * @param typeToRemove The type to remove. This is optional and only needed if removing. Defaults to "worst"
+     */
+    private fun addRemoveAilment(command:String, person:Person, ailmentType:Ailment.AilmentType, ailmentLevel:Ailment.AilmentLevel, typeToRemove:String = "worse"){
+        if(command == "addAilment") {
+            person.addAilment(ailmentLevel, ailmentType)
+            FunGameStats.addFunStat("Ailments Inflicted: ", "1")
+            ResultManager.addRecentChange("$ailmentLevel $ailmentType for ${person.firstName}", 1f, GameScreen.currGameTime, "", true)
+        }else if(command == "removeAilment"){
+            when (typeToRemove) {
+                "worst" -> person.removeWorstAilment()
+                else -> person.removeLongestAilment()
+            }
+            FunGameStats.addFunStat("Ailments Cured: ", "1")
         }
     }
 

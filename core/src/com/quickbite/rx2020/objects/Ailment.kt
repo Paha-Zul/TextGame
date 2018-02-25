@@ -12,17 +12,24 @@ class Ailment(level: AilmentLevel, var type: AilmentType): IUpdateable {
     //Need this empty constructor for loading/saving to json files.
     private constructor():this(AilmentLevel.Minor, AilmentType.Injury)
 
+    val totalDuration:Int
+    val baseHpLostPerHour:Float
+    val baseHpLost:Int
     var hoursRemaining = 0
     var hpLost = 0
     var hpLostPerHour = 0f
 
     init{
         when(level){
-            AilmentLevel.Minor ->{ hoursRemaining = MathUtils.random(10*24, 30*24); hpLost = MathUtils.random(0, 25); hpLostPerHour = 0.12f}
-            AilmentLevel.Regular ->{ hoursRemaining = MathUtils.random(30*24, 50*24); hpLost = MathUtils.random(25, 50); hpLostPerHour = 0.14f}
-            AilmentLevel.Major ->{ hoursRemaining = MathUtils.random(50*24, 70*24); hpLost = MathUtils.random(50, 75); hpLostPerHour = 0.19f}
-            AilmentLevel.Trauma ->{ hoursRemaining = MathUtils.random(70*24, 90*24); hpLost = MathUtils.random(75, 100); hpLostPerHour = 0.29f}
+            AilmentLevel.Minor ->{ totalDuration = MathUtils.random(10*24, 30*24); baseHpLost = MathUtils.random(0, 25); baseHpLostPerHour = 0.12f}
+            AilmentLevel.Regular ->{ totalDuration = MathUtils.random(30*24, 50*24); baseHpLost = MathUtils.random(25, 50); baseHpLostPerHour = 0.14f}
+            AilmentLevel.Major ->{ totalDuration = MathUtils.random(50*24, 70*24); baseHpLost = MathUtils.random(50, 75); baseHpLostPerHour = 0.19f}
+            AilmentLevel.Trauma ->{ totalDuration = MathUtils.random(70*24, 90*24); baseHpLost = MathUtils.random(75, 100); baseHpLostPerHour = 0.29f}
         }
+
+        hoursRemaining = totalDuration
+        hpLostPerHour = baseHpLostPerHour
+        hpLost = baseHpLost
     }
 
     override fun update(delta: Float) {}
