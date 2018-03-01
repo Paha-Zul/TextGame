@@ -2,12 +2,12 @@ package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
-import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
+import com.quickbite.rx2020.objects.Ailment
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Tester
-import com.quickbite.rx2020.util.Trait
+import com.quickbite.rx2020.objects.Trait
 
 /**
  * Created by Paha on 2/8/2016.
@@ -17,7 +17,7 @@ object GroupManager : IUpdateable, IResetable {
         get
         private set
 
-    private var list:MutableList<Person> = arrayListOf()
+    private var list:MutableList<Person> = mutableListOf()
 
     private val emptyFoodHealthDrain = -0.3f
 
@@ -38,9 +38,9 @@ object GroupManager : IUpdateable, IResetable {
             val person = Person(triple.first, triple.second, MathUtils.random(1f, maxHealth), triple.third, 0)
             //Get a random profession
             val professions = DataManager.traitList.professions
-            val randomProfession = professions[MathUtils.random(professions.size-1)]
+            val randomProfession = professions.listOfTraits[MathUtils.random(professions.listOfTraits.size-1)]
             person.traitList += Trait(randomProfession, 0f, 0f) //Add a random profession
-            TraitManager.addTrait(randomProfession, person.firstName) //Add it into the trait manager
+            TraitManager.addTrait(randomProfession, person) //Add it into the trait manager
             list.add(person) //Add the person
         }
     }
@@ -59,7 +59,7 @@ object GroupManager : IUpdateable, IResetable {
             person.ailmentList.forEach { disability ->
                 disability.updateHourly(delta)
                 //If the disability is a sickness, remove health.
-                if(disability.type == Person.Ailment.AilmentType.Sickness)
+                if(disability.type ==  Ailment.AilmentType.Sickness)
                     person.addHealth(-disability.hpLostPerHour)
                 //If it's done, remove the disability
                 if(disability.done)
@@ -79,8 +79,8 @@ object GroupManager : IUpdateable, IResetable {
 
     fun getPerson(name:String): Person?{
         val person = list.find {person -> person.firstName == name }
-        if(person == null) Logger.log("GroupManager", "Trying to find person with name $name and it doesn't exist. People: ${list.toString()}")
-        return person;
+        if(person == null) Logger.log("GroupManager", "Trying to find person with name $name and it doesn't exist. People: $list")
+        return person
     }
 
     fun getRandomPerson():Person?{
@@ -92,8 +92,9 @@ object GroupManager : IUpdateable, IResetable {
 
     fun clearPeople() = list.clear()
 
-    fun addPerson(person:Person) {
+    fun addPerson(person:Person):Person {
         list.add(person)
+        return person
     }
 
     fun killPerson(name:String){

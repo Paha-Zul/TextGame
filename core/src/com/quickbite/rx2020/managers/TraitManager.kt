@@ -73,7 +73,7 @@ object TraitManager {
      * @param people A list of people to use to get a trait modifier.
      * @return Returns a pair with the
      */
-    fun getTraitModifier(affects:String, subName:String? = null, subType:String? = null, subCommand:String? = null, people:List<Person>? = null):Pair<Float, Boolean>{
+    fun getTraitModifier(affects:String, affectsType:String, subName:String? = null, subType:String? = null, subCommand:String? = null, people:List<Person>? = null):Pair<Float, Boolean>{
         val key2 = subName ?: subType ?: subCommand ?: affects
 
         //This is the global trait map. It doesn't refer to a specific person...

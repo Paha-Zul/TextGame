@@ -28,6 +28,7 @@ allprojects {
         ashleyVersion = '1.7.0'
         aiVersion = '1.7.0'
         lib_version = '1.5'
+        toml_version = '0.7.2'
     }
 
     repositories {
@@ -118,6 +119,7 @@ project(":core") {
         compile "com.kotcrab.vis:vis-runtime:0.3.0"
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.2"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        compile "com.moandjiezana.toml:toml4j:$toml_version"
     }
 }
 

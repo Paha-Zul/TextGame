@@ -1,11 +1,9 @@
 package com.quickbite.rx2020
 
-import com.badlogic.gdx.math.MathUtils
-import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.objects.Ailment
-import com.quickbite.rx2020.util.Trait
+import com.quickbite.rx2020.objects.Trait
 
 /**
  * Created by Paha on 2/8/2016.
@@ -39,13 +37,9 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         timeAdded = _timeAdded
     }
 
-    private var ailments:MutableList<Ailment> = mutableListOf()
-    var ailmentList:List<Ailment>
+    private val ailments:MutableList<Ailment> = mutableListOf()
+    val ailmentList:List<Ailment>
         get() = ailments.toList()
-        set(value){
-            ailments.clear()
-            value.forEach { injury -> addAilment(injury) }
-        }
 
     val hasInjury:Boolean
         get() = numInjury > 0
@@ -87,45 +81,66 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         return addHealth(amt)
     }
 
-    /**
-     * Adds an ailment to this person. This will deal with setting up health changes.
-     * @param level The level of the ailment
-     * @param type The type of the ailment
-     * @param damageModifier The modifier for the ailment's damage which is altered by traits
-     * @param durationModifier The modifier for the ailment's duration which is altered by traits
-     */
-    fun addAilment(level: Ailment.AilmentLevel, type: Ailment.AilmentType, damageModifier:Float = 0f, durationModifier:Float = 0f){
-        val ailment = Ailment(level, type)
-        ailments.add(ailment) //Add the ailment
-        val isInjury = ailment.type == Ailment.AilmentType.Injury //Store whether it's an injury or sickness
 
-        //Only shift health if it's an injury
+    /**
+     * Adds an ailment
+     * @param ailment The ailment to add
+     */
+    fun addAilment(ailment: Ailment){
+        ailments.add(ailment)
+        val isInjury = ailment.type == Ailment.AilmentType.Injury
+
         if(isInjury) {
-            val amount = ailment.hpLost - ailment.hpLost*(damageModifier/100f) //We reduce by the modifier amount
-            healthNormal -= amount //Reduce normal health
-            healthInjury += amount //Add injury health
+            healthNormal -= ailment.HPTakenByInjury
+            healthInjury += ailment.HPTakenByInjury
         }
 
-        //Increment the right counter
         when(isInjury){
             true -> numInjury++
             else -> numSickness++
         }
 
-        //Subtract the modified amount if any
-        ailment.hoursRemaining -= (ailment.totalDuration*(damageModifier/100f)).toInt()
-
         if(isDead)
             GroupManager.killPerson(firstName)
     }
 
+    /**
+     * Adds an ailment to this person. This will deal with setting up health changes.
+     * @param level The level of the ailment
+     * @param type The type of the ailment
+     */
+    fun addAilment(level: Ailment.AilmentLevel, type: Ailment.AilmentType){
+        val ailment = Ailment(level, type)
+        addAilment(ailment)
+    }
+
+    /**
+     * Reapplies all existing ailments. This will remove them and clear any effects to the person and reapply each ailment.
+     * This is used for situations like when traits for ailments are added/removed and ailment effects will change
+     */
+    fun reapplyExistingAilments(){
+        val existingAilments = ailments.toList() //Gotta make a copy here or clear() will erase both
+        ailments.clear()
+
+        //We add back the injury health and clear the injury health. We do this instead of calling
+        //removeAilment because the ailments could have been altered
+        healthNormal += healthInjury
+        healthInjury = 0f
+
+        existingAilments.forEach { addAilment(it) }
+    }
+
+    /**
+     * Removes a specific ailment from this person
+     * @param ailment The ailment to remove
+     */
     fun removeAilment(ailment: Ailment):Boolean{
         val removed = ailments.remove(ailment)
         val isInjury = ailment.type == Ailment.AilmentType.Injury
         //Only shift health if it's an injury
         if(removed && isInjury) {
-            healthNormal += ailment.hpLost
-            healthInjury -= ailment.hpLost
+            healthNormal += ailment.HPTakenByInjury
+            healthInjury -= ailment.HPTakenByInjury
         }
 
         //Decrement the right counter
@@ -137,11 +152,14 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         return removed
     }
 
+    /**
+     * Removes the worst ailment from this person
+     */
     fun removeWorstAilment():Boolean{
         var worst: Ailment? = null
         var removed = false
 
-        ailmentList.forEach { injury ->
+        ailments.forEach { injury ->
             if(worst == null || worst!!.type < injury.type)
                 worst = injury
         }
@@ -152,11 +170,14 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         return removed
     }
 
+    /**
+     * Removes the ailment with the longest duration from this person
+     */
     fun removeLongestAilment():Boolean{
         var longest: Ailment? = null
         var removed = false
 
-        ailmentList.forEach { injury ->
+        ailments.forEach { injury ->
             if(longest == null || longest!!.hoursRemaining < injury.hoursRemaining)
                 longest = injury
         }
@@ -165,24 +186,6 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
             removed = removeAilment(longest!!)
 
         return removed
-    }
-
-    /**
-     * Used for loading in injuries from a save mostly.
-     */
-    private fun addAilment(ailment: Ailment){
-        ailments.add(ailment)
-        val isInjury = ailment.type == Ailment.AilmentType.Injury
-
-        if(isInjury) {
-            healthNormal -= ailment.hpLost
-            healthInjury += ailment.hpLost
-        }
-
-        when(isInjury){
-            true -> numInjury++
-            else -> numSickness++
-        }
     }
 
     override fun toString(): String {

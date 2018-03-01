@@ -1,4 +1,4 @@
-package com.quickbite.rx2020.util
+package com.quickbite.rx2020.objects
 
 import com.quickbite.rx2020.managers.DataManager
 

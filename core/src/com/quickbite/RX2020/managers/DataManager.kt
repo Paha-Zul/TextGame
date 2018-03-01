@@ -1,9 +1,11 @@
 package com.quickbite.rx2020.managers
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
+import com.moandjiezana.toml.Toml
 import com.quickbite.rx2020.shuffle
 import com.quickbite.rx2020.tests.TraitTest
 import com.quickbite.rx2020.util.Logger
@@ -16,10 +18,8 @@ import java.util.*
 
 object DataManager{
     private val searchActivities: LinkedHashMap<String, SearchActivityJSON> = linkedMapOf() //For Json Events
-
     private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
-
-    lateinit var traitList:TraitList
+    lateinit var traitList:Traits
         private set
 
     var eventDir:FileHandle? = null
@@ -62,7 +62,7 @@ object DataManager{
 
     private fun runTests(){
         println("Testing")
-        TraitTest.test()
+        TraitTest.testInjuryTraits()
     }
 
     private fun loadEvents(dir:FileHandle){
@@ -137,16 +137,18 @@ object DataManager{
     }
 
     private fun loadTraits(file:FileHandle){
-        this.traitList = json.fromJson(TraitList::class.java, file)
+//        this.traitList = json.fromJson(TraitList::class.java, file)
+
+        this.traitList = Toml().read(Gdx.files.internal("files/traits.toml").file()).to(Traits::class.java)
     }
 
     fun pullRandomName():Triple<String, String, Boolean>{
         var firstName = ""
         val male = MathUtils.random(0, 100) > 50
-        if(male)
-            firstName = names.maleFirstNames.removeAt(names.maleFirstNames.size-1)
+        firstName = if(male)
+            names.maleFirstNames.removeAt(names.maleFirstNames.size-1)
         else
-            firstName = names.femaleFirstNames.removeAt(names.femaleFirstNames.size-1)
+            names.femaleFirstNames.removeAt(names.femaleFirstNames.size-1)
 
         val lastName = names.lastNames[MathUtils.random(0, names.lastNames.size - 1)]
 
@@ -171,8 +173,14 @@ object DataManager{
         var affectedByHealth:Boolean = false
     }
 
+    class Traits{
+        lateinit var professions:TraitList
+        lateinit var skills:TraitList
+    }
+
     class TraitList{
-        var professions:Array<TraitJson> = arrayOf()
+        var timeRange = arrayOf(0f, 0f)
+        var listOfTraits:Array<TraitJson> = arrayOf()
     }
 
     class TraitJson{
@@ -192,9 +200,11 @@ object DataManager{
         var subCommand:String? = null
         var amount:Float = 0.0f
         var percent = true
+        var affectsType = "both"
+        var amountRange = arrayOf(0, 0)
     }
 
-    class SearchActivityJSON(){
+    class SearchActivityJSON{
         var name:String = "def"
         var description:Array<Array<String>> = arrayOf()
         var buttonTitle:String = "fixme"

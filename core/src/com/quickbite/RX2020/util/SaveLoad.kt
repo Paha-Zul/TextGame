@@ -9,6 +9,7 @@ import com.quickbite.rx2020.managers.GameEventManager
 import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.managers.SupplyManager
+import com.quickbite.rx2020.objects.Ailment
 import com.quickbite.rx2020.screens.GameScreen
 
 /**
@@ -50,7 +51,10 @@ object SaveLoad{
         save.currMiles = GameStats.TravelInfo.totalDistTraveled
         save.maxTripMileage = GameStats.TravelInfo.totalDistOfGame
 
-        GroupManager.getPeopleList().forEach { person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal + person.healthInjury, person.ailmentList, person.male, person.timeAdded))}
+        GroupManager.getPeopleList().forEach {
+            person -> save.personList.add(PersonPOJO(person.fullName, person.healthNormal + person.healthInjury,
+                person.ailmentList, person.male, person.timeAdded))}
+
         SupplyManager.getSupplyList().forEach { supply -> save.supplyList.add(SupplyPOJO(supply.name, supply.amt, supply.currHealth)) }
         FunGameStats.statsMap.toList().forEach { stat -> save.funStatList.add(arrayOf(stat.first, stat.second)) }
         FunGameStats.uniqueStatsList.forEach { stat -> save.funStatUniqueList.add(arrayOf(stat.desc, stat.value)) }
@@ -84,7 +88,7 @@ object SaveLoad{
             val names = jsonPerson.name.split(" ")
             val person = Person(names[0], names[1], jsonPerson.male, jsonPerson.gameTimeAdded) //Make a new person to add to the group.
             person.addHealth(jsonPerson.health - person.totalMaxHealth) //We need to set the health through a bit of roundabout.
-            person.ailmentList = jsonPerson.ailments
+            jsonPerson.ailments.forEach { person.addAilment(it) }
             GroupManager.addPerson(person)
         }
 
@@ -114,6 +118,8 @@ object SaveLoad{
             GameEventManager.addDelayedEvent(list[0], list[1], list[2].toFloat(), list[3].toInt())
         }
 
+        //TODO Trait saving/loading
+
         Logger.log("SaveLoad", "Loaded game in ${(TimeUtils.nanoTime() - startTime)/1000000000.0} seconds")
     }
 
@@ -134,7 +140,7 @@ object SaveLoad{
         var delayedEventTimers:MutableList<Array<String>> = mutableListOf() // [evtName, evtType, remainingTime, pageNumber]
     }
 
-    private class PersonPOJO(var name:String, var health:Float, var ailments:List<Person.Ailment>, var male:Boolean, val gameTimeAdded:Long){
+    private class PersonPOJO(var name:String, var health:Float, var ailments:List<Ailment>, var male:Boolean, val gameTimeAdded:Long){
         constructor():this("", 0f, listOf(), false, 0)
     }
 
