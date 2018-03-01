@@ -516,7 +516,7 @@ object EventManager : IResetable {
         var amt = amt //Shadow this to make it mutable
 
         val modifier = TraitManager.getTraitModifier("cutMiles") //Get the modifier
-        amt += (modifier.first / 100f) * amt //Subtract the modified amount
+        amt += (-modifier.first / 100f) * amt //Subtract the modified amount. The modifier amount is negative so we negate it to a positive
 
         GameStats.TravelInfo.totalDistTraveled += amt.toInt() //Add it to the distance traveled (which is really subtracting)
 
@@ -541,6 +541,10 @@ object EventManager : IResetable {
         FunGameStats.addFunStat("$itemName damage", amt.toInt().toString())
     }
 
+    /**
+     * Adds health to a person. This could either be adding a positive or negative amount
+     * @param amt The amount to add. This could be negative or positive
+     */
     private fun addHealthToPerson(list: List<Person>, amt: Int, min: Int, max: Int, perc: Boolean, randomPerPerson: Boolean) {
         var amt = amt
         list.forEach { person ->
