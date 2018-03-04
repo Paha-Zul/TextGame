@@ -9,7 +9,7 @@ import com.quickbite.rx2020.objects.Trait
  * Created by Paha on 2/8/2016.
  */
 class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:Long) {
-    val traitList:MutableList<Trait> = mutableListOf()
+    val traitList:MutableList<DataManager.TraitJson> = mutableListOf()
 
     var firstName:String = ""
     var lastName:String = ""
@@ -186,6 +186,19 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
             removed = removeAilment(longest!!)
 
         return removed
+    }
+
+    fun addTrait(trait:DataManager.TraitJson):Boolean {
+        val existingTrait = traitList.firstOrNull { it.name == trait.name}
+        if(existingTrait == null){
+            traitList.add(trait.copy()) //We wanna copy the trait so we can modify if needed
+            return true
+        }else if(existingTrait != null && existingTrait.stackable){
+            existingTrait.amount += trait.amount
+            return true        
+        }
+            
+        return false
     }
 
     override fun toString(): String {

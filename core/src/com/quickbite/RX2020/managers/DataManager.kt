@@ -188,6 +188,25 @@ object DataManager{
         var name:String = ""
         var effects:Array<TraitEffectJson> = arrayOf()
 
+        fun copy():TraitJson{
+            val newTrait = TraitJson()
+            newTrait.name = name
+            newTrait.effects = arrayOf(effects.size)
+            newTrait.effects.forEachIndexed { t, index ->
+                val eff = effects[index]
+                t.affects = eff.affects
+                t.scope = eff.scope
+                t.subType = eff.subType
+                t.subName = eff.subName
+                t.subCommand = eff.subCommand
+                t.amount = eff.amount
+                t.percent = eff.percent
+                t.amountRange = eff.amountRange
+            }
+
+            return newTrait
+        }
+
         override fun toString(): String {
             return name
         }

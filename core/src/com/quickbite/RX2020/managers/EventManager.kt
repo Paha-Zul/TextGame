@@ -413,6 +413,13 @@ object EventManager : IResetable {
             ResultManager.purgeEventResults()
         })
 
+        EventManager.onEvent("addTrait", {args -> 
+            val name = args[0] as String
+            val type = args[1] as String
+
+            val trait = //TODO Continue here...
+        })
+
         //Called when an event finishes.
         EventManager.onEvent("forceCamp", {  args ->
             GameScreenGUI.closeEventGUI(false, true)
