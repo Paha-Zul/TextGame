@@ -75,17 +75,14 @@ object TraitTest {
 
         System.out.println("Individuals")
         TraitManager.individualTraitMap.toList().forEach{ kv ->
-            System.out.println(kv.first)
-            kv.second.values.forEach {
-                it.toList().forEach { kv ->
-                    System.out.println("${kv.first}:${kv.second}")
-                }}} //Print out
+            System.out.println("${kv.first}:${kv.second.first}:${kv.second.second}")
+        } //Print out
 
         System.out.println()
 
         System.out.println("Globals")
         TraitManager.globalTraitMap.toList().forEach { kv1 ->
-            System.out.println(kv1)
+            System.out.println("${kv1.first}:${kv1.second.first}:${kv1.second.second}")
         }
     }
 
@@ -96,10 +93,10 @@ object TraitTest {
             val randomItem = itemList[MathUtils.random(itemList.size - 1)]
             val baseAmount = MathUtils.random(50, 150).toFloat()
             val result:Pair<Float, Boolean>
-            if(randomItem.type == "ROVPart")
-                result = TraitManager.getTraitModifier("addRndAmt", subType = randomItem.type)
+            result = if(randomItem.type == "ROVPart")
+                TraitManager.getTraitModifier("addRndAmt", subType = randomItem.type)
             else
-                result = TraitManager.getTraitModifier("addRndAmt", randomItem.name)
+                TraitManager.getTraitModifier("addRndAmt", randomItem.name)
 
             val modifiedAmount:Float=
                     if(result.second) //If we are using percent

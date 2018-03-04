@@ -18,7 +18,8 @@ object TraitManager {
 
         trait.effects.forEach { traitEffect ->
             val map = if(traitEffect.scope == "global") globalTraitMap else individualTraitMap
-            val key = traitEffect.affects + traitEffect.subType + traitEffect.subCommand + traitEffect.subName + if(traitEffect.scope == "global") person!!.fullName else ""
+            val key = traitEffect.affects + traitEffect.subName + traitEffect.subType + traitEffect.subCommand +
+                    if(traitEffect.scope == "individual") person!!.fullName else ""
 
             //When adding a trait we wanna check listeners in case some trait like
             //maxSurvivorHP needs to be triggered. We can basically combine the trait.affects
@@ -34,7 +35,8 @@ object TraitManager {
         trait.effects.forEach { traitEffect ->
             //Get the right map
             val map = if(traitEffect.scope == "global") globalTraitMap else individualTraitMap
-            val key = traitEffect.affects + traitEffect.subType + traitEffect.subCommand + traitEffect.subName + if(traitEffect.scope == "global") person!!.fullName else ""
+            val key = traitEffect.affects + traitEffect.subName + traitEffect.subType + traitEffect.subCommand +
+                    if(traitEffect.scope == "individual") person!!.fullName else ""
 
             //Call a listener here when removing a trait. If we have a trait that affects maxHP or something
             //then we need to modify the values here.
@@ -70,8 +72,8 @@ object TraitManager {
      * @param people A list of people to use to get a trait modifier.
      * @return Returns a pair with the
      */
-    fun getTraitModifier(affects:String, affectsType:String, subName:String = "", subType:String = "", subCommand:String = "", people:List<Person>? = null):Pair<Float, Boolean>{
-        val key = subName + subType + subCommand + affects
+    fun getTraitModifier(affects:String, subName:String = "", subType:String = "", subCommand:String = "", people:List<Person>? = null):Pair<Float, Boolean>{
+        val key = affects + subName + subType + subCommand
 
         //This is the global trait map. It doesn't refer to a specific person...
         val value = globalTraitMap.getOrElse(key, {MutablePair(0f, blankTraitEffect)})

@@ -536,7 +536,7 @@ object EventManager : IResetable {
         val currEvent = GameEventManager.currActiveEvent!! //Get the current active event. We'll use this to grab the active people from
         val peopleInvolvedInEvent = currEvent.randomPersonList.subList(0, currEvent.numOfPeopleInEvent) //Gets a sublist of the people involved
         val modifier = TraitManager.getTraitModifier("addRndItemHealth", subType = item.type, people = peopleInvolvedInEvent) //Get the trait modifier
-        amt += amt * (modifier.first / 100f) //Increase by the modifier amount
+        amt += if(amt < 0) amt * (modifier.first / 100f) else 0f //Increase by the modifier amount only IF we are taking away health (amt < 0)
         SupplyManager.addHealthToSupply(itemName, amt) //Add health to the supply
         FunGameStats.addFunStat("$itemName damage", amt.toInt().toString())
     }
@@ -552,7 +552,7 @@ object EventManager : IResetable {
                 amt = MathUtils.random(Math.abs(min), Math.abs(max))
 
             val modifier = TraitManager.getTraitModifier("addHealth", subCommand = "remove")
-            val multiplier = modifier.first / 100f
+            val multiplier = if(amt < 0) modifier.first / 100f else 0f //Only take the modifier if we are dealing with removing health (amt < 0)
 
             if (perc)
                 person.addPercentHealth(amt.toFloat() + multiplier).toInt()

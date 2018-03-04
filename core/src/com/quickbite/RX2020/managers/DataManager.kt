@@ -62,7 +62,7 @@ object DataManager{
 
     private fun runTests(){
         println("Testing")
-        TraitTest.testInjuryTraits()
+        TraitTest.test()
     }
 
     private fun loadEvents(dir:FileHandle){
@@ -176,6 +176,7 @@ object DataManager{
     class Traits{
         lateinit var professions:TraitList
         lateinit var skills:TraitList
+        lateinit var stateofbeing:TraitList
     }
 
     class TraitList{
@@ -193,14 +194,13 @@ object DataManager{
     }
 
     class TraitEffectJson{
-        var affects:String? = null
-        var scope:String? = null
-        var subType:String? = null
-        var subName:String? = null
-        var subCommand:String? = null
+        var affects:String = ""
+        var scope:String = ""
+        var subType:String = ""
+        var subName:String = ""
+        var subCommand:String = ""
         var amount:Float = 0.0f
         var percent = true
-        var affectsType = "both"
         var amountRange = arrayOf(0, 0)
     }
 

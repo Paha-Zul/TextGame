@@ -57,16 +57,16 @@ object Globals {
                 if (!removing) {
                     peopleList.forEach { person ->
                         person.ailmentList.forEach { ailment ->
-                            //We add here because traitEffect.amount will be negative
-                            ailment.hoursRemaining += (ailment.totalDuration * (traitEffect.amount / 100f)).toInt()
+                            //We subtract here cause traitEffect.amount will be positive
+                            ailment.hoursRemaining -= (ailment.totalDuration * (traitEffect.amount / 100f)).toInt()
                         }
                     }
                 //If we are removing, add the duration back on to all ailments on all people
                 } else {
                     peopleList.forEach { person ->
                         person.ailmentList.forEach { ailment ->
-                            //We subtract here because traitEffect.amount will be negative
-                            ailment.hoursRemaining -= (ailment.totalDuration * (traitEffect.amount / 100f)).toInt()
+                            //We add here because traitEffect.amount will be positive
+                            ailment.hoursRemaining += (ailment.totalDuration * (traitEffect.amount / 100f)).toInt()
                         }
                     }
                 }
@@ -75,13 +75,13 @@ object Globals {
             }else if(traitEffect.scope == "individual"){
                 //If not removing (adding), remove the duration amount from the trait person passed in
                 if (!removing)
-                     //We add here because traitEffect.amount will be negative
-                    personWithTrait!!.ailmentList.forEach { it.hoursRemaining += (it.totalDuration*traitEffect.amount/100f).toInt() }
+                     //We subtract here because traitEffect.amount will be positive
+                    personWithTrait!!.ailmentList.forEach { it.hoursRemaining -= (it.totalDuration*traitEffect.amount/100f).toInt() }
 
                 //If we are removing, add the duration back on to the person with the trait
                 else
-                    //We subtract here because traitEffect.amount will be negative
-                    personWithTrait!!.ailmentList.forEach { it.hoursRemaining -= (it.totalDuration*traitEffect.amount/100f).toInt() }
+                    //We add here because traitEffect.amount will be positive
+                    personWithTrait!!.ailmentList.forEach { it.hoursRemaining += (it.totalDuration*traitEffect.amount/100f).toInt() }
             }
         })
 
@@ -96,8 +96,8 @@ object Globals {
                 if (!removing) {
                     peopleList.forEach { person ->
                         person.ailmentList.forEach { ailment ->
-                            //We add here because traitEffect.amount will be negative
-                            ailment.HPTakenByInjury += (ailment.baseHPTakenByInjury * (traitEffect.amount / 100f)).toInt()
+                            //We subtract here because traitEffect.amount will be positive
+                            ailment.HPTakenByInjury -= (ailment.baseHPTakenByInjury * (traitEffect.amount / 100f)).toInt()
                             println("Such")
                         }
                     }
@@ -105,8 +105,8 @@ object Globals {
                 } else {
                     peopleList.forEach { person ->
                         person.ailmentList.forEach { ailment ->
-                            //We add here because traitEffect.amount will be negative
-                            ailment.HPTakenByInjury -= (ailment.baseHPTakenByInjury * (traitEffect.amount / 100f)).toInt()
+                            //We add here because traitEffect.amount will be positive
+                            ailment.HPTakenByInjury += (ailment.baseHPTakenByInjury * (traitEffect.amount / 100f)).toInt()
                         }
                     }
                 }
@@ -118,13 +118,13 @@ object Globals {
             }else if(traitEffect.scope == "individual"){
                 //If not removing (adding), remove the duration amount from the trait person passed in
                 if (!removing)
-                    //We add here because traitEffect.amount will be negative
-                    personWithTrait!!.ailmentList.forEach { it.HPTakenByInjury += (it.baseHPTakenByInjury*traitEffect.amount/100f).toInt() }
+                    //We subtract here because traitEffect.amount will be positive
+                    personWithTrait!!.ailmentList.forEach { it.HPTakenByInjury -= (it.baseHPTakenByInjury*traitEffect.amount/100f).toInt() }
 
                 //If we are removing, add the duration back on to the person with the trait
                 else
-                    //We add here because traitEffect.amount will be negative
-                    personWithTrait!!.ailmentList.forEach { it.HPTakenByInjury -= (it.baseHPTakenByInjury*traitEffect.amount/100f).toInt() }
+                    //We add here because traitEffect.amount will be positive
+                    personWithTrait!!.ailmentList.forEach { it.HPTakenByInjury += (it.baseHPTakenByInjury*traitEffect.amount/100f).toInt() }
 
                 //Reapply all the ailments on the person
                 personWithTrait.reapplyExistingAilments()
