@@ -61,8 +61,9 @@ object DataManager{
     }
 
     private fun runTests(){
-        println("Testing")
-        TraitTest.test()
+        println()
+        println("----Testing Traits----")
+        TraitTest.testSkills(20)
     }
 
     private fun loadEvents(dir:FileHandle){
@@ -142,6 +143,10 @@ object DataManager{
         this.traitList = Toml().read(Gdx.files.internal("files/traits.toml").file()).to(Traits::class.java)
     }
 
+    /**
+     * Pulls a random name from all available names. This includes the first and last name
+     * @return Returns a triple containing the first and last name, as well as if they are male or female. True if male, false if female
+     */
     fun pullRandomName():Triple<String, String, Boolean>{
         var firstName = ""
         val male = MathUtils.random(0, 100) > 50
@@ -185,14 +190,15 @@ object DataManager{
     }
 
     class TraitJson{
-        var name:String = ""
+        var name:String = "Default Trait"
         var effects:Array<TraitEffectJson> = arrayOf()
+        var stackable = false
 
         fun copy():TraitJson{
             val newTrait = TraitJson()
             newTrait.name = name
-            newTrait.effects = arrayOf(effects.size)
-            newTrait.effects.forEachIndexed { t, index ->
+            newTrait.effects = Array(effects.size, {TraitEffectJson()})
+            newTrait.effects.forEachIndexed { index, t ->
                 val eff = effects[index]
                 t.affects = eff.affects
                 t.scope = eff.scope
@@ -220,7 +226,7 @@ object DataManager{
         var subCommand:String = ""
         var amount:Float = 0.0f
         var percent = true
-        var amountRange = arrayOf(0, 0)
+        var amountRange:Array<Float> = arrayOf()
     }
 
     class SearchActivityJSON{

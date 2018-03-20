@@ -39,7 +39,7 @@ object GroupManager : IUpdateable, IResetable {
             //Get a random profession
             val professions = DataManager.traitList.professions
             val randomProfession = professions.listOfTraits[MathUtils.random(professions.listOfTraits.size-1)]
-            person.traitList += Trait(randomProfession, 0f, 0f) //Add a random profession
+            person.traitList += randomProfession //Add a random profession
             TraitManager.addTrait(randomProfession, person) //Add it into the trait manager
             list.add(person) //Add the person
         }

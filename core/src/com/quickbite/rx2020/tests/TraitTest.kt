@@ -11,6 +11,26 @@ object TraitTest {
 
     private val listOfTraitsAdded = mutableListOf<DataManager.TraitJson>()
 
+    fun testSkills(testAmount:Int = 5){
+        val personList = mutableListOf<Person>()
+        val skillList = DataManager.traitList.skills.listOfTraits
+
+        for(i in 0 until testAmount){
+            val randomName = DataManager.pullRandomName()
+            val person = Person(randomName.first, randomName.second, randomName.third, 0L)
+            personList += person
+
+            val randomSkill = skillList[MathUtils.random(skillList.size-1)]
+
+            System.out.println("Testing ${randomSkill.name} on $person")
+
+            TraitManager.addTrait(skillList[MathUtils.random(skillList.size-1)], person)
+        }
+
+        testModifierAmount()
+    }
+
+    //Tests injuries to see if the traits correctly affect them. This is random testing
     fun testInjuryTraits(){
         val injuryDuration = DataManager.traitList.professions.listOfTraits.first {
             it.effects.firstOrNull { it.affects == "addAilment" && it.subCommand == "duration" && it.scope == "global"} != null }
@@ -86,10 +106,10 @@ object TraitTest {
         }
     }
 
-    private fun testModifierAmount(){
+    private fun testModifierAmount(amountOfTimes:Int = 20){
         val itemList = DataManager.getItemList()
 
-        for(i in 1 until 20){
+        for(i in 0 until amountOfTimes){
             val randomItem = itemList[MathUtils.random(itemList.size - 1)]
             val baseAmount = MathUtils.random(50, 150).toFloat()
             val result:Pair<Float, Boolean>

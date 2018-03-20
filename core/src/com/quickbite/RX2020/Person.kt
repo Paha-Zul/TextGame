@@ -1,5 +1,6 @@
 package com.quickbite.rx2020
 
+import com.quickbite.rx2020.managers.DataManager
 import com.quickbite.rx2020.managers.EventManager
 import com.quickbite.rx2020.managers.GroupManager
 import com.quickbite.rx2020.objects.Ailment
@@ -193,15 +194,17 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         if(existingTrait == null){
             traitList.add(trait.copy()) //We wanna copy the trait so we can modify if needed
             return true
-        }else if(existingTrait != null && existingTrait.stackable){
-            existingTrait.amount += trait.amount
-            return true        
+        }else if(existingTrait.stackable){
+            existingTrait.effects.forEachIndexed { index, te ->
+                te.amount += trait.effects[index].amount
+            }
+            return true
         }
             
         return false
     }
 
     override fun toString(): String {
-        return "$fullName - "+(if(male){"male"}else{"female"});
+        return "$fullName - "+(if(male){"male"}else{"female"})
     }
 }

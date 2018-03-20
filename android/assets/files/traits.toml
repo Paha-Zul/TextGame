@@ -1,0 +1,739 @@
+[[professions.listOfTraits]]
+name = "1"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "global"
+subName = "energy"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "2"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "global"
+subName = "edibles"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "3"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "global"
+subName = "parts"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "4"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "global"
+subName = "crystals"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "5"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 0.5
+percent = false
+scope = "global"
+subName = "medkits"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "6"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "global"
+subName = "wealth"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "7"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 0.5
+percent = false
+scope = "global"
+subType = "ROVParts"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "8"
+
+[[professions.listOfTraits.effects]]
+affects = "survivorMaxHP"
+amount = 5
+scope = "global"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "9"
+
+[[professions.listOfTraits.effects]]
+affects = "ROVMaxHP"
+amount = 5
+scope = "global"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "10"
+
+[[professions.listOfTraits.effects]]
+affects = "ROVPartMaxHealth"
+amount = 5
+scope = "global"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "11"
+
+[[professions.listOfTraits.effects]]
+affects = "cutMiles"
+amount = -5
+scope = "global"
+affectsType = "negative"
+
+[[professions.listOfTraits]]
+name = "12"
+
+[[professions.listOfTraits.effects]]
+affects = "travelSpeed"
+amount = 0.5
+percent = false
+scope = "global"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "13"
+
+[[professions.listOfTraits.effects]]
+affects = "addHealth"
+amount = 5
+scope = "global"
+subCommand = "remove"
+affectsType = "negative"
+
+[[professions.listOfTraits]]
+name = "14"
+
+[[professions.listOfTraits.effects]]
+affects = "damageROV"
+amount = 5
+scope = "global"
+affectsType = "negative"
+
+[[professions.listOfTraits]]
+name = "15"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndItemHealth"
+amount = 5
+scope = "global"
+subCommand = "remove"
+subType = "ROVPart"
+
+[[professions.listOfTraits]]
+name = "16"
+
+[[professions.listOfTraits.effects]]
+affects = "addAilment"
+amount = 5
+scope = "global"
+subCommand = "duration"
+
+[[professions.listOfTraits]]
+name = "17"
+
+[[professions.listOfTraits.effects]]
+affects = "addAilment"
+amount = 5
+scope = "global"
+subCommand = "damage"
+
+[[professions.listOfTraits]]
+name = "18"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 10
+scope = "individual"
+subName = "energy"
+
+[[professions.listOfTraits]]
+name = "19"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 10
+scope = "individual"
+subName = "parts"
+
+[[professions.listOfTraits]]
+name = "20"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 10
+scope = "individual"
+subName = "crystals"
+
+[[professions.listOfTraits]]
+name = "21"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 1
+percent = false
+scope = "individual"
+subName = "medkits"
+
+[[professions.listOfTraits]]
+name = "22"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 10
+scope = "individual"
+subName = "wealth"
+
+[[professions.listOfTraits]]
+name = "23"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 1
+percent = false
+scope = "individual"
+subType = "ROVPart"
+
+[[professions.listOfTraits]]
+name = "24"
+
+[[professions.listOfTraits.effects]]
+affects = "survivorMaxHP"
+amount = 10
+scope = "individual"
+
+[[professions.listOfTraits]]
+name = "25"
+
+[[professions.listOfTraits.effects]]
+affects = "ROVMaxHP"
+amount = 10
+scope = "individual"
+
+[[professions.listOfTraits]]
+name = "26"
+
+[[professions.listOfTraits.effects]]
+affects = "ROVPartsMaxHP"
+amount = 10
+scope = "individual"
+
+[[professions.listOfTraits]]
+name = "27"
+
+[[professions.listOfTraits.effects]]
+affects = "cutMiles"
+amount = -10
+scope = "individual"
+
+[[professions.listOfTraits]]
+name = "28"
+
+[[professions.listOfTraits.effects]]
+affects = "travelSpeed"
+amount = 1
+percent = false
+scope = "individual"
+
+[[professions.listOfTraits]]
+name = "29"
+
+[[professions.listOfTraits.effects]]
+affects = "addHealth"
+amount = 10
+scope = "individual"
+subCommand = "remove"
+
+[[professions.listOfTraits.effects]]
+affects = "ROVMaxHP"
+amount = 10
+scope = "individual"
+affectsType = "positive"
+
+[[professions.listOfTraits]]
+name = "30"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndItemHealth"
+amount = -10
+scope = "individual"
+subCommand = "remove"
+subType = "ROVPart"
+
+[[professions.listOfTraits]]
+name = "31"
+
+[[professions.listOfTraits.effects]]
+affects = "addAilment"
+amount = -10
+scope = "individual"
+subCommand = "duration"
+
+[[professions.listOfTraits]]
+name = "32"
+
+[[professions.listOfTraits.effects]]
+affects = "addAilment"
+amount = -10
+scope = "individual"
+subCommand = "damage"
+
+[[professions.listOfTraits]]
+name = "Lone Survivor"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "individual"
+subName = "energy"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "individual"
+subName = "edibles"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "individual"
+subName = "parts"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "individual"
+subName = "crystals"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "individual"
+subName = "wealth"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 0.5
+scope = "individual"
+subName = "medkits"
+
+[[professions.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 0.5
+scope = "individual"
+subType = "ROVParts"
+
+[skills]
+timeRange = [12, 36]
+
+[[skills.listOfTraits]]
+name = "34"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subName = "energy"
+
+[[skills.listOfTraits]]
+name = "35"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subName = "edible"
+
+[[skills.listOfTraits]]
+name = "36"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subName = "parts"
+
+[[skills.listOfTraits]]
+name = "37"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subName = "crystals"
+
+[[skills.listOfTraits]]
+name = "38"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.05, 0.05]
+percent = false
+scope = "global"
+subName = "medkits"
+
+[[skills.listOfTraits]]
+name = "39"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subName = "wealth"
+
+[[skills.listOfTraits]]
+name = "40"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subType = "ROVParts"
+
+[[skills.listOfTraits]]
+name = "41"
+
+[[skills.listOfTraits.effects]]
+affects = "survivorMaxHP"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "42"
+
+[[skills.listOfTraits.effects]]
+affects = "ROVMaxHP"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "43"
+
+[[skills.listOfTraits.effects]]
+affects = "ROVMaxHP"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "44"
+
+[[skills.listOfTraits.effects]]
+affects = "cutMiles"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "45"
+
+[[skills.listOfTraits.effects]]
+affects = "travelSpeed"
+affectsType = "both"
+amountRange = [-0.05, 0.05]
+percent = false
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "46"
+
+[[skills.listOfTraits.effects]]
+affects = "travelSpeed"
+affectsType = "both"
+amountRange = [-0.5, 0.5]
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "47"
+
+[[skills.listOfTraits.effects]]
+affects = "addHealth"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subCommand = "remove"
+percent = false
+
+[[skills.listOfTraits]]
+name = "48"
+
+[[skills.listOfTraits.effects]]
+affects = "damageROV"
+amountRange = [-0.5, 0.5]
+percent = false
+scope = "global"
+
+[[skills.listOfTraits]]
+name = "49"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndItemHealth"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subCommand = "remove"
+subType = "ROVPart"
+
+[[skills.listOfTraits]]
+name = "50"
+
+[[skills.listOfTraits.effects]]
+affects = "addAilment"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subCommand = "duration"
+
+[[skills.listOfTraits]]
+name = "51"
+
+[[skills.listOfTraits.effects]]
+affects = "addAilment"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subCommand = "damage"
+
+[[skills.listOfTraits]]
+name = "52"
+
+[[skills.listOfTraits.effects]]
+affects = "addAilment"
+amountRange = [-0.5, 0.5]
+scope = "global"
+subCommand = "duration"
+
+[[skills.listOfTraits]]
+name = "53"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-1, 1]
+scope = "individual"
+subName = "energy"
+
+[[skills.listOfTraits]]
+name = "54"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-1, 1]
+scope = "individual"
+subName = "edibles"
+
+[[skills.listOfTraits]]
+name = "55"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-1, 1]
+scope = "individual"
+subName = "parts"
+
+[[skills.listOfTraits]]
+name = "56"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-1, 1]
+scope = "individual"
+subName = "crystals"
+
+[[skills.listOfTraits]]
+name = "56"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-0.1, 0.1]
+scope = "individual"
+subName = "medkits"
+percent = false
+
+[[skills.listOfTraits]]
+name = "57"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-0.1, 0.1]
+scope = "individual"
+subName = "medkits"
+percent = false
+
+[[skills.listOfTraits]]
+name = "58"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-1, 1]
+scope = "individual"
+subName = "wealth"
+
+[[skills.listOfTraits]]
+name = "59"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndAmt"
+amountRange = [-0.1, 0.1]
+scope = "individual"
+subType = "ROVPart"
+percent = false
+
+[[skills.listOfTraits]]
+name = "60"
+
+[[skills.listOfTraits.effects]]
+affects = "survivorMaxHP"
+amountRange = [-1, 1]
+scope = "individual"
+
+[[skills.listOfTraits]]
+name = "61"
+
+[[skills.listOfTraits.effects]]
+affects = "ROVMaxHP"
+amountRange = [-1, 1]
+scope = "individual"
+
+[[skills.listOfTraits]]
+name = "62"
+
+[[skills.listOfTraits.effects]]
+affects = "ROVPartsMaxHP"
+amountRange = [-1, 1]
+scope = "individual"
+
+[[skills.listOfTraits]]
+name = "63"
+
+[[skills.listOfTraits.effects]]
+affects = "cutMiles"
+amountRange = [-1, 1]
+scope = "individual"
+
+[[skills.listOfTraits]]
+name = "64"
+
+[[skills.listOfTraits.effects]]
+affects = "travelSpeed"
+amountRange = [-0.1, 0.1]
+scope = "individual"
+percent = false
+
+[[skills.listOfTraits]]
+name = "65"
+
+[[skills.listOfTraits.effects]]
+affects = "addHealth"
+amountRange = [-1, 1]
+scope = "individual"
+subCommand = "remove"
+
+[[skills.listOfTraits]]
+name = "66"
+
+[[skills.listOfTraits.effects]]
+affects = "ROVMaxHP"
+amountRange = [-1, 1]
+scope = "individual"
+affectsType = "positive"
+
+[[skills.listOfTraits]]
+name = "67"
+
+[[skills.listOfTraits.effects]]
+affects = "addRndItemHealth"
+amountRage = [-1, 1]
+scope = "individual"
+subCommand = "remove"
+subType = "ROVPart"
+
+[[skills.listOfTraits]]
+name = "68"
+
+[[skills.listOfTraits.effects]]
+affects = "addAilment"
+amountRange = [-1, 1]
+scope = "individual"
+subCommand = "duration"
+
+[[skills.listOfTraits]]
+name = "69"
+
+[[skills.listOfTraits.effects]]
+affects = "addAilment"
+amountRange = [-1, 1]
+scope = "individual"
+subCommand = "damage"
+
+[[stateofbeing.listOfTraits]]
+name = "70"
+
+[[stateofbeing.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = -25
+scope = "individual"
+subName = "edibles"
+
+[[stateofbeing.listOfTraits.effects]]
+affects = "survivorMaxHP"
+amount = 10
+scope = "individual"
+
+[[stateofbeing.listOfTraits]]
+name = "71"
+
+[[stateofbeing.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = -25
+scope = "individual"
+subName = "parts"
+
+[[stateofbeing.listOfTraits.effects]]
+affects = "ROVMaxHP"
+amount = 10
+scope = "individual"
+
+[[stateofbeing.listOfTraits]]
+name = "71"
+
+[[stateofbeing.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = -25
+scope = "individual"
+subName = "crystals"
+
+[[stateofbeing.listOfTraits.effects]]
+affects = "addRndAmt"
+amount = 5
+scope = "individual"
+subName = "edibles"

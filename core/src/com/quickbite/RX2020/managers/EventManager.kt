@@ -345,7 +345,7 @@ object EventManager : IResetable {
 
             //Remove all the traits from the manager when a person dies
             person.traitList.forEach { trait ->
-                TraitManager.removeTrait(trait.traitDef, person)
+                TraitManager.removeTrait(trait, person)
             }
 
             ResultManager.addRecentDeath(person)
@@ -414,10 +414,23 @@ object EventManager : IResetable {
         })
 
         EventManager.onEvent("addTrait", {args -> 
-            val name = args[0] as String
-            val type = args[1] as String
+            val nameOfTrait = args[0] as String
+            val typeOfTrait = args[1] as String
+            val nameOfPerson = args[2] as String
 
-            val trait = //TODO Continue here...
+            //Get the list by using 'type'
+            val list = when(typeOfTrait){
+                "profession" -> DataManager.traitList.professions.listOfTraits
+                "skill" -> DataManager.traitList.skills.listOfTraits
+                else -> DataManager.traitList.stateofbeing.listOfTraits
+            }
+
+            val trait = if(nameOfTrait == "random") list[MathUtils.random(list.size-1)] else list.first{ it.name == nameOfTrait }
+
+            trait.effects.forEach {
+                if(it.amountRange.isNotEmpty())
+                    it.amount = if(MathUtils.random() <= 0.5) it.amountRange[0] else it.amountRange[1] //Pick either one base on random number
+            }
         })
 
         //Called when an event finishes.
@@ -481,7 +494,7 @@ object EventManager : IResetable {
         var amount = amount //Make this mutable
         val itemDef = DataManager.getItem(itemName)!!
 
-        var modifier = if (itemDef.type != "ROVPart")
+        val modifier = if (itemDef.type != "ROVPart")
             TraitManager.getTraitModifier("addRndAmt", itemName, people = people)
         else
             TraitManager.getTraitModifier("addRndAmt", subType = itemDef.type, people = people)

@@ -1,5 +1,6 @@
 package com.quickbite.rx2020.managers
 
+import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.MutablePair
 import com.quickbite.rx2020.Person
 
@@ -20,6 +21,9 @@ object TraitManager {
             val map = if(traitEffect.scope == "global") globalTraitMap else individualTraitMap
             val key = traitEffect.affects + traitEffect.subName + traitEffect.subType + traitEffect.subCommand +
                     if(traitEffect.scope == "individual") person!!.fullName else ""
+
+            if(traitEffect.amountRange.isNotEmpty())
+                traitEffect.amount = if(MathUtils.randomBoolean()) traitEffect.amountRange[0] else traitEffect.amountRange[1]
 
             //When adding a trait we wanna check listeners in case some trait like
             //maxSurvivorHP needs to be triggered. We can basically combine the trait.affects
@@ -59,6 +63,11 @@ object TraitManager {
         }
     }
 
+    fun removeTrait(traitKeyName:String){
+        val trait = globalTraitMap[traitKeyName] ?: individualTraitMap[traitKeyName]
+        //TODO How to get a person's name from this?
+    }
+
     private fun callListener(key:String, removing:Boolean, traitEffect:DataManager.TraitEffectJson, person:Person?){
         listeners[key]?.forEach{it.invoke(traitEffect, removing, person)}
     }
@@ -76,16 +85,17 @@ object TraitManager {
         val key = affects + subName + subType + subCommand
 
         //This is the global trait map. It doesn't refer to a specific person...
-        val value = globalTraitMap.getOrElse(key, {MutablePair(0f, blankTraitEffect)})
-        var modifier = value.first //And here we store the modifier amount
+        val globalTrait = globalTraitMap.getOrElse(key, {MutablePair(0f, blankTraitEffect)})
+        var modifier = globalTrait.first //And here we store the modifier amount
 
         //For each person, add on to the modifier. So if two people are involved in the event, Tom and Jerry, then we try
         //to get the individual modifiers for both
         people?.forEach { person ->
-            modifier += individualTraitMap.getOrElse(key+person.fullName, {0f}) as Float
+            val trait = individualTraitMap.getOrElse(key+person.fullName, {MutablePair(0f, blankTraitEffect)})
+            modifier += trait.first
         }
 
-        val isPercent = value.second.effects.firstOrNull {
+        val isPercent = globalTrait.second.effects.firstOrNull {
             it.affects == affects && (it.subName == subName || it.subType == it.subType || it.subCommand == subCommand)}?.percent ?: true
 
         return Pair(modifier, isPercent)
@@ -102,5 +112,13 @@ object TraitManager {
     fun addListener(name:String, subName:String, listener:(DataManager.TraitEffectJson, Boolean, Person?)->Unit):(DataManager.TraitEffectJson, Boolean, Person?)->Unit{
         listeners.getOrPut(name+subName, { mutableListOf(listener)})
         return listener
+    }
+
+    fun clearAll(){
+        //We gotta do toList() here to create a copy to keep from a modification exception
+        globalTraitMap.toList().forEach {
+//            removeTrait(it.second)
+            //TODO Under construction...
+        }
     }
 }
