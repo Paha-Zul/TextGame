@@ -63,7 +63,7 @@ object DataManager{
     private fun runTests(){
         println()
         println("----Testing Traits----")
-        TraitTest.testSkills(20)
+        TraitTest.testTraits("stateOfBeing", 2)
     }
 
     private fun loadEvents(dir:FileHandle){

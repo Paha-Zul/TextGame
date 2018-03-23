@@ -98,7 +98,6 @@ object Globals {
                         person.ailmentList.forEach { ailment ->
                             //We subtract here because traitEffect.amount will be positive
                             ailment.HPTakenByInjury -= (ailment.baseHPTakenByInjury * (traitEffect.amount / 100f)).toInt()
-                            println("Such")
                         }
                     }
                 //If we are removing, add the duration back on to all ailments on all people

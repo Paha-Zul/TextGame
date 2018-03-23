@@ -11,6 +11,37 @@ object TraitTest {
 
     private val listOfTraitsAdded = mutableListOf<DataManager.TraitJson>()
 
+    fun testTraits(type:String = "skills", numPeopleToTest:Int = 5, numTraitsToTest:Int = 5, numModifiersToTest:Int = 20){
+        val personList = mutableListOf<Person>()
+        val traitList = when(type) {
+            "professions" -> DataManager.traitList.professions.listOfTraits
+            "skills" -> DataManager.traitList.skills.listOfTraits
+            else -> DataManager.traitList.stateofbeing.listOfTraits
+        }
+
+        //Create the people
+        for(i in 0 until numPeopleToTest){
+            val randomName = DataManager.pullRandomName()
+            val person = Person(randomName.first, randomName.second, randomName.third, 0L)
+            personList += person
+            println("Creating random person $person")
+        }
+
+        //Create the traits and assign them to people
+        for(i in 0 until numTraitsToTest){
+            val randomPerson = personList[MathUtils.random(personList.size - 1)]
+            val randomSkill = traitList[MathUtils.random(traitList.size-1)]
+
+            System.out.println("Testing ${randomSkill.name} on $randomPerson")
+            TraitManager.addTrait(traitList[MathUtils.random(traitList.size-1)], randomPerson)
+        }
+
+        //Test the modifiers
+        testModifierAmount(numModifiersToTest, people = personList)
+        //Test the injuries
+        testInjuryTraits(type)
+    }
+
     fun testSkills(testAmount:Int = 5){
         val personList = mutableListOf<Person>()
         val skillList = DataManager.traitList.skills.listOfTraits
@@ -28,19 +59,29 @@ object TraitTest {
         }
 
         testModifierAmount()
+        testInjuryTraits("skills")
     }
 
     //Tests injuries to see if the traits correctly affect them. This is random testing
-    fun testInjuryTraits(){
-        val injuryDuration = DataManager.traitList.professions.listOfTraits.first {
+    private fun testInjuryTraits(type:String = "professions"){
+        val listToUse = when (type) {
+            "professions" -> DataManager.traitList.professions.listOfTraits
+            "skills" -> DataManager.traitList.skills.listOfTraits
+            else -> DataManager.traitList.stateofbeing.listOfTraits
+        }
+
+        val injuryDuration = listToUse.firstOrNull {
             it.effects.firstOrNull { it.affects == "addAilment" && it.subCommand == "duration" && it.scope == "global"} != null }
-        val injuryDamage = DataManager.traitList.professions.listOfTraits.first {
+        val injuryDamage = listToUse.firstOrNull {
             it.effects.firstOrNull { it.affects == "addAilment" && it.subCommand == "damage"&& it.scope == "global" } != null }
 
-        val injuryDurationIndividual = DataManager.traitList.professions.listOfTraits.first {
+        val injuryDurationIndividual = listToUse.firstOrNull {
             it.effects.firstOrNull { it.affects == "addAilment" && it.subCommand == "duration" && it.scope == "individual" } != null }
-        val injuryDamageIndividual = DataManager.traitList.professions.listOfTraits.first {
+        val injuryDamageIndividual = listToUse.firstOrNull {
             it.effects.firstOrNull { it.affects == "addAilment" && it.subCommand == "damage" && it.scope == "individual"} != null }
+
+        println()
+        println("---- testing injuries for $type ----")
 
         //Add at least one person to the group manager for testing
         val person = GroupManager.addPerson(Person("Mike", "Thomas", 100f, true, 0L))
@@ -48,15 +89,18 @@ object TraitTest {
 
         System.out.println("Before adding trait... Health: ${person.healthNormal}, Injury health: ${person.healthInjury}, Duration: ${person.ailmentList[0].hoursRemaining}")
 
-        TraitManager.addTrait(injuryDuration)
-        TraitManager.addTrait(injuryDamage)
+        if(injuryDuration!= null) TraitManager.addTrait(injuryDuration)
+        if(injuryDamage!= null) TraitManager.addTrait(injuryDamage)
 
         System.out.println("After adding trait... Health: ${person.healthNormal}, Injury health: ${person.healthInjury}, Duration: ${person.ailmentList[0].hoursRemaining}")
 
-        TraitManager.removeTrait(injuryDuration)
-        TraitManager.removeTrait(injuryDamage)
+        if(injuryDuration!= null) TraitManager.removeTrait(injuryDuration)
+        if(injuryDamage!= null) TraitManager.removeTrait(injuryDamage)
 
         System.out.println("After removing trait... Health: ${person.healthNormal}, Injury health: ${person.healthInjury}, Duration: ${person.ailmentList[0].hoursRemaining}")
+
+        println("---- done testing injuries ----")
+        println()
     }
 
     fun test(){
@@ -106,17 +150,18 @@ object TraitTest {
         }
     }
 
-    private fun testModifierAmount(amountOfTimes:Int = 20){
+    private fun testModifierAmount(amountOfTimes:Int = 20, person:Person? = null, people:List<Person> = listOf()){
         val itemList = DataManager.getItemList()
+        val peopleList = if(person != null) listOf(person) else people
 
         for(i in 0 until amountOfTimes){
             val randomItem = itemList[MathUtils.random(itemList.size - 1)]
             val baseAmount = MathUtils.random(50, 150).toFloat()
             val result:Pair<Float, Boolean>
             result = if(randomItem.type == "ROVPart")
-                TraitManager.getTraitModifier("addRndAmt", subType = randomItem.type)
+                TraitManager.getTraitModifier("addRndAmt", subType = randomItem.type, people = peopleList)
             else
-                TraitManager.getTraitModifier("addRndAmt", randomItem.name)
+                TraitManager.getTraitModifier("addRndAmt", randomItem.name, people = peopleList)
 
             val modifiedAmount:Float=
                     if(result.second) //If we are using percent
