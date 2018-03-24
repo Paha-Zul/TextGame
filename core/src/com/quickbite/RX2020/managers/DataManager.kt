@@ -11,12 +11,13 @@ import com.quickbite.rx2020.tests.TraitTest
 import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.Reward
 import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Created by Paha on 2/6/2016.
  */
-
 object DataManager{
+    lateinit var guiData:Toml
     private val searchActivities: LinkedHashMap<String, SearchActivityJSON> = linkedMapOf() //For Json Events
     private val itemMap: LinkedHashMap<String, ItemJson> = linkedMapOf() //For Json Events
     lateinit var traitList:Traits
@@ -29,6 +30,7 @@ object DataManager{
     var rewardsDir:FileHandle? = null
     var endDir:FileHandle? = null
     var traitsDir:FileHandle? = null
+    var guiDataDir:FileHandle? = null
 
     private var tick = 0
 
@@ -52,8 +54,9 @@ object DataManager{
             4 -> loadRewards(rewardsDir!!)
             5 -> {loadSearchActivities(activitiesDir!!)}
             6 -> loadTraits(traitsDir!!)
-            7-> runTests()
-            8 -> return true
+            7 -> loadGUIData(guiDataDir!!)
+//            7-> runTests()
+            else -> return true
         }
 
         tick++
@@ -139,8 +142,12 @@ object DataManager{
 
     private fun loadTraits(file:FileHandle){
 //        this.traitList = json.fromJson(TraitList::class.java, file)
+        this.traitList = Toml().read(file.file()).to(Traits::class.java)
+    }
 
-        this.traitList = Toml().read(Gdx.files.internal("files/traits.toml").file()).to(Traits::class.java)
+    private fun loadGUIData(file:FileHandle){
+        guiData = Toml().read(file.file())
+        println("Such")
     }
 
     /**

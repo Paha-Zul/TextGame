@@ -180,7 +180,7 @@ class EventGUI() {
             //Make the description label
             val descLabel = Label(event.modifiedDescription[pageNumber], labelStyle)
             descLabel.setAlignment(Align.center)
-            descLabel.setFontScale(GameScreenGUI.normalFontScale)
+            descLabel.setFontScale(GUIScale.Normal.fontScale)
             descLabel.setWrap(true)
 
             //This is to add some extra padding to the label. Without this, the text gets cut off a bit
@@ -339,8 +339,8 @@ class EventGUI() {
                 }
             }
 
-            nameLabel.setFontScale(GameScreenGUI.normalFontScale)
-            amtLabel.setFontScale(GameScreenGUI.normalFontScale)
+            nameLabel.setFontScale(GUIScale.Normal.fontScale)
+            amtLabel.setFontScale(GUIScale.Normal.fontScale)
 
             ResultManagersTable.add(amtLabel).padRight(10f)
             ResultManagersTable.add(nameLabel)
@@ -351,7 +351,7 @@ class EventGUI() {
             if(death == null) continue
 
             val label = Label(death.name + death.desc.toString(), labelStyle)
-            label.setFontScale(GameScreenGUI.normalFontScale)
+            label.setFontScale(GUIScale.Normal.fontScale)
             label.setWrap(true)
             label.setAlignment(Align.center)
 

@@ -28,7 +28,6 @@ import com.quickbite.rx2020.util.SaveLoad
  */
 object GameScreenGUI{
     val defaultLabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
-    val normalFontScale = 0.15f
     val titleFontScale = 0.25f
     val eventTitleFontScale = 0.18f
     val buttonFontScale = 0.15f
@@ -105,9 +104,9 @@ object GameScreenGUI{
         var time:String
 
         val t = GameStats.TimeInfo.timeOfDay
-        time = ""+t+":00 "
-        if(GameStats.TimeInfo.currTime >= 12) time += "PM"
-        else time += "AM"
+        time = "$t:00 "
+        time += if(GameStats.TimeInfo.currTime >= 12) "PM"
+        else "AM"
 
         timeLabel.setText(time)
         totalDaysLabel.setText("Day "+ GameStats.TimeInfo.totalDaysTraveled)
@@ -130,14 +129,16 @@ object GameScreenGUI{
             val supplyChanged = ResultManager.recentChangeMap[list[i].displayName]
             if(supplyChanged != null) {
                 supplyChangeList[i].setText(supplyChanged.amt.toInt().toString())
-                if(supplyChanged.amt > 0)  supplyChangeList[i].color = Color.GREEN
-                else if(supplyChanged.amt < 0)  supplyChangeList[i].color = Color.RED
-                else  supplyChangeList[i].color = Color.WHITE
+                when {
+                    supplyChanged.amt > 0 -> supplyChangeList[i].color = Color.GREEN
+                    supplyChanged.amt < 0 -> supplyChangeList[i].color = Color.RED
+                    else -> supplyChangeList[i].color = Color.WHITE
+                }
             }
         }
     }
 
-    fun addListeners(){
+    private fun addListeners(){
         supplyButton.addListener(object: ClickListener(){
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 super.clicked(event, x, y)
@@ -282,9 +283,9 @@ object GameScreenGUI{
         distanceLabel = Label("" + GameStats.TravelInfo.totalDistToGo + " Miles", style)
 
         /* Time related stuff */
-        totalDaysLabel.setFontScale(normalFontScale)
-        timeLabel.setFontScale(normalFontScale)
-        distanceLabel.setFontScale(normalFontScale)
+        totalDaysLabel.setFontScale(GUIScale.Normal.fontScale)
+        timeLabel.setFontScale(GUIScale.Normal.fontScale)
+        distanceLabel.setFontScale(GUIScale.Normal.fontScale)
 
         totalDaysLabel.setAlignment(Align.center)
         timeLabel.setAlignment(Align.center)
@@ -373,14 +374,14 @@ object GameScreenGUI{
             val pairTable = Table()
 
             val nameLabel = Label(person.fullName, labelStyle)
-            nameLabel.setFontScale(normalFontScale)
+            nameLabel.setFontScale(GUIScale.Normal.fontScale)
             nameLabel.setAlignment(Align.center)
 
             val medkitButton = ImageButton(imageButtonStyle)
             medkitButton.isDisabled = !hasMedkits || (!person.hasInjury && person.healthNormal >= person.totalMaxHealth)
 
             val recentChangeLabel = Label("", labelStyle)
-            recentChangeLabel.setFontScale(normalFontScale)
+            recentChangeLabel.setFontScale(GUIScale.Normal.fontScale)
             recentChangeLabel.setAlignment(Align.right)
 
             val genderImage:Image = if(person.male) Image(maleGenderSymbol) else Image(femaleGenderSymbol)
@@ -448,12 +449,12 @@ object GameScreenGUI{
         val healthLabelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2Small", BitmapFont::class.java), Color.FOREST)
 
         val ROVNameLabel = Label("ROV", labelStyle)
-        ROVNameLabel.setFontScale(normalFontScale)
+        ROVNameLabel.setFontScale(GUIScale.Normal.fontScale)
 
         val list = ROVManager.ROVPartMap
         for(supply in list.values){
             val nameLabel = Label(supply.displayName, labelStyle)
-            nameLabel.setFontScale(normalFontScale)
+            nameLabel.setFontScale(GUIScale.Normal.fontScale)
 
             var repairButton:ImageButton? = null
             if(supply.name != "ROV") {
@@ -464,7 +465,7 @@ object GameScreenGUI{
             }
 
             val changeLabel: Label = Label("", labelStyle)
-            changeLabel.setFontScale(normalFontScale)
+            changeLabel.setFontScale(GUIScale.Normal.fontScale)
 
             val ResultManager = ResultManager.recentChangeMap["${supply.name} health"]
             if(ResultManager != null){
@@ -521,15 +522,15 @@ object GameScreenGUI{
         for(i in list.indices){
             val value = list[i]
             val nameLabel = Label(value.displayName, labelStyle)
-            nameLabel.setFontScale(normalFontScale)
+            nameLabel.setFontScale(GUIScale.Normal.fontScale)
             nameLabel.setAlignment(Align.left)
 
             val amtLabel = Label("" + value.amt.toInt(), labelStyle)
-            amtLabel.setFontScale(normalFontScale)
+            amtLabel.setFontScale(GUIScale.Normal.fontScale)
             amtLabel.setAlignment(Align.left)
 
             val changeLabel = Label("", labelStyle)
-            changeLabel.setFontScale(normalFontScale)
+            changeLabel.setFontScale(GUIScale.Normal.fontScale)
             changeLabel.setAlignment(Align.center)
 
             val supply = ResultManager.recentChangeMap[list[i].displayName]

@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Json
 import com.badlogic.gdx.utils.TimeUtils
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.gui.GroupGUI
 import com.quickbite.rx2020.managers.GameEventManager
 import com.quickbite.rx2020.managers.GameStats
 import com.quickbite.rx2020.managers.GroupManager
@@ -117,6 +118,8 @@ object SaveLoad{
         save.delayedEventTimers.forEach { list ->
             GameEventManager.addDelayedEvent(list[0], list[1], list[2].toFloat(), list[3].toInt())
         }
+
+        GroupGUI.init()
 
         //TODO Trait saving/loading
 

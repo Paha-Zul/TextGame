@@ -71,14 +71,14 @@ class Person(_firstName:String, _lastName:String, val male:Boolean, _timeAdded:L
         if(isDead)
             GroupManager.killPerson(firstName)
 
-        EventManager.callEvent("healthChanged", listOf(fullName), amt)
+        EventManager.callEvent("healthChanged", this, amt)
         return amt
     }
 
     fun addPercentHealth(perc:Float):Float{
         val amt = totalMaxHealth*(perc/100f)
 
-        EventManager.callEvent("healthChanged", listOf(fullName), amt)
+        EventManager.callEvent("healthChanged", this, amt)
         return addHealth(amt)
     }
 

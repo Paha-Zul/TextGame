@@ -54,7 +54,7 @@ class CampMenuGUI {
         buttonStyle.up = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("buttonBackground"))
 
         val campLabel = Label("Camp", labelStyle)
-        campLabel.setFontScale((GameScreenGUI.normalFontScale))
+        campLabel.setFontScale((GUIScale.Normal.fontScale))
         campLabel.setAlignment(Align.center)
 
         denyReason = Label("", labelStyle)
@@ -63,10 +63,10 @@ class CampMenuGUI {
         denyReason.setAlignment(Align.bottom)
 
         activityHourLabel = Label("0", labelStyle)
-        activityHourLabel.setFontScale(GameScreenGUI.normalFontScale)
+        activityHourLabel.setFontScale(GUIScale.Normal.fontScale)
 
         val hourLabel = Label("Hours", labelStyle)
-        hourLabel.setFontScale((GameScreenGUI.normalFontScale))
+        hourLabel.setFontScale((GUIScale.Normal.fontScale))
         hourLabel.setAlignment(Align.center)
 
         activityHourSlider = Slider(0f, 24f, 1f, false, sliderStyle)
@@ -247,7 +247,7 @@ class CampMenuGUI {
                 }
             }else{
                 val label = Label(params[0], GameScreenGUI.defaultLabelStyle)
-                label.setFontScale((GameScreenGUI.normalFontScale))
+                label.setFontScale((GUIScale.Normal.fontScale))
                 label.setAlignment(Align.center)
 
                 descriptionTable.add(label).colspan(3)
@@ -258,7 +258,7 @@ class CampMenuGUI {
 
     private fun buildDropdownList(): Actor {
         val newFont = BitmapFont(Gdx.files.internal("fonts/spaceFont2.fnt"))
-        newFont.data.setScale(GameScreenGUI.normalFontScale)
+        newFont.data.setScale(GUIScale.Normal.fontScale)
 
         val labelStyle = Label.LabelStyle(newFont, Color.WHITE)
         labelStyle.background = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("pixelBlack"))
@@ -285,7 +285,7 @@ class CampMenuGUI {
         val list:com.badlogic.gdx.utils.Array<Label> = com.badlogic.gdx.utils.Array()
         for(sa in DataManager.getSearchActiviesList()){
             val label = GameScreenGUI.CustomLabel(sa.buttonTitle, labelStyle)
-            label.setFontScale(GameScreenGUI.normalFontScale)
+            label.setFontScale(GUIScale.Normal.fontScale)
             list.add(label)
         }
 
