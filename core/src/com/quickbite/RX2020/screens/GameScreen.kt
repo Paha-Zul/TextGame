@@ -8,15 +8,11 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.GameScreenInput
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.clamp
-import com.quickbite.rx2020.gui.GameScreenGUI
-import com.quickbite.rx2020.gui.GroupGUI
-import com.quickbite.rx2020.gui.SupplyGUI
-import com.quickbite.rx2020.gui.ROVPartsGUI
+import com.quickbite.rx2020.gui.*
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.managers.ScrollingBackgroundManager.scrollingBackgroundList
 import com.quickbite.rx2020.util.*
@@ -87,10 +83,10 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
         GameStats.game = this
 
-//        GameScreenGUI.init(this)
+//        GameScreenGUIManager.init(this)
         EventManager.init(this)
 
-        setupGUI()
+        GameScreenGUIManager.init()
 
         sunMoon.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear)
 
@@ -100,8 +96,8 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         Gdx.input.inputProcessor = multi
 
         gameInput.keyEventMap[Input.Keys.E] = {SupplyManager.addToSupply("energy", -25f)}
-        gameInput.keyEventMap[Input.Keys.R] = { GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)}
-        gameInput.keyEventMap[Input.Keys.T] = {GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)}
+        gameInput.keyEventMap[Input.Keys.R] = { GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent("Power", "monthly")!!)}
+        gameInput.keyEventMap[Input.Keys.T] = {GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent("TestEnergy", "special")!!)}
         gameInput.keyEventMap[Input.Keys.Y] = {GameEventManager.addDelayedEvent("Hole", "daily", MathUtils.random(1, 5).toFloat())}
 
         dailyEventTimer.callback = timerFunc("daily", dailyEventTimer, dailyEventTime.min, dailyEventTime.max)
@@ -114,37 +110,13 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         //If we are testing, run the tests!
         if(Tester.TESTING) {
             Tester.testEvents(50)
-            GameScreenGUI.buildTradeWindow()
-            GameScreenGUI.openTradeWindow()
+            GameScreenGUIManager.rebuildTradeWindow()
+            GameScreenGUIManager.openTradeWindow()
             pauseGame()
         }
 
         if(loaded)
             loadGame()
-    }
-
-    private fun setupGUI(){
-        val groupTable = GroupGUI.init()
-        val rovPartsTable = ROVPartsGUI.init()
-        val supplyTable = SupplyGUI.init()
-
-        val leftTable = Table()
-        leftTable.add(supplyTable)
-
-        val rightTable = Table()
-        rightTable.add(groupTable)
-        rightTable.row()
-        rightTable.add().expandY().fillY()
-        rightTable.row()
-        rightTable.add(rovPartsTable)
-
-        val mainTable = Table()
-        mainTable.add(leftTable)
-        mainTable.add().expandX().fillX()
-        mainTable.add(rightTable).expandY().fillY()
-
-        mainTable.setFillParent(true)
-        TextGame.stage.addActor(mainTable)
     }
 
     private fun fadeIn(){
@@ -233,7 +205,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         draw(TextGame.batch)
         TextGame.batch.end()
 
-        GameScreenGUI.update(delta)
+        GameScreenGUIManager.update(delta)
         TextGame.stage.draw()
     }
 
@@ -337,7 +309,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         //If we made it to the end, we've won!
         }else if(GameStats.TravelInfo.totalDistToGo <= 0) {
             GameStats.gameOverStatus = "won"
-            GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
+            GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent("EndWin", "special")!!)
 
         //Otherwise, update everything as normal
         }else {
@@ -347,14 +319,15 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
             ChainTask.updateHourly(delta)
 
             if (ResultManager.recentDeathMap.isNotEmpty()) {
-                GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
+                GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent("Death", "special")!!)
             }
 
             if (numHoursToAdvance > 0) numHoursToAdvance--
             timeTickEventList.forEach { evt -> evt.update() }
 
-            GameScreenGUI.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
-            SupplyGUI.updateSuppliesGUI()
+//            GameScreenGUIManager.updateOnTimeTick(delta) //GUI should be last thing updated since it relies on everything else.
+            GameScreenGUIManager.update(delta)
+//            SupplyGUI.update(delta)
         }
     }
 
@@ -365,7 +338,6 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
         if(this.state != State.CAMP) {
             this.state = State.CAMP
             this.ROV = TextGame.manager.get("NewCamp", Texture::class.java)
-            GameScreenGUI.openCampMenu()
             this.resumeGame()
         }
     }
@@ -381,7 +353,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
     fun setGameOver(reason:String){
         GameStats.gameOverStatus = reason
         this.state = State.GAMEOVER
-        GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
+        GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent("EndLose", "special")!!)
     }
 
 
@@ -406,7 +378,7 @@ class GameScreen(val game: TextGame, val loaded:Boolean = false): Screen {
 
             if(currEvent == null) Logger.log("GameScreen", "Event skipped because it was null. Tried to get $eventType event.", Logger.LogLevel.Warning)
             else //Trigger the GUI UI and send a callback to it.
-                GameScreenGUI.openEventGUI(currEvent)
+                GameScreenGUIManager.openEventGUI(currEvent)
 
             timer.restart(MathUtils.random(min, max))
         }

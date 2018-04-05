@@ -102,4 +102,8 @@ object ROVPartsGUI {
             }
         }
     }
+
+    fun update(delta:Float){
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.quickbite.rx2020
 
+import com.moandjiezana.toml.Toml
 import java.text.DecimalFormat
 import java.util.*
 
@@ -32,7 +33,7 @@ fun <T> Array<T>.shuffle() : Array<T>{
 
 fun <T> MutableList<T>.shuffle() : MutableList<T>{
     val rg : Random = Random();
-    for (i in 0..this.size - 1) {
+    for (i in 0 until this.size) {
         val randomPosition = rg.nextInt(this.size);
         swap(this, i, randomPosition);
     }
@@ -40,10 +41,10 @@ fun <T> MutableList<T>.shuffle() : MutableList<T>{
 }
 
 fun <T> swap(arr: MutableList<T>, i: Int, j: Int) : MutableList<T>{
-    val tmp : T = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
-    return arr;
+    val tmp : T = arr[i]
+    arr[i] = arr[j]
+    arr[j] = tmp
+    return arr
 }
 
 fun <T> swap(arr: Array<T>, i: Int, j: Int) : Array<T>{
@@ -51,4 +52,16 @@ fun <T> swap(arr: Array<T>, i: Int, j: Int) : Array<T>{
     arr[i] = arr[j];
     arr[j] = tmp;
     return arr;
+}
+
+fun Toml.getFloat(vararg strings:String):Float{
+    var table = this
+    strings.forEachIndexed {index, string ->
+        when{
+            index < strings.size - 1 -> table = table.getTable(string)
+            else -> return table.getDouble(string).toFloat()
+        }
+    }
+    Exception("Didn't find the value in toml table")
+    return 0f
 }

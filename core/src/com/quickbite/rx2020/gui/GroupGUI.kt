@@ -23,11 +23,10 @@ object GroupGUI {
     private val transparentBackground = NinePatchDrawable(NinePatch(TextGame.manager.get("GUIBackground", Texture::class.java), 4, 4, 4, 4))
 
     fun init():Table{
-        buildGroupTable()
-        return groupTable
+        return buildGroupTable()
     }
 
-    private fun buildGroupTable(){
+    fun buildGroupTable():Table{
         groupTable.clear()
         groupTable.width = 200f
 
@@ -122,5 +121,11 @@ object GroupGUI {
                 }
             })
         }
+
+        return groupTable
+    }
+
+    fun update(delta:Float){
+
     }
 }

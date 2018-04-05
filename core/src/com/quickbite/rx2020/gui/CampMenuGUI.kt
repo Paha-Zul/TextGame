@@ -22,7 +22,7 @@ import com.quickbite.rx2020.util.GH
  *
  * The camp menu GUI
  */
-class CampMenuGUI {
+object CampMenuGUI {
     lateinit var activityHourLabel: Label
     lateinit var activityHourSlider: Slider
     lateinit var acceptButton: TextButton
@@ -108,7 +108,7 @@ class CampMenuGUI {
         setupListeners()
 
         //When we first set up the table, disable the accept button since we are on 0 hours initially
-        GameScreenGUI.disableButton(acceptButton)
+        GameScreenGUIManager.disableButton(acceptButton)
 
         return mainTable
     }
@@ -119,23 +119,24 @@ class CampMenuGUI {
      */
     fun closeTable(){
         activityHourSlider.value = 0f
+        mainTable.remove()
     }
 
     private fun setupListeners(){
         acceptButton.addListener(object: ChangeListener(){
             override fun changed(event: ChangeEvent?, actor: Actor?) {
-                if(GameScreenGUI.campMenu.activityHourSlider.value <= 0f)
+                if(CampMenuGUI.activityHourSlider.value <= 0f)
                     return
 
-                GameStats.game.numHoursToAdvance = GameScreenGUI.campMenu.activityHourSlider.value.toInt()
-                GameStats.game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(GameScreenGUI.campMenu.selectBox.selected.text.toString())
+                GameStats.game.numHoursToAdvance = CampMenuGUI.activityHourSlider.value.toInt()
+                GameStats.game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(CampMenuGUI.selectBox.selected.text.toString())
                 //If not null, get the action.
                 val actionList = GameStats.game.searchActivity!!.action!! //Get the action list
                 GameStats.game.searchFunc = Array(actionList.size, { i->null}) //Initialize an array to hold the events.
 
                 ChainTask.addTaskToHourlyList(sliderTask())
-                GameScreenGUI.disableButton(acceptButton)
-                GameScreenGUI.disableButton(uncampButton)
+                GameScreenGUIManager.disableButton(acceptButton)
+                GameScreenGUIManager.disableButton(uncampButton)
 
                 var i =0
                 //For each set of parameters in the action list, set the search function to perform the action
@@ -152,9 +153,9 @@ class CampMenuGUI {
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
                 if(!GH.checkCantTravel()) {
                     GameStats.game.changeToTravel()
-                    GameScreenGUI.applyTravelTab()
+//                    GameScreenGUIManagerManager.applyTravelTab()
                 }
-                GameScreenGUI.closeCampMenu()
+                GameScreenGUIManager.closeCampMenu()
             }
         })
 
@@ -163,20 +164,20 @@ class CampMenuGUI {
                 activityHourLabel.setText(activityHourSlider.value.toInt().toString())
                 //If our hour is at or below 0 -OR- our search activity is not null, disable the accept button
                 if(activityHourSlider.value.toInt() <= 0 || GameStats.game.numHoursToAdvance > 0)
-                    GameScreenGUI.disableButton(acceptButton)
+                    GameScreenGUIManager.disableButton(acceptButton)
 
                 //Otherwise, enable it
                 else
-                    GameScreenGUI.enableButton(acceptButton)
+                    GameScreenGUIManager.enableButton(acceptButton)
 
                 if(GameStats.game.numHoursToAdvance <= 1)
-                    GameScreenGUI.enableButton(uncampButton)
+                    GameScreenGUIManager.enableButton(uncampButton)
             }
         })
 
         selectBox.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                GameStats.game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(GameScreenGUI.campMenu.selectBox.selected.text.toString())
+                GameStats.game.searchActivity = DataManager.SearchActivityJSON.getSearchActivity(CampMenuGUI.selectBox.selected.text.toString())
                 val ResultManager = GH.parseAndCheckRestrictions(GameStats.game.searchActivity!!.restrictions!!)
                 if(!ResultManager.first)
                     disableAcceptButtonError(GH.getRestrictionFailReason(ResultManager.second, ResultManager.third))
@@ -184,7 +185,7 @@ class CampMenuGUI {
                     enableAcceptButton() //This will clear the red button text and error text
                     //Then, if we don't meet these conditions, disable it again
                     if (activityHourSlider.value.toInt() <= 0 || GameStats.game.numHoursToAdvance > 0)
-                        GameScreenGUI.disableButton(acceptButton)
+                        GameScreenGUIManager.disableButton(acceptButton)
                 }
 
             }
@@ -206,7 +207,7 @@ class CampMenuGUI {
     private fun setupDescriptionTable(searchAct: DataManager.SearchActivityJSON){
         descriptionTable.clear()
 
-        val titleLabel = Label("Per Hour", GameScreenGUI.defaultLabelStyle)
+        val titleLabel = Label("Per Hour", GameScreenGUIManager.defaultLabelStyle)
         titleLabel.setFontScale(0.2f)
         titleLabel.setAlignment(Align.center)
 
@@ -222,15 +223,15 @@ class CampMenuGUI {
         //For each description, lay it out on the description table
         descList.forEachIndexed { i, params ->
             if(params.size >= 3) {
-                val nameLabel = Label(params[0], GameScreenGUI.defaultLabelStyle)
+                val nameLabel = Label(params[0], GameScreenGUIManager.defaultLabelStyle)
                 nameLabel.setFontScale((0.15f))
                 nameLabel.setAlignment(Align.center)
 
-                val chanceLabel = Label(params[1], GameScreenGUI.defaultLabelStyle)
+                val chanceLabel = Label(params[1], GameScreenGUIManager.defaultLabelStyle)
                 chanceLabel.setFontScale((0.15f))
                 chanceLabel.setAlignment(Align.center)
 
-                val amountLabel = Label(params[2], GameScreenGUI.defaultLabelStyle)
+                val amountLabel = Label(params[2], GameScreenGUIManager.defaultLabelStyle)
                 amountLabel.setFontScale((0.15f))
                 amountLabel.setAlignment(Align.center)
 
@@ -246,7 +247,7 @@ class CampMenuGUI {
                     descriptionTable.row()
                 }
             }else{
-                val label = Label(params[0], GameScreenGUI.defaultLabelStyle)
+                val label = Label(params[0], GameScreenGUIManager.defaultLabelStyle)
                 label.setFontScale((GUIScale.Normal.fontScale))
                 label.setAlignment(Align.center)
 
@@ -280,27 +281,27 @@ class CampMenuGUI {
         selectBoxStyle.font = newFont
         selectBoxStyle.fontColor = Color.WHITE
 
-        GameScreenGUI.campMenu.selectBox = SelectBox(selectBoxStyle)
+        CampMenuGUI.selectBox = SelectBox(selectBoxStyle)
 
         val list:com.badlogic.gdx.utils.Array<Label> = com.badlogic.gdx.utils.Array()
         for(sa in DataManager.getSearchActiviesList()){
-            val label = GameScreenGUI.CustomLabel(sa.buttonTitle, labelStyle)
+            val label = CustomLabel(sa.buttonTitle, labelStyle)
             label.setFontScale(GUIScale.Normal.fontScale)
             list.add(label)
         }
 
         selectBox.addListener(object: ChangeListener(){
             override fun changed(p0: ChangeEvent?, p1: Actor?) {
-                setupDescriptionTable(DataManager.SearchActivityJSON.getSearchActivity(GameScreenGUI.campMenu.selectBox.selected.text.toString())!!)
+                setupDescriptionTable(DataManager.SearchActivityJSON.getSearchActivity(CampMenuGUI.selectBox.selected.text.toString())!!)
             }
         })
 
-        GameScreenGUI.campMenu.selectBox.items = list
-        GameScreenGUI.campMenu.selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
+        CampMenuGUI.selectBox.items = list
+        CampMenuGUI.selectBox.selected = list[0] //This simply triggers the above changelistener to call the function initially
 
-        GameScreenGUI.campMenu.selectBox.setAlignment(Align.center)
-        GameScreenGUI.campMenu.selectBox.list.setAlignment(Align.center)
-        return GameScreenGUI.campMenu.selectBox
+        CampMenuGUI.selectBox.setAlignment(Align.center)
+        CampMenuGUI.selectBox.list.setAlignment(Align.center)
+        return CampMenuGUI.selectBox
     }
 
     private fun sliderTask():ChainTask{

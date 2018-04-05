@@ -2,7 +2,7 @@ package com.quickbite.rx2020.managers
 
 import com.badlogic.gdx.math.MathUtils
 import com.quickbite.rx2020.Person
-import com.quickbite.rx2020.gui.GameScreenGUI
+import com.quickbite.rx2020.gui.GameScreenGUIManager
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.interfaces.IUpdateable
 import com.quickbite.rx2020.shuffle
@@ -84,7 +84,7 @@ object GameEventManager : IUpdateable, IResetable{
      * @param seconds The seconds to wait until the event is fire.
      */
     fun addDelayedEvent(name:String, type:String, seconds:Float, page:Int = 0){
-        val timer = CustomTimer(seconds, true, { GameScreenGUI.openEventGUI(this.getAndSetEvent(name, type)!!, page)})
+        val timer = CustomTimer(seconds, true, { GameScreenGUIManager.openEventGUI(this.getAndSetEvent(name, type)!!, page)})
         timer.userData = arrayOf(name, type, page.toString())
         delayedEventTimerList += timer
     }

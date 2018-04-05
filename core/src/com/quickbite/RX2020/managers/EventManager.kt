@@ -8,7 +8,7 @@ import com.quickbite.rx2020.ChainTask
 import com.quickbite.rx2020.Person
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.clamp
-import com.quickbite.rx2020.gui.GameScreenGUI
+import com.quickbite.rx2020.gui.GameScreenGUIManager
 import com.quickbite.rx2020.interfaces.IResetable
 import com.quickbite.rx2020.objects.Ailment
 import com.quickbite.rx2020.objects.Supply
@@ -170,7 +170,7 @@ object EventManager : IResetable {
                     addItemAmount(supplyName, amount)
                 }
 
-                GameScreenGUI.updateSuppliesGUI()
+//                GameScreenGUIManager.updateSuppliesGUI()
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndAmt has some wrong parameters, make sure they are in the order: min/max/supplyName/perPerson/chance")
@@ -194,7 +194,7 @@ object EventManager : IResetable {
                     addItemAmount(randomSupply, amount)
                 }
 
-                GameScreenGUI.updateSuppliesGUI()
+//                GameScreenGUIManager.updateSuppliesGUI()
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndItem has some wrong parameters, make sure they are in the order: min/max/chance/supplyNames(args)")
@@ -215,7 +215,7 @@ object EventManager : IResetable {
                     addItemHealth(randomSupply, amt)
                 }
 
-                GameScreenGUI.updateSuppliesGUI()
+//                GameScreenGUIManager.updateSuppliesGUI()
             } catch (e: NumberFormatException) {
                 e.printStackTrace()
                 Logger.log("EventManager", "addRndItem has some wrong parameters, make sure they are in the order: min/max/chance/supplyNames(args)")
@@ -247,7 +247,7 @@ object EventManager : IResetable {
                 //Add a timer to call the event later
                 GameEventManager.addDelayedEvent(evtName, evtType, MathUtils.random(minHours, maxHours), evtPage)
             } else {
-                GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
+                GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent(evtName, evtType)!!, evtPage)
             }
         })
 
@@ -333,15 +333,14 @@ object EventManager : IResetable {
 
         //Called when the trade window should be opened.
         EventManager.onEvent("openTrade", {  args ->
-            GameScreenGUI.buildTradeWindow()
-            GameScreenGUI.openTradeWindow()
+            GameScreenGUIManager.openTradeWindow()
         })
 
         //Called when a person dies.
         EventManager.onEvent("death", {  args ->
             val person = args[0] as Person
 
-            GameScreenGUI.buildGroupTable()
+            GameScreenGUIManager.rebuildGroupTable()
 
             //Remove all the traits from the manager when a person dies
             person.traitList.forEach { trait ->
@@ -364,7 +363,7 @@ object EventManager : IResetable {
             val person = args[0] as Person
             val amt = args[1] as Float
 
-            GameScreenGUI.buildGroupTable()
+            GameScreenGUIManager.rebuildGroupTable()
 
             ResultManager.addRecentChange(person.firstName, amt, GameScreen.currGameTime, "'s HP", GameEventManager.currActiveEvent != null)
         })
@@ -377,7 +376,7 @@ object EventManager : IResetable {
 
             val name = GH.checkSupplyAmount(supply, amt, oldAmt)
             if (!name.isEmpty()) {
-                GameScreenGUI.openEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
+                GameScreenGUIManager.openEventGUI(GameEventManager.getAndSetEvent(name, "special")!!)
             }
 
             ResultManager.addRecentChange(supply.displayName, amt, GameScreen.currGameTime, "", GameEventManager.currActiveEvent != null)
@@ -435,7 +434,7 @@ object EventManager : IResetable {
 
         //Called when an event finishes.
         EventManager.onEvent("forceCamp", {  args ->
-            GameScreenGUI.closeEventGUI(false, true)
+            GameScreenGUIManager.closeEventGUI(false, true)
             val gameOver = GH.checkGameOverConditions()
             if (gameOver.first)
                 gameScreen.setGameOver(gameOver.second)

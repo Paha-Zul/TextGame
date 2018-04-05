@@ -12,23 +12,21 @@ import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Queue
 import com.quickbite.rx2020.Result
 import com.quickbite.rx2020.TextGame
-import com.quickbite.rx2020.managers.EventManager
-import com.quickbite.rx2020.managers.GameEventManager
-import com.quickbite.rx2020.managers.GameStats
-import com.quickbite.rx2020.managers.ResultManager
+import com.quickbite.rx2020.getFloat
+import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.util.GH
 import com.quickbite.rx2020.util.Logger
 
 /**
  * Created by Paha on 6/28/2017.
  */
-class EventGUI() {
+object EventGUI {
     private val guiQueue: Queue<Triple<GameEventManager.EventJson, Int, Boolean>> = Queue()
 
-    val eventTable = Table()
-    val eventContainer = Table()
-    val eventInnerTable = Table()
-    val eventChoicesTable = Table()
+    private val eventTable = Table()
+    private val eventContainer = Table()
+    private val eventInnerTable = Table()
+    private val eventChoicesTable = Table()
 
     lateinit var titleLabel:Label
     
@@ -41,7 +39,7 @@ class EventGUI() {
      */
     fun beginEventGUI(event: GameEventManager.EventJson, startPage:Int = 0, eraseResultManagers:Boolean = true):Boolean{
         //If the GUI is already active, lets add it to the queue instead of going further.
-        if(GameScreenGUI.gameEventGUIActive) {
+        if(GameScreenGUIManager.gameEventGUIActive) {
             guiQueue.addLast(Triple(event, startPage, eraseResultManagers))
             println("[EventGUI:beingEventGUI] Do we ever already have an event gui active?")
             return false
@@ -67,7 +65,7 @@ class EventGUI() {
 
         titleLabel = Label(event.title, labelStyle)
         titleLabel.setAlignment(Align.center)
-        titleLabel.setFontScale(GameScreenGUI.eventTitleFontScale)
+        titleLabel.setFontScale(DataManager.guiData.getFloat("eventGUI", "tiny", "eventTitleScale"))
 //        titleLabel!!.setWrap(true)
 
         eventTable.add(titleLabel).padTop(5f).height(40f)
@@ -126,7 +124,7 @@ class EventGUI() {
             eventInnerTable.add(eventChoicesTable).expand().fill()
 
             //Make a button for each choice.
-            for(i in 0.rangeTo(event.choices!!.size-1)){
+            for(i in 0 until event.choices!!.size){
                 val choice = event.choices!![i]
 
                 //Need a style specifically for each button since we may be changing colors.
@@ -137,7 +135,7 @@ class EventGUI() {
                 val modifiedText = GH.replaceChoiceForEvent(choice, event)
                 val button = TextButton("($modifiedText)", buttonStyle)
                 button.pad(0f, 10f, 0f, 10f)
-                button.label.setFontScale(GameScreenGUI.buttonFontScale)
+                button.label.setFontScale(DataManager.guiData.getFloat("eventGUI", "tiny", "buttonFontScale"))
                 button.label.setWrap(true)
 
                 eventChoicesTable.add(button).minHeight(40f).expandX().fillX()
@@ -158,7 +156,7 @@ class EventGUI() {
                 })
             }
 
-            //Otherwise, we are not showing possible choices. Let's show the descriptions!
+        //Otherwise, we are not showing possible choices. Let's show the descriptions!
         }else {
             val drawable = TextureRegionDrawable(TextGame.smallGuiAtlas.findRegion("nextButtonWhite"))
 
@@ -169,10 +167,6 @@ class EventGUI() {
 
             val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
-            val textButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
-            textButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
-            textButtonStyle.fontColor = Color.WHITE
-
             val nextPageButtonStyle: TextButton.TextButtonStyle = TextButton.TextButtonStyle()
             nextPageButtonStyle.font = TextGame.manager.get("spaceFont2", BitmapFont::class.java)
             nextPageButtonStyle.fontColor = Color.WHITE
@@ -180,7 +174,7 @@ class EventGUI() {
             //Make the description label
             val descLabel = Label(event.modifiedDescription[pageNumber], labelStyle)
             descLabel.setAlignment(Align.center)
-            descLabel.setFontScale(GUIScale.Normal.fontScale)
+            descLabel.setFontScale(DataManager.guiData.getFloat("eventGUI", "tiny", "eventTextFontScale"))
             descLabel.setWrap(true)
 
             //This is to add some extra padding to the label. Without this, the text gets cut off a bit
@@ -194,7 +188,7 @@ class EventGUI() {
             scrollPane.setFadeScrollBars(false)
 
             //Make the next page button
-            val nextPageButton: TextButton = TextButton("", nextPageButtonStyle)
+            val nextPageButton = TextButton("", nextPageButtonStyle)
             nextPageButton.label.setFontScale(0.15f)
 
             //Add the title and description label
@@ -217,7 +211,7 @@ class EventGUI() {
                     else
                         nextPageButton.style.up = drawable
 
-                    //Otherwise, add a close button.
+                //Otherwise, add a close button.
                 } else {
                     nextPageButton.setText("- Close -")
                 }
@@ -241,7 +235,7 @@ class EventGUI() {
                         if (event.choices!!.size > 1) {
                             showEventPage(event, pageNumber + 1)
 
-                            //If we only have one choice, trigger the event GUI again.
+                        //If we only have one choice, trigger the event GUI again.
                         } else {
                             GH.executeEventActions(event)   //TODO Watch this. Might fire twice if I'm wrong.
                             handleEvent(GH.getEventFromChoice(event, ""))
@@ -319,10 +313,10 @@ class EventGUI() {
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         //Close button
-        val closeButton: TextButton = TextButton("- Close -", textButtonStyle)
-        closeButton.label.setFontScale(GameScreenGUI.buttonFontScale)
+        val closeButton = TextButton("- Close -", textButtonStyle)
+        closeButton.label.setFontScale(DataManager.guiData.getFloat("eventGUI", "tiny", "buttonFontScale"))
 
-        val ResultManagersTable = Table()
+        val resultManagerTable = Table()
 
         //Display the ResultManagers of the event.
         for (item in list) {
@@ -342,9 +336,9 @@ class EventGUI() {
             nameLabel.setFontScale(GUIScale.Normal.fontScale)
             amtLabel.setFontScale(GUIScale.Normal.fontScale)
 
-            ResultManagersTable.add(amtLabel).padRight(10f)
-            ResultManagersTable.add(nameLabel)
-            ResultManagersTable.row()
+            resultManagerTable.add(amtLabel).padRight(10f)
+            resultManagerTable.add(nameLabel)
+            resultManagerTable.row()
         }
 
         for (death in deathList) {
@@ -355,11 +349,11 @@ class EventGUI() {
             label.setWrap(true)
             label.setAlignment(Align.center)
 
-            ResultManagersTable.add(label).expand().fill()
-            ResultManagersTable.row()
+            resultManagerTable.add(label).expand().fill()
+            resultManagerTable.row()
         }
 
-        val container = Container<Table>(ResultManagersTable).fill().pad(10f, 10f, 0f, 10f)
+        val container = Container<Table>(resultManagerTable).fill().pad(10f, 10f, 0f, 10f)
         container.padTop(10f)
 
         //Put it into a scrollpane
@@ -417,12 +411,12 @@ class EventGUI() {
                 beginEventGUI(last.first, last.second, last.third)
 
             //Otherwise, if the trade window table is not open, we want to resume the game!
-            } else if (!GameScreenGUI.tradeWindowOpen()) {
+            } else if (!GameScreenGUIManager.tradeWindowOpen) {
                 GameStats.game.resumeGame()
                 enableSettings = true
             }
 
-            GameScreenGUI.closeEventGUI(enableCamp, enableSettings)
+            GameScreenGUIManager.closeEventGUI(enableCamp, enableSettings)
         }
     }
 }

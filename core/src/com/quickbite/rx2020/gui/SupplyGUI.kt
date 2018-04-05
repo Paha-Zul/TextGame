@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 import com.badlogic.gdx.utils.Align
 import com.quickbite.rx2020.TextGame
+import com.quickbite.rx2020.getFloat
 import com.quickbite.rx2020.managers.DataManager
 import com.quickbite.rx2020.managers.ResultManager
 import com.quickbite.rx2020.managers.SupplyManager
@@ -41,7 +42,7 @@ object SupplyGUI {
         val labelStyle: Label.LabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
         val title = Label("Supplies", labelStyle)
-        title.setFontScale(GameScreenGUI.titleFontScale)
+        title.setFontScale(DataManager.guiData.getFloat("supplyGUI", "tiny", "titleFontScale"))
 
         val innerTable = Table()
         val list = SupplyManager.getSupplyList()
@@ -81,7 +82,7 @@ object SupplyGUI {
         supplyTable.add(innerTable)
     }
 
-    fun updateSuppliesGUI(){
+    fun update(delta:Float){
         val list = SupplyManager.getSupplyList()
         for(i in list.indices){
             supplyAmountList[i].setText( list[i].amt.toInt().toString())
@@ -92,6 +93,30 @@ object SupplyGUI {
             if(supplyChanged != null) {
                 supplyChangeList[i].setText(supplyChanged.amt.toInt().toString())
                 when {
+                    supplyChanged.amt > 0 -> supplyChangeList[i].color = Color.GREEN
+                    supplyChanged.amt < 0 -> supplyChangeList[i].color = Color.RED
+                    else -> supplyChangeList[i].color = Color.WHITE
+                }
+            }
+        }
+    }
+
+    /**
+     * A one time (not constant) update to all supply amounts and the recent changes
+     */
+    fun updateSuppliesGUI(){
+        val list = SupplyManager.getSupplyList() //Get the supply list
+
+        //For each item
+        for(i in list.indices){
+            supplyAmountList[i].setText( list[i].amt.toInt().toString()) //Set the text. Easy part!
+
+            //Update the change list. This is for the recent changes to supplies that shows in red or green
+            supplyChangeList[i].setText("")
+            val supplyChanged = ResultManager.recentChangeMap[list[i].displayName] //Get the supply changed
+            if(supplyChanged != null) {
+                supplyChangeList[i].setText(supplyChanged.amt.toInt().toString()) //Change it to the text of the recent change amount
+                when { //Change colors
                     supplyChanged.amt > 0 -> supplyChangeList[i].color = Color.GREEN
                     supplyChanged.amt < 0 -> supplyChangeList[i].color = Color.RED
                     else -> supplyChangeList[i].color = Color.WHITE

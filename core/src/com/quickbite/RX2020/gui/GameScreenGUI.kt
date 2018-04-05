@@ -13,26 +13,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.*
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Queue
 import com.quickbite.rx2020.Person
-import com.quickbite.rx2020.Result
 import com.quickbite.rx2020.TextGame
 import com.quickbite.rx2020.managers.*
 import com.quickbite.rx2020.managers.GameStats.game
 import com.quickbite.rx2020.screens.GameScreen
 import com.quickbite.rx2020.screens.MainMenuScreen
-import com.quickbite.rx2020.util.GH
-import com.quickbite.rx2020.util.Logger
 import com.quickbite.rx2020.util.SaveLoad
 
 /**
  * Created by Paha on 2/5/2016.
  */
-object GameScreenGUI{
+object GameScreenGUIOld{
     val defaultLabelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
     val titleFontScale = 0.25f
     val eventTitleFontScale = 0.18f
     val buttonFontScale = 0.15f
     
-    lateinit var campMenu:CampMenuGUI
     lateinit var eventGUI:EventGUI
 
     private val mainTable: Table = Table()
@@ -85,10 +81,9 @@ object GameScreenGUI{
 
     fun init(gameScreen: GameScreen){
         this.gameScreen = gameScreen
-        campMenu = CampMenuGUI()
-        campMenu.setupTable()
+        CampMenuGUI.setupTable()
 
-        eventGUI = EventGUI()
+//        eventGUI = EventGUI()
 
         transparentBackground = NinePatchDrawable(NinePatch(TextGame.manager.get("GUIBackground", Texture::class.java), 4, 4, 4, 4))
         buildTravelScreenGUI()
@@ -100,6 +95,9 @@ object GameScreenGUI{
 
     }
 
+    /**
+     * An update that happens on every tick (which is every in game hour)
+     */
     fun updateOnTimeTick(delta:Float){
         var time:String
 
@@ -114,22 +112,28 @@ object GameScreenGUI{
         distanceLabel.setText("" + GameStats.TravelInfo.totalDistToGo+" Miles")
         distProgressBar.value = GameStats.TravelInfo.totalDistTraveled.toFloat()
 
-        if(supplyTable.parent != null) updateSuppliesGUI()
-        if(groupTable.parent != null) buildGroupTable()
-        if(ROVTable.parent != null) buildROVTable()
+//        if(supplyTable.parent != null) SupplyGUI.update()
+//        if(groupTable.parent != null) buildGroupTable()
+//        if(ROVTable.parent != null) buildROVTable()
+
+        GroupGUI.update(delta)
+        ROVPartsGUI.update(delta)
+        SupplyGUI.update(delta)
     }
 
     fun updateSuppliesGUI(){
-        val list = SupplyManager.getSupplyList()
-        for(i in list.indices){
-            supplyAmountList[i].setText( list[i].amt.toInt().toString())
+        val list = SupplyManager.getSupplyList() //Get the supply list
 
-            //Update the change list
+        //For each item
+        for(i in list.indices){
+            supplyAmountList[i].setText( list[i].amt.toInt().toString()) //Set the text. Easy part!
+
+            //Update the change list. This is for the recent changes to supplies that shows in red or green
             supplyChangeList[i].setText("")
-            val supplyChanged = ResultManager.recentChangeMap[list[i].displayName]
+            val supplyChanged = ResultManager.recentChangeMap[list[i].displayName] //Get the supply changed
             if(supplyChanged != null) {
-                supplyChangeList[i].setText(supplyChanged.amt.toInt().toString())
-                when {
+                supplyChangeList[i].setText(supplyChanged.amt.toInt().toString()) //Change it to the text of the recent change amount
+                when { //Change colors
                     supplyChanged.amt > 0 -> supplyChangeList[i].color = Color.GREEN
                     supplyChanged.amt < 0 -> supplyChangeList[i].color = Color.RED
                     else -> supplyChangeList[i].color = Color.WHITE
@@ -222,7 +226,7 @@ object GameScreenGUI{
     }
 
     fun closeCampMenu(){
-        campMenu.closeTable()
+        CampMenuGUI.closeTable()
         campTable.remove()
         addCampButton()
     }
@@ -559,20 +563,20 @@ object GameScreenGUI{
         disableButton(campButton)
         settingsButton.remove()
         if(eventGUI.beginEventGUI(event, startPage, eraseResultManagers)){
-            GameScreenGUI.gameEventGUIActive = true
+            gameEventGUIActive = true
         }
     }
 
     fun closeEventGUI(enableCampButton:Boolean, addSettingsButton:Boolean){
         if(enableCampButton) enableButton(campButton)
         if(addSettingsButton) TextGame.stage.addActor(settingsButton)
-        GameScreenGUI.gameEventGUIActive = false
+        gameEventGUIActive = false
     }
 
     fun tradeWindowOpen():Boolean = tradeWindowTable.parent != null
 
     fun buildCampTable(){
-        campTable = campMenu.setupTable()
+        campTable = CampMenuGUI.setupTable()
     }
 
     fun buildTradeWindow(){
@@ -581,9 +585,9 @@ object GameScreenGUI{
         tradeWindowTable.background = TextureRegionDrawable(TextureRegion(TextGame.manager.get("TradeWindow2", Texture::class.java)))
         tradeWindowTable.setSize(450f, 400f)
 
-        val labelTable: Table = Table()
-        val listTable: Table = Table()
-        val offerTable: Table = Table()
+        val labelTable = Table()
+        val listTable = Table()
+        val offerTable = Table()
 
         val labelStyle = Label.LabelStyle(TextGame.manager.get("spaceFont2", BitmapFont::class.java), Color.WHITE)
 
@@ -1055,9 +1059,4 @@ object GameScreenGUI{
         var titleLabel: Label? = null
     }
 
-    class CustomLabel(text: CharSequence?, style: LabelStyle?): Label(text, style) {
-        override fun toString(): String {
-            return this.text.toString()
-        }
-    }
 }
